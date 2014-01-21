@@ -9,7 +9,9 @@ import javax.persistence.PersistenceContext;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
+import com.siemens.ctbav.intership.shop.dto.superadmin.ProductDTO;
 import com.siemens.ctbav.intership.shop.exception.superadmin.ProductException;
+import com.siemens.ctbav.intership.shop.model.Category;
 import com.siemens.ctbav.intership.shop.model.Product;
 
 @Stateless(name = "productService")
@@ -44,6 +46,44 @@ public class ProductService {
 			throw new ProductException(
 					"Couldn't find the product in the database");
 		em.remove(product);
+		em.flush();
+	}
+
+	public void createProduct(ProductDTO productDto, long idCategory)
+			throws ProductException {
+		Category category = em.find(Category.class, idCategory);
+		if (category == null)
+			throw new ProductException("Category not found in the database!");
+		Product product = new Product(productDto.getName(),
+				productDto.getDescription(), productDto.getPrice(), category);
+		em.persist(product);
+		em.flush();
+	}
+
+	public void changeParent(long idProduct, long idCategory)
+			throws ProductException {
+		Product product = em.find(Product.class, idProduct);
+		if (product == null)
+			throw new ProductException("Product not found in the database");
+
+		Category category = em.find(Category.class, idCategory);
+		if (category == null)
+			throw new ProductException("Category not found in the database");
+
+		product.setCategory(category);
+		em.merge(product);
+		em.flush();
+	}
+
+	public void updateProduct(long idProduct, Product updated)
+			throws ProductException {
+		Product product = em.find(Product.class, idProduct);
+		if (product == null)
+			throw new ProductException("Product not found in the database");
+		product.setName(updated.getName());
+		product.setPrice(updated.getPrice());
+		product.setDescription(updated.getDescription());
+		em.merge(product);
 		em.flush();
 	}
 }

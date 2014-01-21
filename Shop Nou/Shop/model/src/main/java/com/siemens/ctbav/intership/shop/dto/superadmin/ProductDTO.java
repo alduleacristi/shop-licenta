@@ -10,6 +10,9 @@ public class ProductDTO {
 	private Double price;
 	private CategoryDTO category;
 
+	public ProductDTO() {
+	}
+
 	public ProductDTO(String name, String description, Double price,
 			Category category) {
 		this.name = name;
@@ -55,7 +58,7 @@ public class ProductDTO {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result
-				+ ((category == null) ? 0 : category.hashCode());
+				+ ((category.getName() == null) ? 0 : category.getName().hashCode());
 		result = prime * result
 				+ ((description == null) ? 0 : description.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
@@ -75,7 +78,7 @@ public class ProductDTO {
 		if (category == null) {
 			if (other.category != null)
 				return false;
-		} else if (!category.equals(other.category))
+		} else if (!category.getName().equals(other.category.getName()))
 			return false;
 		if (description == null) {
 			if (other.description != null)

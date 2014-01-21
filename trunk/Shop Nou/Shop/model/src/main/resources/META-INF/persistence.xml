@@ -7,7 +7,6 @@
 	<persistence-unit name="internshipPU1">
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
 		<jta-data-source>java:/shop4j</jta-data-source>
-		<jar-file>lib/entity.jar</jar-file>
 		<properties>
 			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect" />
 			<property name="hibernate.search.default.directory_provider"

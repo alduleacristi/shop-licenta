@@ -16,8 +16,8 @@ import javax.persistence.Table;
 @Table(name = "user")
 @NamedQueries({
 		@NamedQuery(name = User.GET_ALL_USERS, query = "SELECT u FROM User u"),
-		@NamedQuery(name = User.GET_CLIENT_USERS, query = "select u from User u where rolename=client"),
-		@NamedQuery(name = User.GET_USER_ID, query = "select id from User u where username=:user"),
+		@NamedQuery(name = User.GET_CLIENT_USERS, query = "select u from User u where u.rolename='client'"),
+		@NamedQuery(name = User.GET_USER_ID, query = "select u.id from User u where u.username=:user"),
 		@NamedQuery(name = User.GET_CLIENT_BY_USERNAME, query = "select u from User u where u.username = :username"),
 		@NamedQuery(name = User.GET_USER_BY_EMAIL, query = "select u from User u where u.email = :email and u.passwordStatus=2"),
 		@NamedQuery(name = User.GET_USER_BY_PASSWORD, query = "select u from User u where u.userPassword = :password and u.passwordStatus =1") })

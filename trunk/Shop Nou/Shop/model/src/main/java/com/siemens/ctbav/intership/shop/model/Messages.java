@@ -18,7 +18,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "messages")
 @NamedQueries({
-	@NamedQuery(name = Messages.GET_UNREPLIED_MESSAGES, query = "SELECT m FROM Messages m where m.isReplied=0")})
+	@NamedQuery(name = Messages.GET_UNREPLIED_MESSAGES, query = "SELECT m FROM Messages m where m.isReplied = :isReplied")})
 public class Messages implements Serializable{
 
 	/**

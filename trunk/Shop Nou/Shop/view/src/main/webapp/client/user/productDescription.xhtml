@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<title>Personal data</title>
+</h:head>
+<h:body>
+
+
+	<ui:composition template="/resources/template/template.xhtml">
+		<ui:define name="menu">
+			<ui:include src="/resources/template/client/user/menuBox.xhtml"></ui:include>
+		</ui:define>
+
+		<ui:define name="cart">
+			<ui:include src="/resources/template/client/user/cartBox.xhtml"></ui:include>
+		</ui:define>
+
+
+		<ui:define name="search">
+			<ui:include src="/resources/template/client/user/searchBox.xhtml"></ui:include>
+		</ui:define>
+
+		<ui:define name="categories">
+			<ui:include
+				src="/resources/template/client/user/productsCategoryBox.xhtml"></ui:include>
+		</ui:define>
+
+		<ui:define name="mainContent">
+			<div class="products2">
+				<div class="cl">&nbsp;</div>
+				<ul>
+					<li>
+						<div class="product-info2">
+							<h3>Product info</h3>
+							<div class="product-desc">
+								<p>Name:</p>
+								#{clientProducts.selectedProduct.product.name}
+								<p>Category:</p>
+								#{clientProducts.selectedProduct.product.category.name}
+								<p>Color:</p>
+								#{clientProducts.selectedProduct.color.name}
+								<div class="price">
+									#{products.selectedProduct.product.price}</div>
+							</div>
+						</div>
+					</li>
+					<li>
+						<div class="product-info2">
+							<h3>Description</h3>
+							#{clientProducts.selectedProduct.product.description}
+						</div>
+					</li>
+					<li>
+						<div class="product-info2">
+							<h3>Choose the size</h3>
+							<h:form>
+								<div style="width: 100%">
+									<p:selectOneMenu value="#{clientProducts.selectedProduct}"
+										style="width:160px">
+										<f:selectItems
+											value="#{clientProducts.selectedProduct.productColorSize}"
+											var="p" itemLabel="#{p.size.size}" itemValue="#{p.id}" />
+									</p:selectOneMenu>
+								</div>
+							</h:form>
+						</div>
+					</li>
+				</ul>
+				<div class="cl">&nbsp;</div>
+			</div>
+			<!-- 			<div class="box"> -->
+			<!-- 				<div class="cl">&nbsp;</div> -->
+			<!-- 				<h:form> -->
+			<!-- 					<p:galleria effect="slide" value="#{imageBean.pictures}" -->
+			<!-- 						var="image" panelWidth="500" panelHeight="313" showCaption="false" -->
+			<!-- 						title="#{products.selectedProduct.name}"> -->
+			<!-- 						<p:graphicImage url="#{image}"> -->
+			<!-- 						</p:graphicImage> -->
+			<!-- 					</p:galleria> -->
+			<!-- 				</h:form> -->
+			<!-- 				<div class="cl">&nbsp;</div> -->
+			<!-- 			</div> -->
+		</ui:define>
+
+		<ui:define name="advertise">
+			<ui:include src="/resources/template/advertise.xhtml"></ui:include>
+		</ui:define>
+
+		<ui:define name="footer">
+			<ui:include src="/resources/template/footer.xhtml"></ui:include>
+		</ui:define>
+	</ui:composition>
+
+</h:body>
+
+</html>
+

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<title>Security data</title>
+</h:head>
+<h:body>
+
+
+	<ui:composition template="/resources/template/template.xhtml">
+		<ui:define name="menu">
+			<ui:include src="/resources/template/client/user/menuBox.xhtml"></ui:include>
+		</ui:define>
+		
+		<ui:define name="cart">
+			<ui:include src="/resources/template/client/user/cartBox.xhtml"></ui:include>
+		</ui:define>
+		
+
+		<ui:define name="search">
+			<ui:include src="/resources/template/client/user/searchBox.xhtml"></ui:include>
+		</ui:define>
+
+		<ui:define name="categories">
+			<ui:include src="/resources/template/client/user/verticalMenu.xhtml"></ui:include>
+		</ui:define>
+
+		<ui:define name="mainContent">
+			<h:form>
+				<p:growl id="securityData" showDetail="true" sticky="true" />
+				<p:panel header="Update account">
+					<h:panelGrid columns="1" cellpadding="1">
+
+						<h:outputLabel for="oldPassword" value="Old password: " />
+						<p:password id="oldPassword" value="#{updateClientSecurityData.oldPassword}" label="Old password"/>
+
+						<h:outputLabel for="password" value="Password: " />
+						<p:password id="password"
+							value="#{updateClientSecurityData.client.password}"
+							label="Password">
+							<f:validator validatorId="validatePassword" />
+							<f:attribute name="confirm" value="#{confirm}" />
+						</p:password>
+						<p:message for="password" />
+
+						<h:outputLabel for="confirm" value="Retype password: " />
+						<p:password id="confirm"
+							value="#{updateClientSecurityData.client.retypedPassword}"
+							label="Retyped password" binding="#{confirm}" />
+						<p:message for="confirm" />
+
+					</h:panelGrid>
+					<h:commandButton value="Update Account" ajax="false"
+						action="#{updateClientSecurityData.update}"
+						styleClass="update-submit" />
+				</p:panel>
+			</h:form>
+		</ui:define>
+
+		<ui:define name="advertise">
+			<ui:include src="/resources/template/advertise.xhtml"></ui:include>
+		</ui:define>
+
+		<ui:define name="footer">
+			<ui:include src="/resources/template/footer.xhtml"></ui:include>
+		</ui:define>
+	</ui:composition>
+
+</h:body>
+
+</html>

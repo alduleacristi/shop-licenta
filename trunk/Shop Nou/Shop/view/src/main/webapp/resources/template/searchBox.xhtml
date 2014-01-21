@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:body>
+	<ui:composition>
+		<h:form>
+			<div class="box2 search2">
+				<h2>
+					Search by <span></span>
+				</h2>
+				<div>
+
+					<br></br> <label>Keyword</label> <br />
+					<p:autoComplete id="acMinLength" minQueryLength="3"
+						value="#{search.query}" effect="fade"
+						completeMethod="#{search.complete}" style="width=150" />
+
+					<br />
+					<div class="inline-field">
+						<br />
+						<h:outputLabel value="Price " />
+						<br />
+						<p:selectOneMenu value="#{client2.minPrice}" editable="false"
+							style="width:60px">
+							<f:selectItems value="#{client2.minPrices}" var="price"
+								itemLabel="#{price}" itemValue="#{price}" />
+						</p:selectOneMenu>
+						<br />
+						<h:outputLabel value=" to " />
+						<br />
+						<p:selectOneMenu value="#{client2.maxPrice}" editable="false"
+							style="width:60px">
+							<f:selectItems value="#{client2.maxPrices}" var="price"
+								itemLabel="#{price}" itemValue="#{price}" />
+						</p:selectOneMenu>
+					</div>
+					<p:commandButton value="Search"
+						actionListener="#{clientProducts.doSearch(search.query,client.minPrice,client.maxPrice)}"
+						process="@form" styleClass="search-submit" />
+					<p>
+						<a href="/Shop4J/client/Contact" class="bul">Contact Customer
+							Support</a>
+					</p>
+					<br />
+				</div>
+			</div>
+		</h:form>
+
+	</ui:composition>
+
+</h:body>
+</html>

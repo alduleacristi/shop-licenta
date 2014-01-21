@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Categories</title>
+</h:head>
+<h:body>
+	<ui:composition template="/superadmin/index.xhtml">
+		<br />
+		
+		<ui:define name="mainContent">
+			*Pentru editarea marimilor trebuie selectata o categorie. Pentru radacina ierarhiei si copiii acesteia nu se pot defini marimi.
+			<br />
+			*Se pot modifica doar marimile de pe categoria curenta. Marimile sunt mostenite de la parinti si nu se pot duplica
+			<h:form id="formTree">
+				<p:growl id="messages" showDetail="true" />
+				<p:tree value="#{categoryBean.root}" var="node" dynamic="true"
+					cache="false" selectionMode="single" animate="true"
+					orientation="horizontal" selection="#{categoryBean.selectedNode}"
+					id="tree">
+					<p:ajax event="select" listener="#{sizeBean.onNodeSelect}"
+						update=":formSizes, :formCreate, :formDeleteUpdate" />
+					<p:treeNode>
+						<h:outputText value="#{node}" />
+					</p:treeNode>
+				</p:tree>
+			</h:form>
+
+			<h:form id="formCreate">
+
+				<p:growl id="messages2" showDetail="true" />
+				<h:commandButton id="createLink" value="Create size" type="button"
+					onclick="create.show()" styleClass="search-submit"
+					rendered="#{sizeBean.addSize}" />
+
+				<p:dialog header="Create a new size" modal="true" widgetVar="create"
+					focus="name" resizable="false">
+					<h:panelGrid columns="2" cellpadding="5">
+						<h:outputLabel for="name" value="Name:" />
+						<p:inputText id="name" label="name" value="#{sizeBean.newName}">
+							<f:validator validatorId="validateSize" />
+						</p:inputText>
+						<p:commandButton value="Create"
+							actionListener="#{sizeBean.create}" update="messages2"
+							oncomplete="handleCreateRequest(xhr, status, args)" />
+						<p:commandButton value="Cancel" onclick="create.hide();"
+							type="button" />
+					</h:panelGrid>
+				</p:dialog>
+
+				<script type="text/javascript">
+					function handleCreateRequest(xhr, status, args) {
+						if (args.validationFailed || !args.create) {
+							PF('create').jq.effect("shake", {
+								times : 5
+							}, 100);
+						} else {
+							PF('create').hide();
+							window.location.reload();
+						}
+					}
+				</script>
+			</h:form>
+
+			<h:form id="formDeleteUpdate">
+				<p:growl id="messages3" showDetail="true" />
+				<p:dataTable id="sizes" var="size" value="#{sizeBean.sizes}"
+					paginator="true" rows="10" selection="#{sizeBean.selectedSize}"
+					selectionMode="single" rendered="#{sizeBean.addSize}">
+					<f:facet name="header">
+						<p:ajax event="rowSelect" update=":formSizes"
+							listener="#{sizeBean.onRowSelect}"
+							oncomplete="PF('editDialog').show()" /> 
+            		Select a row to edit the size  
+        			</f:facet>
+					<p:column headerText="Category">
+						<h:outputText value="#{size.category.name}" />
+					</p:column>
+					<p:column headerText="Size">
+						<h:outputText value="#{size.size}" />
+					</p:column>
+				</p:dataTable>
+
+				<p:dialog id="dialog" header="Size Detail" widgetVar="editDialog"
+					resizable="false" showEffect="fade" hideEffect="explode"
+					modal="true">
+					<h:panelGrid id="display" columns="2" cellpadding="4">
+						<h:outputText value="Size's new name:" />
+						<p:inputText id="nName" label="name" value="#{sizeBean.newName}">
+							<f:validator validatorId="validateUpdateSize" />
+						</p:inputText>
+						<p:commandButton value="Update"
+							actionListener="#{sizeBean.update}" update="messages3"
+							oncomplete="handleUpdateRequest(xhr, status, args)" />
+						<p:commandButton value="Delete" type="button" onclick="cd.show()"
+							immediate="true" process="@this" />
+						<p:dialog header="Confirmation" widgetVar="cd" resizable="false">
+							<h:outputText value="Are you sure?" />
+							<br />
+							<p:commandButton value="Yes" actionListener="#{sizeBean.delete}"
+								update="messages3" oncomplete="cd.hide()" immediate="true" />
+							<p:commandButton value="No" onclick="cd.hide();" type="button" />
+						</p:dialog>
+					</h:panelGrid>
+				</p:dialog>
+				<script type="text/javascript">
+					function handleUpdateRequest(xhr, status, args) {
+						if (args.validationFailed || !args.update) {
+							PF('editDialog').jq.effect("shake", {
+								times : 5
+							}, 100);
+						} else {
+							PF('editDialog').hide();
+							window.location.reload();
+						}
+					}
+				</script>
+				<br />
+				<br />
+				<br />
+			</h:form>
+
+
+			<h:form id="formSizes">
+				<p:dataTable id="parentSizes" var="s"
+					value="#{sizeBean.parentsSizes}" paginator="true" rows="10"
+					rendered="#{sizeBean.addSize}">
+					<f:facet name="header">  
+            		Inherited and no editable sizes
+        			</f:facet>
+					<p:column headerText="Category">
+						<h:outputText value="#{s.category.getIerarhie()}" />
+					</p:column>
+					<p:column headerText="Size">
+						<h:outputText value="#{s.size}" />
+					</p:column>
+				</p:dataTable>
+			</h:form>
+
+
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

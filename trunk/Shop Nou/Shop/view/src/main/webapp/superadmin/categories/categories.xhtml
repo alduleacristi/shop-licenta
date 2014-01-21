@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Categories</title>
+</h:head>
+<h:body>
+	<ui:composition template="/superadmin/index.xhtml">
+		<br />
+
+		<ui:define name="mainContent">
+				
+		*Pentru update si delete trebuie selectata categoria pe care se vor opera modificarile.
+		<br />
+		*Pentru a crea o noua categorie trebuie selectat parintele, in cazul in care exista.
+			<h:form id="formTree">
+
+				<p:growl id="messages" showDetail="true" />
+				<p:tree value="#{categoryBean.root}" var="node" dynamic="true"
+					cache="false" selectionMode="single" animate="true"
+					orientation="horizontal" selection="#{categoryBean.selectedNode}"
+					id="tree">
+					<p:ajax event="select" listener="#{categoryBean.onNodeSelect}"
+						update=":formCreate, :formUpdate, :formDelete" />
+					<p:treeNode>
+						<h:outputText value="#{node}" />
+					</p:treeNode>
+				</p:tree>
+
+			</h:form>
+
+
+			<h:form id="formCreate">
+
+				<p:growl id="messages2" showDetail="true" />
+				<h:commandButton id="createLink" value="Create" type="button"
+					onclick="create.show()" styleClass="search-submit"
+					rendered="#{categoryBean.selected}" />
+
+				<p:dialog header="Create a new category" modal="true"
+					widgetVar="create" focus="name" resizable="false">
+					<h:panelGrid columns="2" cellpadding="5">
+						<h:outputLabel for="name" value="Name:" />
+						<p:inputText id="name" label="name"
+							value="#{categoryBean.newName}">
+							<f:validator validatorId="validateCategory" />
+						</p:inputText>
+						<p:commandButton value="Create"
+							actionListener="#{categoryBean.create}" update="messages2"
+							oncomplete="handleCreateRequest(xhr, status, args)" />
+						<p:commandButton value="Cancel" onclick="create.hide();"
+							type="button" />
+					</h:panelGrid>
+				</p:dialog>
+
+				<script type="text/javascript">
+					function handleCreateRequest(xhr, status, args) {
+						if (args.validationFailed || !args.create) {
+							PF('create').jq.effect("shake", {
+								times : 5
+							}, 100);
+						} else {
+							PF('create').hide();
+							window.location.reload();
+						}
+					}
+				</script>
+			</h:form>
+
+
+			<h:form id="formUpdate">
+				<p:growl id="messages3" showDetail="true" />
+				<h:commandButton value="Update" type="button"
+					onclick="update.show()" styleClass="search-submit"
+					rendered="#{categoryBean.selected}" id="b2" immediate="true"
+					process="@this" />
+
+				<p:dialog header="Update the selected category" modal="true"
+					widgetVar="update" focus="nName" resizable="false">
+					<h:panelGrid columns="2" cellpadding="5">
+						<h:outputLabel for="tree"
+							value="Select a new parent for the category" />
+						<p:tree value="#{categoryBean.rootUpdate}" var="node"
+							dynamic="true" cache="false" selectionMode="single"
+							animate="true" orientation="horizontal"
+							selection="#{categoryBean.selectedParent}" id="tree">
+							<p:ajax event="select" listener="#{categoryBean.onParentSelect}" />
+							<p:treeNode>
+								<h:outputText value="#{node}" />
+							</p:treeNode>
+						</p:tree>
+						<h:outputLabel for="nName" value="Name:" />
+						<p:inputText id="nName" label="nName"
+							value="#{categoryBean.newName}">
+							<f:validator validatorId="validateUpdateCategory" />
+						</p:inputText>
+						<p:commandButton value="Update"
+							actionListener="#{categoryBean.update}" update="messages3"
+							oncomplete="handleUpdateRequest(xhr, status, args)" />
+						<p:commandButton value="Cancel" onclick="update.hide();"
+							type="button" />
+					</h:panelGrid>
+				</p:dialog>
+
+				<script type="text/javascript">
+					function handleUpdateRequest(xhr, status, args) {
+						if (args.validationFailed || !args.update) {
+							PF('update').jq.effect("shake", {
+								times : 5
+							}, 100);
+						} else {
+							PF('update').hide();
+							window.location.reload();
+						}
+					}
+				</script>
+			</h:form>
+
+
+			<h:form id="formDelete">
+				<p:growl id="messages4" showDetail="true" />
+				<h:commandButton value="Delete" type="button" onclick="cd.show()"
+					styleClass="search-submit" rendered="#{categoryBean.selected}"
+					id="b3" immediate="true" process="@this" />
+
+				<p:confirmDialog message="Are you sure?" header="Confirmation"
+					severity="alert" widgetVar="cd" resizable="false">
+					<p:commandButton value="Yes"
+						actionListener="#{categoryBean.delete}" update="messages4"
+						oncomplete="cd.hide()" immediate="true" />
+					<p:commandButton value="No" onclick="cd.hide();" type="button" />
+				</p:confirmDialog>
+			</h:form>
+
+
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

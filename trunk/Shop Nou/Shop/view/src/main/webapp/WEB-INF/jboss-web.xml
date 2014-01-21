@@ -1,0 +1,3 @@
+<jboss-web>
+    <security-domain>Shop4J</security-domain>
+</jboss-web>

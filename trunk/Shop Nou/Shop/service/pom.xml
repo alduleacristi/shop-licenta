@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<!-- The pom builds the service JAR artifact. -->
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<artifactId>Shop</artifactId>
+		<groupId>com.siemens.ctbav.intership.shop</groupId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>service_shop</artifactId>
+	<name>service_shop</name>
+	<description>The service of the shop</description>
+	<packaging>jar</packaging>
+
+	<dependencies>
+	
+		<dependency>
+			<groupId>com.siemens.ctbav.intership.shop</groupId>
+			<artifactId>model_shop</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.hibernate.javax.persistence</groupId>
+			<artifactId>hibernate-jpa-2.1-api</artifactId>
+			<version>1.0.0.Final</version>
+		</dependency><!--$NO-MVN-MAN-VER$-->
+
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+			<version>4.2.7.Final</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-search</artifactId>
+			<version>4.2.0.Final</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-search-analyzers</artifactId>
+			<version>4.4.0.Alpha2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>javax</groupId>
+			<artifactId>javaee-api</artifactId>
+			<version>7.0</version>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<!-- Specify the artifact name, this is referred to in the EAR's application.xml -->
+		<finalName>${project.artifactId}</finalName>
+		<!-- Compiler plugin enforces Java 1.6 compatibility and activates annotation 
+			processors -->
+	</build>
+</project>
+

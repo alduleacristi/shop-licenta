@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<title>Client</title>
+</h:head>
+<h:body>
+
+	<h:outputStylesheet library="css" name="style.css" />
+	<h:outputStylesheet library="css" name="ie6.css" />
+
+	<div class="shell">
+		<!-- Header -->
+		<div id="header">
+
+			<h1 id="logo">
+				<a href="#">shoparound</a>
+			</h1>
+			<!-- Cart -->
+
+			<ui:insert name="cart">
+			</ui:insert>
+
+			<!-- Navigation -->
+			<ui:insert name="menu">
+			</ui:insert>
+			<!-- End Navigation -->
+
+			<div id="main">
+				<div class="cl">&nbsp;</div>
+				<!-- Content -->
+				<div id="content">
+					<div class="box">
+						<p:graphicImage value="/resources/n5.jpg" width="723" height="200" />
+					</div>
+					<ui:insert name="mainContent">
+
+					</ui:insert>
+
+				</div>
+				<div id="sidebar">
+					<ui:insert name="search">
+					</ui:insert>
+					<ui:insert name="menuAdmin">
+					</ui:insert>
+					<ui:insert name="categories">
+					</ui:insert>
+				</div>
+			</div>
+
+			<!-- End Main -->
+			<!-- Side Full -->
+
+			<!-- End Text Cols -->
+			<ui:insert name="advertise">
+
+			</ui:insert>
+
+			<!-- End Side Full -->
+			<!-- Footer -->
+			<ui:insert name="footer">
+
+			</ui:insert>
+
+		</div>
+	</div>
+
+</h:body>
+
+</html>

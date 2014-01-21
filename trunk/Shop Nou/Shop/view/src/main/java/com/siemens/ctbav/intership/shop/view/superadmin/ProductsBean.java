@@ -3,6 +3,7 @@ package com.siemens.ctbav.intership.shop.view.superadmin;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -10,10 +11,15 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.NodeSelectEvent;
+import org.primefaces.model.TreeNode;
 
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
+import com.siemens.ctbav.intership.shop.convert.superadmin.ConvertProduct;
+import com.siemens.ctbav.intership.shop.dto.superadmin.CategoryDTO;
+import com.siemens.ctbav.intership.shop.dto.superadmin.ProductDTO;
 import com.siemens.ctbav.intership.shop.exception.superadmin.ProductException;
 import com.siemens.ctbav.intership.shop.model.Product;
 import com.siemens.ctbav.intership.shop.model.Category;
@@ -33,6 +39,13 @@ public class ProductsBean implements Serializable {
 	private boolean selectedCategory;
 	private List<Product> productList;
 	private Product selectedProduct;
+	private ProductDTO newProduct;
+
+	@PostConstruct
+	void init() {
+		newProduct = new ProductDTO();
+		NavigationUtils.addSuccesMessage();
+	}
 
 	public boolean isSelectedCategory() {
 		return selectedCategory;
@@ -62,6 +75,14 @@ public class ProductsBean implements Serializable {
 				.put("selectedProduct", selectedProduct);
 	}
 
+	public ProductDTO getNewProduct() {
+		return newProduct;
+	}
+
+	public void setNewProduct(ProductDTO newProduct) {
+		this.newProduct = newProduct;
+	}
+
 	public void onNodeSelect(NodeSelectEvent event) {
 		FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
 				.put("selectedNode", event.getTreeNode());
@@ -70,6 +91,11 @@ public class ProductsBean implements Serializable {
 				.put("selectedCategory", selectedCategory);
 		long id = ((Category) event.getTreeNode().getData()).getId();
 		productList = productService.getGenericProductsByCategory(id);
+	}
+
+	public void onNewParentSelect(NodeSelectEvent event) {
+		FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
+				.put("selectedParent", event.getTreeNode());
 	}
 
 	public void delete(ActionEvent actionEvent) {
@@ -95,4 +121,197 @@ public class ProductsBean implements Serializable {
 				"Success!", "Product deleted!");
 		NavigationUtils.addMessage(message);
 	}
+
+	public void create(ActionEvent actionEvent) {
+		RequestContext context = RequestContext.getCurrentInstance();
+		boolean create = false;
+		FacesMessage msg = null;
+		try {
+			msg = tryToCreate();
+			create = true;
+		} catch (ProductException e) {
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
+					e.getMessage());
+			create = false;
+		} finally {
+			NavigationUtils.addMessage(msg);
+			context.addCallbackParam("create", create);
+		}
+	}
+
+	private FacesMessage tryToCreate() throws ProductException {
+		FacesMessage msg;
+		TreeNode selectedNode = (TreeNode) FacesContext.getCurrentInstance()
+				.getExternalContext().getSessionMap().get("selectedNode");
+
+		createExceptions(selectedNode);
+
+		long idCategory = ((Category) selectedNode.getData()).getId();
+		productService.createProduct(newProduct, idCategory);
+		msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Succes",
+				"New product added");
+		FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
+				.put("success", msg);
+		return msg;
+	}
+
+	private void createExceptions(TreeNode selectedNode)
+			throws ProductException {
+		if (selectedNode == null)
+			throw new ProductException("No category selected");
+		
+		List<ProductDTO> productsDto = ConvertProduct
+				.convertProducts(productList);
+		CategoryDTO c = new CategoryDTO(
+				((Category) selectedNode.getData()).getName(), null);
+		newProduct.setCategory(c);
+
+		if (productsDto.contains(newProduct))
+			throw new ProductException("Cannot duplicate a product");
+	}
+
+	public void changeCategory(ActionEvent actionEvent) {
+		RequestContext context = RequestContext.getCurrentInstance();
+		boolean change = false;
+		FacesMessage msg = null;
+
+		selectedProduct = (Product) FacesContext.getCurrentInstance()
+				.getExternalContext().getSessionMap().get("selectedProduct");
+		try {
+			msg = tryToChangeParent();
+			change = true;
+		} catch (ProductException e) {
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
+					e.getMessage());
+			change = false;
+		} finally {
+			NavigationUtils.addMessage(msg);
+			context.addCallbackParam("change", change);
+		}
+	}
+
+	private FacesMessage tryToChangeParent() throws ProductException {
+		TreeNode selectedParent = (TreeNode) FacesContext.getCurrentInstance()
+				.getExternalContext().getSessionMap().get("selectedParent");
+		TreeNode selectedNode = (TreeNode) FacesContext.getCurrentInstance()
+				.getExternalContext().getSessionMap().get("selectedNode");
+
+		updateParentExceptions(selectedNode, selectedParent);
+
+		boolean isSon = checkRelationship(selectedParent, selectedNode);
+		boolean isParent = checkRelationship(selectedNode, selectedParent);
+
+		long idCategory = uniqueCheck(selectedParent, isSon, isParent);
+		productService.changeParent(selectedProduct.getId(), idCategory);
+		FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
+				"Succes", "Product's category changed");
+		productList.clear();
+		productList.addAll(productService
+				.getGenericProductsByCategory(idCategory));
+		return msg;
+	}
+
+	private void updateParentExceptions(TreeNode selectedNode,
+			TreeNode selectedParent) throws ProductException {
+		if (selectedNode == null) {
+			throw new ProductException("No category selected");
+		}
+		if (selectedProduct == null) {
+			throw new ProductException("No product selected");
+		}
+		if (selectedParent == null) {
+			throw new ProductException("Not a new parent selected");
+		}
+	}
+
+	private long uniqueCheck(TreeNode selectedParent, boolean isSon,
+			boolean isParent) throws ProductException {
+		long idCategory = ((Category) selectedParent.getData()).getId();
+		if (!isSon && !isParent) {
+			check(idCategory);
+		}
+		return idCategory;
+	}
+
+	private void check(long idCategory) throws ProductException {
+		List<ProductDTO> productsDto = ConvertProduct
+				.convertProducts(productService
+						.getGenericProductsByCategory(idCategory));
+		ProductDTO productDto = ConvertProduct.convertProduct(selectedProduct);
+
+		if (productsDto.contains(productDto)) {
+			throw new ProductException("Cannot duplicate the product");
+		}
+	}
+
+	private boolean checkRelationship(TreeNode selectedParent,
+			TreeNode selectedNode) {
+		boolean isSon = false;
+		TreeNode parent = selectedNode;
+		while (parent != null) {
+			if (parent.equals(selectedParent)) {
+				isSon = true;
+				break;
+			}
+			parent = parent.getParent();
+		}
+		return isSon;
+	}
+
+	public void update(ActionEvent actionEvent) {
+		RequestContext context = RequestContext.getCurrentInstance();
+		boolean update = false;
+		FacesMessage msg = null;
+
+		selectedProduct = (Product) FacesContext.getCurrentInstance()
+				.getExternalContext().getSessionMap().get("selectedProduct");
+
+		try {
+			msg = tryToUpdate();
+			update = true;
+		} catch (ProductException e) {
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
+					e.getMessage());
+			update = false;
+		} finally {
+			NavigationUtils.addMessage(msg);
+			context.addCallbackParam("update", update);
+		}
+
+	}
+
+	private FacesMessage tryToUpdate() throws ProductException {
+		FacesMessage msg;
+		TreeNode selectedNode = (TreeNode) FacesContext.getCurrentInstance()
+				.getExternalContext().getSessionMap().get("selectedNode");
+		Product oldProduct = updateFieldsExceptions(selectedNode);
+
+		if (!oldProduct.equals(selectedProduct)) {
+			check(((Category) selectedNode.getData()).getId());
+		}
+
+		productService.updateProduct(selectedProduct.getId(), selectedProduct);
+
+		msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Succes",
+				"Product successfully updated!");
+		FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
+				.put("success", msg);
+		return msg;
+	}
+
+	private Product updateFieldsExceptions(TreeNode selectedNode)
+			throws ProductException {
+		if (selectedNode == null)
+			throw new ProductException("No category selected");
+
+		if (selectedProduct == null)
+			throw new ProductException("No product selected");
+
+		Product oldProduct = productService
+				.findProduct(selectedProduct.getId());
+		if (oldProduct == null)
+			throw new ProductException("No such product in the database");
+		return oldProduct;
+	}
+
 }

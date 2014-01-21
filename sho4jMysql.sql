@@ -85,8 +85,8 @@ id_prod_col bigint not null primary key auto_increment,
 id_product bigint not null,
 id_color bigint not null,
 foreign key id_product(id_product) references product(id)
-on update no action
-on delete no action,
+on update cascade
+on delete cascade,
 foreign key id_color(id_color) references color(id_color)
 );
 

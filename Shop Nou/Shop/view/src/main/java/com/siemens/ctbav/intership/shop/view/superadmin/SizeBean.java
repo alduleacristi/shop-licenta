@@ -75,7 +75,6 @@ public class SizeBean implements Serializable {
 				.remove("addSize");
 		selectedSize = (Size) FacesContext.getCurrentInstance()
 				.getExternalContext().getSessionMap().get("selectedSize");
-		System.out.println("in post construct: " + selectedSize);
 		putAllSizes(currentSizes);
 	}
 
@@ -133,7 +132,6 @@ public class SizeBean implements Serializable {
 
 	public void onRowSelect(SelectEvent event) {
 		selectedSize = (Size) event.getObject();
-		System.out.println("On row select: " + selectedSize);
 		FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
 				.put("selectedSize", selectedSize);
 		FacesContext.getCurrentInstance().getExternalContext().getSessionMap()

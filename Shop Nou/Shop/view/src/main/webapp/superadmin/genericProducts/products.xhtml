@@ -26,19 +26,69 @@
 					orientation="horizontal" selection="#{categoryBean.selectedNode}"
 					id="tree">
 					<p:ajax event="select" listener="#{productBean.onNodeSelect}"
-						update=":formProducts" />
+						update=":formProducts, :formCreate" />
 					<p:treeNode>
 						<h:outputText value="#{node}" />
 					</p:treeNode>
 				</p:tree>
 				<br />
 			</h:form>
+
+			<h:form id="formCreate">
+
+				<p:growl id="messages2" showDetail="true" />
+				<h:commandButton id="createLink" value="Create product"
+					type="button" onclick="create.show()" styleClass="update-submit"
+					rendered="#{productBean.selectedCategory}" />
+				<br />
+				<br />
+				<p:dialog header="Create a new product" modal="true"
+					widgetVar="create" focus="name" resizable="false">
+					<h:panelGrid columns="2" cellpadding="5">
+						<h:outputLabel for="name" value="Product's name:" />
+						<p:inputText id="name" label="name" required="true"
+							requiredMessage="Name is required"
+							value="#{productBean.newProduct.name}">
+							<f:validator validatorId="validateProductName" />
+						</p:inputText>
+						<h:outputLabel for="price" value="Product's price:" />
+						<p:inputText id="price" label="price" required="true"
+							requiredMessage="Price is required"
+							value="#{productBean.newProduct.price}">
+							<f:validator validatorId="validateProductPrice" />
+						</p:inputText>
+						<h:outputText value="Product's description: " />
+						<p:inputTextarea cols="22" rows="10" maxlength="200"
+							maxLength="200" value="#{productBean.newProduct.description}" />
+						<p:commandButton value="Create"
+							actionListener="#{productBean.create}" update="messages2"
+							oncomplete="handleCreateRequest(xhr, status, args)" />
+						<p:commandButton value="Cancel" onclick="create.hide();"
+							type="button" />
+					</h:panelGrid>
+				</p:dialog>
+
+				<script type="text/javascript">
+					function handleCreateRequest(xhr, status, args) {
+						if (args.validationFailed || !args.create) {
+							PF('create').jq.effect("shake", {
+								times : 5
+							}, 100);
+						} else {
+							PF('create').hide();
+							window.location.reload();
+						}
+					}
+				</script>
+			</h:form>
+
 			<h:form id="formProducts">
 				<p:growl id="messages1" showDetail="true" />
-				<p:dataGrid var="product" value="#{productBean.productList}"
-					columns="3" rows="12" paginator="true"
+				<p:dataGrid id="dataGrid" var="product"
+					value="#{productBean.productList}" columns="3" rows="12"
+					paginator="true"
 					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-					rowsPerPageTemplate="9,12,15"
+					rowsPerPageTemplate="3,6,9,12,15"
 					rendered="#{productBean.selectedCategory}">
 					<p:column>
 						<p:panel header="#{product.name}" style="text-align:center">
@@ -64,13 +114,26 @@
 						<h:panelGrid columns="2" cellpadding="4"
 							rendered="#{productBean.selectedProduct != null}">
 							<h:outputText value="Product's name: " />
-							<p:inputText value="#{productBean.selectedProduct.name}" />
+							<p:inputText value="#{productBean.selectedProduct.name}"
+								required="true" requiredMessage="Name is required">
+								<f:validator validatorId="validateProductName" />
+							</p:inputText>
 							<h:outputText value="Product's category: " />
-							<p:inputText value="#{productBean.selectedProduct.category.name}" />
+							<p:inputText value="#{productBean.selectedProduct.category.name}"
+								readonly="true" />
+							<h:outputText value="Change the product's category" />
+							<p:commandLink update=":formProducts:productDetail"
+								oncomplete="categoryDialog.show()" title="Change Category">
+								<h:outputText styleClass="ui-icon ui-icon-search"
+									style="margin:0 auto;" />
+							</p:commandLink>
 							<h:outputText value="Product's price: " />
-							<p:inputText value="#{productBean.selectedProduct.price}" />
+							<p:inputText value="#{productBean.selectedProduct.price}"
+								required="true" requiredMessage="Price is required">
+								<f:validator validatorId="validateProductPrice" />
+							</p:inputText>
 							<h:outputText value="Product's description: " />
-							<p:inputTextarea
+							<p:inputTextarea cols="22" rows="10" maxlength="200"
 								value="#{productBean.selectedProduct.description}"
 								maxLength="200" />
 							<p:commandButton value="Update"
@@ -89,6 +152,52 @@
 						</h:panelGrid>
 					</p:outputPanel>
 				</p:dialog>
+
+				<p:dialog header="Change Category" widgetVar="categoryDialog">
+					<h:form id="formTreeUpdate">
+						<p:growl id="messages" showDetail="true" />
+						<p:tree value="#{categoryBean.root}" var="node" dynamic="true"
+							cache="false" selectionMode="single" animate="true"
+							orientation="horizontal" id="tree">
+							<p:ajax event="select"
+								listener="#{productBean.onNewParentSelect}" />
+							<p:treeNode>
+								<h:outputText value="#{node}" />
+							</p:treeNode>
+						</p:tree>
+						<br />
+					</h:form>
+					<p:commandButton value="Change"
+						actionListener="#{productBean.changeCategory}"
+						update="messages1, :formProducts:dataGrid"
+						oncomplete="handleChangeCategoryRequest(xhr, status, args)" />
+				</p:dialog>
+
+				<script type="text/javascript">
+					function handleUpdateRequest(xhr, status, args) {
+						if (args.validationFailed || !args.update) {
+							PF('productDialog').jq.effect("shake", {
+								times : 5
+							}, 100);
+						} else {
+							PF('productDialog').hide();
+							window.location.reload();
+						}
+					}
+				</script>
+
+				<script type="text/javascript">
+					function handleChangeCategoryRequest(xhr, status, args) {
+						if (args.validationFailed || !args.change) {
+							PF('categoryDialog').jq.effect("shake", {
+								times : 5
+							}, 100);
+						} else {
+							PF('categoryDialog').hide();
+						}
+					}
+				</script>
+
 			</h:form>
 		</ui:define>
 	</ui:composition>

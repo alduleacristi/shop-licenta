@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+<title></title>
+</head>
+<h:body>
+	<ui:composition>
+		<h:form>
+			<div id="navigation">
+				<ul>
+					<li><a href="/Shop4j/superadmin/index.xhtml" class="active">Home</a></li>
+					<li><a href="/Shop4j/superadmin/genericProducts"
+						class="active">Manage generic products</a></li>
+					<li><a href="#" class="active">Manage colors for products</a></li>
+					<li><a href="#" class="active">Manage sizes for products</a></li>
+
+					<li><p:commandLink styleClass="active"
+							actionListener="#{Login.logout()}">
+							<h:outputText value="Logout" styleClass="active"></h:outputText>
+						</p:commandLink></li>
+
+				</ul>
+			</div>
+		</h:form>
+	</ui:composition>
+</h:body>
+</html>

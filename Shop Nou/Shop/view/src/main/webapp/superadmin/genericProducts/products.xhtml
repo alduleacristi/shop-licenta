@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Categories</title>
+</h:head>
+<h:body>
+	<ui:composition template="/superadmin/index.xhtml">
+		<br />
+		<ui:define name="menu">
+			<ui:include src="/resources/template/superadmin/menuProducts.xhtml"></ui:include>
+		</ui:define>
+
+		<ui:define name="mainContent">
+			<br />
+			*Pentru adaugare, editare, stergere de produse, se va selecta o categorie
+			<h:form id="formTree">
+				<p:growl id="messages" showDetail="true" />
+				<p:tree value="#{categoryBean.root}" var="node" dynamic="true"
+					cache="false" selectionMode="single" animate="true"
+					orientation="horizontal" selection="#{categoryBean.selectedNode}"
+					id="tree">
+					<p:ajax event="select" listener="#{productBean.onNodeSelect}"
+						update=":formProducts" />
+					<p:treeNode>
+						<h:outputText value="#{node}" />
+					</p:treeNode>
+				</p:tree>
+				<br />
+			</h:form>
+			<h:form id="formProducts">
+				<p:growl id="messages1" showDetail="true" />
+				<p:dataGrid var="product" value="#{productBean.productList}"
+					columns="3" rows="12" paginator="true"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					rowsPerPageTemplate="9,12,15"
+					rendered="#{productBean.selectedCategory}">
+					<p:column>
+						<p:panel header="#{product.name}" style="text-align:center">
+							<h:outputText value="Category: #{product.category.name}" />
+							<br />
+							<h:outputText value="Price: #{product.price}" />
+							<br />
+							<h:outputText value="Description: #{product.description}" />
+							<br />
+							<p:commandLink update=":formProducts:productDetail"
+								oncomplete="productDialog.show()" title="View Detail">
+								<h:outputText styleClass="ui-icon ui-icon-search"
+									style="margin:0 auto;" />
+								<f:setPropertyActionListener value="#{product}"
+									target="#{productBean.selectedProduct}" />
+							</p:commandLink>
+						</p:panel>
+					</p:column>
+				</p:dataGrid>
+				<p:dialog header="Product Detail" widgetVar="productDialog"
+					modal="true">
+					<p:outputPanel id="productDetail" style="text-align:center;">
+						<h:panelGrid columns="2" cellpadding="4"
+							rendered="#{productBean.selectedProduct != null}">
+							<h:outputText value="Product's name: " />
+							<p:inputText value="#{productBean.selectedProduct.name}" />
+							<h:outputText value="Product's category: " />
+							<p:inputText value="#{productBean.selectedProduct.category.name}" />
+							<h:outputText value="Product's price: " />
+							<p:inputText value="#{productBean.selectedProduct.price}" />
+							<h:outputText value="Product's description: " />
+							<p:inputTextarea
+								value="#{productBean.selectedProduct.description}"
+								maxLength="200" />
+							<p:commandButton value="Update"
+								actionListener="#{productBean.update}" update="messages1"
+								oncomplete="handleUpdateRequest(xhr, status, args)" />
+							<p:commandButton value="Delete" type="button" onclick="cd.show()"
+								immediate="true" process="@this" />
+							<p:dialog header="Confirmation" widgetVar="cd" resizable="false">
+								<h:outputText value="Are you sure?" />
+								<br />
+								<p:commandButton value="Yes"
+									actionListener="#{productBean.delete}" update="messages1"
+									oncomplete="cd.hide()" immediate="true" />
+								<p:commandButton value="No" onclick="cd.hide();" type="button" />
+							</p:dialog>
+						</h:panelGrid>
+					</p:outputPanel>
+				</p:dialog>
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

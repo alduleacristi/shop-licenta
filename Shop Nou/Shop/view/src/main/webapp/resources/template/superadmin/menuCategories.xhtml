@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+<title></title>
+</head>
+<h:body>
+	<h:form id="formCateg">
+		<ui:composition>
+			<p:growl id="messages" showDetail="true" />
+			<div id="navigation">
+				<ul>
+					<li><a href="#" class="active">Home</a></li>
+					<li><p:commandLink styleClass="active"
+							rendered="#{categoryBean.selected}">
+							<h:outputText value="Create category" styleClass="active"></h:outputText>
+						</p:commandLink></li>
+					<li><p:commandLink styleClass="active"
+							rendered="#{categoryBean.selected}">
+							<h:outputText value="Edit category" styleClass="active"></h:outputText>
+						</p:commandLink></li>
+					<li><p:commandLink styleClass="active"
+							rendered="#{categoryBean.selected}" onclick="cd.show()">
+							<h:outputText value="Delete category" styleClass="active"></h:outputText>
+						</p:commandLink> <p:confirmDialog message="Are you sure?" header="Confirmation"
+							severity="alert" widgetVar="cd">
+							<p:commandButton value="Yes"
+								actionListener="#{categoryBean.delete}" update="messages"
+								oncomplete="cd.hide()" />
+							<p:commandButton value="No" onclick="cd.hide();" type="button" />
+						</p:confirmDialog></li>
+					<li><p:commandLink rendered="#{!Login.logged}"
+							styleClass="active" action="#{Login.logout()}">
+							<h:outputText value="Logout" styleClass="active"></h:outputText>
+						</p:commandLink></li>
+				</ul>
+			</div>
+		</ui:composition>
+	</h:form>
+</h:body>
+</html>

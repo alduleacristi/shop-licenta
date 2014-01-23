@@ -21,38 +21,19 @@ import com.ocpsoft.pretty.faces.annotation.URLMappings;
 import com.siemens.ctbav.intership.shop.model.Category;
 import com.siemens.ctbav.intership.shop.service.client.TreeService;
 
-
 @ManagedBean(name = "treeBean")
 @RequestScoped
 @URLMappings(mappings = {
 		@URLMapping(id = "idClientProduct", pattern = "/client/user/category/#{treeBean.id}", viewId = "/client/user/products.xhtml"),
-		@URLMapping(id = "idClientIndex", pattern = "/client/user/index", viewId = "/client/user/index.xhtml")
-})
-
+		@URLMapping(id = "idClientIndex", pattern = "/client/user/index", viewId = "/client/user/index.xhtml") })
 public class TreeBean implements Serializable {
+	private static final long serialVersionUID = -6611396480967131619L;
+
+	@EJB
+	TreeService treeService;
 
 	@ManagedProperty(value = "#{id}")
 	private long id;
-
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		System.out.println("se seteaza id-ul pt mapare in treeBean" + id);
-		this.id = id;
-		if (id != 0) {
-			Category selectedCategory = treeService.getCategory(id);
-			System.out
-					.println("punem categoria: " + selectedCategory.getName());
-			FacesContext.getCurrentInstance().getExternalContext()
-					.getSessionMap().put("category", selectedCategory);
-		}
-	}
-
-	private static final long serialVersionUID = -6611396480967131619L;
-	@EJB
-	TreeService treeService;
 
 	private TreeNode root;
 
@@ -61,19 +42,11 @@ public class TreeBean implements Serializable {
 
 	private TreeNode selectedNode;
 	private TreeNode selectedParent;
-	private TreeNode selectRead;
 	private TreeNode selectedCategory;
-
-	private String name;
-
-	private String nameUpdate;
 
 	public TreeBean() {
 		selectedNode = null;
 		selectedParent = null;
-		selectRead = null;
-		name = null;
-		nameUpdate = null;
 	}
 
 	@PostConstruct
@@ -94,30 +67,32 @@ public class TreeBean implements Serializable {
 		}
 	}
 
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+		if (id != 0) {
+			Category selectedCategory = treeService.getCategory(id);
+			FacesContext.getCurrentInstance().getExternalContext()
+					.getSessionMap().put("category", selectedCategory);
+		}
+	}
+
 	public TreeNode getSelectedCategory() {
 		return selectedCategory;
 	}
 
 	public void setSelectedCategory(TreeNode selectedCategory) {
-		// System.out.println("selected category");
 		this.selectedCategory = selectedCategory;
-		// redirect("cateory.xhtml");
 	}
 
 	public void onNodeSelect(NodeSelectEvent event) {
 		Category category = ((Category) event.getTreeNode().getData());
-		System.out.println("punem categoria in event: " + category.getName());
 		FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
 				.put("category", category);
 		redirect("/Shop4j/client/user/category/" + category.getId());
-	}
-
-	public TreeNode getSelectRead() {
-		return selectRead;
-	}
-
-	public void setSelectRead(TreeNode selectRead) {
-		this.selectRead = selectRead;
 	}
 
 	public TreeNode getSelectedParent() {
@@ -126,22 +101,6 @@ public class TreeBean implements Serializable {
 
 	public void setSelectedParent(TreeNode selectedParent) {
 		this.selectedParent = selectedParent;
-	}
-
-	public String getNameUpdate() {
-		return nameUpdate;
-	}
-
-	public void setNameUpdate(String nameUpdate) {
-		this.nameUpdate = nameUpdate;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	private TreeNode getParent(long id) {

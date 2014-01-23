@@ -45,16 +45,20 @@
 								<p:commandLink
 									actionListener="#{clientProducts.showProduct(productColor)}">
 									<li>
-										<div class="product-info">
-											<h3>#{productColor.product.name}</h3>
-											<div class="product-desc">
-												<h3>#{productColor.product.category.name}'S</h3>
-												<p>
-													#{productColor.product.description}<br />
-												</p>
-												<strong class="price">$#{productColor.product.price}</strong>
+										<center>
+											<div class="product-info">
+												<h3>Product name</h3>
+												#{productColor.product.name} <br />
+												<br />
+												<strong class="price">Category name</strong>#{productColor.product.category.name}
+												<br />
+												<br />
+												<strong class="price">Price</strong>#{productColor.product.price}$
+												<br />
+												<br />
+												<strong class="price">Color</strong>#{productColor.color.name}
 											</div>
-										</div>
+										</center>
 									</li>
 
 								</p:commandLink>

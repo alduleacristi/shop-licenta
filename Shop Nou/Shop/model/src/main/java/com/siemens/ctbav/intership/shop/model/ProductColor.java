@@ -3,6 +3,7 @@ package com.siemens.ctbav.intership.shop.model;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -10,38 +11,49 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.NamedNativeQueries;
 import org.hibernate.annotations.NamedNativeQuery;
 
-@Entity(name="product_color")
-@NamedNativeQueries({
-	@NamedNativeQuery(name = ProductColor.GET_PRODUCTS_FROM_CATEGORY, query = "CALL products_child_categories(:param)", resultClass = ProductColor.class)})
-public class ProductColor implements Serializable{
+@Entity(name = "product_color")
+@NamedQueries({ @NamedQuery(name = ProductColor.GET_COLOR_PRODUCTS_FOR_PRODUCT, query = "SELECT p FROM product_color p where p.product.id = :id") })
+@NamedNativeQueries({ @NamedNativeQuery(name = ProductColor.GET_PRODUCTS_FROM_CATEGORY, query = "CALL products_child_categories(:param)", resultClass = ProductColor.class) })
+public class ProductColor implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -8367516895914463732L;
-	
+
 	public final static String GET_PRODUCTS_FROM_CATEGORY = "get_product_from_category";
+	public final static String GET_COLOR_PRODUCTS_FOR_PRODUCT = "getColorProductsForProduct";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id_prod_col;
-	
+	@Column(name = "id_prod_col")
+	private Long id;
+
 	@ManyToOne
 	@JoinColumn(name = "id_product")
 	private Product product;
-	
-	
+
 	@ManyToOne
 	@JoinColumn(name = "id_color")
 	private Color color;
-	
-	@OneToMany(mappedBy = "productcolor" , fetch = FetchType.EAGER)
+
+	@OneToMany(mappedBy = "productcolor", fetch = FetchType.EAGER)
 	List<ProductColorSize> productColorSize;
+
+	public ProductColor() {
+	}
+
+	public ProductColor(Product p, Color c) {
+		this.product = p;
+		this.color = c;
+	}
 
 	public Product getProduct() {
 		return product;
@@ -51,12 +63,12 @@ public class ProductColor implements Serializable{
 		return color;
 	}
 
-	public Long getId_prod_col() {
-		return id_prod_col;
+	public Long getId() {
+		return id;
 	}
 
-	public void setId_prod_col(Long id_prod_col) {
-		this.id_prod_col = id_prod_col;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public List<ProductColorSize> getProductColorSize() {
@@ -75,6 +87,10 @@ public class ProductColor implements Serializable{
 		this.color = color;
 	}
 
-	
-	
+	@Override
+	public String toString() {
+		return "ProductColor [id=" + id + ", product=" + product + ", color="
+				+ color + ", productColorSize=" + productColorSize + "]";
+	}
+
 }

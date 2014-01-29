@@ -1,6 +1,7 @@
 package com.siemens.ctbav.intership.shop.model;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
@@ -20,9 +22,6 @@ import org.hibernate.annotations.NamedNativeQuery;
 @Entity
 public class Product implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 7012681729962896743L;
 
 	public static final String GET_PRODUCTS_BY_CATEGORY = "getProductsByCategory";
@@ -44,6 +43,9 @@ public class Product implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "id_category")
 	private Category category;
+
+	@OneToMany(mappedBy = "color")
+	List<ProductColor> productColor;
 
 	public Product() {
 	}
@@ -94,6 +96,14 @@ public class Product implements Serializable {
 
 	public void setCategory(Category category) {
 		this.category = category;
+	}
+
+	public List<ProductColor> getProductColor() {
+		return productColor;
+	}
+
+	public void setProductColor(List<ProductColor> productColor) {
+		this.productColor = productColor;
 	}
 
 	@Override
@@ -153,7 +163,5 @@ public class Product implements Serializable {
 				+ description + ", price=" + price + ", category=" + category
 				+ "]";
 	}
-	
-	
 
 }

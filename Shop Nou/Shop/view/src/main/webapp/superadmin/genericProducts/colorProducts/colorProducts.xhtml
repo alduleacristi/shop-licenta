@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Categories</title>
+</h:head>
+<h:body>
+	<ui:composition template="/superadmin/index.xhtml">
+		<br />
+		<ui:define name="menu">
+			<ui:include src="/resources/template/superadmin/menuProducts.xhtml"></ui:include>
+		</ui:define>
+
+		<ui:define name="mainContent">
+			<br />
+			*Pentru adaugare, editare, stergere de produse, se va selecta o categorie
+			
+			
+			<h:form id="formTree">
+
+				<p:growl id="messages" showDetail="true" />
+
+				<p:tree value="#{categoryBean.root}" var="node" dynamic="true"
+					cache="false" selectionMode="single" animate="true"
+					orientation="horizontal" selection="#{categoryBean.selectedNode}"
+					id="tree">
+					<p:ajax event="select" listener="#{colorProductBean.onNodeSelect}"
+						update=":formProducts" />
+					<p:treeNode>
+						<h:outputText value="#{node}" />
+					</p:treeNode>
+
+				</p:tree>
+
+				<br />
+			</h:form>
+
+
+			<h:form id="formProducts">
+
+				<p:growl id="messages1" showDetail="true" />
+				<p:dataGrid id="dataGrid" var="product"
+					value="#{colorProductBean.productList}" columns="3" rows="12"
+					paginator="true"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					rowsPerPageTemplate="3,6,9,12,15"
+					rendered="#{colorProductBean.selectedCategory}">
+					<p:column>
+						<p:panel header="#{product.name}" style="text-align:center">
+							<h:outputText value="Category: #{product.category.name}" />
+							<br />
+							<h:outputText value="Price: #{product.price}" />
+							<br />
+							<h:outputText
+								value="Colors: #{colorProductBean.displayColors(product)}" />
+							<br />
+							<h:outputText value="Description: #{product.description}" />
+							<br />
+							<p:commandLink title="Manage colors"
+								update=":formProducts:productDetail"
+								oncomplete="productDialog.show()">
+								<h:outputText styleClass="ui-icon ui-icon-search"
+									style="margin:0 auto;" />
+								<f:setPropertyActionListener value="#{product}"
+									target="#{colorProductBean.selectedProduct}" />
+							</p:commandLink>
+						</p:panel>
+					</p:column>
+				</p:dataGrid>
+
+				<p:dialog header="Product Detail" widgetVar="productDialog"
+					modal="true" id="pdetail">
+					<p:outputPanel id="productDetail" style="text-align:center;">
+						<h:panelGrid columns="2" cellpadding="4"
+							rendered="#{colorProductBean.selectedProduct != null}">
+							<h:outputText value="Product's name: " />
+							<p:inputText value="#{colorProductBean.selectedProduct.name}"
+								readonly="true">
+							</p:inputText>
+							<h:outputText value="Product's category: " />
+							<p:inputText
+								value="#{colorProductBean.selectedProduct.category.name}"
+								readonly="true" />
+							<h:outputText value="Product's price: " />
+							<p:inputText value="#{colorProductBean.selectedProduct.price}"
+								readonly="true">
+							</p:inputText>
+							<h:outputText value="Product's description: " />
+							<p:inputTextarea cols="22" rows="10" maxlength="200"
+								value="#{colorProductBean.selectedProduct.description}"
+								maxLength="200" readonly="true" />
+							<h:outputText value="Select a color:" />
+							<p:selectOneMenu id="selectOneMenu"
+								value="#{colorProductBean.idSelectedProductColor}"
+								style="width:155px">
+								<f:selectItems
+									value="#{colorProductBean.selectedProduct.productColor}"
+									var="pcolor" itemLabel="#{pcolor.color.name}"
+									itemValue="#{pcolor.id}" />
+								<p:ajax event="valueChange" update="description" />
+							</p:selectOneMenu>
+							<h:outputText value="Description: " />
+							<p:inputTextarea id="description" cols="22" rows="5"
+								maxlength="100"
+								value="#{colorProductBean.selectedProductColor.color.description}"
+								readonly="true" />
+						</h:panelGrid>
+						<p:commandButton value="Add color for product"
+							onclick="addDialog.show()" update="messages1" />
+						<p:commandButton value="Edit color for product"
+							onclick="editDialog.show()" update="messages1" />
+						<p:commandButton value="Delete color from product"
+							onclick="cd.show()" />
+					</p:outputPanel>
+				</p:dialog>
+
+				<p:dialog header="Chose a color" widgetVar="addDialog"
+					resizable="false">
+					<h:panelGrid columns="2" cellpadding="4">
+						<h:outputText value="Available colors:" />
+						<p:selectOneMenu id="selectAColor"
+							value="#{colorProductBean.idSelectedColor}" style="width:155px">
+							<f:selectItems value="#{colorProductBean.allColors}" var="color"
+								itemLabel="#{color.name}" itemValue="#{color.id}" />
+							<p:ajax event="valueChange" update="descriptionCol" />
+						</p:selectOneMenu>
+						<h:outputText value="Description: " />
+						<p:inputTextarea id="descriptionCol" cols="22" rows="5"
+							maxlength="100" value="#{colorProductBean.selectedColor.description}"
+							readonly="true" />
+						<p:commandButton value="Add"
+							actionListener="#{colorProductBean.add}"
+							oncomplete="handleCreateRequest(xhr, status, args)"
+							update="messages1, :formProducts:dataGrid, :formProducts:productDetail" />
+						<p:commandButton value="Cancel" onclick="addDialog.hide()" />
+					</h:panelGrid>
+				</p:dialog>
+				<script type="text/javascript">
+					function handleCreateRequest(xhr, status, args) {
+						if (args.validationFailed || !args.create) {
+							PF('addDialog').jq.effect("shake", {
+								times : 5
+							}, 100);
+						} else {
+							PF('addDialog').hide();
+						}
+					}
+				</script>
+
+				<p:dialog header="Edit a color" widgetVar="editDialog"
+					resizable="false">
+					<h:panelGrid columns="2" cellpadding="4">
+						<h:outputText value="SELECTED COLOR: " />
+						<h:outputText
+							value="#{colorProductBean.selectedProductColor.color.name}" />
+						<h:outputText value="Available colors:" />
+						<p:selectOneMenu id="selectACol"
+							value="#{colorProductBean.idSelectedColor}" style="width:155px">
+							<f:selectItems value="#{colorProductBean.allColors}" var="color"
+								itemLabel="#{color.name}" itemValue="#{color.id}" />
+							<p:ajax event="valueChange" update="descriptionColor" />
+						</p:selectOneMenu>
+						<h:outputText value="Description: " />
+						<p:inputTextarea id="descriptionColor" cols="22" rows="5"
+							maxlength="100" value="#{colorProductBean.selectedColor.description}"
+							readonly="true" />
+						<p:commandButton value="Edit"
+							actionListener="#{colorProductBean.edit}"
+							update="messages1, :formProducts:dataGrid, :formProducts:productDetail" />
+						<p:commandButton value="Cancel" onclick="addDialog.hide()" />
+					</h:panelGrid>
+				</p:dialog>
+
+				<p:dialog header="Confirmation" widgetVar="cd" resizable="false">
+					<h:outputText value="Are you sure?" />
+					<br />
+					<p:commandButton value="Yes"
+						actionListener="#{colorProductBean.delete}"
+						update="messages1, :formProducts:dataGrid, :formProducts:productDetail"
+						oncomplete="cd.hide()" immediate="true" />
+					<p:commandButton value="No" onclick="cd.hide();" type="button" />
+				</p:dialog>
+
+			</h:form>
+
+
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

@@ -74,6 +74,7 @@
 
 
 			<h:form id="formUpdate">
+
 				<p:growl id="messages3" showDetail="true" />
 				<h:commandButton value="Update" type="button"
 					onclick="update.show()" styleClass="search-submit"
@@ -82,9 +83,11 @@
 
 				<p:dialog header="Update the selected category" modal="true"
 					widgetVar="update" focus="nName" resizable="false">
+					
 					<h:panelGrid columns="2" cellpadding="5">
 						<h:outputLabel for="tree"
 							value="Select a new parent for the category" />
+						
 						<p:tree value="#{categoryBean.rootUpdate}" var="node"
 							dynamic="true" cache="false" selectionMode="single"
 							animate="true" orientation="horizontal"
@@ -94,6 +97,7 @@
 								<h:outputText value="#{node}" />
 							</p:treeNode>
 						</p:tree>
+						
 						<h:outputLabel for="nName" value="Name:" />
 						<p:inputText id="nName" label="nName"
 							value="#{categoryBean.newName}">
@@ -104,6 +108,7 @@
 							oncomplete="handleUpdateRequest(xhr, status, args)" />
 						<p:commandButton value="Cancel" onclick="update.hide();"
 							type="button" />
+					
 					</h:panelGrid>
 				</p:dialog>
 

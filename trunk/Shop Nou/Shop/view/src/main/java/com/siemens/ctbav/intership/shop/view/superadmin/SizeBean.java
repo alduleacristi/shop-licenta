@@ -8,7 +8,7 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
@@ -24,11 +24,10 @@ import com.siemens.ctbav.intership.shop.model.Category;
 import com.siemens.ctbav.intership.shop.model.Size;
 import com.siemens.ctbav.intership.shop.service.superadmin.SizeService;
 import com.siemens.ctbav.intership.shop.util.superadmin.NavigationUtils;
-import com.siemens.ctbav.intership.shop.util.superadmin.SizeUpdateNameValidate;
 import com.siemens.ctbav.intership.shop.util.superadmin.selectable.SelectableSize;
 
 @ManagedBean(name = "sizeBean")
-@RequestScoped
+@ViewScoped
 @URLMappings(mappings = { @URLMapping(id = "sizes", pattern = "/superadmin/categories/sizes/", viewId = "sizes.xhtml") })
 public class SizeBean implements Serializable {
 
@@ -45,24 +44,6 @@ public class SizeBean implements Serializable {
 
 	@PostConstruct
 	void init() {
-		TreeNode selectedNode = (TreeNode) FacesContext.getCurrentInstance()
-				.getExternalContext().getSessionMap().get("selectedNode");
-		if (selectedNode != null) {
-			initAddAndSelectedSize(selectedNode);
-		}
-	}
-
-	private void initAddAndSelectedSize(TreeNode selectedNode) {
-		long idSelectedNode = ((Category) selectedNode.getData()).getId();
-		Boolean b = (Boolean) FacesContext.getCurrentInstance()
-				.getExternalContext().getSessionMap().get("addSize");
-		if (b != null)
-			addSize = b;
-		else
-			addSize = false;
-		if (addSize == true) {
-			initSelectedSize(idSelectedNode);
-		}
 	}
 
 	private void initSelectedSize(long idSelectedNode) {
@@ -71,10 +52,6 @@ public class SizeBean implements Serializable {
 		parentsSizes = sizeService
 				.storedProcedureGetParentsSizes(idSelectedNode);
 		sizes = new SelectableSize(currentSizes);
-		FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
-				.remove("addSize");
-		selectedSize = (Size) FacesContext.getCurrentInstance()
-				.getExternalContext().getSessionMap().get("selectedSize");
 		putAllSizes(currentSizes);
 	}
 
@@ -126,16 +103,24 @@ public class SizeBean implements Serializable {
 		long idSelectedNode = ((Category) selectedNode.getData()).getId();
 
 		setEditableSize(selectedNode, idSelectedNode);
-		FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
-				.put("addSize", addSize);
+		initSelectedSize(idSelectedNode);
+	}
+
+	private void updateSizes() {
+		TreeNode selectedNode = (TreeNode) FacesContext.getCurrentInstance()
+				.getExternalContext().getSessionMap().get("selectedNode");
+		long idSelectedNode = ((Category) selectedNode.getData()).getId();
+
+		setEditableSize(selectedNode, idSelectedNode);
+		initSelectedSize(idSelectedNode);
+		selectedSize = null;
 	}
 
 	public void onRowSelect(SelectEvent event) {
 		selectedSize = (Size) event.getObject();
+
 		FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
 				.put("selectedSize", selectedSize);
-		FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
-				.put("addSize", addSize);
 	}
 
 	private void setEditableSize(TreeNode selectedNode, long idSelectedNode) {
@@ -165,17 +150,13 @@ public class SizeBean implements Serializable {
 	}
 
 	public void delete(ActionEvent actionEvent) {
-		selectedSize = (Size) FacesContext.getCurrentInstance()
-				.getExternalContext().getSessionMap().get("selectedSize");
 		try {
 			tryToDelete();
+			updateSizes();
 		} catch (SizeException e) {
 			FacesMessage message = new FacesMessage(
 					FacesMessage.SEVERITY_ERROR, "Error", e.getMessage());
 			NavigationUtils.addMessage(message);
-		} finally {
-			NavigationUtils
-					.redirect("/Shop4j/superadmin/categories/sizes");
 		}
 	}
 
@@ -195,6 +176,7 @@ public class SizeBean implements Serializable {
 		try {
 			msg = tryToCreate();
 			create = true;
+			updateSizes();
 		} catch (SizeException e) {
 			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
 					e.getMessage());
@@ -214,8 +196,6 @@ public class SizeBean implements Serializable {
 		sizeService.createSize(newName, (Category) selectedNode.getData());
 		FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
 				"Succes", "New size added");
-		FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
-				.put("success", msg);
 		return msg;
 	}
 
@@ -226,6 +206,7 @@ public class SizeBean implements Serializable {
 		try {
 			msg = tryToUpdate();
 			update = true;
+			updateSizes();
 		} catch (SizeException e) {
 			new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
 					e.getMessage());
@@ -240,21 +221,15 @@ public class SizeBean implements Serializable {
 	private FacesMessage tryToUpdate() throws SizeException {
 		treatExceptionsUpdate();
 		long id = selectedSize.getId();
-		new SizeUpdateNameValidate().validate(
-				FacesContext.getCurrentInstance(), null, newName);
-		sizeService.updateSize(id, newName);
+		sizeService.updateSize(id, selectedSize.getSize());
 		FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
 				"Succes", "Size edited");
-		FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
-				.put("success", msg);
 		return msg;
 	}
 
 	private void treatExceptionsUpdate() throws SizeException {
 		TreeNode selectedNode = (TreeNode) FacesContext.getCurrentInstance()
 				.getExternalContext().getSessionMap().get("selectedNode");
-		selectedSize = (Size) FacesContext.getCurrentInstance()
-				.getExternalContext().getSessionMap().get("selectedSize");
 		if (selectedNode == null)
 			throw new SizeException("No category selected");
 		if (selectedSize == null)

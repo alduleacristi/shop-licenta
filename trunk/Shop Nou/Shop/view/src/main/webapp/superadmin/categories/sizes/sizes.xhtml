@@ -12,13 +12,17 @@
 <h:body>
 	<ui:composition template="/superadmin/index.xhtml">
 		<br />
-		
+
 		<ui:define name="mainContent">
 			*Pentru editarea marimilor trebuie selectata o categorie. Pentru radacina ierarhiei si copiii acesteia nu se pot defini marimi.
 			<br />
 			*Se pot modifica doar marimile de pe categoria curenta. Marimile sunt mostenite de la parinti si nu se pot duplica
+			
+			
 			<h:form id="formTree">
+
 				<p:growl id="messages" showDetail="true" />
+
 				<p:tree value="#{categoryBean.root}" var="node" dynamic="true"
 					cache="false" selectionMode="single" animate="true"
 					orientation="horizontal" selection="#{categoryBean.selectedNode}"
@@ -29,7 +33,9 @@
 						<h:outputText value="#{node}" />
 					</p:treeNode>
 				</p:tree>
+
 			</h:form>
+
 
 			<h:form id="formCreate">
 
@@ -40,17 +46,20 @@
 
 				<p:dialog header="Create a new size" modal="true" widgetVar="create"
 					focus="name" resizable="false">
+
 					<h:panelGrid columns="2" cellpadding="5">
 						<h:outputLabel for="name" value="Name:" />
 						<p:inputText id="name" label="name" value="#{sizeBean.newName}">
 							<f:validator validatorId="validateSize" />
 						</p:inputText>
 						<p:commandButton value="Create"
-							actionListener="#{sizeBean.create}" update="messages2"
+							actionListener="#{sizeBean.create}"
+							update="messages2, :formDeleteUpdate:sizes"
 							oncomplete="handleCreateRequest(xhr, status, args)" />
 						<p:commandButton value="Cancel" onclick="create.hide();"
 							type="button" />
 					</h:panelGrid>
+
 				</p:dialog>
 
 				<script type="text/javascript">
@@ -61,14 +70,17 @@
 							}, 100);
 						} else {
 							PF('create').hide();
-							window.location.reload();
 						}
 					}
 				</script>
+
 			</h:form>
 
+
 			<h:form id="formDeleteUpdate">
+
 				<p:growl id="messages3" showDetail="true" />
+
 				<p:dataTable id="sizes" var="size" value="#{sizeBean.sizes}"
 					paginator="true" rows="10" selection="#{sizeBean.selectedSize}"
 					selectionMode="single" rendered="#{sizeBean.addSize}">
@@ -89,25 +101,32 @@
 				<p:dialog id="dialog" header="Size Detail" widgetVar="editDialog"
 					resizable="false" showEffect="fade" hideEffect="explode"
 					modal="true">
+
 					<h:panelGrid id="display" columns="2" cellpadding="4">
 						<h:outputText value="Size's new name:" />
-						<p:inputText id="nName" label="name" value="#{sizeBean.newName}">
+						<p:inputText id="nName" label="name" value="#{sizeBean.selectedSize.size}">
 							<f:validator validatorId="validateUpdateSize" />
 						</p:inputText>
 						<p:commandButton value="Update"
-							actionListener="#{sizeBean.update}" update="messages3"
+							actionListener="#{sizeBean.update}"
+							update="messages3, :formDeleteUpdate:sizes"
 							oncomplete="handleUpdateRequest(xhr, status, args)" />
 						<p:commandButton value="Delete" type="button" onclick="cd.show()"
 							immediate="true" process="@this" />
+
 						<p:dialog header="Confirmation" widgetVar="cd" resizable="false">
 							<h:outputText value="Are you sure?" />
 							<br />
 							<p:commandButton value="Yes" actionListener="#{sizeBean.delete}"
-								update="messages3" oncomplete="cd.hide()" immediate="true" />
+								update="messages3,:formDeleteUpdate:sizes"
+								oncomplete="cd.hide(), editDialog.hide()" immediate="true" />
 							<p:commandButton value="No" onclick="cd.hide();" type="button" />
 						</p:dialog>
+
 					</h:panelGrid>
+
 				</p:dialog>
+
 				<script type="text/javascript">
 					function handleUpdateRequest(xhr, status, args) {
 						if (args.validationFailed || !args.update) {
@@ -116,10 +135,10 @@
 							}, 100);
 						} else {
 							PF('editDialog').hide();
-							window.location.reload();
 						}
 					}
 				</script>
+
 				<br />
 				<br />
 				<br />
@@ -127,6 +146,7 @@
 
 
 			<h:form id="formSizes">
+
 				<p:dataTable id="parentSizes" var="s"
 					value="#{sizeBean.parentsSizes}" paginator="true" rows="10"
 					rendered="#{sizeBean.addSize}">
@@ -140,6 +160,7 @@
 						<h:outputText value="#{s.size}" />
 					</p:column>
 				</p:dataTable>
+
 			</h:form>
 
 

@@ -44,7 +44,6 @@ public class ProductsBean implements Serializable {
 	@PostConstruct
 	void init() {
 		newProduct = new ProductDTO();
-		NavigationUtils.addSuccesMessage();
 	}
 
 	public boolean isSelectedCategory() {
@@ -64,15 +63,11 @@ public class ProductsBean implements Serializable {
 	}
 
 	public Product getSelectedProduct() {
-		selectedProduct = (Product) FacesContext.getCurrentInstance()
-				.getExternalContext().getSessionMap().get("selectedProduct");
 		return selectedProduct;
 	}
 
 	public void setSelectedProduct(Product selectedProduct) {
 		this.selectedProduct = selectedProduct;
-		FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
-				.put("selectedProduct", selectedProduct);
 	}
 
 	public ProductDTO getNewProduct() {
@@ -98,17 +93,21 @@ public class ProductsBean implements Serializable {
 				.put("selectedParent", event.getTreeNode());
 	}
 
+	private void updateList() {
+		TreeNode node = (TreeNode) FacesContext.getCurrentInstance()
+				.getExternalContext().getSessionMap().get("selectedNode");
+		long id = ((Category) node.getData()).getId();
+		productList = productService.getGenericProductsByCategory(id);
+	}
+
 	public void delete(ActionEvent actionEvent) {
-		selectedProduct = (Product) FacesContext.getCurrentInstance()
-				.getExternalContext().getSessionMap().get("selectedProduct");
 		try {
 			tryToDelete();
+			updateList();
 		} catch (ProductException e) {
 			FacesMessage message = new FacesMessage(
 					FacesMessage.SEVERITY_ERROR, "Error", e.getMessage());
 			NavigationUtils.addMessage(message);
-		} finally {
-			NavigationUtils.redirect("/Shop4j/superadmin/genericProducts");
 		}
 	}
 
@@ -129,6 +128,7 @@ public class ProductsBean implements Serializable {
 		try {
 			msg = tryToCreate();
 			create = true;
+			updateList();
 		} catch (ProductException e) {
 			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
 					e.getMessage());
@@ -150,8 +150,6 @@ public class ProductsBean implements Serializable {
 		productService.createProduct(newProduct, idCategory);
 		msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Succes",
 				"New product added");
-		FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
-				.put("success", msg);
 		return msg;
 	}
 
@@ -159,7 +157,7 @@ public class ProductsBean implements Serializable {
 			throws ProductException {
 		if (selectedNode == null)
 			throw new ProductException("No category selected");
-		
+
 		List<ProductDTO> productsDto = ConvertProduct
 				.convertProducts(productList);
 		CategoryDTO c = new CategoryDTO(
@@ -174,9 +172,10 @@ public class ProductsBean implements Serializable {
 		RequestContext context = RequestContext.getCurrentInstance();
 		boolean change = false;
 		FacesMessage msg = null;
-
-		selectedProduct = (Product) FacesContext.getCurrentInstance()
-				.getExternalContext().getSessionMap().get("selectedProduct");
+		/*
+		 * selectedProduct = (Product) FacesContext.getCurrentInstance()
+		 * .getExternalContext().getSessionMap().get("selectedProduct");
+		 */
 		try {
 			msg = tryToChangeParent();
 			change = true;
@@ -262,13 +261,15 @@ public class ProductsBean implements Serializable {
 		RequestContext context = RequestContext.getCurrentInstance();
 		boolean update = false;
 		FacesMessage msg = null;
-
-		selectedProduct = (Product) FacesContext.getCurrentInstance()
-				.getExternalContext().getSessionMap().get("selectedProduct");
+		/*
+		 * selectedProduct = (Product) FacesContext.getCurrentInstance()
+		 * .getExternalContext().getSessionMap().get("selectedProduct");
+		 */
 
 		try {
 			msg = tryToUpdate();
 			update = true;
+			updateList();
 		} catch (ProductException e) {
 			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
 					e.getMessage());
@@ -294,8 +295,6 @@ public class ProductsBean implements Serializable {
 
 		msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Succes",
 				"Product successfully updated!");
-		FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
-				.put("success", msg);
 		return msg;
 	}
 

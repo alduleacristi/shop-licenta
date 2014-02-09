@@ -131,7 +131,8 @@
 						</p:selectOneMenu>
 						<h:outputText value="Description: " />
 						<p:inputTextarea id="descriptionCol" cols="22" rows="5"
-							maxlength="100" value="#{colorProductBean.selectedColor.description}"
+							maxlength="100"
+							value="#{colorProductBean.selectedColor.description}"
 							readonly="true" />
 						<p:commandButton value="Add"
 							actionListener="#{colorProductBean.add}"
@@ -155,9 +156,6 @@
 				<p:dialog header="Edit a color" widgetVar="editDialog"
 					resizable="false">
 					<h:panelGrid columns="2" cellpadding="4">
-						<h:outputText value="SELECTED COLOR: " />
-						<h:outputText
-							value="#{colorProductBean.selectedProductColor.color.name}" />
 						<h:outputText value="Available colors:" />
 						<p:selectOneMenu id="selectACol"
 							value="#{colorProductBean.idSelectedColor}" style="width:155px">
@@ -167,15 +165,27 @@
 						</p:selectOneMenu>
 						<h:outputText value="Description: " />
 						<p:inputTextarea id="descriptionColor" cols="22" rows="5"
-							maxlength="100" value="#{colorProductBean.selectedColor.description}"
+							maxlength="100"
+							value="#{colorProductBean.selectedColor.description}"
 							readonly="true" />
 						<p:commandButton value="Edit"
 							actionListener="#{colorProductBean.edit}"
+							oncomplete="handleChangeCategoryRequest(xhr, status, args)"
 							update="messages1, :formProducts:dataGrid, :formProducts:productDetail" />
 						<p:commandButton value="Cancel" onclick="addDialog.hide()" />
 					</h:panelGrid>
 				</p:dialog>
-
+				<script type="text/javascript">
+					function handleUpdateRequest(xhr, status, args) {
+						if (args.validationFailed || !args.update) {
+							PF('editDialog').jq.effect("shake", {
+								times : 5
+							}, 100);
+						} else {
+							PF('editDialog').hide();
+						}
+					}
+				</script>
 				<p:dialog header="Confirmation" widgetVar="cd" resizable="false">
 					<h:outputText value="Are you sure?" />
 					<br />

@@ -181,11 +181,37 @@ public class ColorProductsBean implements Serializable {
 				colors.add(p.getColor());
 		}
 		if (colors.contains(selectedColor))
-			throw new ColorProductException("Coloe already exists!");
+			throw new ColorProductException("Color already exists!");
 	}
 
 	public void edit(ActionEvent actionEvent) {
+		RequestContext context = RequestContext.getCurrentInstance();
+		boolean update = false;
+		FacesMessage msg = null;
+		try {
+			msg = tryToEdit();
+			update = true;
+		} catch (ColorProductException e) {
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
+					e.getMessage());
+			update = false;
+		} finally {
+			NavigationUtils.addMessage(msg);
+			context.addCallbackParam("update", update);
+		}
+	}
 
+	private FacesMessage tryToEdit() throws ColorProductException {
+		FacesMessage msg = null;
+		if (selectedProduct == null)
+			throw new ColorProductException("No product selected");
+		if (selectedProductColor == null)
+			throw new ColorProductException(
+					"No color selected in order to update it");
+		if (selectedColor == null)
+			throw new ColorProductException("No new color selected");
+		msg = new FacesMessage("Success!", "Color updated!");
+		return msg;
 	}
 
 	public void delete(ActionEvent actionEvent) {

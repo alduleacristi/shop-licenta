@@ -17,7 +17,9 @@ import javax.persistence.NamedQuery;
 import org.hibernate.annotations.NamedNativeQueries;
 import org.hibernate.annotations.NamedNativeQuery;
 
-@NamedQueries({ @NamedQuery(name = Product.GET_PRODUCTS_BY_CATEGORY, query = "SELECT p FROM Product p where p.category.id = :id") })
+@NamedQueries({
+		@NamedQuery(name = Product.GET_PRODUCTS_BY_CATEGORY, query = "SELECT p FROM Product p where p.category.id = :id"),
+		@NamedQuery(name = Product.GET_REDUCE_PRODUCTS, query = "SELECT p FROM Product p WHERE p.reduction > 0") })
 @NamedNativeQueries({ @NamedNativeQuery(name = Product.GET_GENERIC_PRODUCTS_FROM_CATEGORY, query = "CALL generic_products_child_categories(:param)", resultClass = Product.class) })
 @Entity
 public class Product implements Serializable {
@@ -26,6 +28,7 @@ public class Product implements Serializable {
 
 	public static final String GET_PRODUCTS_BY_CATEGORY = "getProductsByCategory";
 	public final static String GET_GENERIC_PRODUCTS_FROM_CATEGORY = "getGenericProductsFromCategory";
+	public final static String GET_REDUCE_PRODUCTS = "get_reduce_products";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,6 +49,8 @@ public class Product implements Serializable {
 
 	@OneToMany(mappedBy = "color")
 	List<ProductColor> productColor;
+	@Column(name = "perc_reduction")
+	private Double reduction;
 
 	public Product() {
 	}
@@ -104,6 +109,14 @@ public class Product implements Serializable {
 
 	public void setProductColor(List<ProductColor> productColor) {
 		this.productColor = productColor;
+	}
+
+	public Double getReduction() {
+		return reduction;
+	}
+
+	public void setReduction(Double reduction) {
+		this.reduction = reduction;
 	}
 
 	@Override

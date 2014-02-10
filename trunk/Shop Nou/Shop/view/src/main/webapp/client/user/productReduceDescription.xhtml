@@ -30,23 +30,7 @@
 
 		<ui:define name="mainContent">
 			<h:form id="reduceForm">
-				<p:carousel value="#{reductionProductsClient.products}" var="p"
-					itemStyle="width:230px" styleClass="products-reduce"
-					itemStyleClass="product-info">
-					<p:commandLink
-						actionListener="#{reductionProductsClient.chooseAProduct(p)}">
-						<center>
-							<div class="reduction">
-								<p:outputLabel value="-#{p.reduction}%"
-									rendered="#{p.reduction != 0.0}"></p:outputLabel>
-							</div>
-							<h3>Product name</h3>
-							<p:outputLabel value="#{p.name}"></p:outputLabel>
-							<br /> <br /> <strong class="price">Price</strong>
-							<p:outputLabel value="#{p.price}"></p:outputLabel>
-						</center>
-					</p:commandLink>
-				</p:carousel>
+				<p:outputLabel value="#{productDescriptionReduceClient.id}"></p:outputLabel>
 			</h:form>
 		</ui:define>
 

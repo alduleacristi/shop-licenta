@@ -10,21 +10,21 @@ import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.RequestScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-
-
 
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
+import com.siemens.ctbav.intership.shop.exception.client.ProductColorSizeDoesNotExistException;
 import com.siemens.ctbav.intership.shop.exception.client.ProductDoesNotExistException;
 import com.siemens.ctbav.intership.shop.model.Category;
 import com.siemens.ctbav.intership.shop.model.ProductColor;
 import com.siemens.ctbav.intership.shop.model.ProductColorSize;
 import com.siemens.ctbav.intership.shop.service.client.ProductColorService;
+import com.siemens.ctbav.intership.shop.service.client.ProductColorSizeService;
 
 @ManagedBean(name = "clientProducts")
-@RequestScoped
+@ViewScoped
 @URLMappings(mappings = { @URLMapping(id = "id6", pattern = "/client/user/products/#{clientProducts.id}", viewId = "/client/user/productDescription.xhtml") })
 public class ClientProductsBean implements Serializable {
 
@@ -39,12 +39,16 @@ public class ClientProductsBean implements Serializable {
 	@EJB
 	private ProductColorService productColorService;
 
+	@EJB
+	ProductColorSizeService productColorSizeService;
+
 	private ProductColor selectedProduct;
 	private Category selectedCategory;
 	private List<ProductColor> productList;
 	private String availabel;
 	private Boolean isAvailabel;
 	private ProductColorSize productColorSize;
+	private Long idProductColorSize;
 
 	@PostConstruct
 	void postConstruct() {
@@ -72,8 +76,7 @@ public class ClientProductsBean implements Serializable {
 		if (id != 0) {
 			try {
 				selectedProduct = productColorService.getProductById(id);
-				this.availabel = "Yes";
-				this.isAvailabel = true;
+				this.isAvailabel = false;
 			} catch (ProductDoesNotExistException e) {
 				FacesContext ctx = FacesContext.getCurrentInstance();
 				ctx.addMessage(null, new FacesMessage(
@@ -87,6 +90,14 @@ public class ClientProductsBean implements Serializable {
 
 	public ProductColorSize getProductColorSize() {
 		return productColorSize;
+	}
+
+	public Long getIdProductColorSize() {
+		return idProductColorSize;
+	}
+
+	public void setIdProductColorSize(Long idProductColorSize) {
+		this.idProductColorSize = idProductColorSize;
 	}
 
 	public void setProductColorSize(ProductColorSize productColorSize) {
@@ -145,16 +156,30 @@ public class ClientProductsBean implements Serializable {
 	}
 
 	public void showProduct(ProductColor product) {
-		// System.out.println("SHOW PRODUCT!!!!");
-		// System.out.println(product.getIdProduct());
 		FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
 				.put("myObj", product);
 
-		setId(product.getId_prod_col());
-		redirect("/Shop4j/client/user/products/" + product.getId_prod_col());
+		setId(product.getId());
+		redirect("/Shop4j/client/user/products/" + product.getId());
 	}
 
-	public void changeSize(){
-		System.out.println(productColorSize.getNrOfPieces());
+	public void changeSize() {
+		try {
+			this.productColorSize = productColorSizeService
+					.getProductColorSizeById(idProductColorSize);
+			
+			if (this.productColorSize.getNrOfPieces() == 0) {
+				this.availabel = "Not in stock";
+				this.isAvailabel = false;
+			} else {
+				this.availabel = "In stock";
+				this.isAvailabel = true;
+			}
+		} catch (ProductColorSizeDoesNotExistException e) {
+			FacesContext ctx = FacesContext.getCurrentInstance();
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+					"Error", "Sorry. You can't choose products now."));
+			this.availabel = "";
+		}
 	}
 }

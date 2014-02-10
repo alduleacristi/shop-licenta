@@ -11,20 +11,23 @@
 </head>
 <h:body>
 	<ui:composition>
-		<div id="cart">
-			<a href="/Shop4J/client/Cart" class="cart-link">Your Shopping
-				Cart</a>
-			<div class="cl">&nbsp;</div>
-			<span>
-				Articles:
-				<h:outputText value="#{cart.getNrOfProducts(AdminLogin.logged)}"></h:outputText>
-			</span>
-			 &nbsp;&nbsp;
-			<span>
-				Cost:
-				<h:outputText value="#{cart.getTotalPrice(AdminLogin.logged)}"></h:outputText>
-			</span>
-		</div>
+		<h:form id="cartLink" onmouseover="PF('dlg3').show();">
+			<div class="cart">
+				<a href="/Shop4J/client/Cart" class="cart-link">Your Shopping
+					Cart</a>
+				<div class="cl">&nbsp;</div>
+				<span> Articles: <h:outputText
+						value="#{cart.getNrOfProducts(AdminLogin.logged)}"></h:outputText>
+				</span> &nbsp;&nbsp; <span> Cost: <h:outputText
+						value="#{cart.getTotalPrice(AdminLogin.logged)}"></h:outputText>
+				</span>
+				<p:dialog header="Effects" widgetVar="dlg3" showEffect="explode"
+					position="1250,6" hideEffect="explode" height="100">
+					<h:outputText value="This dialog has nice effects." />
+				</p:dialog>
+			</div>
+		</h:form>
+
 	</ui:composition>
 </h:body>
 </html>

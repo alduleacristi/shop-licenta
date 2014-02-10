@@ -33,4 +33,11 @@ public class ProductColorService {
 			throw new ProductDoesNotExistException();
 		return pc;
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<ProductColor> getColorsForProduct(Long id) {
+		return (List<ProductColor>) em
+				.createNamedQuery(ProductColor.GET_COLOR_PRODUCTS_FOR_PRODUCT)
+				.setParameter("id", id).getResultList();
+	}
 }

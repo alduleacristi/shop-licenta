@@ -38,6 +38,7 @@ create table product(
     name varchar(20) not null,
     description varchar(200),
     price float not null,
+	perc_reduction float default 0,
 
     foreign key product_category(id_category)
     references category(id)

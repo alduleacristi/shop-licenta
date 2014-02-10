@@ -38,6 +38,12 @@
 					<li>
 						<div class="product-info2">
 							<h3>Product info</h3>
+							<div class="reduction">
+								<p:outputLabel
+									value="-#{clientProducts.selectedProduct.product.reduction}%"
+									rendered="#{clientProducts.selectedProduct.product.reduction != 0.0}"
+									styleClass="reduction"></p:outputLabel>
+							</div>
 							<div class="product-desc">
 								<center>
 									<strong class="price">Name</strong>
@@ -77,20 +83,26 @@
 						<div class="product-info2">
 							<h3>Choose the size</h3>
 							<h:form id="form">
+								<p:growl sticky="true"></p:growl>
 								<div style="width: 100%">
 									<center>
 										<br></br>
-										<p:selectOneMenu value="#{clientProducts.productColorSize}" immediate="true"
+										<p:selectOneMenu value="#{clientProducts.idProductColorSize}"
 											style="width:160px">
+											<f:selectItem itemLabel="Choose a size"></f:selectItem>
 											<f:selectItems id="selectSize"
 												value="#{clientProducts.selectedProduct.productColorSize}"
-												var="p" itemLabel="#{p.size.size}" itemValue="#{p}"/>
-											<p:ajax listener="#{clientProducts.changeSize}" update="ava" />
+												var="p" itemLabel="#{p.size.size}" itemValue="#{p.id}" />
+											<p:ajax event="valueChange"
+												listener="#{clientProducts.changeSize}"
+												update="ava,addButton" />
 										</p:selectOneMenu>
-										<br /> <br /> <strong class="price">Is in stock</strong>
-										<p:outputLabel value="#{clientProducts.availabel}" id="ava"></p:outputLabel>
+										<br /> <br /> <strong class="price"><p:outputLabel
+												value="#{clientProducts.availabel}" id="ava"></p:outputLabel></strong>
+										<br /> <strong class="price">Number of pieces</strong>
+										<p:inputText style="width:160px"></p:inputText>
 										<br /> <br />
-										<p:commandButton value="Add to cart"
+										<p:commandButton value="Add to cart" id="addButton"
 											styleClass="update-submit"
 											disabled="#{!clientProducts.isAvailabel}" />
 
@@ -102,18 +114,6 @@
 				</ul>
 				<div class="cl">&nbsp;</div>
 			</div>
-			<!-- 			<div class="box"> -->
-			<!-- 				<div class="cl">&nbsp;</div> -->
-			<!-- 				<h:form> -->
-			<!-- 					<p:galleria effect="slide" value="#{imageBean.pictures}" -->
-			<!-- 						var="image" panelWidth="500" panelHeight="313" showCaption="false" -->
-			<!-- 						title="#{products.selectedProduct.name}"> -->
-			<!-- 						<p:graphicImage url="#{image}"> -->
-			<!-- 						</p:graphicImage> -->
-			<!-- 					</p:galleria> -->
-			<!-- 				</h:form> -->
-			<!-- 				<div class="cl">&nbsp;</div> -->
-			<!-- 			</div> -->
 		</ui:define>
 
 		<ui:define name="advertise">

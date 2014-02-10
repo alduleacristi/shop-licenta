@@ -30,7 +30,6 @@ public class ProductColor implements Serializable {
 
 	public final static String GET_PRODUCTS_FROM_CATEGORY = "get_product_from_category";
 	public final static String GET_COLOR_PRODUCTS_FOR_PRODUCT = "getColorProductsForProduct";
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id_prod_col")

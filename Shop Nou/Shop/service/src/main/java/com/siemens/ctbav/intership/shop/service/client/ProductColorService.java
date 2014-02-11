@@ -36,6 +36,7 @@ public class ProductColorService {
 	
 	@SuppressWarnings("unchecked")
 	public List<ProductColor> getColorsForProduct(Long id) {
+		System.out.println("in service id="+id);
 		return (List<ProductColor>) em
 				.createNamedQuery(ProductColor.GET_COLOR_PRODUCTS_FOR_PRODUCT)
 				.setParameter("id", id).getResultList();

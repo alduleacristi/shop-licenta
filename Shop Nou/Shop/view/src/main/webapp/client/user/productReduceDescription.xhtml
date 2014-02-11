@@ -29,9 +29,99 @@
 		</ui:define>
 
 		<ui:define name="mainContent">
-			<h:form id="reduceForm">
-				<p:outputLabel value="#{productDescriptionReduceClient.id}"></p:outputLabel>
-			</h:form>
+			<div class="products2">
+				<div class="cl">&nbsp;</div>
+				<ul>
+					<li>
+						<div class="product-info2">
+							<h3>Product info</h3>
+							<div class="reduction">
+								<p:outputLabel
+									value="-#{productDescriptionReduceClient.selectedProduct.reduction}%"
+									rendered="#{productDescriptionReduceClient.selectedProduct.reduction != 0.0}"
+									styleClass="reduction"></p:outputLabel>
+							</div>
+							<div class="product-desc">
+								<center>
+									<strong class="price">Name</strong>
+									#{productDescriptionReduceClient.selectedProduct.name}<br />
+									<br /> <strong class="price">Category</strong>
+									#{productDescriptionReduceClient.selectedProduct.category.name}<br />
+									<br /> <strong class="price">Price</strong>
+									#{productDescriptionReduceClient.selectedProduct.price}
+								</center>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+			<div class="products2description">
+				<ul>
+					<li>
+						<div class="product-info2description">
+							<h3>Description</h3>
+							<center>
+								<br></br>
+								<p:inputTextarea cols="55" rows="9" maxlength="200"
+									value="#{productDescriptionReduceClient.selectedProduct.description}"
+									readonly="true">
+								</p:inputTextarea>
+							</center>
+
+						</div>
+					</li>
+				</ul>
+			</div>
+			<div class="products2">
+				<ul>
+					<li>
+						<div class="product-info2">
+							<h3>Choose the color</h3>
+							<h:form id="formChange">
+								<p:growl sticky="true"></p:growl>
+								<div style="width: 100%">
+									<center>
+										<br></br>
+										<p:selectOneMenu
+											value="#{productDescriptionReduceClient.idProductColor}"
+											style="width:160px">
+											<f:selectItem itemLabel="Choose a color"></f:selectItem>
+											<f:selectItems id="selectColor"
+												value="#{productDescriptionReduceClient.productsColor}"
+												var="p" itemLabel="#{p.color.name}" itemValue="#{p.id}" />
+											<f:ajax event="valueChange"
+												listener="#{productDescriptionReduceClient.changeColor}"
+												update="selectSize,ava,addButton" render="formChange" />
+										</p:selectOneMenu>
+										<br /> <br />
+										<p:selectOneMenu id="selectProductColorSize"
+											value="#{productDescriptionReduceClient.idProductColorSize}"
+											style="width:160px">
+											<f:selectItem itemLabel="Choose a size"></f:selectItem>
+											<f:selectItems id="selectSize"
+												value="#{productDescriptionReduceClient.productsColorSize}"
+												var="pcs" itemLabel="#{pcs.size.size}" itemValue="#{pcs.id}" />
+											<p:ajax event="valueChange"
+												listener="#{productDescriptionReduceClient.changeSize}"
+												update="ava,addButton" />
+										</p:selectOneMenu>
+										<br /> <br /> <strong class="price"><p:outputLabel
+												value="#{productDescriptionReduceClient.availabel}" id="ava"></p:outputLabel></strong>
+										<strong class="price">Number of pieces</strong>
+										<p:inputText style="width:160px"></p:inputText>
+										<br /> <br />
+										<p:commandButton value="Add to cart" id="addButton"
+											styleClass="update-submit"
+											disabled="#{!productDescriptionReduceClient.isAvailabel}" />
+
+									</center>
+								</div>
+							</h:form>
+						</div>
+					</li>
+				</ul>
+				<div class="cl">&nbsp;</div>
+			</div>
 		</ui:define>
 
 		<ui:define name="advertise">

@@ -104,7 +104,8 @@
 										<br /> <br />
 										<p:commandButton value="Add to cart" id="addButton"
 											styleClass="update-submit"
-											disabled="#{!clientProducts.isAvailabel}" />
+											disabled="#{!clientProducts.isAvailabel}" 
+											actionListener="#{cart.addProduct(productColorSize,5)}"/>
 
 									</center>
 								</div>

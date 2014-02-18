@@ -3,12 +3,12 @@ package com.siemens.ctbav.intership.shop.view.client;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
@@ -27,35 +27,88 @@ public class Cart {
 	// @EJB
 	// ProductService productService;
 
+	private Integer nrOfProducts;
+
+	private Double totalPrice;
+	
+	private List<ProductColorSize> products;
+
 	@PostConstruct
 	public void initialize() {
 		cart = new HashMap<ProductColorSize, Integer>();
+		setNrOfProducts(0);
+		setTotalPrice(0.0);
+		products = new ArrayList<ProductColorSize>();
 	}
 
-	public int nrOfProducts() {
-		return cart.size();
+	public Integer getNrOfProducts() {
+		return nrOfProducts;
 	}
 
-	public double totalPrice() {
-		double s = 0.0;
-
-		Iterator<Map.Entry<ProductColorSize, Integer>> it = cart.entrySet().iterator();
-
-		while (it.hasNext()) {
-			Map.Entry<ProductColorSize, Integer> pair = it.next();
-			s += pair.getValue() * pair.getKey().getProductcolor().getProduct().getPrice();
-		}
-
-		return s;
+	public void setNrOfProducts(Integer nrOfProducts) {
+		this.nrOfProducts = nrOfProducts;
 	}
 
-	public List<Entry<ProductColorSize, Integer>> getProducts() {
-		return new ArrayList<Entry<ProductColorSize, Integer>>(cart.entrySet());
+	public Double getTotalPrice() {
+		return totalPrice;
+	}
+
+	public void setTotalPrice(Double totalPrice) {
+		this.totalPrice = totalPrice;
+	}
+
+	public void setProducts() {
+		System.out.println("in set products");
+		products.clear();
+		Set<ProductColorSize> list = cart.keySet();
+		for (ProductColorSize pcs : list)
+			products.add(pcs);
+	}
+
+	public List<ProductColorSize> getProducts() {
+		return products;
 	}
 	
-	public void addProduct(ProductColorSize productToAdd,Integer numberOfProducts){
-		cart.put(productToAdd, numberOfProducts);
-		System.out.println("s-au adaugat "+numberOfProducts);
+	public String getNumberOfProducts(ProductColorSize pcs){
+		System.out.println("in number of products "+cart.get(pcs));
+		return String.valueOf(cart.get(pcs));
+	}
+
+	public void addProduct(ProductColorSize pcs, Integer nrOfProducts) {
+		if (pcs == null) {
+			FacesContext context = FacesContext.getCurrentInstance();
+			context.addMessage(null, new FacesMessage(
+					FacesMessage.SEVERITY_WARN, "Warn",
+					"You must choose a size"));
+			return;
+		}
+		if (nrOfProducts == null) {
+			FacesContext context = FacesContext.getCurrentInstance();
+			context.addMessage(null, new FacesMessage(
+					FacesMessage.SEVERITY_WARN, "Warn",
+					"You must enter the number of products"));
+			return;
+		}
+		
+		if (nrOfProducts > pcs.getNrOfPieces()) {
+			FacesContext context = FacesContext.getCurrentInstance();
+			context.addMessage(null, new FacesMessage(
+					FacesMessage.SEVERITY_WARN, "Warn",
+					"We dont't have enough product in stock"));
+			return;
+		}
+
+		if (cart.containsKey(pcs)) {
+		//	System.out.println("exista deja");
+			cart.put(pcs, cart.get(pcs) + nrOfProducts);
+			setTotalPrice(getTotalPrice() + nrOfProducts * pcs.getProductcolor().getProduct().getPrice());
+		} else {
+			cart.put(pcs, nrOfProducts);
+			setNrOfProducts(getNrOfProducts() + 1);
+			setTotalPrice(getTotalPrice() + nrOfProducts * pcs.getProductcolor().getProduct().getPrice());
+		}
+		
+		setProducts();
 	}
 
 	public void removeProduct(Product product) {
@@ -69,4 +122,5 @@ public class Cart {
 			}
 		}
 	}
+
 }

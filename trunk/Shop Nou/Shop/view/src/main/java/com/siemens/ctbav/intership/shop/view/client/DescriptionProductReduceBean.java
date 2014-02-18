@@ -46,6 +46,8 @@ public class DescriptionProductReduceBean implements Serializable {
 	private boolean isAvailabel;
 	
 	private String availabel;
+	
+	private Integer nrOfPieces;
 
 	public List<ProductColor> getProductsColor() {
 		return productsColor;
@@ -121,15 +123,23 @@ public class DescriptionProductReduceBean implements Serializable {
 		this.availabel = availabel;
 	}
 
+	public Integer getNrOfPieces() {
+		return nrOfPieces;
+	}
+
+	public void setNrOfPieces(Integer nrOfPieces) {
+		this.nrOfPieces = nrOfPieces;
+	}
+
 	private void initialize() {
-		//System.out.println("postconstruct description");
+		//System.out.println("postconstruct reduction description isVisible="+isAvailabel);
 		//System.out.println("iau culorile cu id=" + id);
 		productsColor = productColorService.getColorsForProduct(id);
 
 		if (productsColor.size() > 0) {
 			selectedProduct = productsColor.get(0).getProduct();
-			System.out.println("name" + selectedProduct.getName());
-			System.out.println("price" + selectedProduct.getPrice());
+			//System.out.println("name" + selectedProduct.getName());
+			//System.out.println("price" + selectedProduct.getPrice());
 		}
 	}
 
@@ -156,6 +166,7 @@ public class DescriptionProductReduceBean implements Serializable {
 				this.availabel = "In stock";
 				this.isAvailabel = true;
 				ok = true;
+				productColorSize = pcs;
 			}
 		}
 		if(ok == false){

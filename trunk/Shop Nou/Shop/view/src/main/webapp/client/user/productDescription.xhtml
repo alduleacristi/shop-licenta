@@ -11,7 +11,6 @@
 </h:head>
 <h:body>
 
-
 	<ui:composition template="/resources/template/template.xhtml">
 		<ui:define name="menu">
 			<ui:include src="/resources/template/client/user/menuBox.xhtml"></ui:include>
@@ -32,89 +31,102 @@
 		</ui:define>
 
 		<ui:define name="mainContent">
-			<div class="products2">
-				<div class="cl">&nbsp;</div>
-				<ul>
-					<li>
-						<div class="product-info2">
-							<h3>Product info</h3>
-							<div class="reduction">
-								<p:outputLabel
-									value="-#{clientProducts.selectedProduct.product.reduction}%"
-									rendered="#{clientProducts.selectedProduct.product.reduction != 0.0}"
-									styleClass="reduction"></p:outputLabel>
+			<h:form id="formSelect">
+				<p:messages autoUpdate="true" showDetail="true"
+					id="messageConverter" />
+				<div class="products2">
+					<div class="cl">&nbsp;</div>
+					<ul>
+						<li>
+							<div class="product-info2">
+								<h3>Product info</h3>
+								<div class="reduction">
+									<p:outputLabel
+										value="-#{clientProducts.selectedProduct.product.reduction}%"
+										rendered="#{clientProducts.selectedProduct.product.reduction != 0.0}"
+										styleClass="reduction"></p:outputLabel>
+								</div>
+								<div class="product-desc">
+									<center>
+										<strong class="price">Name</strong>
+										#{clientProducts.selectedProduct.product.name}<br /> <br />
+										<strong class="price">Category</strong>
+										#{clientProducts.selectedProduct.product.category.name}<br />
+										<br /> <strong class="price">Color</strong>
+										#{clientProducts.selectedProduct.color.name}<br /> <br /> <strong
+											class="price">Price</strong>
+										#{clientProducts.selectedProduct.product.price}
+									</center>
+								</div>
 							</div>
-							<div class="product-desc">
+						</li>
+					</ul>
+				</div>
+				<div class="products2description">
+					<ul>
+						<li>
+							<div class="product-info2description">
+								<h3>Description</h3>
 								<center>
-									<strong class="price">Name</strong>
-									#{clientProducts.selectedProduct.product.name}<br /> <br /> <strong
-										class="price">Category</strong>
-									#{clientProducts.selectedProduct.product.category.name}<br />
-									<br /> <strong class="price">Color</strong>
-									#{clientProducts.selectedProduct.color.name}<br /> <br /> <strong
-										class="price">Price</strong>
-									#{clientProducts.selectedProduct.product.price}
+									<br></br>
+									<p:inputTextarea cols="55" rows="9" maxlength="200"
+										value="#{clientProducts.selectedProduct.product.description}"
+										readonly="true">
+									</p:inputTextarea>
 								</center>
-							</div>
-						</div>
-					</li>
-				</ul>
-			</div>
-			<div class="products2description">
-				<ul>
-					<li>
-						<div class="product-info2description">
-							<h3>Description</h3>
-							<center>
-								<br></br>
-								<p:inputTextarea cols="55" rows="9" maxlength="200"
-									value="#{clientProducts.selectedProduct.product.description}"
-									readonly="true">
-								</p:inputTextarea>
-							</center>
 
-						</div>
-					</li>
-				</ul>
-			</div>
-			<div class="products2">
-				<ul>
-					<li>
-						<div class="product-info2">
-							<h3>Choose the size</h3>
-							<h:form id="form">
-								<p:growl sticky="true"></p:growl>
+							</div>
+						</li>
+					</ul>
+				</div>
+				<div class="products2">
+					<ul>
+						<li>
+							<div class="product-info2">
+								<h3>Choose the size</h3>
+
+
 								<div style="width: 100%">
 									<center>
 										<br></br>
 										<p:selectOneMenu value="#{clientProducts.idProductColorSize}"
-											style="width:160px">
+											style="width:160px" id="selectOneSize">
+
+
 											<f:selectItem itemLabel="Choose a size"></f:selectItem>
+
 											<f:selectItems id="selectSize"
 												value="#{clientProducts.selectedProduct.productColorSize}"
 												var="p" itemLabel="#{p.size.size}" itemValue="#{p.id}" />
-											<p:ajax event="valueChange"
-												listener="#{clientProducts.changeSize}"
-												update="ava,addButton" />
+											<f:ajax event="valueChange" update="addButton,ava"
+												render="formSelect" listener="#{clientProducts.changeSize}" />
 										</p:selectOneMenu>
+
 										<br /> <br /> <strong class="price"><p:outputLabel
 												value="#{clientProducts.availabel}" id="ava"></p:outputLabel></strong>
 										<br /> <strong class="price">Number of pieces</strong>
-										<p:inputText style="width:160px"></p:inputText>
+										<p:inputText style="width:160px"
+											value="#{clientProducts.nrOfPieces}">
+											<f:converter converterId="NrOfPiecesConverter"></f:converter>
+										</p:inputText>
 										<br /> <br />
 										<p:commandButton value="Add to cart" id="addButton"
 											styleClass="update-submit"
-											disabled="#{!clientProducts.isAvailabel}" 
-											actionListener="#{cart.addProduct(productColorSize,5)}"/>
+											actionListener="#{cart.addProduct(clientProducts.productColorSize,clientProducts.nrOfPieces)}"
+											disabled="#{clientProducts.isAvailabel}"
+											update="messageConverter,:cartLink:nrProducts,:cartLink:totalPrice,:cartLink:dialog" />
+
+
 
 									</center>
 								</div>
-							</h:form>
-						</div>
-					</li>
-				</ul>
-				<div class="cl">&nbsp;</div>
-			</div>
+
+							</div>
+						</li>
+					</ul>
+					<div class="cl">&nbsp;</div>
+				</div>
+			</h:form>
 		</ui:define>
 
 		<ui:define name="advertise">

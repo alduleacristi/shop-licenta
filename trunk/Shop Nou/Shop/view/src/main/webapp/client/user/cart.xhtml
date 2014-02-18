@@ -29,7 +29,22 @@
 		</ui:define>
 
 		<ui:define name="mainContent">
-			
+			<h:form id="cartForm">
+				<p:carousel id="carousel" value="#{cart.products}"
+					headerText="Products" itemStyle="width:230px"
+					styleClass="products-reduce" itemStyleClass="product-info" var="p">
+					<center>
+						<h3>Product name</h3>
+						<p:outputLabel value="#{p.productcolor.product.name}"></p:outputLabel>
+						<br /> <strong class="price">Price</strong>
+							<p:outputLabel value="#{p.productcolor.product.price}"></p:outputLabel>
+						<br /> <strong class="price">Color</strong>
+							<p:outputLabel value="#{p.productcolor.color.name}"></p:outputLabel>
+						<br /> <strong class="price">Size</strong>
+							<p:outputLabel value="#{p.size.size}"></p:outputLabel>
+					</center>
+				</p:carousel>
+			</h:form>
 		</ui:define>
 
 		<ui:define name="advertise">

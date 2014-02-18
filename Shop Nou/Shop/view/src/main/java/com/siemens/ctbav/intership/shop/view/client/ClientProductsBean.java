@@ -46,12 +46,17 @@ public class ClientProductsBean implements Serializable {
 	private Category selectedCategory;
 	private List<ProductColor> productList;
 	private String availabel;
-	private Boolean isAvailabel;
+	private boolean isAvailabel;
 	private ProductColorSize productColorSize;
 	private Long idProductColorSize;
 
+	private Integer nrOfPieces;
+
 	@PostConstruct
 	void postConstruct() {
+		nrOfPieces = 1;
+		setIsAvailabel(false);
+		//System.out.println("postconstruct products isVisible="+isAvailabel);
 		productList = new ArrayList<ProductColor>();
 
 		if (selectedCategory == null) {
@@ -117,6 +122,7 @@ public class ClientProductsBean implements Serializable {
 	}
 
 	public void setIsAvailabel(Boolean isAvailabel) {
+		//System.out.println("sa setat isAvailabel la: "+isAvailabel);
 		this.isAvailabel = isAvailabel;
 	}
 
@@ -144,6 +150,14 @@ public class ClientProductsBean implements Serializable {
 		this.productList = productList;
 	}
 
+	public Integer getNrOfPieces() {
+		return nrOfPieces;
+	}
+
+	public void setNrOfPieces(Integer nrOfPieces) {
+		this.nrOfPieces = nrOfPieces;
+	}
+
 	private void redirect(String url) {
 		FacesContext fc = FacesContext.getCurrentInstance();
 
@@ -164,22 +178,32 @@ public class ClientProductsBean implements Serializable {
 	}
 
 	public void changeSize() {
+		//System.out.println("change size "+idProductColorSize);
 		try {
+			//idProductColorSize = (Long) event.getNewValue();
+			if(idProductColorSize == 0){
+				this.availabel = "";
+				setIsAvailabel(true);
+				return;
+			}
 			this.productColorSize = productColorSizeService
 					.getProductColorSizeById(idProductColorSize);
-			
+
 			if (this.productColorSize.getNrOfPieces() == 0) {
 				this.availabel = "Not in stock";
-				this.isAvailabel = false;
+				setIsAvailabel(true);
 			} else {
 				this.availabel = "In stock";
-				this.isAvailabel = true;
+				setIsAvailabel(false);
 			}
 		} catch (ProductColorSizeDoesNotExistException e) {
 			FacesContext ctx = FacesContext.getCurrentInstance();
 			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
 					"Error", "Sorry. You can't choose products now."));
 			this.availabel = "";
+		}catch(Exception exc){
+			exc.printStackTrace();
 		}
 	}
+
 }

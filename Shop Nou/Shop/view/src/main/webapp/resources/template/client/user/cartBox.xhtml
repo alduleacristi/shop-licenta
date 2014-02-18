@@ -16,15 +16,20 @@
 				<a href="/Shop4j/client/user/Cart" class="cart-link">Your
 					Shopping Cart</a>
 				<div class="cl">&nbsp;</div>
-				<span> Articles: 
-				<h:outputText
-						value="#{cart.nrOfProducts()}"></h:outputText>
+				<span> Articles: <h:outputText value="#{cart.nrOfProducts}"
+						id="nrProducts"></h:outputText>
 				</span> &nbsp;&nbsp; <span> Cost: <h:outputText
-						value="#{cart.totalPrice()}"></h:outputText>
+						value="#{cart.totalPrice}" id="totalPrice"></h:outputText>
 				</span>
 				<p:dialog header="Effects" widgetVar="dlg3" showEffect="explode"
-					position="1250,6" hideEffect="explode" height="100">
-					<h:outputText value="This dialog has nice effects." />
+					position="1160,6" hideEffect="explode" height="100" id="dialog">
+					<p:dataList id="carousel" value="#{cart.products}" var="p">
+						<p:column style="width:75%;">  
+           					 #{p.productcolor.product.name} - #{cart.getNumberOfProducts(p)}
+        				</p:column>
+
+					</p:dataList>
+
 				</p:dialog>
 			</div>
 		</h:form>

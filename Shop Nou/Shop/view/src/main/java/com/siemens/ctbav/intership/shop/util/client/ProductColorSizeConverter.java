@@ -29,7 +29,6 @@ public class ProductColorSizeConverter implements Converter,Serializable {
 		System.out.println("in converter: id="+id);
 		try {
 			ProductColorSize pcs = productColorSizeService.getProductColorSizeById(Long.parseLong(id));
-			System.out.println("a gasit , returneza");
 			return pcs;
 		} catch (NumberFormatException e) {
 			return null;

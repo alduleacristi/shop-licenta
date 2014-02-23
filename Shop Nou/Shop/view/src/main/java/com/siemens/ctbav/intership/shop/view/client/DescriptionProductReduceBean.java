@@ -161,7 +161,7 @@ public class DescriptionProductReduceBean implements Serializable {
 	public void changeSize(){
 		boolean ok = false;
 		for(ProductColorSize pcs:productsColorSize){
-			if(pcs.getId() == idProductColorSize){
+			if(pcs.getId() == idProductColorSize && pcs.getNrOfPieces() > 0){
 				productColorSize = pcs;
 				this.availabel = "In stock";
 				this.isAvailabel = true;

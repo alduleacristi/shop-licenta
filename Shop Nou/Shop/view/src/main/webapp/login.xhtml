@@ -30,7 +30,7 @@
 						<p:password value="#{Login.user.password}" id="pass" />
 
 						<h:commandButton value="Login" actionListener="#{Login.login()}"
-							ajax="false" update="register" styleClass="search-submit" />
+							ajax="false" update="register" styleClass="search-submit" action="#{cart.readCookie()}"/>
 						<h:commandLink styleClass="active" action="forgotPassword.xhtml">
 							<h:outputText value="I forgot my password" styleClass="active"></h:outputText>
 						</h:commandLink>

@@ -211,7 +211,6 @@ public class LoginBean implements Serializable {
 	 * this method the user can not access that pages which are protected.
 	 */
 	public void logout() {
-
 		HttpServletRequest request = (HttpServletRequest) FacesContext
 				.getCurrentInstance().getExternalContext().getRequest();
 

@@ -31,19 +31,48 @@
 		<ui:define name="mainContent">
 			<h:form id="cartForm">
 				<p:carousel id="carousel" value="#{cart.products}"
-					headerText="Products" itemStyle="width:230px"
-					styleClass="products-reduce" itemStyleClass="product-info" var="p">
+					headerText="Products" itemStyle="width:237px"
+					styleClass="products-reduce" itemStyleClass="product-info" var="p" rendered="#{cart.isEmpty()}">
 					<center>
 						<h3>Product name</h3>
 						<p:outputLabel value="#{p.productcolor.product.name}"></p:outputLabel>
-						<br /> <strong class="price">Price</strong>
-							<p:outputLabel value="#{p.productcolor.product.price}"></p:outputLabel>
-						<br /> <strong class="price">Color</strong>
-							<p:outputLabel value="#{p.productcolor.color.name}"></p:outputLabel>
-						<br /> <strong class="price">Size</strong>
-							<p:outputLabel value="#{p.size.size}"></p:outputLabel>
+						<br /><br /> <strong class="price">Price</strong>
+						<p:outputLabel value="#{p.productcolor.product.price}"></p:outputLabel>
+						<br /><br /> <strong class="price">Color</strong>
+						<p:outputLabel value="#{p.productcolor.color.name}"></p:outputLabel>
+						<br /><br /> <strong class="price">Size</strong>
+						<p:outputLabel value="#{p.size.size}"></p:outputLabel>
+						<br /><br />
+						<p:commandButton id="selectButton"
+							oncomplete="PF('descriptionDialog').show()" icon="ui-icon-search"
+							value="Description" title="Description"
+							styleClass="update-submit" update=":cartForm:descriptionDlg">
+							<f:setPropertyActionListener value="#{p}"
+								target="#{cart.selectedProductForDescription}" />
+						</p:commandButton>
+						<br /> <br />
+						<p:commandLink value="Remove product"
+							styleClass="remove-form-cart"
+							actionListener="#{cart.removeProduct(p)}" update=":cartForm:descriptionDlg"></p:commandLink>
 					</center>
 				</p:carousel>
+				<p:outputLabel value="No records found" rendered="#{cart.isEmpty() == false}"></p:outputLabel>
+
+				<p:dialog header="Description" widgetVar="descriptionDialog"
+					id="descriptionDlg" showEffect="fade" hideEffect="explode"
+					modal="true">
+					<p:inputTextarea cols="55" rows="9" maxlength="200"
+						value="#{cart.selectedProductForDescription.productcolor.product.description}"
+						readonly="true">
+					</p:inputTextarea>
+				</p:dialog>
+				
+				<br />
+				<center>
+					<p:commandButton styleClass="update-submit" value="Send command" rendered="#{cart.isEmpty()}"></p:commandButton>
+				</center>
+				
+				<br /><br />
 			</h:form>
 		</ui:define>
 

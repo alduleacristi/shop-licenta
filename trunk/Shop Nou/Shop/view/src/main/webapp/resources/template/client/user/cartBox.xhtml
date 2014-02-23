@@ -21,12 +21,21 @@
 				</span> &nbsp;&nbsp; <span> Cost: <h:outputText
 						value="#{cart.totalPrice}" id="totalPrice"></h:outputText>
 				</span>
-				<p:dialog header="Effects" widgetVar="dlg3" showEffect="explode"
-					position="1160,6" hideEffect="explode" height="100" id="dialog">
+				<p:dialog header="Your product" widgetVar="dlg3"
+					showEffect="explode" position="1160,6" hideEffect="explode"
+					height="100" id="dialog">
 					<p:dataList id="carousel" value="#{cart.products}" var="p">
-						<p:column style="width:75%;">  
-           					 #{p.productcolor.product.name} - #{cart.getNumberOfProducts(p)}
-        				</p:column>
+						<p:column style="width:75%;">
+							<div class="cart-dialog-item">
+								#{p.productcolor.product.name} - #{cart.getNumberOfProducts(p)}
+							</div>
+							<p:commandLink actionListener="#{cart.removeProduct(p)}"
+								update=":cartLink">
+								<center>
+									Remove
+								</center>
+							</p:commandLink>
+						</p:column>
 
 					</p:dataList>
 

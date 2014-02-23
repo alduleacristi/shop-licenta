@@ -279,6 +279,22 @@ a.bul {
 	display: inline;
 }
 
+.products-reduce .product-info .update-submit {
+	width: 120px;
+	background: #8b0000;
+	color: #fff;
+	height: 27px;
+	display: block;
+	line-height: 26px;
+	cursor: pointer;
+	display: inline;
+	padding: 2px;
+}
+
+.products-reduce .product-info .remove-form-cart{
+	color: #8b0000;
+}
+
 .categories {
 	min-height: 383px;
 }
@@ -510,6 +526,19 @@ a.bul {
 	font-style: italic;
 	font-weight: bold;
 	width: 176px;
+}
+
+.cart-dialog-item{
+	background: #8b0000;
+	color: #fff;
+	text-align: left;
+	font-style: italic;
+	font-weight: bold;
+	padding-bottom: 5px;
+}
+
+.cart .cart-remove-item{
+	color: FFFFCC;
 }
 
 .product-info2 h4 {
@@ -836,7 +865,7 @@ h3.ico4 {
 	float: left;
 	width: 231px;
 	margin-right: 0px;
-	height: 405px;
+	height: 500px;
 	overflow: hidden;
 }
 

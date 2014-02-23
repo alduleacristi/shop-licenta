@@ -23,7 +23,7 @@
 
 
 					<li><p:commandLink styleClass="active"
-							actionListener="#{Login.logout()}">
+							actionListener="#{cart.saveToCookie()}" action="#{Login.logout()}">
 							<h:outputText value="Logout" styleClass="active"></h:outputText>
 						</p:commandLink></li>
 

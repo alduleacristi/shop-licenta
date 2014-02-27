@@ -17,10 +17,15 @@
 		</ui:define>
 
 		<ui:define name="mainContent">
+			<div class="box">
+				<p:graphicImage value="/resources/cproducts.jpg" width="720"
+					height="100" />
+			</div>
 			<br />
-			*Pentru adaugare, editare, stergere de produse, se va selecta o categorie
-			
-			
+			Pentru adaugare, editare, stergere se va selecta o categorie
+			<br />
+			<br />
+
 			<h:form id="formTree">
 
 				<p:growl id="messages" showDetail="true" />
@@ -42,7 +47,6 @@
 
 
 			<h:form id="formProducts">
-
 				<p:growl id="messages1" showDetail="true" />
 				<p:dataGrid id="dataGrid" var="product"
 					value="#{colorProductBean.productList}" columns="3" rows="12"
@@ -51,25 +55,34 @@
 					rowsPerPageTemplate="3,6,9,12,15"
 					rendered="#{colorProductBean.selectedCategory}">
 					<p:column>
-						<p:panel header="#{product.name}" style="text-align:center">
-							<h:outputText value="Category: #{product.category.name}" />
-							<br />
-							<h:outputText value="Price: #{product.price}" />
-							<br />
-							<h:outputText
-								value="Colors: #{colorProductBean.displayColors(product)}" />
-							<br />
-							<h:outputText value="Description: #{product.description}" />
-							<br />
-							<p:commandLink title="Manage colors"
-								update=":formProducts:productDetail"
-								oncomplete="productDialog.show()">
-								<h:outputText styleClass="ui-icon ui-icon-search"
-									style="margin:0 auto;" />
-								<f:setPropertyActionListener value="#{product}"
-									target="#{colorProductBean.selectedProduct}" />
-							</p:commandLink>
-						</p:panel>
+						<div class="productsA">
+							<div class="cl">&nbsp;</div>
+							<p:panel header="#{product.name}" style="text-align:center">
+								<h:outputText value="Category: #{product.category.name}" />
+								<br />
+								<h:outputText value="Price: #{product.price}" />
+								<br />
+								<h:outputText
+									value="Colors: #{colorProductBean.displayColors(product)}" />
+								<br />
+								<h:outputText value="Description: " />
+								<br />
+								<p:inputTextarea cols="20" rows="11" maxlength="200"
+									value="#{product.description}" readonly="true">
+								</p:inputTextarea>
+								<br />
+								<p:commandLink title="Manage colors"
+									update=":formProducts:productDetail"
+									actionListener="#{colorProductBean.initializeFirst}"
+									oncomplete="productDialog.show()">
+									<h:outputText styleClass="ui-icon ui-icon-search"
+										style="margin:0 auto;" />
+									<f:setPropertyActionListener value="#{product}"
+										target="#{colorProductBean.selectedProduct}" />
+								</p:commandLink>
+							</p:panel>
+							<div class="cl">&nbsp;</div>
+						</div>
 					</p:column>
 				</p:dataGrid>
 
@@ -118,7 +131,9 @@
 							onclick="cd.show()" />
 					</p:outputPanel>
 				</p:dialog>
-
+			</h:form>
+			<h:form id="add">
+				<p:growl id="messages2" showDetail="true" />
 				<p:dialog header="Chose a color" widgetVar="addDialog"
 					resizable="false">
 					<h:panelGrid columns="2" cellpadding="4">
@@ -137,7 +152,7 @@
 						<p:commandButton value="Add"
 							actionListener="#{colorProductBean.add}"
 							oncomplete="handleCreateRequest(xhr, status, args)"
-							update="messages1, :formProducts:dataGrid, :formProducts:productDetail" />
+							update="messages2, :formProducts:dataGrid, :formProducts:productDetail" />
 						<p:commandButton value="Cancel" onclick="addDialog.hide()" />
 					</h:panelGrid>
 				</p:dialog>
@@ -152,7 +167,9 @@
 						}
 					}
 				</script>
-
+			</h:form>
+			<h:form id="edit">
+				<p:growl id="messages3" showDetail="true" />
 				<p:dialog header="Edit a color" widgetVar="editDialog"
 					resizable="false">
 					<h:panelGrid columns="2" cellpadding="4">
@@ -170,9 +187,9 @@
 							readonly="true" />
 						<p:commandButton value="Edit"
 							actionListener="#{colorProductBean.edit}"
-							oncomplete="handleChangeCategoryRequest(xhr, status, args)"
-							update="messages1, :formProducts:dataGrid, :formProducts:productDetail" />
-						<p:commandButton value="Cancel" onclick="addDialog.hide()" />
+							oncomplete="handleUpdateRequest(xhr, status, args)"
+							update="messages3, :formProducts:dataGrid, :formProducts:productDetail" />
+						<p:commandButton value="Cancel" onclick="editDialog.hide()" />
 					</h:panelGrid>
 				</p:dialog>
 				<script type="text/javascript">
@@ -186,16 +203,18 @@
 						}
 					}
 				</script>
+			</h:form>
+			<h:form id="delete">
+				<p:growl id="messages4" showDetail="true" />
 				<p:dialog header="Confirmation" widgetVar="cd" resizable="false">
 					<h:outputText value="Are you sure?" />
 					<br />
 					<p:commandButton value="Yes"
 						actionListener="#{colorProductBean.delete}"
-						update="messages1, :formProducts:dataGrid, :formProducts:productDetail"
+						update="messages4, :formProducts:dataGrid, :formProducts:productDetail"
 						oncomplete="cd.hide()" immediate="true" />
 					<p:commandButton value="No" onclick="cd.hide();" type="button" />
 				</p:dialog>
-
 			</h:form>
 
 

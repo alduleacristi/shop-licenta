@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Categories</title>
+</h:head>
+<h:body>
+	<ui:composition template="/superadmin/index.xhtml">
+		<br />
+		<ui:define name="menu">
+			<ui:include src="/resources/template/superadmin/menuProducts.xhtml"></ui:include>
+		</ui:define>
+
+		<ui:define name="mainContent">
+			<h:form id="mainForm">
+				<p:growl id="messages" showDetail="true" />
+				<div class="products2">
+					<div class="cl">&nbsp;</div>
+					<ul>
+						<li>
+							<div class="product-info2">
+								<h3>#{colorProductSelectPhotoBean.selectedProduct.product.name}</h3>
+								<div class="product-desc">
+									<h4>Category:
+										#{colorProductSelectPhotoBean.selectedProduct.product.category.name}'S</h4>
+									<p>
+										<br /> Color:
+										#{colorProductSelectPhotoBean.selectedProduct.color.name}<br />
+									</p>
+									<strong class="price">$#{colorProductSelectPhotoBean.selectedProduct.product.price}</strong>
+								</div>
+							</div>
+						</li>
+					</ul>
+				</div>
+				<div class="products2description">
+					<ul>
+						<li>
+							<div class="products2description">
+								<div align="center">
+									<p:graphicImage id="firstImage"
+										url="http://localhost:8080/Shop4j/rest/products/id#{colorProductSelectPhotoBean.selectedProduct.id}"
+										width="170" height="198" />
+									<h:commandButton value="Remove all the photos from product"
+										actionListener="#{colorProductSelectPhotoBean.deletePhotos}"
+										style="width: 100%" styleClass="search-submit"
+										update="messages,:galleria:refreshMe,:mainForm:firstImage" />
+								</div>
+							</div>
+						</li>
+					</ul>
+				</div>
+				<div class="products2">
+					<ul>
+						<li>
+							<div class="product-info2">
+
+								<h3>Description</h3>
+								<center>
+									<br></br>
+									<p:inputTextarea cols="21" rows="11" maxlength="200"
+										value="#{colorProductSelectPhotoBean.selectedProduct.product.description}"
+										readonly="true">
+									</p:inputTextarea>
+								</center>
+							</div>
+						</li>
+					</ul>
+					<div class="cl">&nbsp;</div>
+				</div>
+			</h:form>
+			<br />
+			<br />
+			<h:form id="upload">
+				<p:growl id="messagesUpload" showDetail="true" />
+				<p:fileUpload value="this" auto="true" mode="advanced" id="upload"
+					fileUploadListener="#{colorProductSelectPhotoBean.handleFileUpload}"
+					dragDropSupport="false" sizeLimit="50000" fileLimit="10"
+					allowTypes="/(\.|\/)(gif|jpe?g|png)$/" process="@form"
+					update="messagesUpload, :galleria:refreshMe,:mainForm:firstImage" />
+				<p:message for="upload" display="text" />
+			</h:form>
+			<br />
+			<br />
+			<h:form id="galleria">
+				<p:galleria id="refreshMe"
+					value="#{colorProductSelectPhotoBean.photos}" var="image"
+					panelWidth="500" panelHeight="313" showCaption="false"
+					title="#{colorProductSelectPhotoBean.selectedProduct.product.name}">
+					<p:graphicImage url="#{image}">
+					</p:graphicImage>
+				</p:galleria>
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

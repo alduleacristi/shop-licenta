@@ -14,11 +14,17 @@
 		<br />
 
 		<ui:define name="mainContent">
-			*Pentru editarea marimilor trebuie selectata o categorie. Pentru radacina ierarhiei si copiii acesteia nu se pot defini marimi.
+			<div class="box">
+				<p:graphicImage value="/resources/sizes.jpg" width="720"
+					height="100" />
+			</div>
 			<br />
-			*Se pot modifica doar marimile de pe categoria curenta. Marimile sunt mostenite de la parinti si nu se pot duplica
-			
-			
+			Pentru editarea marimilor trebuie selectata o categorie. Pentru radacina ierarhiei si copiii acesteia nu se pot defini marimi.
+			<br />
+			Se pot modifica doar marimile de pe categoria curenta. Marimile sunt mostenite de la parinti si nu se pot duplica
+			<br />
+			<br />
+
 			<h:form id="formTree">
 
 				<p:growl id="messages" showDetail="true" />
@@ -104,7 +110,8 @@
 
 					<h:panelGrid id="display" columns="2" cellpadding="4">
 						<h:outputText value="Size's new name:" />
-						<p:inputText id="nName" label="name" value="#{sizeBean.selectedSize.size}">
+						<p:inputText id="nName" label="name"
+							value="#{sizeBean.selectedSize.size}">
 							<f:validator validatorId="validateUpdateSize" />
 						</p:inputText>
 						<p:commandButton value="Update"

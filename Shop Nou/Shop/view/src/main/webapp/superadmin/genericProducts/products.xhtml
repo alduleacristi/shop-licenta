@@ -17,10 +17,15 @@
 		</ui:define>
 
 		<ui:define name="mainContent">
+			<div class="box">
+				<p:graphicImage value="/resources/gproducts.jpg" width="720"
+					height="100" />
+			</div>
 			<br />
-			*Pentru adaugare, editare, stergere de produse, se va selecta o categorie
-			
-			
+			Pentru adaugare, editare, stergere de produse, se va selecta o categorie
+			<br />
+			<br />
+
 			<h:form id="formTree">
 
 				<p:growl id="messages" showDetail="true" />
@@ -111,7 +116,11 @@
 							<br />
 							<h:outputText value="Price: #{product.price}" />
 							<br />
-							<h:outputText value="Description: #{product.description}" />
+							<h:outputText value="Description:" />
+							<br />
+							<p:inputTextarea cols="20" rows="11" maxlength="200"
+								value="#{product.description}" readonly="true">
+							</p:inputTextarea>
 							<br />
 							<p:commandLink update=":formProducts:productDetail"
 								oncomplete="productDialog.show()" title="View Detail">

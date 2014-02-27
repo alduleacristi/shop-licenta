@@ -1,0 +1,91 @@
+package com.siemens.ctbav.intership.shop.view.superadmin;
+
+import java.io.Serializable;
+import java.util.List;
+
+import javax.ejb.EJB;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+
+import org.primefaces.event.NodeSelectEvent;
+import org.primefaces.model.TreeNode;
+
+import com.ocpsoft.pretty.faces.annotation.URLMapping;
+import com.ocpsoft.pretty.faces.annotation.URLMappings;
+import com.siemens.ctbav.intership.shop.model.Category;
+import com.siemens.ctbav.intership.shop.model.ProductColor;
+import com.siemens.ctbav.intership.shop.model.ProductColorSize;
+import com.siemens.ctbav.intership.shop.service.superadmin.ColorProductService;
+import com.siemens.ctbav.intership.shop.util.superadmin.NavigationUtils;
+
+@URLMappings(mappings = {
+		@URLMapping(id = "colorProductsSize", pattern = "/superadmin/genericProducts/colorProducts/sizes/", viewId = "colorProductsSizes.xhtml"),
+		@URLMapping(id = "colorProductsSizeUpdate", pattern = "/superadmin/updateStoc/", viewId = "products.xhtml") })
+@ManagedBean(name = "colorProductsSizeBean")
+@ViewScoped
+public class ColorProductsSizeBean implements Serializable {
+	private static final long serialVersionUID = -7715800049046729621L;
+
+	@EJB
+	ColorProductService colorProductService;
+
+	private boolean selectedCategory;
+	private List<ProductColor> productList;
+
+	public boolean isSelectedCategory() {
+		return selectedCategory;
+	}
+
+	public void setSelectedCategory(boolean selectedCategory) {
+		this.selectedCategory = selectedCategory;
+	}
+
+	public List<ProductColor> getProductList() {
+		return productList;
+	}
+
+	public void setProductList(List<ProductColor> productList) {
+		this.productList = productList;
+	}
+
+	public void onNodeSelect(NodeSelectEvent event) {
+		FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
+				.put("selectedNode", event.getTreeNode());
+		selectedCategory = true;
+		FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
+				.put("selectedCategory", selectedCategory);
+		updateListOfProducts();
+	}
+
+	private void updateListOfProducts() {
+		TreeNode selectedNode = (TreeNode) FacesContext.getCurrentInstance()
+				.getExternalContext().getSessionMap().get("selectedNode");
+		long id = ((Category) selectedNode.getData()).getId();
+		productList = colorProductService.getProductsByCategory(id);
+	}
+
+	public String displaySizes(ProductColor p) {
+		StringBuilder sb = new StringBuilder(25);
+		List<ProductColorSize> pcs = p.getProductColorSize();
+		for (ProductColorSize pc : pcs) {
+			sb.append(pc.getSize().getSize() + " ");
+		}
+		return sb.toString();
+	}
+
+	public void showProduct(ProductColor product) {
+		FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
+				.put("selectedProductSize", product);
+		NavigationUtils
+				.redirect("/Shop4j/superadmin/genericProducts/colorProducts/sizes/"
+						+ product.getId());
+	}
+
+	public void showUpdateProduct(ProductColor product) {
+		FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
+				.put("selectedProductSize", product);
+		NavigationUtils.redirect("/Shop4j/superadmin/updateStoc/"
+				+ product.getId());
+	}
+}

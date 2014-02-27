@@ -118,7 +118,6 @@ public class SizeBean implements Serializable {
 
 	public void onRowSelect(SelectEvent event) {
 		selectedSize = (Size) event.getObject();
-
 		FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
 				.put("selectedSize", selectedSize);
 	}

@@ -422,11 +422,11 @@ begin
         set found = row_count();
     end while;
 
-    select p.id, p.id_category, p.name, p.description, p.price
+    select p.id, p.id_category, p.name, p.description, p.price, p.perc_reduction
     from product p
     join cat_tree ct on p.id_category = ct.cat_id
     union
-    select p.id, p.id_category, p.name, p.description, p.price
+    select p.id, p.id_category, p.name, p.description, p.price, p.perc_reduction
     from product p
     join category c on c.id = p.id_category
     where c.id = param;

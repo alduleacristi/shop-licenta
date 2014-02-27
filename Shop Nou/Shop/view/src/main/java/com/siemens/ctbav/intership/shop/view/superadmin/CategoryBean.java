@@ -22,9 +22,9 @@ import com.ocpsoft.pretty.faces.annotation.URLMappings;
 import com.siemens.ctbav.intership.shop.exception.superadmin.CategoryException;
 import com.siemens.ctbav.intership.shop.model.Category;
 import com.siemens.ctbav.intership.shop.service.superadmin.CategoryService;
-import com.siemens.ctbav.intership.shop.util.superadmin.CategoryNameValidate;
-import com.siemens.ctbav.intership.shop.util.superadmin.CategoryUpdateNameValidate;
 import com.siemens.ctbav.intership.shop.util.superadmin.NavigationUtils;
+import com.siemens.ctbav.intership.shop.util.superadmin.validations.CategoryNameValidate;
+import com.siemens.ctbav.intership.shop.util.superadmin.validations.CategoryUpdateNameValidate;
 
 @URLMappings(mappings = { @URLMapping(id = "categories", pattern = "/superadmin/categories/", viewId = "categories.xhtml") })
 @ManagedBean(name = "categoryBean")

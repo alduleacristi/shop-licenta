@@ -54,7 +54,7 @@ public class ColorProductsBean implements Serializable {
 
 	@PostConstruct
 	void init() {
-
+		allColors = colorService.getAllColors();
 	}
 
 	public boolean isSelectedCategory() {
@@ -130,7 +130,6 @@ public class ColorProductsBean implements Serializable {
 		selectedCategory = true;
 		FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
 				.put("selectedCategory", selectedCategory);
-		allColors = colorService.getAllColors();
 		updateListOfProducts();
 	}
 
@@ -141,6 +140,10 @@ public class ColorProductsBean implements Serializable {
 			sb.append(pc.getColor().getName() + " ");
 		}
 		return sb.toString();
+	}
+
+	public void initializeFirst(ActionEvent actionEvent) {
+		selectedProductColor = null;
 	}
 
 	public void add(ActionEvent actionEvent) {
@@ -210,7 +213,13 @@ public class ColorProductsBean implements Serializable {
 					"No color selected in order to update it");
 		if (selectedColor == null)
 			throw new ColorProductException("No new color selected");
+		uniqueCheck();
+		colorProductService.editProductColor(selectedProductColor,
+				selectedColor);
 		msg = new FacesMessage("Success!", "Color updated!");
+
+		updateListOfProducts();
+		updateSelectedProduct();
 		return msg;
 	}
 
@@ -236,7 +245,6 @@ public class ColorProductsBean implements Serializable {
 				"Color successfully deleted!");
 
 		updateListOfProducts();
-
 		updateSelectedProduct();
 		return msg;
 	}

@@ -64,6 +64,7 @@ create table color(
 
 id_color bigint not null auto_increment primary key,
 name varchar(15)  not null,
+code varchar(10) not null,
 description varchar (30) not null
 );
 

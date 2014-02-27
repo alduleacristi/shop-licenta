@@ -15,35 +15,43 @@ import javax.persistence.NamedQuery;
 
 import com.siemens.ctbav.intership.shop.model.Size;
 
-
 @Entity(name = "product_color_size")
 @NamedQueries({ @NamedQuery(name = ProductColorSize.GET_PRODUCT_COLOR_SIZE_BY_ID, query = "SELECT p FROM product_color_size p where p.id = :id") })
-public class ProductColorSize implements Serializable{
+public class ProductColorSize implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -8254096206057865195L;
-	
+
 	public static final String GET_PRODUCT_COLOR_SIZE_BY_ID = "getColorProductSizeById";
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="id_pcs")
+	@Column(name = "id_pcs")
 	private Long id;
-	
+
 	@Column(name = "nr_pieces")
 	Long nrOfPieces;
-	
-	//join productColor
-	@ManyToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name="id_prod_col")
+
+	// join productColor
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "id_prod_col")
 	private ProductColor productcolor;
-	
-	//join Size
+
+	// join Size
 	@ManyToOne
-	@JoinColumn(name="id_size")
+	@JoinColumn(name = "id_size")
 	private Size size;
+
+	public ProductColorSize() {
+	}
+
+	public ProductColorSize(ProductColor productColor, Size size, Long nrPieces) {
+		this.productcolor = productColor;
+		this.size = size;
+		this.nrOfPieces = nrPieces;
+	}
 
 	public Long getId() {
 		return id;

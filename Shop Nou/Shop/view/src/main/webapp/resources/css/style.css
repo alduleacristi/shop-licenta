@@ -744,7 +744,7 @@ a.bul {
 	text-align: right;
 	font-style: italic;
 	font-weight: bold;
-	width: 230px;
+	width: 237px;
 }
 
 .product-info.red{
@@ -962,7 +962,29 @@ h3.ico4 {
 	float: left;
 	width: 231px;
 	margin-right: 0px;
-	height: 500px;
+	height: 600px;
+	overflow: hidden;
+}
+
+.products-reduce-index ul li {
+	position: relative;
+	padding: 0px;
+	border: solid 1px #dedede;
+	float: left;
+	width: 231px;
+	margin-right: 0px;
+	height: 350px;
+	overflow: hidden;
+}
+
+.products-reduce-recommand ul li {
+	position: relative;
+	padding: 0px;
+	border: solid 1px #dedede;
+	float: left;
+	width: 231px;
+	margin-right: 0px;
+	height: 310px;
 	overflow: hidden;
 }
 

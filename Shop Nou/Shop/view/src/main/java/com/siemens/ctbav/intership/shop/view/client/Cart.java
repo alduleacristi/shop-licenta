@@ -43,7 +43,7 @@ public class Cart {
 	ProductColorSizeService productColorSizeService;
 
 	@PostConstruct
-	public void initialize() {
+	private void initialize() {
 		cart = new HashMap<ProductColorSize, Integer>();
 		setNrOfProducts(0);
 		setTotalPrice(0.0);
@@ -136,6 +136,10 @@ public class Cart {
 		}
 
 		setProducts();
+		FacesContext context = FacesContext.getCurrentInstance();
+		context.addMessage(null, new FacesMessage(
+				FacesMessage.SEVERITY_INFO, "Succes",
+				"Products added succesfully"));
 	}
 
 	public void removeProduct(ProductColorSize product) {
@@ -178,44 +182,44 @@ public class Cart {
 	}
 
 	public void readCookie() {
-		Map<String, Object> cookies = FacesContext.getCurrentInstance()
-				.getExternalContext().getRequestCookieMap();
-
-		Client client = (Client) FacesContext.getCurrentInstance()
-				.getExternalContext().getSessionMap().get("client");
-
-		Cookie cookie = null;
-		if (cookies.containsKey(client.getUser().getUsername()))
-			cookie = (Cookie) cookies.get(client.getUser().getUsername());
-		else
-			return;
-
-		String valCookie = CookieEncryption.decrypt(cookie.getValue());
-		// System.out.println("valoare cookie: "+aux);
-
-		String[] elements = valCookie.split("/");
-		Map<Long, Integer> mapProducts = new HashMap<Long, Integer>();
-
-		for (int i = 0; i < elements.length; i++) {
-			{
-				String[] pairs = elements[i].split(":");
-				Long idProduct = null;
-				Integer numberOfPcs = null;
-
-				if (pairs.length == 2) {
-					try {
-
-						idProduct = Long.parseLong(pairs[0]);
-						numberOfPcs = Integer.parseInt(pairs[1]);
-						mapProducts.put(idProduct, numberOfPcs);
-					} catch (NumberFormatException exc) {
-						exc.printStackTrace();
-					}
-				}
-			}
-		}
-		
-		populateCartFromCookie(mapProducts);
+//		Map<String, Object> cookies = FacesContext.getCurrentInstance()
+//				.getExternalContext().getRequestCookieMap();
+//
+//		Client client = (Client) FacesContext.getCurrentInstance()
+//				.getExternalContext().getSessionMap().get("client");
+//
+//		Cookie cookie = null;
+//		if (cookies.containsKey(client.getUser().getUsername()))
+//			cookie = (Cookie) cookies.get(client.getUser().getUsername());
+//		else
+//			return;
+//
+//		String valCookie = CookieEncryption.decrypt(cookie.getValue());
+//		// System.out.println("valoare cookie: "+aux);
+//
+//		String[] elements = valCookie.split("/");
+//		Map<Long, Integer> mapProducts = new HashMap<Long, Integer>();
+//
+//		for (int i = 0; i < elements.length; i++) {
+//			{
+//				String[] pairs = elements[i].split(":");
+//				Long idProduct = null;
+//				Integer numberOfPcs = null;
+//
+//				if (pairs.length == 2) {
+//					try {
+//
+//						idProduct = Long.parseLong(pairs[0]);
+//						numberOfPcs = Integer.parseInt(pairs[1]);
+//						mapProducts.put(idProduct, numberOfPcs);
+//					} catch (NumberFormatException exc) {
+//						exc.printStackTrace();
+//					}
+//				}
+//			}
+//		}
+//		
+//		populateCartFromCookie(mapProducts);
 	}
 
 	private void clearCart() {
@@ -253,5 +257,9 @@ public class Cart {
 		response.addCookie(cookie);
 
 		clearCart();
+	}
+	
+	public void changeQuantity(ProductColorSize product){
+		System.out.println("sa apelat change quantity: "+product);
 	}
 }

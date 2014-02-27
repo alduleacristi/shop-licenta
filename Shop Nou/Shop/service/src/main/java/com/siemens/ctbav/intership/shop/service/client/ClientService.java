@@ -6,6 +6,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import com.siemens.ctbav.intership.shop.exception.client.ClientDoesNotExistException;
 import com.siemens.ctbav.intership.shop.exception.client.NullClientException;
 import com.siemens.ctbav.intership.shop.model.Client;
 
@@ -15,13 +16,16 @@ public class ClientService {
 	@PersistenceContext
 	private EntityManager em;
 
-	public Client getClientByUsername(String username) {
+	public Client getClientByUsername(String username) throws ClientDoesNotExistException {
 		@SuppressWarnings("unchecked")
 		List<Client> clients = em
 				.createNamedQuery(Client.GET_CLIENT_BY_USERNAME)
 				.setParameter("username", username).getResultList();
-
-		return clients.get(0);
+		
+		if(clients.size() > 0)
+			return clients.get(0);
+		else
+			throw new ClientDoesNotExistException("Client with username: " + username + " does not exist.");
 	}
 	
 	

@@ -6,6 +6,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import com.siemens.ctbav.intership.shop.exception.superadmin.ColorException;
 import com.siemens.ctbav.intership.shop.model.Color;
 
 @Stateless(name = "colorService")
@@ -21,5 +22,28 @@ public class ColorService {
 
 	public Color getColorById(Long id) {
 		return em.find(Color.class, id);
+	}
+
+	public void updateColorNameAndDescription(Long id, String name,
+			String description) throws ColorException {
+		Color color = em.find(Color.class, id);
+		if (color == null)
+			throw new ColorException("Color doesn't exists in the database");
+		color.setName(name);
+		color.setDescription(description);
+		em.merge(color);
+		em.flush();
+	}
+
+	public void updateColor(Long id, String name, String description,
+			String code) throws ColorException {
+		Color color = em.find(Color.class, id);
+		if (color == null)
+			throw new ColorException("Color doesn't exists in the database");
+		color.setName(name);
+		color.setDescription(description);
+		color.setCode(code);
+		em.merge(color);
+		em.flush();
 	}
 }

@@ -114,4 +114,8 @@ public class ColorsBean implements Serializable {
 		}
 	}
 
+	public void create(ActionEvent actionEvent) {
+
+	}
+
 }

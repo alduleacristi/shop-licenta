@@ -38,13 +38,13 @@
 						<h:outputText value="Chose the color:" />
 						<p:colorPicker id="popupCP" value="#{colorsBean.color}"
 							mode="inline" />
-						<p:commandButton value="Create"
-							actionListener="#{colorsBean.create}"
-							update="messages2, :form:colors"
-							oncomplete="handleCreateRequest(xhr, status, args)" />
-						<p:commandButton value="Cancel" onclick="create.hide();"
-							type="button" />
 					</h:panelGrid>
+					<p:commandButton value="Create"
+						actionListener="#{colorsBean.create}"
+						update="messages2, :form:colors"
+						oncomplete="handleCreateRequest(xhr, status, args)" />
+					<p:commandButton value="Cancel" onclick="create.hide();"
+						type="button" />
 					<p:ajax event="close" listener="#{colorsBean.handleClose}" />
 				</p:dialog>
 
@@ -89,11 +89,11 @@
 							<h:outputText value="Edit the color:" />
 							<p:colorPicker id="popupCP" value="#{colorsBean.color}"
 								mode="inline" />
-							<p:commandButton value="Update"
-								actionListener="#{colorsBean.update}" update="messages, colors"
-								oncomplete="handleUpdateRequest(xhr, status, args)" />
-							<p:commandButton value="Delete" />
 						</h:panelGrid>
+						<p:commandButton value="Update"
+							actionListener="#{colorsBean.update}" update="messages, colors"
+							oncomplete="handleUpdateRequest(xhr, status, args)" />
+						<p:commandButton value="Delete" />
 					</p:outputPanel>
 					<p:ajax event="close" listener="#{colorsBean.handleClose}" />
 				</p:dialog>

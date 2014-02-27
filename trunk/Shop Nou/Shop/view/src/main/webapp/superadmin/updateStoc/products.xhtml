@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Categories</title>
+</h:head>
+<h:body>
+	<ui:composition template="/superadmin/index.xhtml">
+		<br />
+		<ui:define name="menu">
+			<ui:include src="/resources/template/superadmin/menuProducts.xhtml"></ui:include>
+		</ui:define>
+
+		<ui:define name="mainContent">
+			<div class="box">
+				<p:graphicImage value="/resources/updateStoc.jpg" width="720"
+					height="100" />
+			</div>
+			<br />
+			Pentru adaugare, editare, stergere se va selecta o categorie
+			<br />
+			<br />
+
+			<h:form id="formTree">
+
+				<p:growl id="messages" showDetail="true" />
+
+				<p:tree value="#{categoryBean.root}" var="node" dynamic="true"
+					cache="false" selectionMode="single" animate="true"
+					orientation="horizontal" selection="#{categoryBean.selectedNode}"
+					id="tree">
+					<p:ajax event="select"
+						listener="#{colorProductsSizeBean.onNodeSelect}"
+						update=":formProducts" />
+					<p:treeNode>
+						<h:outputText value="#{node}" />
+					</p:treeNode>
+
+				</p:tree>
+
+				<br />
+			</h:form>
+
+
+			<h:form id="formProducts">
+				<p:growl id="messages1" showDetail="true" />
+				<p:dataGrid id="dataGrid" var="product"
+					value="#{colorProductsSizeBean.productList}" columns="3" rows="12"
+					paginator="true"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					rowsPerPageTemplate="3,6,9,12,15"
+					rendered="#{colorProductsSizeBean.selectedCategory}">
+					<div class="productsA">
+						<div class="cl">&nbsp;</div>
+						<ul>
+							<li><p:graphicImage
+									url="http://localhost:8080/Shop4j/rest/products/id#{product.id}"
+									width="170" height="198" />
+								<div class="product-infoA">
+									<h3>#{product.product.name}</h3>
+									<div class="product-desc">
+										<h4>#{product.product.category.name}'S</h4>
+										<p>
+											Color: #{product.color.name}<br />
+										</p>
+									</div>
+									<h:outputText
+										value="Sizes: #{colorProductsSizeBean.displaySizes(product)}" />
+									<br />
+									<div align="right">
+										<p:commandLink
+											actionListener="#{colorProductsSizeBean.showUpdateProduct(product)}">
+											<h:commandButton id="idVizualizare" value="Vizualizare"
+												type="button" styleClass="search-submit" style="width: 50%" />
+										</p:commandLink>
+									</div>
+									<strong class="price"> <p:outputLabel
+											value="$#{product.product.price}"
+											rendered="#{product.product.reduction == 0.0}"></p:outputLabel></strong>
+									<strike> <strong class="reduction"> <p:outputLabel
+												value="$#{product.product.price}"
+												rendered="#{product.product.reduction != 0.0}"></p:outputLabel>
+									</strong>
+									</strike> <strong class="price"> <p:outputLabel
+											value="$#{product.product.price-product.product.price*product.product.reduction/100}"
+											rendered="#{product.product.reduction != 0.0}"></p:outputLabel></strong>
+
+								</div></li>
+						</ul>
+						<div class="cl">&nbsp;</div>
+					</div>
+				</p:dataGrid>
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

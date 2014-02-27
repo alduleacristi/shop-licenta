@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Categories</title>
+</h:head>
+<h:body>
+	<ui:composition template="/superadmin/index.xhtml">
+		<br />
+		<ui:define name="menu">
+			<ui:include src="/resources/template/superadmin/menuProducts.xhtml"></ui:include>
+		</ui:define>
+
+		<ui:define name="mainContent">
+			<h:form id="mainForm">
+				<p:growl id="messages" showDetail="true" />
+				<div class="products2">
+					<div class="cl">&nbsp;</div>
+					<ul>
+						<li>
+							<div class="product-info2">
+								<h3>#{colorProductSizeSelectBean.selectedProduct.product.name}</h3>
+								<div class="product-desc">
+									<h4>Category:
+										#{colorProductSizeSelectBean.selectedProduct.product.category.name}'S</h4>
+									<p>
+										<br /> Color:
+										#{colorProductSizeSelectBean.selectedProduct.color.name}<br />
+									</p>
+									<strong class="price">$#{colorProductSizeSelectBean.selectedProduct.product.price}</strong>
+									<br />
+									<h:outputText id="outputPieces"
+										value="Available pieces: #{colorProductSizeSelectBean.getAvailablePieces()}" />
+								</div>
+							</div>
+						</li>
+					</ul>
+				</div>
+				<div class="products2description">
+					<ul>
+						<li>
+							<div class="products2description">
+								<div align="center">
+									<p:graphicImage
+										url="http://localhost:8080/Shop4j/rest/products/id#{colorProductSizeSelectBean.selectedProduct.id}"
+										width="170" height="198" />
+								</div>
+							</div>
+						</li>
+					</ul>
+				</div>
+				<div class="products2">
+					<ul>
+						<li>
+							<div class="product-info2">
+
+								<h3>Description</h3>
+								<center>
+									<br></br>
+									<p:inputTextarea cols="21" rows="11" maxlength="200"
+										value="#{colorProductSizeSelectBean.selectedProduct.product.description}"
+										readonly="true">
+									</p:inputTextarea>
+								</center>
+							</div>
+						</li>
+					</ul>
+					<div class="cl">&nbsp;</div>
+				</div>
+			</h:form>
+			<h:form id="menu">
+				<br />
+				<br />
+				<p:selectOneMenu id="selectOneMenu"
+					value="#{colorProductSizeSelectBean.idSelectedProductColorSize}"
+					style="width:180px" update="edit,delete">
+					<f:selectItems
+						value="#{colorProductSizeSelectBean.selectedProduct.productColorSize}"
+						var="psize" itemLabel="#{psize.size.size}" itemValue="#{psize.id}" />
+					<p:ajax event="valueChange" update=":mainForm:outputPieces" />
+				</p:selectOneMenu>
+				<br />
+				<br />
+				<p:growl id="messagesD" showDetail="true" />
+				<h:commandButton value="Delete a size from product" type="button"
+					onclick="cd.show()" styleClass="search-submit" id="delete"
+					immediate="true" process="@this" style="width: 25%" />
+				<p:confirmDialog message="Are you sure?" header="Confirmation"
+					severity="alert" widgetVar="cd" resizable="false">
+					<p:commandButton value="Yes"
+						actionListener="#{colorProductSizeSelectBean.delete}"
+						update="messagesD" oncomplete="cd.hide()" immediate="true" />
+					<p:commandButton value="No" onclick="cd.hide();" type="button" />
+				</p:confirmDialog>
+			</h:form>
+
+
+			<h:form id="add">
+				<p:growl id="messages1" showDetail="true" />
+				<h:commandButton value="Add a size for product" type="button"
+					styleClass="search-submit" onclick="addDialog.show()"
+					style="width: 25%" update="messages1" />
+				<p:dialog header="Chose a size" widgetVar="addDialog"
+					resizable="false" modal="true">
+					<h:panelGrid columns="2" cellpadding="4">
+						<h:outputText value="Available sizes:" />
+						<p:selectOneMenu id="selectASize"
+							value="#{colorProductSizeSelectBean.idSelectedSize}"
+							style="width:155px">
+							<f:selectItems value="#{colorProductSizeSelectBean.allSizes}"
+								var="size" itemLabel="#{size.size}" itemValue="#{size.id}" />
+						</p:selectOneMenu>
+						<h:outputText value="Number of pieces" />
+						<p:inputText value="#{colorProductSizeSelectBean.nrPieces}">
+							<f:validator validatorId="validatePieces" />
+						</p:inputText>
+						<p:commandButton value="Add"
+							actionListener="#{colorProductSizeSelectBean.add}"
+							oncomplete="handleCreateRequest(xhr, status, args)"
+							update=":add:messages1,:menu:selectOneMenu" />
+						<p:commandButton value="Cancel" onclick="addDialog.hide()" />
+					</h:panelGrid>
+				</p:dialog>
+				<script type="text/javascript">
+					function handleCreateRequest(xhr, status, args) {
+						if (args.validationFailed || !args.create) {
+							PF('addDialog').jq.effect("shake", {
+								times : 5
+							}, 100);
+						} else {
+							PF('addDialog').hide();
+							location.reload();
+						}
+					}
+				</script>
+			</h:form>
+
+			<h:form id="edit">
+				<p:growl id="messagesE" showDetail="true" />
+				<h:commandButton id="edit" value="Edit a size for product"
+					styleClass="search-submit" onclick="editDialog.show()"
+					style="width: 25%" update="messagesE" type="button" />
+				<p:dialog header="Edit the selectedSize" widgetVar="editDialog"
+					resizable="false" modal="true">
+					<h:panelGrid columns="2" cellpadding="4">
+						<h:outputText value="Number of pieces" />
+						<p:inputText value="#{colorProductSizeSelectBean.pcs.nrOfPieces}">
+							<f:validator validatorId="validatePieces" />
+						</p:inputText>
+						<p:commandButton value="Edit"
+							actionListener="#{colorProductSizeSelectBean.edit}"
+							oncomplete="handleEditRequest(xhr, status, args)"
+							update="messagesE,:menu:selectOneMenu" />
+						<p:commandButton value="Cancel" onclick="editDialog.hide()" />
+					</h:panelGrid>
+				</p:dialog>
+				<script type="text/javascript">
+					function handleEditRequest(xhr, status, args) {
+						if (args.validationFailed || !args.edit) {
+							PF('editDialog').jq.effect("shake", {
+								times : 5
+							}, 100);
+						} else {
+							PF('editDialog').hide();
+							location.reload();
+						}
+					}
+				</script>
+			</h:form>
+
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

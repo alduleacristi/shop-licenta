@@ -19,7 +19,8 @@ import org.hibernate.annotations.NamedNativeQuery;
 
 @NamedQueries({
 		@NamedQuery(name = Product.GET_PRODUCTS_BY_CATEGORY, query = "SELECT p FROM Product p where p.category.id = :id"),
-		@NamedQuery(name = Product.GET_REDUCE_PRODUCTS, query = "SELECT p FROM Product p WHERE p.reduction > 0") })
+		@NamedQuery(name = Product.GET_REDUCE_PRODUCTS, query = "SELECT p FROM Product p WHERE p.reduction > 0"), 
+		@NamedQuery(name = Product.GET_PRODUCT_BY_ID, query = "SELECT p FROM Product p WHERE p.id = :id")})
 @NamedNativeQueries({ @NamedNativeQuery(name = Product.GET_GENERIC_PRODUCTS_FROM_CATEGORY, query = "CALL generic_products_child_categories(:param)", resultClass = Product.class) })
 @Entity
 public class Product implements Serializable {
@@ -29,6 +30,7 @@ public class Product implements Serializable {
 	public static final String GET_PRODUCTS_BY_CATEGORY = "getProductsByCategory";
 	public final static String GET_GENERIC_PRODUCTS_FROM_CATEGORY = "getGenericProductsFromCategory";
 	public final static String GET_REDUCE_PRODUCTS = "get_reduce_products";
+	public final static String GET_PRODUCT_BY_ID = "get_product_by_id";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

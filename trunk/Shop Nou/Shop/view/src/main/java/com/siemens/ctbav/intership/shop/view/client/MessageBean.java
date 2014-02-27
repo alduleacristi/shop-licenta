@@ -1,5 +1,6 @@
 package com.siemens.ctbav.intership.shop.view.client;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.ejb.EJB;
@@ -18,7 +19,12 @@ import com.siemens.ctbav.intership.shop.service.client.MessageService;
 @ViewScoped
 @ManagedBean(name = "messageBeanClient")
 @URLMappings(mappings = { @URLMapping(id = "message", pattern = "/client/user/contact", viewId = "/client/user/contact.xhtml") })
-public class MessageBean {
+public class MessageBean implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2073951724665061782L;
+
 	@EJB
 	private MessageService messageService;
 

@@ -1,5 +1,7 @@
 package com.siemens.ctbav.intership.shop.view.client;
 
+import java.io.Serializable;
+
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -18,7 +20,12 @@ import com.siemens.ctbav.intership.shop.service.client.ClientService;
 @ManagedBean(name = "updateClientData")
 @URLMappings(mappings = {
 		@URLMapping(id = "personalDataClient", pattern = "/client/user/Account/PersonalData", viewId = "/client/user/Account/personalData.xhtml") })
-public class EditPersonalDataBean {
+public class EditPersonalDataBean implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4950013606934801190L;
+
 	@ManagedProperty(value = "#{updateClient}")
 	private ClientBean client;
 	

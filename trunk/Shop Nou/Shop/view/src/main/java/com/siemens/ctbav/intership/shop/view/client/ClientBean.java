@@ -1,5 +1,7 @@
 package com.siemens.ctbav.intership.shop.view.client;
 
+import java.io.Serializable;
+
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.validation.constraints.Pattern;
@@ -7,7 +9,12 @@ import javax.validation.constraints.Size;
 
 @ViewScoped
 @ManagedBean(name="updateClient")
-public class ClientBean {
+public class ClientBean implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2554403070147548310L;
+
 	@Pattern(regexp = "^[a-zA-Z]{1}[a-zA-Z0-9._-]{5,15}",message="The password must begin with a letter and it must have at least 6 characters.")
 	private String password;
 	

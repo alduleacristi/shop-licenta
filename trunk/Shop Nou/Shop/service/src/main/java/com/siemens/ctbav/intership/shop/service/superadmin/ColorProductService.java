@@ -19,13 +19,12 @@ public class ColorProductService {
 	@PersistenceContext
 	private EntityManager em;
 
+	@SuppressWarnings("unchecked")
 	public List<ProductColor> getProductsByCategory(Long id) {
 		Session session = em.unwrap(Session.class);
 		Query query = session.getNamedQuery(
 				ProductColor.GET_PRODUCTS_FROM_CATEGORY).setParameter("param",
 				id);
-
-		@SuppressWarnings("unchecked")
 		List<ProductColor> list = query.list();
 		return list;
 	}
@@ -53,6 +52,15 @@ public class ColorProductService {
 	public void addProductColor(Product p, Color c) {
 		ProductColor newPc = new ProductColor(p, c);
 		em.persist(newPc);
+		em.flush();
+	}
+
+	public void editProductColor(ProductColor pc, Color c)
+			throws ColorProductException {
+		if (pc == null || c == null)
+			throw new ColorProductException("Product or color null");
+		pc.setColor(c);
+		em.merge(pc);
 		em.flush();
 	}
 }

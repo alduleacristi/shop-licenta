@@ -237,7 +237,11 @@ create table command(
     foreign key command_status(id_status)
     references command_status(id)
     on update no action
-    on delete no action
+    on delete no action,
+	foreign key user(id_operator)
+	references user(id)
+	on update no action 
+	on delete no action
 
 );
 

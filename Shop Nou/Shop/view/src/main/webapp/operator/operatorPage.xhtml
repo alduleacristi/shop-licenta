@@ -14,7 +14,11 @@
 
 	<ui:composition template="/resources/template/operator/index.xhtml">
 		<ui:define name="mainContent">
-			<ui:include src = "/operator/operatorBox.xhtml"></ui:include>
+		<p:imageSwitch effect ="shuffle">
+			<ui:repeat value="#{opImages.images}" var ="image">
+				<p:graphicImage value="#{image}" width="723" height="300"/>
+			</ui:repeat>
+		</p:imageSwitch>
 		</ui:define>
 		<ui:define name="footer">
 			<ui:include src="/resources/template/operator/footer.xhtml"></ui:include>

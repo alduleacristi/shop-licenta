@@ -102,74 +102,65 @@ public class UserService {
 		return usersList.get(0);
 	}
 
-	 @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+	@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 	public boolean usernameAlreadyExists(String user, Long id)
 			throws SecurityException, IllegalStateException, RollbackException,
 			HeuristicMixedException, HeuristicRollbackException,
 			SystemException {
-		
+		boolean exists = false;
 		System.out.println("verific daca mai exista username");
 		User u = null;
 		try {
 			u = getUserByUsername(user);
 			System.out.println(u);
-			if(u.getId() == id.longValue())
-			{ //daca userul gasit este chiar el
+			if (u.getId() == id.longValue()) { // daca userul gasit este chiar
+												// el
 				System.out.println("userul gasit este chiar el");
-				userTransaction.commit();
-				return false;
-			}
-			else
-			{//altfel inseamna ca exista un alt  user cu acelasi username
+				// return false;
+			} else {// altfel inseamna ca exista un alt user cu acelasi username
 				System.out.println("exista un alt  user cu acelasi username");
-				userTransaction.commit();
-				return true;
+				// return true;
+				exists = true;
 			}
-		} catch (UserException e) {//inseamna ca a gasit mai multi
-				userTransaction.commit();
-				return true;
-		} catch (UserNotFoundException e) {//nu a agsit nici unul
+		} catch (UserException e) {// inseamna ca a gasit mai multi
+			return true;
+		} catch (UserNotFoundException e) {// nu a agsit nici unul
 			System.out.println("nu am gasit");
-			userTransaction.commit();
-			return false;
+			exists = false;
 		}
-		
-		
+		userTransaction.commit();
+		return exists;
 	}
 
-	 @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+	@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 	public boolean emailAlreadyExists(String email, Long id)
 			throws SecurityException, IllegalStateException, RollbackException,
 			HeuristicMixedException, HeuristicRollbackException,
 			SystemException {
-		System.out.println("verific daca mai exista email");
-	
+		System.out.println("verific daca mai exista email " + email);
+
 		User u = null;
 		try {
 			u = getUserByEmail(email);
 			System.out.println(u);
-			if(u.getId() == id.longValue())
-			{ //daca userul gasit este chiar el
+			if (u.getId() == id.longValue()) { // daca userul gasit este chiar
+												// el
 				System.out.println("userul gasit este chiar el");
-				userTransaction.commit();
 				return false;
-			}
-			else
-			{//altfel inseamna ca exista un alt  user cu acelasi username
+			} else {// altfel inseamna ca exista un alt user cu acelasi username
 				System.out.println("exista un alt  user cu acelasi email");
-				userTransaction.commit();
 				return true;
 			}
 		} catch (UserException e) {
 			System.out.println(u.getId() + "    " + id.longValue());
-			userTransaction.commit();
 			return false;
-				
+
 		} catch (UserNotFoundException e) {
 			System.out.println("nu am gasit");
-			userTransaction.commit();
+			// if(userTransaction.getStatus() != 6)
+			// userTransaction.commit();
 			return false;
-			
+
 		}
 	}
 
@@ -187,18 +178,21 @@ public class UserService {
 				User user = new User(id, oper.getUsername(),
 						oper.getPassword(), "operator", oper.getEmail());
 				System.out.println(user);
-				em.merge(user);
+				 em.merge(user);
 				System.out.println("am modificat");
-			} else
+			} else {
+				System.out
+						.println("Username or email already exists in the database");
 				throw new DuplicateFieldException(
 						"Username or email already exists in the database");
+			}
 		} catch (UserException e) {
 			userTransaction.rollback();
 		} catch (UserNotFoundException e) {
 			userTransaction.rollback();
 		}
 
-		if(userTransaction.getStatus() != 6)
+		// if(userTransaction.getStatus() != 6)
 		userTransaction.commit();
 	}
 
@@ -211,6 +205,8 @@ public class UserService {
 			Long id = getUserId(user.getUsername());
 			User u = new User(id, user.getUsername(), user.getPassword(),
 					user.getRolename(), user.getEmail());
+			u.setPasswordStatus(user.getPasswordStatus());
+			System.out.println("VReau sa  setez parola pentru  " + u);
 			em.merge(u);
 		} catch (UserException exc) {
 			userTransaction.rollback();
@@ -229,13 +225,34 @@ public class UserService {
 		return false;
 	}
 
-	public User getUserByPassword(String password) throws UserException {
+	public User getUserByPassword(String password) throws UserNotFoundException {
 		@SuppressWarnings("unchecked")
 		List<User> list = em.createNamedQuery(User.GET_USER_BY_PASSWORD)
 				.setParameter("password", password).getResultList();
 		if (list.size() == 0)
-			throw new UserException(
+			throw new UserNotFoundException(
 					"Sorry! the password does not appear in the database");
 		return list.get(0);
+	}
+
+	public void changePassword(String generatedPassword, String newPassword)
+			throws NotSupportedException, SystemException, SecurityException, IllegalStateException, RollbackException, HeuristicMixedException, HeuristicRollbackException {
+		userTransaction.begin();
+		try
+		{
+		System.out.println("vreau sa modific");
+		System.out.println(generatedPassword + " " + newPassword);
+		User user = getUserByPassword(generatedPassword);
+		if(user == null) throw new UserNotFoundException("the password does not exists in the database");
+		user.setPasswordStatus(2);
+		user.setUserPassword(newPassword);
+		em.merge(user);
+		System.out.println("am modificat");
+		}
+		catch(UserNotFoundException e)
+		{
+			userTransaction.rollback();
+		}
+		userTransaction.commit();
 	}
 }

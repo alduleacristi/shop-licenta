@@ -1,6 +1,5 @@
 package com.siemens.ctbav.intership.shop.view.operator;
 
-import java.io.IOException;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -13,21 +12,27 @@ import javax.faces.context.FacesContext;
 import org.primefaces.event.ToggleEvent;
 
 import com.siemens.ctbav.intership.shop.convert.operator.ConvertClient;
+import com.siemens.ctbav.intership.shop.convert.operator.ConvertCommand;
 import com.siemens.ctbav.intership.shop.dto.operator.ClientDTO;
+import com.siemens.ctbav.intership.shop.dto.operator.CommandDTO;
 import com.siemens.ctbav.intership.shop.service.operator.ClientService;
+import com.siemens.ctbav.intership.shop.service.operator.CommandService;
 import com.siemens.ctbav.intership.shop.service.operator.UserService;
 
 //@URLMappings(mappings = {@URLMapping(id = "client", pattern = "/operator/clients", viewId = "operator/clients.xhtml") })
 @ManagedBean(name = "clients")
 @RequestScoped
 public class ClientBean {
+	
+	
 	@EJB
 	private ClientService clientService;
-
+	@EJB
+	private CommandService commService;
 	@EJB
 	private UserService userService;
 	private List<ClientDTO> allClients;
-
+	private boolean hasOrders;
 	@PostConstruct
 	public void initClientList() {
 		setAllClients(ConvertClient.convertClientList(clientService
@@ -51,8 +56,15 @@ public class ClientBean {
 	}
 
 	public void deleteClient(String username) {
-
+		
+		
 		try {
+			Long id  = userService.getUserId(username);
+			List<CommandDTO> ordersList = ConvertCommand.convertListOfOrders(commService.getOrdersForOperator(id, Integer.MAX_VALUE));
+			if(ordersList.size() > 0){
+				hasOrders= true;
+				return;
+			}
 			userService.deleteUserClient(username);
 			FacesContext.getCurrentInstance().getExternalContext()
 					.redirect("clients.xhtml");
@@ -65,14 +77,12 @@ public class ClientBean {
 		}
 	}
 
-	public void backToMainPage() {
-		try {
-			FacesContext.getCurrentInstance().getExternalContext()
-					.redirect("/Shop4j/operator/operatorPage.xhtml");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	public boolean hasOrders() {
+		return hasOrders;
+	}
+
+	public void setHasOrders(boolean hasOrders) {
+		this.hasOrders = hasOrders;
 	}
 
 }

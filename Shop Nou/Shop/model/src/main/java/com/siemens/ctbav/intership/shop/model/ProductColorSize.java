@@ -22,6 +22,8 @@ public class ProductColorSize implements Serializable {
 	/**
 	 * 
 	 */
+
+	public final static String getProductColorSize = "getProductbyColor,size,name";
 	private static final long serialVersionUID = -8254096206057865195L;
 
 	public static final String GET_PRODUCT_COLOR_SIZE_BY_ID = "getColorProductSizeById";

@@ -25,13 +25,17 @@ public class UserDTO {
 		this.username = username;
 	}
 
+	
+
 	@Override
 	public String toString() {
-		return "UserDTO [username=" + username + ", email=" + email + "]";
+		return "UserDTO [username=" + username + ", email=" + email
+				+ ", password=" + password + ", rolename=" + rolename
+				+ ", passwordStatus=" + passwordStatus + "]";
 	}
 
 	public String getEmail() {
-		System.out.println("get email " + email);
+	//	System.out.println("get email " + email);
 		return email;
 	}
 

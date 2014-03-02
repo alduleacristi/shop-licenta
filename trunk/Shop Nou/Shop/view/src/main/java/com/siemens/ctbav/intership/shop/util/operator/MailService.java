@@ -13,11 +13,11 @@ import javax.mail.internet.MimeMessage;
 
 public class MailService {
 
-	static final String username="deliutzzz_23@yahoo.com",password="alinnuts";
+	static final String username = "deliutzzz_23@yahoo.com",
+			password = "alinnuts";
 	static String smtpServ = "smtp.mail.yahoo.com";
 
-	public static void sendLink(String to, String subject,
-			String mess) throws AddressException, MessagingException {
+	public static void sendLink(String to, String subject, String mess, boolean isHtml) throws AddressException, MessagingException {
 		Properties props = new Properties();
 		props.put("mail.smtp.auth", "true");
 		props.put("mail.smtp.starttls.enable", "true");
@@ -32,10 +32,17 @@ public class MailService {
 				});
 
 		Message message = new MimeMessage(session);
+
+		
+		
+		// else pentru timp sa vad
 		message.setFrom(new InternetAddress(username));
 		message.setRecipients(Message.RecipientType.TO,
 				InternetAddress.parse(to));
+		if(!isHtml)
 		message.setSubject(subject);
+		else 
+			message.setContent(mess,"text/html");
 		message.setText(mess);
 		Transport.send(message);
 

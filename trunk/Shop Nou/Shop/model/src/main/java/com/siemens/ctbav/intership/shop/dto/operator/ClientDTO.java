@@ -5,36 +5,39 @@ import com.siemens.ctbav.intership.shop.dto.operator.UserDTO;
 //clsa dto corespunzatoare clasei Client din pachetul model
 public class ClientDTO {
 
-	private String firstname;
-	private String lastname;
+	private String firstName;
+	private String lastName;
 	private String phoneNumber;
 	// private String email;
 	private UserDTO user;
 
 	public ClientDTO(String firstname, String lastname, String phoneNumber,
 			UserDTO user) {
-		this.firstname = firstname;
-		this.lastname = lastname;
+		this.firstName = firstname;
+		this.lastName = lastname;
 		this.phoneNumber = phoneNumber;
-		// this.email = email;
 		this.user = user;
 	}
 
-	public String getFirstname() {
-		return firstname;
+	public String getFirstName() {
+		return firstName;
 	}
 
-	public void setFirstname(String firstname) {
-		this.firstname = firstname;
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
 	}
 
-	public String getLastname() {
-		return lastname;
+
+	public String getLastName() {
+		return lastName;
 	}
 
-	public void setLastname(String lastname) {
-		this.lastname = lastname;
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
+
 
 	public String getPhoneNumber() {
 		return phoneNumber;
@@ -54,7 +57,7 @@ public class ClientDTO {
 
 	@Override
 	public String toString() {
-		return "ClientDTO [firstname=" + firstname + ", lastname=" + lastname
+		return "ClientDTO [firstname=" + firstName + ", lastname=" + lastName
 				+ ", phoneNumber=" + phoneNumber + ", user=" + user + "]";
 	}
 

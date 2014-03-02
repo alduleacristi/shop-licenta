@@ -5,21 +5,40 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.*;
+
 /**
  * The persistent class for the Command database table.
  * 
  */
 @Entity
-@NamedQueries({ @NamedQuery(name = Command.GET_COMMANDS, query = "SELECT c FROM Command c order by c.orderDate"),
-				@NamedQuery(name = Command.GET_ORDERS_IN_PROGRESS, query = "SELECT c FROM Command c where c.command_status.status='In progress'")
-})
+@NamedQueries({
+		@NamedQuery(name = Command.GET_COMMANDS, query = "SELECT c FROM Command c order by c.orderDate"),
+		@NamedQuery(name = Command.GET_ORDERS_IN_PROGRESS, query = "SELECT c FROM Command c where c.command_status.status='In progress'"),
+		@NamedQuery(name = Command.GET_ORDERS_FOR_OPERATOR, query = "SELECT c FROM Command c where c.command_status.status='In progress' and c.user.id=:id"),
+		@NamedQuery(name =Command.GET_RANDOM_ORDERS, query="select c from Command c where c.user.id is null order by rand()"),
+		@NamedQuery(name=Command.GET_ORDER, query="select c from Command c where c.user.id is null and c.command_status.status='In Progress'")
+ })
 public class Command implements Serializable {
+	public Long getId() {
+		return id;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
 	private static final long serialVersionUID = 1L;
 	public static final String GET_COMMANDS = "getCommands";
 	public static final String GET_ORDERS_IN_PROGRESS = "getOrdersInProgress";
-
+	public static final String GET_ORDERS_FOR_OPERATOR="get orders for operator";
+	public static final String GET_RANDOM_ORDERS="get random orders";
+	public static final String GET_ORDER="get order for operator";
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@OneToOne
@@ -37,13 +56,18 @@ public class Command implements Serializable {
 	private List<ClientProduct> clientProducts;
 
 	@OneToOne
-	@JoinColumn(name="id_adress")
+	@JoinColumn(name = "id_adress")
 	private Adress adress;
 
 	@OneToOne
-	@JoinColumn(name="id_client")
+	@JoinColumn(name = "id_client")
 	private Client client;
 
+	@ManyToOne
+	@JoinColumn(name="id_operator")
+	private User user;
+	
+	
 	public Command() {
 	}
 
@@ -68,7 +92,7 @@ public class Command implements Serializable {
 	}
 
 	public void setDeliveryDate(Date deliveryDate) {
-		this.deliveryDate= deliveryDate;
+		this.deliveryDate = deliveryDate;
 	}
 
 	public Date getOrderDate() {
@@ -82,7 +106,6 @@ public class Command implements Serializable {
 	public List<ClientProduct> getClientProducts() {
 		return this.clientProducts;
 	}
-	
 
 	public void setClientProducts(List<ClientProduct> clientProducts) {
 		this.clientProducts = clientProducts;
@@ -115,7 +138,4 @@ public class Command implements Serializable {
 		this.client = client;
 	}
 
-	
-
-	
 }

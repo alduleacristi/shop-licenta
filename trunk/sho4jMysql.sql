@@ -64,7 +64,8 @@ create table color(
 
 id_color bigint not null auto_increment primary key,
 name varchar(15)  not null,
-description varchar (30) not null
+description varchar (30) not null,
+code varchar (20) not null
 );
 
 insert into color(name,description) values ("Red","Red product"),("Green","Greean product"),("Blue","Blue product");

@@ -223,17 +223,18 @@ create table command(
     id bigint not null auto_increment primary key,
     order_date date not null,
     delivery_date date,   
-    id_adress bigint not null,
-    id_client bigint not null,
+    id_adress bigint ,
+    id_client bigint,
     id_status bigint not null,
+id_operator bigint ,
     foreign key command_adress(id_adress)
     references adress(id)
     on update no action
-    on delete no action,
+    on delete set null,
     foreign key command_client(id_client)
     references client(id)
     on update no action
-    on delete no action,
+    on delete set null,
     foreign key command_status(id_status)
     references command_status(id)
     on update no action

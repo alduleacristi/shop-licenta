@@ -20,25 +20,16 @@ import javax.persistence.*;
 		@NamedQuery(name=Command.GET_CLIENTS_ORDERS, query="select c from Command c where  c.command_status.status='In Progress' and c.client.id=:id")
  })
 public class Command implements Serializable {
-	public Long getId() {
-		return id;
-	}
-
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
 
 	private static final long serialVersionUID = 1L;
+	
 	public static final String GET_COMMANDS = "getCommands";
 	public static final String GET_ORDERS_IN_PROGRESS = "getOrdersInProgress";
 	public static final String GET_ORDERS_FOR_OPERATOR="get orders for operator";
 	public static final String GET_RANDOM_ORDERS="get random orders";
 	public static final String GET_ORDER="get order for operator";
 	public static final String GET_CLIENTS_ORDERS="getClientsOrders";
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -138,6 +129,18 @@ public class Command implements Serializable {
 
 	public void setClient(Client client) {
 		this.client = client;
+	}
+	
+	public Long getId() {
+		return id;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 }

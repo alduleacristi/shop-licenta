@@ -11,11 +11,12 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
-
 @Entity
 @Table(name = "user")
 @NamedQueries({
 		@NamedQuery(name = User.GET_ALL_USERS, query = "SELECT u FROM User u"),
+		@NamedQuery(name = User.GET_ALL_ADMINS, query = "SELECT u FROM User u where u.rolename = 'admin'"),
+		@NamedQuery(name = User.GET_ALL_OPERATORS, query = "SELECT u FROM User u where u.rolename = 'operator'"),
 		@NamedQuery(name = User.GET_CLIENT_USERS, query = "select u from User u where u.rolename='client'"),
 		@NamedQuery(name = User.GET_USER_ID, query = "select u.id from User u where u.username=:user"),
 		@NamedQuery(name = User.GET_CLIENT_BY_USERNAME, query = "select u from User u where u.username = :username"),
@@ -32,6 +33,8 @@ public class User implements Serializable {
 	public static final String GET_CLIENT_BY_USERNAME = "get user by username";
 	public static final String GET_USER_BY_EMAIL = "get user by email";
 	public static final String GET_USER_BY_PASSWORD = "get user by pssword";
+	public static final String GET_ALL_ADMINS = "getAllAdmins";
+	public static final String GET_ALL_OPERATORS = "getAllOperators";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -53,12 +56,19 @@ public class User implements Serializable {
 	@Column
 	private int passwordStatus;
 
-	public int getPasswordStatus() {
-		return passwordStatus;
+	@Column
+	private Boolean ban;
+
+	public User() {
 	}
 
-	public void setPasswordStatus(int passwordStatus) {
-		this.passwordStatus = passwordStatus;
+	public User(long id, String username, String userPassword, String rolename,
+			String email) {
+		this.id = id;
+		this.username = username;
+		this.userPassword = userPassword;
+		this.rolename = rolename;
+		this.email = email;
 	}
 
 	public String getEmail() {
@@ -75,18 +85,6 @@ public class User implements Serializable {
 
 	public void setRolename(String rolename) {
 		this.rolename = rolename;
-	}
-
-	public User() {
-	}
-
-	public User(long id, String username, String userPassword, String rolename,
-			String email) {
-		this.id = id;
-		this.username = username;
-		this.userPassword = userPassword;
-		this.rolename = rolename;
-		this.email = email;
 	}
 
 	public long getId() {
@@ -113,6 +111,22 @@ public class User implements Serializable {
 		this.userPassword = userPassword;
 	}
 
+	public int getPasswordStatus() {
+		return passwordStatus;
+	}
+
+	public void setPasswordStatus(int passwordStatus) {
+		this.passwordStatus = passwordStatus;
+	}
+
+	public Boolean getBan() {
+		return ban;
+	}
+
+	public void setBan(Boolean ban) {
+		this.ban = ban;
+	}
+
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", username=" + username + ", userPassword="
@@ -120,5 +134,4 @@ public class User implements Serializable {
 				+ ", passwordStatus=" + passwordStatus + "]";
 	}
 
-	
 }

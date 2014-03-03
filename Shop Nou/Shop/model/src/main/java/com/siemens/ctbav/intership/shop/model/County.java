@@ -14,6 +14,7 @@ import javax.persistence.*;
 @NamedQueries({ @NamedQuery(name = County.GET_COUNTY_BY_COUNTRY_ID, query = "SELECT a FROM County a where a.country.id = :idCountry"),
 				@NamedQuery(name = County.GET_ALL_COUNTY , query = "select c from County c")})
 public class County implements Serializable {
+	
 	private static final long serialVersionUID = 1L;
 
 	public static final String GET_COUNTY_BY_COUNTRY_ID = "getCountyByCountryId";

@@ -23,13 +23,11 @@ import org.hibernate.annotations.NamedNativeQuery;
 @NamedNativeQueries({ @NamedNativeQuery(name = ProductColor.GET_PRODUCTS_FROM_CATEGORY, query = "CALL products_child_categories(:param)", resultClass = ProductColor.class) })
 public class ProductColor implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -8367516895914463732L;
 
 	public final static String GET_PRODUCTS_FROM_CATEGORY = "get_product_from_category";
 	public final static String GET_COLOR_PRODUCTS_FOR_PRODUCT = "getColorProductsForProduct";
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id_prod_col")

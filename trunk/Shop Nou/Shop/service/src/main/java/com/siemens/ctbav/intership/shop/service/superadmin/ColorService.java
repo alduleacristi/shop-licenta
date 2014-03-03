@@ -46,4 +46,18 @@ public class ColorService {
 		em.merge(color);
 		em.flush();
 	}
+
+	public void addColor(String name, String description, String code) {
+		Color color = new Color(name, description, code);
+		em.persist(color);
+		em.flush();
+	}
+
+	public void removeColor(Long id) throws ColorException {
+		Color color = em.find(Color.class, id);
+		if (color == null)
+			throw new ColorException("Couldn't find the color in the database");
+		em.remove(color);
+		em.flush();
+	}
 }

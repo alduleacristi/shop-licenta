@@ -64,7 +64,6 @@ create table color(
 
 id_color bigint not null auto_increment primary key,
 name varchar(15)  not null,
-code varchar(10) not null,
 description varchar (30) not null
 );
 
@@ -147,7 +146,8 @@ create table user(
     user_password char(32) not null,
     rolename varchar(50) not null,
     email varchar(30) unique,
-    passwordStatus int not null
+    passwordStatus int not null,
+	ban bool
 );
 UPDATE `shop4j`.`user` SET `passwordStatus`='2' WHERE `id`='1';
 UPDATE `shop4j`.`user` SET `passwordStatus`='2' WHERE `id`='2';
@@ -223,26 +223,21 @@ create table command(
     id bigint not null auto_increment primary key,
     order_date date not null,
     delivery_date date,   
-    id_adress bigint ,
-    id_client bigint,
+    id_adress bigint not null,
+    id_client bigint not null,
     id_status bigint not null,
-id_operator bigint ,
     foreign key command_adress(id_adress)
     references adress(id)
     on update no action
-    on delete set null,
+    on delete no action,
     foreign key command_client(id_client)
     references client(id)
     on update no action
-    on delete set null,
+    on delete no action,
     foreign key command_status(id_status)
     references command_status(id)
     on update no action
-    on delete no action,
-	foreign key user(id_operator)
-	references user(id)
-	on update no action 
-	on delete no action
+    on delete no action
 
 );
 

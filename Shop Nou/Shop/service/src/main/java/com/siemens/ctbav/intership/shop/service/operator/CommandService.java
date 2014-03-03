@@ -120,9 +120,11 @@ public class CommandService {
 
 	@SuppressWarnings("unchecked")
 	public List<Command> getOrdersForOperator(Long id_operator, int nrOrders) {
-		return em.createNamedQuery(Command.GET_ORDERS_FOR_OPERATOR)
+		List<Command> list= em.createNamedQuery(Command.GET_ORDERS_FOR_OPERATOR)
 				.setParameter("id", id_operator).setMaxResults(nrOrders)
 				.getResultList();
+	//	if(list.size() > 0) System.out.println(list.get(0).getId()); else System.out.println("lista vida");
+		return list;
 	}
 
 	private void setIdOperator(List<Command> list, Long idOp)
@@ -167,6 +169,12 @@ public class CommandService {
 		if(comm == null) throw new CommandNotFoundException();
 		comm.setUser(null);
 		em.merge(comm);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Command> getOrdersForClient(Long id){
+		List<Command> list = em.createNamedQuery(Command.GET_CLIENTS_ORDERS).setParameter("id", id).getResultList();
+		return list;
 	}
 
 }

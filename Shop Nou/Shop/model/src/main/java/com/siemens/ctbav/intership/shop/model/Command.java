@@ -16,7 +16,8 @@ import javax.persistence.*;
 		@NamedQuery(name = Command.GET_ORDERS_IN_PROGRESS, query = "SELECT c FROM Command c where c.command_status.status='In progress'"),
 		@NamedQuery(name = Command.GET_ORDERS_FOR_OPERATOR, query = "SELECT c FROM Command c where c.command_status.status='In progress' and c.user.id=:id"),
 		@NamedQuery(name =Command.GET_RANDOM_ORDERS, query="select c from Command c where c.user.id is null order by rand()"),
-		@NamedQuery(name=Command.GET_ORDER, query="select c from Command c where c.user.id is null and c.command_status.status='In Progress'")
+		@NamedQuery(name=Command.GET_ORDER, query="select c from Command c where c.user.id is null and c.command_status.status='In Progress'"),
+		@NamedQuery(name=Command.GET_CLIENTS_ORDERS, query="select c from Command c where  c.command_status.status='In Progress' and c.client.id=:id")
  })
 public class Command implements Serializable {
 	public Long getId() {
@@ -37,6 +38,7 @@ public class Command implements Serializable {
 	public static final String GET_ORDERS_FOR_OPERATOR="get orders for operator";
 	public static final String GET_RANDOM_ORDERS="get random orders";
 	public static final String GET_ORDER="get order for operator";
+	public static final String GET_CLIENTS_ORDERS="getClientsOrders";
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;

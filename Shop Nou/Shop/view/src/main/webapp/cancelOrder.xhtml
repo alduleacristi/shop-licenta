@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<title>Cancel order</title>
+</h:head>
+
+<h:body>
+
+
+	<ui:composition template="/resources/template/operator/index.xhtml">
+		<ui:define name="mainContent">
+
+
+			<form id="form">
+				<h:outputText value="Do you really want to cancel your order???" />
+				<br></br>
+				<p:commandButton value="Yes" name="yes"
+					action="#{cancelOrder.cancel}" styleClass="search-submit"
+					update=":form:growl" />
+				<p:growl id="growl" />
+			</form>
+
+		</ui:define>
+	</ui:composition>
+
+</h:body>
+
+</html>

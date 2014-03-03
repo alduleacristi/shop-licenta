@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<title>Change mail validity</title>
+</h:head>
+<h:body>
+
+
+	<ui:composition template="/resources/template/operator/index.xhtml">
+		<ui:define name="menu">
+			<ui:include src="/resources/template/operator/menu.xhtml"></ui:include>
+		</ui:define>
+
+		<ui:define name="mainContent">
+			<h:form id="form">
+				<p:panel>
+					<h:commandButton
+						value="Change the validity of the link sent by email "
+						ajax="false" styleClass="search-submitLong"
+						actionListener="#{mailValidity.change}" />
+						<br></br><br></br>
+					<h:selectOneRadio value="#{mailValidity.clickedRadioButton}">
+						<f:selectItem itemValue="1" itemLabel="One day" />
+						<br></br>
+						<f:selectItem itemValue="2" itemLabel="One week" />
+						<br></br>
+						<f:selectItem itemValue="3" itemLabel="One month" />
+						<br></br>
+						<f:selectItem itemValue="4" itemLabel="One year" />
+					</h:selectOneRadio>
+					<p:growl id="growl"/>
+				</p:panel>
+			</h:form>
+		</ui:define>
+		<ui:define name="footer">
+			<ui:include src="/resources/template/operator/footer.xhtml"></ui:include>
+		</ui:define>
+	</ui:composition>
+
+</h:body>
+
+</html>

@@ -32,10 +32,12 @@
 		<param-name>javax.faces.PROJECT_STAGE</param-name>
 		<param-value>Production</param-value>
 	</context-param>
+
 	<context-param>
 		<param-name>com.ocpsoft.pretty.PrettyFilter</param-name>
 		<param-value>view</param-value>
 	</context-param>
+
 	<context-param>
 		<param-name>primefaces.PRIVATE_CAPTCHA_KEY</param-name>
 		<param-value>6LfwZwoAAAAAAEhRyntKF1PBzysAJLzqp2v-GMRR</param-value>
@@ -45,21 +47,26 @@
 		<param-name>primefaces.PUBLIC_CAPTCHA_KEY</param-name>
 		<param-value>6LfwZwoAAAAAAI-oUHpdvRnkMfu9fXQHxc0P7IBu</param-value>
 	</context-param>
-	
+
 	<context-param>
 		<param-name>com.sun.faces.writeStateAtFormEnd</param-name>
 		<param-value>false</param-value>
 	</context-param>
 
+	<context-param>
+		<param-name>primefaces.THEME</param-name>
+		<param-value>casablanca</param-value>
+	</context-param>
+
 	<servlet>
-        <servlet-name>javax.ws.rs.core.Application</servlet-name>
-        <load-on-startup>1</load-on-startup>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>javax.ws.rs.core.Application</servlet-name>
-        <url-pattern>/rest/*</url-pattern>
-    </servlet-mapping>
-	
+		<servlet-name>javax.ws.rs.core.Application</servlet-name>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>javax.ws.rs.core.Application</servlet-name>
+		<url-pattern>/rest/*</url-pattern>
+	</servlet-mapping>
+
 	<servlet>
 		<servlet-name>facesServlet</servlet-name>
 		<servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
@@ -74,7 +81,7 @@
 		<url-pattern>*.xhtml</url-pattern>
 	</servlet-mapping>
 
-	
+
 
 	<welcome-file-list>
 		<welcome-file>/WEB-INF/pages/index.xhtml</welcome-file>

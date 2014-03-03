@@ -20,7 +20,7 @@ import com.siemens.ctbav.intership.shop.convert.operator.ConvertClient;
 import com.siemens.ctbav.intership.shop.convert.operator.ConvertCommand;
 import com.siemens.ctbav.intership.shop.dto.operator.ClientDTO;
 import com.siemens.ctbav.intership.shop.dto.operator.CommandDTO;
-import com.siemens.ctbav.intership.shop.exception.operator.ClientWithOrdersException;
+//import com.siemens.ctbav.intership.shop.exception.operator.ClientWithOrdersException;
 import com.siemens.ctbav.intership.shop.model.User;
 import com.siemens.ctbav.intership.shop.service.operator.ClientService;
 import com.siemens.ctbav.intership.shop.service.operator.CommandService;
@@ -69,7 +69,7 @@ public class ClientBean {
 			System.out.println(id);
 			List<CommandDTO> ordersList = ConvertCommand.convertListOfOrders(commService.getOrdersForClient(id));
 			if(ordersList.size() > 0){
-					throw new ClientWithOrdersException("There are products ordered by this client; you can't delete it ");
+					//throw new ClientWithOrdersException("There are products ordered by this client; you can't delete it ");
 			}
 			userService.deleteUserClient(username);
 			FacesContext.getCurrentInstance().getExternalContext()

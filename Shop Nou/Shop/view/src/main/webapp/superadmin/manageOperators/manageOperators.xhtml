@@ -12,45 +12,48 @@
 <h:body>
 	<ui:composition template="/superadmin/index.xhtml">
 		<br />
-
 		<ui:define name="mainContent">
 			<div class="box">
-				<p:graphicImage value="/resources/manageAdmins.jpg" width="720"
+				<p:graphicImage value="/resources/manageOperators.jpg" width="720"
 					height="100" />
 			</div>
-			<h:form id="manageAdmins">
-				<p:dataTable var="admin" value="#{manageAdminsBean.allAdmins}"
-					rowKey="#{admin.id}" paginator="true" rows="10"
-					selection="#{manageAdminsBean.selectedAdmin}"
+			<h:form id="manageOperators">
+				<p:dataTable var="operator"
+					value="#{manageOperatorsBean.allOperators}" rowKey="#{operator.id}"
+					paginator="true" rows="10"
+					selection="#{manageOperatorsBean.selectedOperator}"
 					selectionMode="single"
-					filteredValue="#{manageAdminsBean.filteredAdmins}" id="adminsTable">
-					<p:ajax event="rowSelect" update=":manageAdmins:display"
+					filteredValue="#{manageOperatorsBean.filteredOperators}"
+					id="operatorsTable">
+					<p:ajax event="rowSelect" update=":manageOperators:display"
 						oncomplete="dialog.show()" />
 					<f:facet name="header">
-						List of admins
+						List of operators
 					</f:facet>
 
 					<p:column headerText="Username" sortBy="username"
 						filterBy="username" id="username">
-						#{admin.username}
+						#{operator.username}
 					</p:column>
 
 					<p:column headerText="Email" sortBy="email" filterBy="email"
 						id="email">
-						#{admin.email}
+						#{operator.email}
 					</p:column>
 				</p:dataTable>
-				<p:dialog header="Admin Detail" widgetVar="dialog" resizable="false"
-					width="300" showEffect="explode" hideEffect="explode">
+				<p:dialog header="Operatir Detail" widgetVar="dialog"
+					resizable="false" width="300" showEffect="explode"
+					hideEffect="explode">
 
 					<h:panelGrid id="display" columns="2" cellpadding="4">
 						<h:outputText value="Username:" />
-						<h:outputText value="#{manageAdminsBean.selectedAdmin.username}"
+						<h:outputText
+							value="#{manageOperatorsBean.selectedOperator.username}"
 							id="username" />
 
 						<h:outputText value="Email:" />
-						<h:outputText value="#{manageAdminsBean.selectedAdmin.email}"
-							id="email" />
+						<h:outputText
+							value="#{manageOperatorsBean.selectedOperator.email}" id="email" />
 					</h:panelGrid>
 				</p:dialog>
 			</h:form>

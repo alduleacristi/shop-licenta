@@ -115,7 +115,36 @@ public class ColorsBean implements Serializable {
 	}
 
 	public void create(ActionEvent actionEvent) {
+		RequestContext context = RequestContext.getCurrentInstance();
+		boolean create = false;
+		FacesMessage msg = null;
 
+		colorService.addColor(newName, newDescription, "#" + color);
+		create = true;
+		msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Success",
+				"Color successfully added!");
+
+		NavigationUtils.addMessage(msg);
+		context.addCallbackParam("create", create);
+
+		allColors = colorService.getAllColors();
+	}
+
+	public void delete(ActionEvent actionEvent) {
+		FacesMessage msg = null;
+
+		try {
+			colorService.removeColor(selectedColor.getId());
+			msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Success",
+					"Color successfully deleted!");
+			allColors = colorService.getAllColors();
+		} catch (ColorException e) {
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
+					e.getMessage());
+		} finally {
+			setColor("");
+			NavigationUtils.addMessage(msg);
+		}
 	}
 
 }

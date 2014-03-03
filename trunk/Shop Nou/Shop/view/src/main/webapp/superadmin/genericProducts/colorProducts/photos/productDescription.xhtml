@@ -47,9 +47,16 @@
 										url="http://localhost:8080/Shop4j/rest/products/id#{colorProductSelectPhotoBean.selectedProduct.id}"
 										width="170" height="198" />
 									<h:commandButton value="Remove all the photos from product"
-										actionListener="#{colorProductSelectPhotoBean.deletePhotos}"
-										style="width: 100%" styleClass="search-submit"
-										update="messages,:galleria:refreshMe,:mainForm:firstImage" />
+										type="button" onclick="cd.show()" style="width: 100%"
+										styleClass="search-submit" />
+									<p:confirmDialog message="Are you sure?" header="Confirmation"
+										severity="alert" widgetVar="cd" resizable="false">
+										<p:commandButton value="Yes"
+											actionListener="#{colorProductSelectPhotoBean.deletePhotos}"
+											update="messages,:galleria:refreshMe,:mainForm:firstImage"
+											oncomplete="cd.hide()" immediate="true" />
+										<p:commandButton value="No" onclick="cd.hide();" type="button" />
+									</p:confirmDialog>
 								</div>
 							</div>
 						</li>

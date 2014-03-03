@@ -148,7 +148,7 @@ create table user(
     rolename varchar(50) not null,
     email varchar(30) unique,
     passwordStatus int not null,
-	ban bool
+	ban int not null
 );
 UPDATE `shop4j`.`user` SET `passwordStatus`='2' WHERE `id`='1';
 UPDATE `shop4j`.`user` SET `passwordStatus`='2' WHERE `id`='2';

@@ -1,5 +1,7 @@
 package com.siemens.ctbav.intership.shop.dto.operator;
 
+import java.util.Date;
+
 import com.siemens.ctbav.intership.shop.dto.operator.UserDTO;
 
 //clsa dto corespunzatoare clasei Client din pachetul model
@@ -10,7 +12,9 @@ public class ClientDTO {
 	private String phoneNumber;
 	// private String email;
 	private UserDTO user;
-
+	private Date lastOrderDate;
+	
+	
 	public ClientDTO(String firstname, String lastname, String phoneNumber,
 			UserDTO user) {
 		this.firstName = firstname;
@@ -59,6 +63,14 @@ public class ClientDTO {
 	public String toString() {
 		return "ClientDTO [firstname=" + firstName + ", lastname=" + lastName
 				+ ", phoneNumber=" + phoneNumber + ", user=" + user + "]";
+	}
+
+	public Date getLastOrderDate() {
+		return lastOrderDate;
+	}
+
+	public void setLastOrderDate(Date lastOrderDate) {
+		this.lastOrderDate = lastOrderDate;
 	}
 
 }

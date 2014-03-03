@@ -9,7 +9,6 @@ import com.siemens.ctbav.intership.shop.dto.operator.ClientProductDTO;
 import com.siemens.ctbav.intership.shop.dto.operator.CommandDTO;
 import com.siemens.ctbav.intership.shop.dto.operator.CommandStatusDTO;
 import com.siemens.ctbav.intership.shop.model.Command;
-import com.siemens.ctbav.intership.shop.model.CommandStatus;
 
 public class ConvertCommand {
 

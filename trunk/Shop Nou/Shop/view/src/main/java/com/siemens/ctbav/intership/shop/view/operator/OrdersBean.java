@@ -1,6 +1,5 @@
 package com.siemens.ctbav.intership.shop.view.operator;
 
-import java.io.IOException;
 import java.sql.Date;
 import java.util.Calendar;
 import java.util.List;
@@ -12,12 +11,9 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 
-import com.siemens.ctbav.intership.shop.convert.operator.ConvertClientProduct;
 import com.siemens.ctbav.intership.shop.convert.operator.ConvertCommand;
-import com.siemens.ctbav.intership.shop.convert.operator.ConvertProductColorSize;
 import com.siemens.ctbav.intership.shop.dto.operator.ClientProductDTO;
 import com.siemens.ctbav.intership.shop.dto.operator.CommandDTO;
-import com.siemens.ctbav.intership.shop.dto.operator.ProductColorSizeDTO;
 import com.siemens.ctbav.intership.shop.exception.operator.NotEnoughProductsException;
 import com.siemens.ctbav.intership.shop.model.User;
 import com.siemens.ctbav.intership.shop.service.operator.CommandService;
@@ -28,7 +24,7 @@ import com.siemens.ctbav.intership.shop.util.operator.AES;
 public class OrdersBean {
 
 	private static int ordersPerOperator = 3;
-	private boolean haveToAddProducts = false;
+//	private boolean haveToAddProducts = false;
 	private double totalPerOrder;
 	private double transport = (double) 0;
 	private static final String clientHasToPayTransport = "Client will have to pay 20 RON for transport";
@@ -53,7 +49,7 @@ public class OrdersBean {
 
 	
 
-	private List<ClientProductDTO> stoppedOrders;
+//	private List<ClientProductDTO> stoppedOrders;
 
 	public Double getTotalPerOrder() {
 		return totalPerOrder;
@@ -83,9 +79,9 @@ public class OrdersBean {
 								.getMessage()));
 			}
 		}
-		stoppedOrders =ConvertClientProduct.convertList(commService.getStoppedOrders(user.getId()));
-		if (stoppedOrders.size() > 0)
-			haveToAddProducts = true;
+//		stoppedOrders =ConvertClientProduct.convertList(commService.getStoppedOrders(user.getId()));
+//		if (stoppedOrders.size() > 0)
+//			haveToAddProducts = true;
 
 	}
 
@@ -112,11 +108,11 @@ public class OrdersBean {
 					null,
 					new FacesMessage(FacesMessage.SEVERITY_INFO,"A mail will be sent to the client",
 							"A mail will be sent to the client"));
-		//	System.out.println("trimitem mail pentru explicare + pun pe sesiune lista de produse");
+			System.out.println("trimitem mail pentru explicare + pun pe sesiune lista de produse");
 			
 			//cand operatorul vrea sa adauge produse, pe pagina de adaugare produsele din lista productList 
 			//o sa apara primele, apoi cele din list stoppedOrders
-			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("productList", e.getProductsNotFound());
+		//	FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("productList", e.getProductsNotFound());
 			
 			sendExplicationMail(order);
 
@@ -176,26 +172,18 @@ public class OrdersBean {
 		return clientHasToPayTransport;
 	}
 
-	public boolean isHaveToAddProducts() {
-	//	System.out.println(haveToAddProducts);
-		return haveToAddProducts;
-	}
 
-	public void setHaveToAddProducts(boolean haveToAddProducts) {
-		this.haveToAddProducts = haveToAddProducts;
-	}
-
-	public void addProducts() {
-		try {
-			//pun in map comenzile pt care nu exista destule produse si trebuie adaugat
-			
-			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("stoppedOrders", stoppedOrders);
-			FacesContext.getCurrentInstance().getExternalContext().redirect("addMissingProducts.xhtml");
-		} catch (IOException e) {
-			
-		}
-
-	}
+//	public void addProducts() {
+//		try {
+//			//pun in map comenzile pt care nu exista destule produse si trebuie adaugat
+//			
+//			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("stoppedOrders", stoppedOrders);
+//			FacesContext.getCurrentInstance().getExternalContext().redirect("addMissingProducts.xhtml");
+//		} catch (IOException e) {
+//			
+//		}
+//
+//	}
 
 	public void changeOrder(CommandDTO order) {
 		User user = (User) FacesContext.getCurrentInstance()

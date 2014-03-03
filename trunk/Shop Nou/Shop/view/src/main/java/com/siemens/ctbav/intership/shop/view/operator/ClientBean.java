@@ -8,6 +8,11 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
+import javax.transaction.HeuristicMixedException;
+import javax.transaction.HeuristicRollbackException;
+import javax.transaction.NotSupportedException;
+import javax.transaction.RollbackException;
+import javax.transaction.SystemException;
 
 import org.primefaces.event.ToggleEvent;
 
@@ -15,6 +20,8 @@ import com.siemens.ctbav.intership.shop.convert.operator.ConvertClient;
 import com.siemens.ctbav.intership.shop.convert.operator.ConvertCommand;
 import com.siemens.ctbav.intership.shop.dto.operator.ClientDTO;
 import com.siemens.ctbav.intership.shop.dto.operator.CommandDTO;
+import com.siemens.ctbav.intership.shop.exception.operator.ClientWithOrdersException;
+import com.siemens.ctbav.intership.shop.model.User;
 import com.siemens.ctbav.intership.shop.service.operator.ClientService;
 import com.siemens.ctbav.intership.shop.service.operator.CommandService;
 import com.siemens.ctbav.intership.shop.service.operator.UserService;
@@ -32,11 +39,12 @@ public class ClientBean {
 	@EJB
 	private UserService userService;
 	private List<ClientDTO> allClients;
-	private boolean hasOrders;
+	
 	@PostConstruct
 	public void initClientList() {
 		setAllClients(ConvertClient.convertClientList(clientService
 				.getAllClients()));
+		
 	}
 
 	public void setAllClients(List<ClientDTO> allClients) {
@@ -56,33 +64,25 @@ public class ClientBean {
 	}
 
 	public void deleteClient(String username) {
-		
-		
 		try {
 			Long id  = userService.getUserId(username);
-			List<CommandDTO> ordersList = ConvertCommand.convertListOfOrders(commService.getOrdersForOperator(id, Integer.MAX_VALUE));
+			System.out.println(id);
+			List<CommandDTO> ordersList = ConvertCommand.convertListOfOrders(commService.getOrdersForClient(id));
 			if(ordersList.size() > 0){
-				hasOrders= true;
-				return;
+					throw new ClientWithOrdersException("There are products ordered by this client; you can't delete it ");
 			}
 			userService.deleteUserClient(username);
 			FacesContext.getCurrentInstance().getExternalContext()
-					.redirect("clients.xhtml");
+			.redirect("clients.xhtml");
+		
 		} catch (Exception e) {
 			FacesContext.getCurrentInstance().addMessage(
 					null,
-					new FacesMessage(FacesMessage.SEVERITY_ERROR, "", e
+					new FacesMessage(FacesMessage.SEVERITY_ERROR,e.getMessage(), e
 							.getMessage()));
 			return;
 		}
 	}
 
-	public boolean hasOrders() {
-		return hasOrders;
-	}
-
-	public void setHasOrders(boolean hasOrders) {
-		this.hasOrders = hasOrders;
-	}
 
 }

@@ -13,6 +13,9 @@
 
 	<h:form id="form">
 		<p:growl id="growl" />
+
+
+
 		<p:dataTable id="clientsTable" var="client"
 			value="#{clients.allClients}">
 			<p:ajax event="rowToggle" listener="#{clients.onRowToggle}"
@@ -46,11 +49,29 @@
             </f:facet>
 				<h:outputText value="#{client.phoneNumber}" />
 			</p:column>
+			
+			
+			<p:column style="width:20%">
+				<f:facet name="header">  
+                    Last order date 
+            </f:facet>
+				<h:outputText value="#{client.phoneNumber}" />
+			</p:column>
+			
+			
 			<p:column>
 
 				<p:commandButton value="Delete"
 					actionListener="#{clients.deleteClient(client.user.username)}"
-					styleClass="ui-priority-primary" update=":form:clientsTable" />
+					styleClass="ui-priority-primary" update=":form:clientsTable">
+					
+					<p:confirm header="Confirmation"  message="Are you sure you want to delete the client???" icon ="ui-icon-alert"/>
+				</p:commandButton>
+				<p:confirmDialog global ="true" showEffect="fade" hideEffect="explode">
+					<p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon ="ui-icon-check" />
+					<p:commandButton value="No" type="button" styleClass="ui-confirmdialog-yes" icon ="ui-icon-close" />
+				</p:confirmDialog>
+
 			</p:column>
 
 			<p:rowExpansion>
@@ -68,7 +89,7 @@
 
 		</p:dataTable>
 
-		
+
 	</h:form>
 </h:body>
 </html>

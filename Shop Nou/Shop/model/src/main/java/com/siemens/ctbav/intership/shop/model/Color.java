@@ -26,6 +26,15 @@ public class Color implements Serializable {
 	private String description;
 	private String code;
 
+	public Color() {
+	}
+
+	public Color(String name, String description, String code) {
+		this.name = name;
+		this.code = code;
+		this.description = description;
+	}
+
 	public Long getId() {
 		return id;
 	}

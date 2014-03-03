@@ -19,13 +19,9 @@ import com.siemens.ctbav.intership.shop.model.Size;
 @NamedQueries({ @NamedQuery(name = ProductColorSize.GET_PRODUCT_COLOR_SIZE_BY_ID, query = "SELECT p FROM product_color_size p where p.id = :id") })
 public class ProductColorSize implements Serializable {
 
-	/**
-	 * 
-	 */
-
-	public final static String getProductColorSize = "getProductbyColor,size,name";
 	private static final long serialVersionUID = -8254096206057865195L;
 
+	public final static String getProductColorSize = "getProductbyColor,size,name";
 	public static final String GET_PRODUCT_COLOR_SIZE_BY_ID = "getColorProductSizeById";
 
 	@Id
@@ -111,7 +107,4 @@ public class ProductColorSize implements Serializable {
 			return false;
 		return true;
 	}
-
-	
-
 }

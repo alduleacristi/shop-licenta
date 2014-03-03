@@ -18,6 +18,7 @@ import javax.persistence.NamedQuery;
 public class CommandStatus implements Serializable{
 	
 	public final static String GET_STATUS_BY_NAME="get status by name";
+	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;

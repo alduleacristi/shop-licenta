@@ -40,9 +40,6 @@ public class Size implements Serializable {
 	@JoinColumn(name = "id_cat")
 	private Category category;
 
-	// @OneToMany(mappedBy = "size")
-	// private List<ProductColorSize> prodColSize;
-
 	public Size() {
 	}
 
@@ -58,14 +55,6 @@ public class Size implements Serializable {
 	public void setId(Long id) {
 		this.id = id;
 	}
-
-	// public List<ProductColorSize> getProdColSize() {
-	// return prodColSize;
-	// }
-
-	// public void setProdColSize(List<ProductColorSize> prodColSize) {
-	// this.prodColSize = prodColSize;
-	// }
 
 	public void setSize(String size) {
 		this.size = size;

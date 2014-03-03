@@ -13,6 +13,7 @@ import javax.persistence.*;
 		@NamedQuery(name = Locality.FIND_BY_COUNTY_ID, query = "SELECT l FROM Locality l where l.county.id = :idCounty"),
 		@NamedQuery(name = Locality.GET_ALL_LOCALITY, query = "select l from Locality l") })
 public class Locality implements Serializable {
+	
 	private static final long serialVersionUID = 1L;
 
 	public static final String FIND_BY_COUNTY_ID = "getLocalityFromCounty";

@@ -46,7 +46,6 @@ public class Category implements Serializable {
 	@OneToMany(mappedBy = "category", fetch = FetchType.EAGER)
 	private List<Category> categories;
 
-
 	public Category() {
 	}
 
@@ -85,6 +84,14 @@ public class Category implements Serializable {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public String getIerarhie() {
+		StringBuilder sb = new StringBuilder(100);
+		for (Category c : categories)
+			sb.append(c.name + " ");
+		sb.append(name);
+		return sb.toString();
 	}
 
 	@Override
@@ -137,13 +144,4 @@ public class Category implements Serializable {
 	public String toString() {
 		return name;
 	}
-
-	public String getIerarhie() {
-		StringBuilder sb = new StringBuilder(100);
-		for (Category c : categories)
-			sb.append(c.name + " ");
-		sb.append(name);
-		return sb.toString();
-	}
-
 }

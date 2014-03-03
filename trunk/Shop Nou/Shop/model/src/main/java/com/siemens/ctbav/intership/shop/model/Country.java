@@ -13,6 +13,7 @@ import javax.persistence.*;
 @Entity
 @NamedQuery(name = Country.findAll, query = "SELECT c FROM Country c")
 public class Country implements Serializable {
+	
 	private static final long serialVersionUID = 1L;
 
 	public static final String findAll = "findAll";

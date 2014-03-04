@@ -2,6 +2,8 @@ package com.siemens.ctbav.intership.shop.view.operator;
 
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.Date;
+
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -11,6 +13,7 @@ import javax.faces.context.FacesContext;
 import com.siemens.ctbav.intership.shop.convert.operator.ConvertUser;
 import com.siemens.ctbav.intership.shop.dto.operator.UserDTO;
 import com.siemens.ctbav.intership.shop.service.operator.UserService;
+import com.siemens.ctbav.intership.shop.util.operator.AES;
 import com.siemens.ctbav.intership.shop.util.operator.GenerateString;
 import com.siemens.ctbav.intership.shop.util.operator.MailService;
 
@@ -34,21 +37,26 @@ public class ForgotPassword {
 		try {
 			UserDTO user = ConvertUser.convertUser(userService
 					.getUserByEmail(email));
-			String password;
+			String password, cryptedPassword;
 			do {
 				password = GenerateString.randomPassword(); // generez o parola
 															// random de 10
 															// caractere
+				
 				System.out.println(password);
 			} while (userService.passwordAlreadyExists(password));
+			
 			user.setPassword(password); // setez parola random utilizatorului
 			user.setPasswordStatus(1); // adica e nou generata,utilizatorul
 										// poate
 										// sa acceseze pagina daca timpul nu a
 										// trecut inca
 			userService.setTemporaryPassword(user);
+			cryptedPassword=AES.encrypt(password);
+			Long now = Calendar.getInstance().getTimeInMillis();
+			String encryptedTime= AES.encrypt(now.toString());
 			String link = "http://localhost:8080/Shop4j/rest/passwordRecovery/"
-					+ password + "/" + Calendar.getInstance().getTimeInMillis();
+					+ cryptedPassword + "/" + encryptedTime;
 			// aici trimite linkul dar acum nu am net
 			// in orice caz linkul se trimite ok
 			

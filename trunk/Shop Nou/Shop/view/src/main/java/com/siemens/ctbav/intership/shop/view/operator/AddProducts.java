@@ -24,47 +24,13 @@ public class AddProducts {
 	@EJB
 	private ProductService prodService;
 	
-	@SuppressWarnings("unchecked")
 	@PostConstruct
 	public void postConstruct() {
 		productList = new ArrayList<MissingProduct>();
-
-		List<ClientProductDTO> list = (List<ClientProductDTO>) (FacesContext
-				.getCurrentInstance().getExternalContext().getSessionMap()
-				.get("productList"));
-		if (list != null)
-			addList(list);
-
-		list = (List<ClientProductDTO>) (FacesContext.getCurrentInstance()
-				.getExternalContext().getSessionMap().get("stoppedOrders"));
-		if (list != null)
-			addList(list);
+		//in productService calculez pt fiecare produs diferenta dintre cate sunt pe stoc si cate s-au cerut in comenzi
+	
 	}
 
-	public void addList(List<ClientProductDTO> list) {
-		for (ClientProductDTO pcs : list)
-			if (!productList.contains(new MissingProduct(pcs.getProduct(),
-					(long) 0))) {
-				System.out.println(pcs.getNrPieces() + "  "
-						+ pcs.getProduct().getNrPieces());
-				productList.add(new MissingProduct(pcs.getProduct(), pcs
-						.getNrPieces()));
-			} else {
-				System.out.println(pcs.getNrPieces() + "  "
-						+ pcs.getProduct().getNrPieces());
-				int index = productList.indexOf(new MissingProduct(pcs
-						.getProduct(), (long) 0));
-				if (index != -1)
-					productList.get(index).setNrPieces(
-							productList.get(index).getNrPieces()
-									+ pcs.getNrPieces());
-			}
-
-		for (MissingProduct mp : productList) {
-			Long nrPieces = mp.getProduct().getNrPieces();
-			mp.setNrPieces(mp.getNrPieces() - nrPieces);
-		}
-	}
 
 	public List<MissingProduct> getProductList() {
 		return productList;

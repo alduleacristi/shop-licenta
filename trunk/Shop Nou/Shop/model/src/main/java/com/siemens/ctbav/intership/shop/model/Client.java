@@ -8,6 +8,8 @@ import javax.persistence.*;
 import org.apache.solr.analysis.LowerCaseFilterFactory;
 import org.apache.solr.analysis.NGramFilterFactory;
 import org.apache.solr.analysis.WhitespaceTokenizerFactory;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.search.annotations.Analyzer;
 import org.hibernate.search.annotations.AnalyzerDef;
 import org.hibernate.search.annotations.AnalyzerDefs;
@@ -26,7 +28,7 @@ import com.siemens.ctbav.intership.shop.util.client.ProductCategoryIndex;
  * 
  */
 @Entity
-@NamedQueries({@NamedQuery(name = Client.GET_ALL_CLIENTS, query = "SELECT c FROM Client c"),
+@NamedQueries({@NamedQuery(name = Client.GET_ALL_CLIENTS, query = "SELECT c FROM Client c order by c.firstname"),
 			@NamedQuery(name = Client.GET_CLIENT_BY_USERNAME , query = "select c from Client c where c.user.username = :username")})
 @ClassBridges({
 	@ClassBridge(name = "category", impl = CategoryIndex.class, params = @Parameter(name = "sepChar", value = " "), analyzer = @Analyzer(definition = "categorySearch")),
@@ -67,6 +69,7 @@ public class Client implements Serializable {
 
 	// bi-directional many-to-one association to Command
 
+	@LazyCollection(LazyCollectionOption.FALSE)
 	@OneToMany(mappedBy = "client")
 	private List<Command> commands;
 

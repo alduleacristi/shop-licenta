@@ -64,8 +64,7 @@ public class PasswordRecovery {
 	}
 
 	public boolean isValidLink(Long milis) {
-		if (Calendar.getInstance().getTimeInMillis() - milis > Interval
-				.getDefault().getValue())
+		if (Calendar.getInstance().getTimeInMillis() - milis > Interval.DEFAULT.getVal())
 			return false;
 		return true;
 	}

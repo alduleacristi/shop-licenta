@@ -1,37 +1,38 @@
 package com.siemens.ctbav.intership.shop.util.operator;
 
-public class Interval {
-
-	public static  Interval ONE_DAY=new Interval (new Long(86400000),1);
-
-	public static  Interval ONE_WEEK= new Interval(new Long(ONE_DAY.value * 7),2);
-
-	public static  Interval ONE_MONTH = new Interval(new Long(ONE_DAY.value * 30),3); // nu e chiar exact, in fine
-
-	public static  Interval ONE_YEAR= new Interval(new Long(ONE_MONTH.value * 12),4);
-
-	private final Long value;
-	private final int rank;
-
-	private Interval(Long value, int rank) {
-		this.value = value;
-		this.rank=rank;
-	}
-
-	private static Interval defaultInt=ONE_WEEK;
+public enum Interval {
+	ONE_DAY(86400000,1),
+	ONE_WEEK(ONE_DAY.val * 7,2),
+	ONE_MONTH(ONE_DAY.val * 30,3),
+	ONE_YEAR(ONE_DAY.val * 365,4),
+	DEFAULT(ONE_DAY);
 	
-	public static void setDefault(Interval obj) {
-			defaultInt = obj;
-	}
-	public static Interval getDefault(){
-		return defaultInt;
+
+	private  long val;
+	private  int rank;
+	
+	private Interval(long val, int rank) {
+		this.val = val;
+		this.rank = rank;
 	}
 	
-	public Long getValue()
-	{
-		return value;
+	private Interval(Interval interval){
+		this.val= interval.val;
+		this.rank=interval.rank;
 	}
-	public int getRank() {
-		return rank;
+	
+	public void set(Interval interval){
+		DEFAULT.rank=interval.rank;
+		DEFAULT.val = interval.val;
 	}
+
+	public long getVal() {
+		return val;
+	}
+
+  public int getRank(){
+	  return rank;
+  }
+	
+	
 }

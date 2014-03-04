@@ -61,15 +61,15 @@
 							value="#{manageOperatorsBean.selectedOperator.email}" id="email" />
 						<h:outputText value="Status: " id="status" />
 						<h:outputText value="Banned"
-							rendered="#{manageAdminsBean.selectedOperator.ban == 1}"
+							rendered="#{manageOperatorsBean.selectedOperator.ban == 1}"
 							id="banned" />
 						<h:outputText value="Not Banned"
-							rendered="#{manageAdminsBean.selectedOperator.ban == 0}"
+							rendered="#{manageOperatorsBean.selectedOperator.ban == 0}"
 							id="notBanned" />
 						<h:commandButton value="Ban him" id="banHim"
-							rendered="#{manageAdminsBean.selectedOperator.ban == 0}" />
+							rendered="#{manageOperatorsBean.selectedOperator.ban == 0}" />
 						<h:commandButton value="Unban him" id="unbanhim"
-							rendered="#{manageAdminsBean.selectedOperator.ban == 1}" />
+							rendered="#{manageOperatorsBean.selectedOperator.ban == 1}" />
 					</h:panelGrid>
 				</p:dialog>
 			</h:form>

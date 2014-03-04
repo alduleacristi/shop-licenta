@@ -14,14 +14,44 @@ import javax.persistence.OneToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
+import org.apache.solr.analysis.LowerCaseFilterFactory;
+import org.apache.solr.analysis.NGramFilterFactory;
+import org.apache.solr.analysis.StandardTokenizerFactory;
 import org.hibernate.annotations.NamedNativeQueries;
 import org.hibernate.annotations.NamedNativeQuery;
+import org.hibernate.search.annotations.Analyzer;
+import org.hibernate.search.annotations.AnalyzerDef;
+import org.hibernate.search.annotations.AnalyzerDefs;
+import org.hibernate.search.annotations.ClassBridge;
+import org.hibernate.search.annotations.ClassBridges;
+import org.hibernate.search.annotations.Indexed;
+import org.hibernate.search.annotations.Parameter;
+import org.hibernate.search.annotations.TokenFilterDef;
+import org.hibernate.search.annotations.TokenizerDef;
+import com.siemens.ctbav.intership.shop.util.client.ProductCategoryIndex;
 
 @NamedQueries({
 		@NamedQuery(name = Product.GET_PRODUCTS_BY_CATEGORY, query = "SELECT p FROM Product p where p.category.id = :id"),
-		@NamedQuery(name = Product.GET_REDUCE_PRODUCTS, query = "SELECT p FROM Product p WHERE p.reduction > 0"), 
-		@NamedQuery(name = Product.GET_PRODUCT_BY_ID, query = "SELECT p FROM Product p WHERE p.id = :id")})
+		@NamedQuery(name = Product.GET_REDUCE_PRODUCTS, query = "SELECT p FROM Product p WHERE p.reduction > 0"),
+		@NamedQuery(name = Product.GET_PRODUCT_BY_ID, query = "SELECT p FROM Product p WHERE p.id = :id") })
 @NamedNativeQueries({ @NamedNativeQuery(name = Product.GET_GENERIC_PRODUCTS_FROM_CATEGORY, query = "CALL generic_products_child_categories(:param)", resultClass = Product.class) })
+@Indexed()
+@ClassBridges({
+//		@ClassBridge(name = "category", impl = CategoryIndex.class, params = @Parameter(name = "sepChar", value = "/"), analyzer = @Analyzer(definition = "categorySearchAnalyzer")),
+		@ClassBridge(name = "productCategory", impl = ProductCategoryIndex.class, params = @Parameter(name = "sepChar", value = "/"), analyzer = @Analyzer(definition = "productSearchAnalyzer")) })
+@AnalyzerDefs({
+		@AnalyzerDef(name = "productSearchAnalyzer",  filters = {
+				@TokenFilterDef(factory = LowerCaseFilterFactory.class),
+				@TokenFilterDef(factory = NGramFilterFactory.class, params = {
+						@Parameter(name = "maxGramSize", value = "10"),
+						@Parameter(name = "minGramSize", value = "3") }), }, tokenizer = @TokenizerDef(factory = StandardTokenizerFactory.class)),
+		@AnalyzerDef(name = "categorySearchAnalyzer", tokenizer = @TokenizerDef(factory = StandardTokenizerFactory.class), filters = {
+				@TokenFilterDef(factory = LowerCaseFilterFactory.class),
+				@TokenFilterDef(factory = NGramFilterFactory.class, params = {
+						@Parameter(name = "maxGramSize", value = "10"),
+						@Parameter(name = "minGramSize", value = "3") }), })
+
+})
 @Entity
 public class Product implements Serializable {
 

@@ -1,18 +1,16 @@
 package com.siemens.ctbav.intership.shop.util.client;
 
 import java.util.Map;
-
-
-
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
-import org.hibernate.search.bridge.FieldBridge;
+
 import org.hibernate.search.bridge.LuceneOptions;
 import org.hibernate.search.bridge.ParameterizedBridge;
+import org.hibernate.search.bridge.TwoWayFieldBridge;
 
 import com.siemens.ctbav.intership.shop.model.Product;
 
-public class ProductCategoryIndex implements FieldBridge, ParameterizedBridge {
+public class ProductCategoryIndex implements TwoWayFieldBridge, ParameterizedBridge {
 	private String sepChar;
 
 	@Override
@@ -34,6 +32,16 @@ public class ProductCategoryIndex implements FieldBridge, ParameterizedBridge {
 	public void setParameterValues(Map<String, String> parameters) {
 		this.sepChar = (String) parameters.get("sepChar");
 		System.out.println("Separatorul este: " + sepChar);
+	}
+
+	@Override
+	public Object get(String arg0, Document arg1) {
+		return arg0;
+	}
+
+	@Override
+	public String objectToString(Object arg0) {
+		return arg0.toString();
 	}
 
 }

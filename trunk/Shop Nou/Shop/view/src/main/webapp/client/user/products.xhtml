@@ -46,15 +46,18 @@
 									actionListener="#{clientProducts.showProduct(productColor)}">
 									<li>
 										<center>
+											<p:graphicImage
+												url="http://localhost:8080/Shop4j/rest/products/id#{productColor.id}"
+												width="170" height="190" />
 											<div class="product-info">
 												<div class="reduction">
 													<p:outputLabel value="-#{productColor.product.reduction}%"
 														rendered="#{productColor.product.reduction != 0.0}"></p:outputLabel>
 												</div>
 												<h3>Product name</h3>
-												#{productColor.product.name} <br /> <strong
-													class="price">Category name</strong>#{productColor.product.category.name}
-												<br /> <br /> <strong class="price">Price</strong>#{productColor.product.price}$
+												#{productColor.product.name} <br /> <strong class="price">Category
+													name</strong>#{productColor.product.category.name} <br /> <br /> <strong
+													class="price">Price</strong>#{productColor.product.price}$
 												<br /> <br /> <strong class="price">Color</strong>#{productColor.color.name}
 											</div>
 										</center>

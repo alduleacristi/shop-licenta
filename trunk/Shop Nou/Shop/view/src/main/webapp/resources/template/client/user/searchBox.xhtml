@@ -7,7 +7,7 @@
 	xmlns:p="http://primefaces.org/ui">
 <h:body>
 	<ui:composition>
-		<h:form>
+		<h:form id="searchFom">
 			<div class="box2 search2">
 				<h2>
 					Search by <span></span>
@@ -16,34 +16,30 @@
 
 					<br></br> <label>Keyword</label> <br />
 					<p:autoComplete id="acMinLength" minQueryLength="3"
-						value="#{search.query}" effect="fade"
-						completeMethod="#{search.complete}" style="width:200px" size="30"/>
+						value="#{searchClient.query}" effect="fade" style="width:210px !important"
+						size="10" completeMethod="#{searchClient.complete}"/>
 
 					<br />
 					<div class="inline-field">
+
 						<br />
-						<h:outputLabel value="Price " />
-						<br />
-						<p:selectOneMenu value="#{client2.minPrice}" editable="false"
-							style="width:60px">
-							<f:selectItems value="#{client2.minPrices}" var="price"
-								itemLabel="#{price}" itemValue="#{price}" />
-						</p:selectOneMenu>
-						<br />
-						<h:outputLabel value=" to " />
-						<br />
-						<p:selectOneMenu value="#{client2.maxPrice}" editable="false"
-							style="width:60px">
-							<f:selectItems value="#{client2.maxPrices}" var="price"
-								itemLabel="#{price}" itemValue="#{price}" />
-						</p:selectOneMenu>
+						<h:panelGrid columns="1" style="margin-bottom:10px">
+							<h:outputText id="displayRange"
+								value="Between #{searchClient.minPrice} and #{searchClient.maxPrice}" />
+							<p:slider for="txt6,txt7" display="displayRange"
+								style="width:210px" range="true"
+								displayTemplate="Between {min} and {max}" minValue="0"
+								maxValue="200" />
+						</h:panelGrid>
+						<h:inputHidden id="txt6" value="#{searchClient.minPrice}" />
+						<h:inputHidden id="txt7" value="#{searchClient.maxPrice}" />
+						<center> <p:commandButton value="Search"
+							styleClass="search-submit"
+							action="#{searchClient.search(searchClient.query)}"/> </center>
 					</div>
-					<p:commandButton value="Search"
-						actionListener="#{clientProducts.doSearch(search.query,client.minPrice,client.maxPrice)}"
-						process="@form" styleClass="search-submit" />
 					<p>
-						<a href="/Shop4J/client/Contact" class="bul">Contact Customer
-							Support</a>
+						<a href="/Shop4j/client/user/contact" class="bul">Contact
+							Customer Support</a>
 					</p>
 					<br />
 				</div>

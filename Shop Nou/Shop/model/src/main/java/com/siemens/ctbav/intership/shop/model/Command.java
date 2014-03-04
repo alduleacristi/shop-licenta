@@ -14,7 +14,7 @@ import javax.persistence.*;
 @NamedQueries({
 		@NamedQuery(name = Command.GET_COMMANDS, query = "SELECT c FROM Command c order by c.orderDate"),
 		@NamedQuery(name = Command.GET_ORDERS_IN_PROGRESS, query = "SELECT c FROM Command c where c.command_status.status='In progress'"),
-		@NamedQuery(name = Command.GET_ORDERS_FOR_OPERATOR, query = "SELECT c FROM Command c where c.command_status.status='In progress' and c.user.id=:id"),
+		@NamedQuery(name = Command.GET_ORDERS_FOR_OPERATOR, query = "SELECT c FROM Command c where c.command_status.status='In progress' and c.user.id=:id order by c.orderDate"),
 		@NamedQuery(name =Command.GET_RANDOM_ORDERS, query="select c from Command c where c.user.id is null order by rand()"),
 		@NamedQuery(name=Command.GET_ORDER, query="select c from Command c where c.user.id is null and c.command_status.status='In Progress'"),
 		@NamedQuery(name=Command.GET_CLIENTS_ORDERS, query="select c from Command c where  c.command_status.status='In Progress' and c.client.id=:id")

@@ -40,10 +40,10 @@ public class CommandService {
 		List<Command> list = em
 				.createNamedQuery(Command.GET_ORDERS_IN_PROGRESS)
 				.getResultList();
-		for (Command com : list)
-			for (ClientProduct client : com.getClientProducts())
-				System.out.println(client.getProduct().getProductcolor()
-						.getProduct().getName());
+//		for (Command com : list)
+//			for (ClientProduct client : com.getClientProducts())
+//				System.out.println(client.getProduct().getProductcolor()
+//						.getProduct().getName());
 		return list;
 
 	}
@@ -153,15 +153,13 @@ public class CommandService {
 	
 	@SuppressWarnings("unchecked")
 	public void assignOperatorsOrder(long id_operator) throws CommandNotFoundException, UserNotFoundException{
-	//	System.out.println(id_operator);
-		List<Command> commList= em.createNamedQuery(Command.GET_ORDER).getResultList();
-		if(commList.size() ==0)
+		List<Command> comm= em.createNamedQuery(Command.GET_ORDER).setMaxResults(1).getResultList();
+		if( comm == null || comm.size() == 0)
 			throw new CommandNotFoundException("No more unassigned orders");
 		
-		Command comm = commList.get(0);
 		User user = em.find(User.class, id_operator);
 		if(user == null) throw new UserNotFoundException("No operator with this id: "+ id_operator);
-		comm.setUser(user);	
+		comm.get(0).setUser(user);	
 	}
 	
 	public void setOperatorNull(Long idOrder) throws CommandNotFoundException{

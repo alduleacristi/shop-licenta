@@ -16,7 +16,7 @@ public class MailValidity {
 
 	@PostConstruct
 	public void postConstruct() {
-		clickedRadioButton = Interval.getDefault().getRank();
+		clickedRadioButton = Interval.DEFAULT.getRank();
 	}
 
 	public int getClickedRadioButton() {
@@ -32,16 +32,16 @@ public class MailValidity {
 		System.out.println(clickedRadioButton);
 		switch (clickedRadioButton) {
 		case 1:
-			Interval.setDefault(Interval.ONE_DAY);
+			Interval.DEFAULT.set(Interval.ONE_DAY);
 			break;
 		case 2:
-			Interval.setDefault(Interval.ONE_WEEK);
+			Interval.DEFAULT.set(Interval.ONE_WEEK);
 			break;
 		case 3:
-			Interval.setDefault(Interval.ONE_MONTH);
+			Interval.DEFAULT.set(Interval.ONE_MONTH);
 			break;
 		case 4:
-			Interval.setDefault(Interval.ONE_YEAR);
+			Interval.DEFAULT.set(Interval.ONE_YEAR);
 			break;
 
 		}

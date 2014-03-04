@@ -3,6 +3,7 @@ package com.siemens.ctbav.intership.shop.service.operator;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
@@ -46,23 +47,23 @@ public class UserService {
 		em.remove(u);
 	}
 
-	public void deleteUserClient(String username) throws NotSupportedException,
-			SystemException, SecurityException, IllegalStateException,
-			RollbackException, HeuristicMixedException,
-			HeuristicRollbackException {
-		userTransaction.begin();
-		// System.out.println("in tranzactie");
+	public void deleteUserClient(String username) {
 		try {
-			Long id = getUserId(username);
-			deleteUser(id);
+			userTransaction.begin();
+			try {
+				Long id = getUserId(username);
+				deleteUser(id);
 
-		} catch (UserException e) {
-			userTransaction.rollback();
-		} catch (UserNotFoundException e) {
-			userTransaction.rollback();
+			} catch (UserException e) {
+				userTransaction.rollback();
+			} catch (UserNotFoundException e) {
+				userTransaction.rollback();
+			}
+
+			userTransaction.commit();
+		} catch (Exception exc) {
+
 		}
-
-		userTransaction.commit();
 	}
 
 	public User getUserByUsername(String username) throws UserException,
@@ -102,11 +103,9 @@ public class UserService {
 		return usersList.get(0);
 	}
 
-	@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-	public boolean usernameAlreadyExists(String user, Long id)
-			throws SecurityException, IllegalStateException, RollbackException,
-			HeuristicMixedException, HeuristicRollbackException,
-			SystemException {
+	//@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+	public boolean usernameAlreadyExists(String user, Long id)  throws Exception{
+		// userTransaction.begin();
 		boolean exists = false;
 		System.out.println("verific daca mai exista username");
 		User u = null;
@@ -128,21 +127,21 @@ public class UserService {
 			System.out.println("nu am gasit");
 			exists = false;
 		}
-		userTransaction.commit();
+		 if(userTransaction.getStatus() != 6)
+		 userTransaction.commit();
 		return exists;
 	}
 
-	@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-	public boolean emailAlreadyExists(String email, Long id)
-			throws SecurityException, IllegalStateException, RollbackException,
-			HeuristicMixedException, HeuristicRollbackException,
-			SystemException {
+	//@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+	public boolean emailAlreadyExists(String email, Long id) throws Exception {
 		System.out.println("verific daca mai exista email " + email);
 
 		User u = null;
 		try {
 			u = getUserByEmail(email);
 			System.out.println(u);
+			
+			System.out.println(u.getId() + "   " + id.longValue());
 			if (u.getId() == id.longValue()) { // daca userul gasit este chiar
 												// el
 				System.out.println("userul gasit este chiar el");
@@ -157,17 +156,15 @@ public class UserService {
 
 		} catch (UserNotFoundException e) {
 			System.out.println("nu am gasit");
-			// if(userTransaction.getStatus() != 6)
-			// userTransaction.commit();
+			 if(userTransaction.getStatus() != 6)
+			 userTransaction.commit();
 			return false;
 
 		}
 	}
 
-	public void updateOperator(OperatorDTO oper, String oldUsername)
-			throws NotSupportedException, SystemException, SecurityException,
-			IllegalStateException, RollbackException, HeuristicMixedException,
-			HeuristicRollbackException, DuplicateFieldException {
+	public void updateOperator(OperatorDTO oper, String oldUsername) throws Exception  {
+		try{
 		userTransaction.begin();
 		System.out.println("in Tranzactie");
 		try {
@@ -177,8 +174,8 @@ public class UserService {
 				System.out.println("nu exista pot sa modific");
 				User user = new User(id, oper.getUsername(),
 						oper.getPassword(), "operator", oper.getEmail());
-				System.out.println(user);
-				 em.merge(user);
+				//System.out.println(user);
+				em.merge(user);
 				System.out.println("am modificat");
 			} else {
 				System.out
@@ -192,8 +189,13 @@ public class UserService {
 			userTransaction.rollback();
 		}
 
-		// if(userTransaction.getStatus() != 6)
+		 if(userTransaction.getStatus() != 6)
 		userTransaction.commit();
+		}
+		catch(Exception exc){
+			if (exc instanceof DuplicateFieldException) throw new DuplicateFieldException(exc.getMessage());
+			//throw new EJBException();
+		}
 	}
 
 	public void setTemporaryPassword(UserDTO user)
@@ -236,21 +238,22 @@ public class UserService {
 	}
 
 	public void changePassword(String generatedPassword, String newPassword)
-			throws NotSupportedException, SystemException, SecurityException, IllegalStateException, RollbackException, HeuristicMixedException, HeuristicRollbackException {
+			throws NotSupportedException, SystemException, SecurityException,
+			IllegalStateException, RollbackException, HeuristicMixedException,
+			HeuristicRollbackException {
 		userTransaction.begin();
-		try
-		{
-		System.out.println("vreau sa modific");
-		System.out.println(generatedPassword + " " + newPassword);
-		User user = getUserByPassword(generatedPassword);
-		if(user == null) throw new UserNotFoundException("the password does not exists in the database");
-		user.setPasswordStatus(2);
-		user.setUserPassword(newPassword);
-		em.merge(user);
-		System.out.println("am modificat");
-		}
-		catch(UserNotFoundException e)
-		{
+		try {
+			System.out.println("vreau sa modific");
+			System.out.println(generatedPassword + " " + newPassword);
+			User user = getUserByPassword(generatedPassword);
+			if (user == null)
+				throw new UserNotFoundException(
+						"the password does not exists in the database");
+			user.setPasswordStatus(2);
+			user.setUserPassword(newPassword);
+			em.merge(user);
+			System.out.println("am modificat");
+		} catch (UserNotFoundException e) {
 			userTransaction.rollback();
 		}
 		userTransaction.commit();

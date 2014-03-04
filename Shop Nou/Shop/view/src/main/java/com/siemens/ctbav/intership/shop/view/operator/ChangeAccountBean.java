@@ -66,14 +66,14 @@ public class ChangeAccountBean {
 		}
 
 		catch (DuplicateFieldException e) {
-		//	System.out.println("exceptie " + e.getMessage());
+			System.out.println("exceptie " + e.getMessage());
 			FacesContext context = FacesContext.getCurrentInstance();
 			context.addMessage(null, new FacesMessage(
 					FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage()));
 		} catch (Exception e) {
 			FacesContext context = FacesContext.getCurrentInstance();
 			context.addMessage(null, new FacesMessage(
-					FacesMessage.SEVERITY_ERROR,"Your account cannot be updated","Your account cannot be updated"));
+					FacesMessage.SEVERITY_ERROR,"Your account cannot be updated ","Your account cannot be updated. "+ e.getMessage()));
 		}
 
 	}

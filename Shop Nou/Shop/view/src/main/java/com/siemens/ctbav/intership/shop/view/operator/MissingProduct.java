@@ -4,11 +4,10 @@ import com.siemens.ctbav.intership.shop.dto.operator.ProductColorSizeDTO;
 
 public class MissingProduct {
 
-	
 	private ProductColorSizeDTO product;
 	private Long nrPieces;
 	private Long piecesAdded;
-	
+
 	public MissingProduct(ProductColorSizeDTO product, Long nrPieces) {
 		this.product = product;
 		this.nrPieces = nrPieces;
@@ -41,7 +40,7 @@ public class MissingProduct {
 		if (obj == null)
 			return false;
 		if (getClass() != obj.getClass())
-			{ System.out.println("returneazafals");return false;}
+			return false;
 		MissingProduct other = (MissingProduct) obj;
 		if (product == null) {
 			if (other.product != null)
@@ -58,8 +57,5 @@ public class MissingProduct {
 	public void setPiecesAdded(Long piecesAdded) {
 		this.piecesAdded = piecesAdded;
 	}
-	
-	
-	
-	
+
 }

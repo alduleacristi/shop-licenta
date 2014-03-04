@@ -39,9 +39,9 @@ public class MailService {
 		message.setFrom(new InternetAddress(username));
 		message.setRecipients(Message.RecipientType.TO,
 				InternetAddress.parse(to));
-		if(!isHtml)
+	//	if(!isHtml)
 		message.setSubject(subject);
-		else 
+		if(isHtml)
 			message.setContent(mess,"text/html");
 		message.setText(mess);
 		Transport.send(message);

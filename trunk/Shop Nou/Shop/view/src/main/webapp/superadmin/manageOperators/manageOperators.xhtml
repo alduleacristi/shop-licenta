@@ -31,6 +31,11 @@
 						List of operators
 					</f:facet>
 
+					<p:column headerText="Is banned">
+						<p:commandButton icon="ui-icon ui-icon-close"
+							rendered="#{operator.ban == 1}" />
+					</p:column>
+
 					<p:column headerText="Username" sortBy="username"
 						filterBy="username" id="username">
 						#{operator.username}
@@ -41,7 +46,7 @@
 						#{operator.email}
 					</p:column>
 				</p:dataTable>
-				<p:dialog header="Operatir Detail" widgetVar="dialog"
+				<p:dialog header="Operator Detail" widgetVar="dialog"
 					resizable="false" width="300" showEffect="explode"
 					hideEffect="explode">
 
@@ -54,6 +59,17 @@
 						<h:outputText value="Email:" />
 						<h:outputText
 							value="#{manageOperatorsBean.selectedOperator.email}" id="email" />
+						<h:outputText value="Status: " id="status" />
+						<h:outputText value="Banned"
+							rendered="#{manageAdminsBean.selectedOperator.ban == 1}"
+							id="banned" />
+						<h:outputText value="Not Banned"
+							rendered="#{manageAdminsBean.selectedOperator.ban == 0}"
+							id="notBanned" />
+						<h:commandButton value="Ban him" id="banHim"
+							rendered="#{manageAdminsBean.selectedOperator.ban == 0}" />
+						<h:commandButton value="Unban him" id="unbanhim"
+							rendered="#{manageAdminsBean.selectedOperator.ban == 1}" />
 					</h:panelGrid>
 				</p:dialog>
 			</h:form>

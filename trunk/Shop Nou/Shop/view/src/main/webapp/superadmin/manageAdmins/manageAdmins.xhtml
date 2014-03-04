@@ -30,6 +30,11 @@
 						List of admins
 					</f:facet>
 
+					<p:column headerText="Is banned">
+						<p:commandButton icon="ui-icon ui-icon-close"
+							rendered="#{admin.ban == 1}" />
+					</p:column>
+
 					<p:column headerText="Username" sortBy="username"
 						filterBy="username" id="username">
 						#{admin.username}
@@ -44,13 +49,23 @@
 					width="300" showEffect="explode" hideEffect="explode">
 
 					<h:panelGrid id="display" columns="2" cellpadding="4">
-						<h:outputText value="Username:" />
+						<h:outputText value="Username: " />
 						<h:outputText value="#{manageAdminsBean.selectedAdmin.username}"
 							id="username" />
 
-						<h:outputText value="Email:" />
+						<h:outputText value="Email: " />
 						<h:outputText value="#{manageAdminsBean.selectedAdmin.email}"
 							id="email" />
+						<h:outputText value="Status: " id="status" />
+						<h:outputText value="Banned"
+							rendered="#{manageAdminsBean.selectedAdmin.ban == 1}" id="banned" />
+						<h:outputText value="Not Banned"
+							rendered="#{manageAdminsBean.selectedAdmin.ban == 0}"
+							id="notBanned" />
+						<h:commandButton value="Ban him" id="banHim"
+							rendered="#{manageAdminsBean.selectedAdmin.ban == 0}" />
+						<h:commandButton value="Unban him" id="unbanhim"
+							rendered="#{manageAdminsBean.selectedAdmin.ban == 1}" />
 					</h:panelGrid>
 				</p:dialog>
 			</h:form>

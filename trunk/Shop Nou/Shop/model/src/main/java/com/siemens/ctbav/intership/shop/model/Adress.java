@@ -15,6 +15,7 @@ import javax.persistence.*;
 				@NamedQuery(name=Adress.GET_ALL_ADRESS,query="select a from Adress a")})
 public class Adress implements Serializable {
 	private static final long serialVersionUID = 1L;
+	
 	public static final String GET_ADRESS_BY_ID = "getAdressByID";
 	public static final String GET_ALL_ADRESS = "getAllAdress";
 

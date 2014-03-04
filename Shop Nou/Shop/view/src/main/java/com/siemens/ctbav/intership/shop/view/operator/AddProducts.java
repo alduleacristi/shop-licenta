@@ -2,6 +2,8 @@ package com.siemens.ctbav.intership.shop.view.operator;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -19,21 +21,21 @@ import com.siemens.ctbav.intership.shop.service.operator.ProductService;
 @RequestScoped
 public class AddProducts {
 
-	private List<MissingProduct> productList;
+	private Set<MissingProduct> productSet;
 	
 	@EJB
 	private ProductService prodService;
 	
 	@PostConstruct
 	public void postConstruct() {
-		productList = new ArrayList<MissingProduct>();
+		productSet = new TreeSet<MissingProduct>();
 		//in productService calculez pt fiecare produs diferenta dintre cate sunt pe stoc si cate s-au cerut in comenzi
 	
 	}
 
 
-	public List<MissingProduct> getProductList() {
-		return productList;
+	public Set<MissingProduct> getProductSet() {
+		return productSet;
 	}
 
 	public void add(MissingProduct product) {
@@ -46,14 +48,14 @@ public class AddProducts {
 		}
 		
 	//	product.getProduct().setNrPieces(product.getNrPieces() + product.getPiecesAdded());
-		try {
-			prodService.addProducts(product.getProduct());
-		} catch (ProductException e) {
-			FacesContext.getCurrentInstance().addMessage(
-					null,
-					new FacesMessage(FacesMessage.SEVERITY_ERROR,
-							e.getMessage(), ""));
-		}
+//		try {
+//			prodService.addProducts(product.getProduct());
+//		} catch (ProductException e) {
+//			FacesContext.getCurrentInstance().addMessage(
+//					null,
+//					new FacesMessage(FacesMessage.SEVERITY_ERROR,
+//							e.getMessage(), ""));
+//		}
 	}
 
 }

@@ -39,10 +39,12 @@ public class MailService {
 		message.setFrom(new InternetAddress(username));
 		message.setRecipients(Message.RecipientType.TO,
 				InternetAddress.parse(to));
-	//	if(!isHtml)
 		message.setSubject(subject);
-		if(isHtml)
+		if(isHtml){
+			System.out.println("trimit html");
 			message.setContent(mess,"text/html");
+		}
+		
 		message.setText(mess);
 		Transport.send(message);
 

@@ -9,7 +9,11 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
+
+import com.siemens.ctbav.intership.shop.exception.operator.UserNotFoundException;
 import com.siemens.ctbav.intership.shop.service.operator.UserService;
+import com.siemens.ctbav.intership.shop.util.operator.AES;
 
 @RequestScoped
 @ManagedBean(name = "changePass")
@@ -24,20 +28,42 @@ public class ChangePassword {
 
 	@PostConstruct
 	public void postConstruct() {
-		Map<String, String> params = FacesContext.getCurrentInstance()
-				.getExternalContext().getRequestParameterMap();
-		String pass = params.get("password");
-
-		if (pass != null) {
-			FacesContext.getCurrentInstance().getExternalContext()
-					.getSessionMap().put("password", pass);
-			generatedPassword = pass;
+//		Map<String, String> params = FacesContext.getCurrentInstance()
+//				.getExternalContext().getRequestParameterMap();
+//		String pass = params.get("password");
+//
+//		if (pass != null) {
+//			FacesContext.getCurrentInstance().getExternalContext()
+//					.getSessionMap().put("password", pass);
+//			generatedPassword = pass;
+//		}
+//
+//		else
+//			generatedPassword = FacesContext.getCurrentInstance()
+//					.getExternalContext().getSessionMap().get("password")
+//					.toString();
+		
+		
+		String decrypt = getGeneratedPasswordfromURL();
+		if(decrypt != null){
+			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("password", decrypt);
 		}
+		else decrypt=(String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("password");
+		if(decrypt == null) return;
+		System.out.println(decrypt);
+		generatedPassword = AES.decrypt(decrypt);
+		System.out.println(generatedPassword);
+	}
 
-		else
-			generatedPassword = FacesContext.getCurrentInstance()
-					.getExternalContext().getSessionMap().get("password")
-					.toString();
+	private String getGeneratedPasswordfromURL() {
+		Object request = FacesContext.getCurrentInstance().getExternalContext()
+				.getRequest();
+		if (request instanceof HttpServletRequest) {
+			String queryString = (((HttpServletRequest) request).getQueryString());
+			if(queryString == null) return null;
+			return queryString.substring(9);
+		}
+		return null;
 	}
 
 	public String getNewPassword() {
@@ -71,16 +97,17 @@ public class ChangePassword {
 						FacesMessage.SEVERITY_INFO, "The password has been successfully changed!!!",
 						"The password has been successfully changed!!!"));
 			} catch (Exception e) {
+				
 				context.addMessage(null, new FacesMessage(
 						FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage()));
 			}
 		
-//		try {
-//			context.getExternalContext().redirect("login.xhtml");
-//		} catch (IOException e) {
-//			context.addMessage(null, new FacesMessage(
-//					FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage()));
-//		}
+		try {
+			context.getExternalContext().redirect("login.xhtml");
+		} catch (IOException e) {
+			context.addMessage(null, new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage()));
+		}
 
 	}
 }

@@ -1,20 +1,26 @@
 package com.siemens.ctbav.intership.shop.dto.operator;
 
+
+
+
+
 public class UserDTO {
 
 	private String username, email, password, rolename;
-	private int passwordStatus;
+	//private PasswordStatus passwordStatus;
 
 	
 	
 
 	public UserDTO(String username, String email, String password,
-			String rolename, int passwordStatus) {
+			String rolename
+		//	,PasswordStatus passwordStatus
+			) {
 		this.username = username;
 		this.email = email;
 		this.password = password;
 		this.rolename = rolename;
-		this.passwordStatus = passwordStatus;
+		//this.setPasswordStatus(passwordStatus);
 	}
 
 	public String getUsername() {
@@ -27,12 +33,7 @@ public class UserDTO {
 
 	
 
-	@Override
-	public String toString() {
-		return "UserDTO [username=" + username + ", email=" + email
-				+ ", password=" + password + ", rolename=" + rolename
-				+ ", passwordStatus=" + passwordStatus + "]";
-	}
+	
 
 	public String getEmail() {
 	//	System.out.println("get email " + email);
@@ -51,13 +52,7 @@ public class UserDTO {
 		this.password = password;
 	}
 
-	public int getPasswordStatus() {
-		return passwordStatus;
-	}
-
-	public void setPasswordStatus(int passwordStatus) {
-		this.passwordStatus = passwordStatus;
-	}
+	
 
 	public String getRolename() {
 		return rolename;
@@ -67,6 +62,6 @@ public class UserDTO {
 		this.rolename = rolename;
 	}
 
-	
+
 	
 }

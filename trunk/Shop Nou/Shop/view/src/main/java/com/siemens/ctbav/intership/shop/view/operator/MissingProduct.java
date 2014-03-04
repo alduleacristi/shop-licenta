@@ -2,7 +2,7 @@ package com.siemens.ctbav.intership.shop.view.operator;
 
 import com.siemens.ctbav.intership.shop.dto.operator.ProductColorSizeDTO;
 
-public class MissingProduct {
+public class MissingProduct implements Comparable<MissingProduct> {
 
 	private ProductColorSizeDTO product;
 	private Long nrPieces;
@@ -58,4 +58,12 @@ public class MissingProduct {
 		this.piecesAdded = piecesAdded;
 	}
 
+	@Override
+	public int compareTo(MissingProduct other) {
+		if(nrPieces == other.nrPieces) return 0;
+		if(nrPieces < other.nrPieces) return -1;
+		return 1;
+	}
+
+	
 }

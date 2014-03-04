@@ -8,17 +8,22 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@NamedQuery(name=ClientProduct.GET_PRODUCTS_FROM_COMMAND, query="SELECT c FROM ClientProduct c")
+@NamedQueries({
+@NamedQuery(name=ClientProduct.GET_PRODUCTS_FROM_COMMAND, query="SELECT c FROM ClientProduct c"),
+@NamedQuery(name=ClientProduct.GET_CLIENT_PRODUCTS_FOR_PRODUCTS, query="select c from ClientProduct c where c.product.id=:id")}
+)
 @Table(name = "client_product")
 public class ClientProduct implements Serializable {
 	private static final long serialVersionUID = 1L;
 	public static final String GET_PRODUCTS_FROM_COMMAND = "getProductsFromCommand";
-	
+	public static final String GET_CLIENT_PRODUCTS_FOR_PRODUCTS="getclientproducts";
 	@Id
 	@Column(name = "id_client_product")
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -31,6 +36,16 @@ public class ClientProduct implements Serializable {
 	private Double percRedution;
 
 	private Double price;
+
+	
+	@ManyToOne
+	@JoinColumn(name="id_command")
+	private Command command;
+	
+	
+	public Command getCommand() {
+		return command;
+	}
 
 	@OneToOne
 	@JoinColumn(name="id_pcs")

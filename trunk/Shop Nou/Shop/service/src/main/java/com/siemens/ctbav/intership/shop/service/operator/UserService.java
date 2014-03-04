@@ -103,8 +103,8 @@ public class UserService {
 		return usersList.get(0);
 	}
 
-	//@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-	public boolean usernameAlreadyExists(String user, Long id)  throws Exception{
+	// @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+	public boolean usernameAlreadyExists(String user, Long id) throws Exception {
 		// userTransaction.begin();
 		boolean exists = false;
 		System.out.println("verific daca mai exista username");
@@ -127,12 +127,12 @@ public class UserService {
 			System.out.println("nu am gasit");
 			exists = false;
 		}
-		 if(userTransaction.getStatus() != 6)
-		 userTransaction.commit();
+		if (userTransaction.getStatus() != 6)
+			userTransaction.commit();
 		return exists;
 	}
 
-	//@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+	// @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 	public boolean emailAlreadyExists(String email, Long id) throws Exception {
 		System.out.println("verific daca mai exista email " + email);
 
@@ -140,7 +140,7 @@ public class UserService {
 		try {
 			u = getUserByEmail(email);
 			System.out.println(u);
-			
+
 			System.out.println(u.getId() + "   " + id.longValue());
 			if (u.getId() == id.longValue()) { // daca userul gasit este chiar
 												// el
@@ -156,45 +156,46 @@ public class UserService {
 
 		} catch (UserNotFoundException e) {
 			System.out.println("nu am gasit");
-			 if(userTransaction.getStatus() != 6)
-			 userTransaction.commit();
+			if (userTransaction.getStatus() != 6)
+				userTransaction.commit();
 			return false;
 
 		}
 	}
 
-	public void updateOperator(OperatorDTO oper, String oldUsername) throws Exception  {
-		try{
-		userTransaction.begin();
-		System.out.println("in Tranzactie");
+	public void updateOperator(OperatorDTO oper, String oldUsername)
+			throws Exception {
 		try {
-			Long id = getUserId(oldUsername);
-			if (!usernameAlreadyExists(oper.getUsername(), id)
-					&& !emailAlreadyExists(oper.getEmail(), id)) {
-				System.out.println("nu exista pot sa modific");
-				User user = new User(id, oper.getUsername(),
-						oper.getPassword(), "operator", oper.getEmail());
-				//System.out.println(user);
-				em.merge(user);
-				System.out.println("am modificat");
-			} else {
-				System.out
-						.println("Username or email already exists in the database");
-				throw new DuplicateFieldException(
-						"Username or email already exists in the database");
+			userTransaction.begin();
+			System.out.println("in Tranzactie");
+			try {
+				Long id = getUserId(oldUsername);
+				if (!usernameAlreadyExists(oper.getUsername(), id)
+						&& !emailAlreadyExists(oper.getEmail(), id)) {
+					System.out.println("nu exista pot sa modific");
+					User user = new User(id, oper.getUsername(),
+							oper.getPassword(), "operator", oper.getEmail());
+					// System.out.println(user);
+					em.merge(user);
+					System.out.println("am modificat");
+				} else {
+					System.out
+							.println("Username or email already exists in the database");
+					throw new DuplicateFieldException(
+							"Username or email already exists in the database");
+				}
+			} catch (UserException e) {
+				userTransaction.rollback();
+			} catch (UserNotFoundException e) {
+				userTransaction.rollback();
 			}
-		} catch (UserException e) {
-			userTransaction.rollback();
-		} catch (UserNotFoundException e) {
-			userTransaction.rollback();
-		}
 
-		 if(userTransaction.getStatus() != 6)
-		userTransaction.commit();
-		}
-		catch(Exception exc){
-			if (exc instanceof DuplicateFieldException) throw new DuplicateFieldException(exc.getMessage());
-			//throw new EJBException();
+			if (userTransaction.getStatus() != 6)
+				userTransaction.commit();
+		} catch (Exception exc) {
+			if (exc instanceof DuplicateFieldException)
+				throw new DuplicateFieldException(exc.getMessage());
+			// throw new EJBException();
 		}
 	}
 
@@ -207,7 +208,7 @@ public class UserService {
 			Long id = getUserId(user.getUsername());
 			User u = new User(id, user.getUsername(), user.getPassword(),
 					user.getRolename(), user.getEmail());
-			u.setPasswordStatus(user.getPasswordStatus());
+		//	u.setPasswordStatus(user.getPasswordStatus());
 			System.out.println("VReau sa  setez parola pentru  " + u);
 			em.merge(u);
 		} catch (UserException exc) {
@@ -227,35 +228,37 @@ public class UserService {
 		return false;
 	}
 
+	@SuppressWarnings("unchecked")
 	public User getUserByPassword(String password) throws UserNotFoundException {
-		@SuppressWarnings("unchecked")
+		System.out.println(password);
 		List<User> list = em.createNamedQuery(User.GET_USER_BY_PASSWORD)
 				.setParameter("password", password).getResultList();
-		if (list.size() == 0)
+		if (list == null || list.size() == 0)
 			throw new UserNotFoundException(
 					"Sorry! the password does not appear in the database");
 		return list.get(0);
+
 	}
 
-	public void changePassword(String generatedPassword, String newPassword)
-			throws NotSupportedException, SystemException, SecurityException,
-			IllegalStateException, RollbackException, HeuristicMixedException,
-			HeuristicRollbackException {
-		userTransaction.begin();
+	public void changePassword(String generatedPassword, String newPassword) throws UserNotFoundException   {
 		try {
+			userTransaction.begin();
+
 			System.out.println("vreau sa modific");
 			System.out.println(generatedPassword + " " + newPassword);
 			User user = getUserByPassword(generatedPassword);
-			if (user == null)
-				throw new UserNotFoundException(
-						"the password does not exists in the database");
+//			if (user == null)
+//				throw new UserNotFoundException(
+//						"the password does not exists in the database");
 			user.setPasswordStatus(2);
 			user.setUserPassword(newPassword);
 			em.merge(user);
 			System.out.println("am modificat");
-		} catch (UserNotFoundException e) {
-			userTransaction.rollback();
+			userTransaction.commit();
+
+		} catch (Exception exc) {
+			if(exc instanceof UserNotFoundException) throw new UserNotFoundException(exc.getMessage());
+			throw new EJBException(exc);
 		}
-		userTransaction.commit();
 	}
 }

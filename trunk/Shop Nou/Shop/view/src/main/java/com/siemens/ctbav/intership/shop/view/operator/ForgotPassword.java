@@ -2,8 +2,6 @@ package com.siemens.ctbav.intership.shop.view.operator;
 
 import java.io.IOException;
 import java.util.Calendar;
-import java.util.Date;
-
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -16,6 +14,7 @@ import com.siemens.ctbav.intership.shop.service.operator.UserService;
 import com.siemens.ctbav.intership.shop.util.operator.AES;
 import com.siemens.ctbav.intership.shop.util.operator.GenerateString;
 import com.siemens.ctbav.intership.shop.util.operator.MailService;
+import com.siemens.ctbav.intership.shop.view.operator.PasswordStatus;
 
 @ManagedBean(name = "forgotPassword")
 @RequestScoped
@@ -42,25 +41,31 @@ public class ForgotPassword {
 				password = GenerateString.randomPassword(); // generez o parola
 															// random de 10
 															// caractere
-				
+
 				System.out.println(password);
 			} while (userService.passwordAlreadyExists(password));
-			
-			user.setPassword(password); // setez parola random utilizatorului
-			user.setPasswordStatus(1); // adica e nou generata,utilizatorul
-										// poate
-										// sa acceseze pagina daca timpul nu a
-										// trecut inca
+
+			user.setPassword(password);
+		//     user.setPasswordStatus(PasswordStatus.NEW_GENERATED);
+			// setez parola random utilizatorului
+			// user.setStatus(PasswordStatus.NEW_GENERATED);
+			// adica e nou generata,utilizatorul
+			// poate
+			// sa acceseze pagina daca timpul nu a
+			// trecut inca
 			userService.setTemporaryPassword(user);
-			cryptedPassword=AES.encrypt(password);
+			cryptedPassword = AES.encrypt(password);
 			Long now = Calendar.getInstance().getTimeInMillis();
-			String encryptedTime= AES.encrypt(now.toString());
+			//folosesc algoritmul de criptare ca sa ascund data trimiterii
+			//asa clientul nu o poate modifica
+			String encryptedTime = AES.encrypt(now.toString());
 			String link = "http://localhost:8080/Shop4j/rest/passwordRecovery/"
 					+ cryptedPassword + "/" + encryptedTime;
 			// aici trimite linkul dar acum nu am net
 			// in orice caz linkul se trimite ok
-			
-			 MailService.sendLink(email, "Password recovery", link, false);// - se
+
+			MailService.sendLink(email, "Password recovery", link, false);// -
+																			// se
 			// apeleaza metoda statica sendLink din clasa MailService
 			FacesContext context = FacesContext.getCurrentInstance();
 			context.addMessage(null, new FacesMessage(
@@ -70,8 +75,10 @@ public class ForgotPassword {
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			FacesContext context = FacesContext.getCurrentInstance();
-			context.addMessage(null, new FacesMessage(
-					FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage()));
+			context.addMessage(
+					null,
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, e
+							.getMessage(), e.getMessage()));
 			return;
 		}
 	}

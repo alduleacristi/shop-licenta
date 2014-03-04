@@ -16,12 +16,19 @@ import javax.persistence.NamedQuery;
 import com.siemens.ctbav.intership.shop.model.Size;
 
 @Entity(name = "product_color_size")
-@NamedQueries({ @NamedQuery(name = ProductColorSize.GET_PRODUCT_COLOR_SIZE_BY_ID, query = "SELECT p FROM product_color_size p where p.id = :id") })
+@NamedQueries({
+		@NamedQuery(name = ProductColorSize.GET_PRODUCT_COLOR_SIZE_BY_ID, query = "SELECT p FROM product_color_size p where p.id = :id"),
+		@NamedQuery(name = ProductColorSize.GET_ALL_PRODUCTS_COLOR_SIZE, query = "SELECT p FROM product_color_size p ") })
 public class ProductColorSize implements Serializable {
 
 	private static final long serialVersionUID = -8254096206057865195L;
 
 	public final static String getProductColorSize = "getProductbyColor,size,name";
+
+	public final static String GET_ALL_PRODUCTS_COLOR_SIZE = "getAllProductsColorSize";
+	private static final long serialVersionUID = -8254096206057865195L;
+
+
 	public static final String GET_PRODUCT_COLOR_SIZE_BY_ID = "getColorProductSizeById";
 
 	@Id

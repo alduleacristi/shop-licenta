@@ -23,10 +23,9 @@ import javax.persistence.Table;
 		@NamedQuery(name = User.GET_USER_BY_EMAIL, query = "select u from User u where u.email = :email and u.passwordStatus=2"),
 		@NamedQuery(name = User.GET_USER_BY_PASSWORD, query = "select u from User u where u.userPassword = :password and u.passwordStatus =1") })
 public class User implements Serializable {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = -1412776763797658827L;
+
 	public static final String GET_ALL_USERS = "getAllUsers";
 	public static final String GET_CLIENT_USERS = "get client users";
 	public static final String GET_USER_ID = "get user id";
@@ -57,7 +56,7 @@ public class User implements Serializable {
 	private int passwordStatus;
 
 	@Column
-	private Boolean ban;
+	private int ban;
 
 	public User() {
 	}
@@ -119,11 +118,11 @@ public class User implements Serializable {
 		this.passwordStatus = passwordStatus;
 	}
 
-	public Boolean getBan() {
+	public int getBan() {
 		return ban;
 	}
 
-	public void setBan(Boolean ban) {
+	public void setBan(int ban) {
 		this.ban = ban;
 	}
 

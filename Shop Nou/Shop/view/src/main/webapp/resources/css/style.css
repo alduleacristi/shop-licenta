@@ -304,9 +304,10 @@ a.bul {
 	padding: 2px;
 }
 
-.products-reduce .product-info .remove-form-cart{
+.products-reduce .product-info .remove-form-cart {
 	color: #8b0000;
 }
+
 .view-submit {
 	width: 150px;
 	background: #8b0000;
@@ -318,6 +319,7 @@ a.bul {
 	display: inline;
 	display: block;
 }
+
 .categories {
 	min-height: 383px;
 }
@@ -491,6 +493,16 @@ a.bul {
 	margin-bottom: 10px;
 }
 
+.ui-inputfield,.ui-widget-content .ui-inputfield,.ui-widget-header .ui-inputfield
+	{
+	width: 210px;
+	background: #ffffff;
+	-moz-box-shadow: inset 0 2px 2px #8f8f8f;
+	-webkit-box-shadow: inset 0 2px 2px #8f8f8f;
+	box-shadow: inset 0 2px 2px #8f8f8f;
+	color: #313131;
+}
+
 .box2 h2 {
 	background: #8b0000;
 	color: #fff;
@@ -531,7 +543,7 @@ a.bul {
 	float: left;
 	width: 170px;
 	margin-right: 3px;
-	height: 225px;
+	height: 270px;
 	overflow: hidden;
 }
 
@@ -542,7 +554,7 @@ a.bul {
 	float: left;
 	width: 350px;
 	margin-right: 3px;
-	height: 260px;
+	height: 270px;
 	overflow: hidden;
 }
 
@@ -582,7 +594,7 @@ a.bul {
 	width: 176px;
 }
 
-.cart-dialog-item{
+.cart-dialog-item {
 	background: #8b0000;
 	color: #fff;
 	text-align: left;
@@ -591,7 +603,7 @@ a.bul {
 	padding-bottom: 5px;
 }
 
-.cart .cart-remove-item{
+.cart .cart-remove-item {
 	color: FFFFCC;
 }
 
@@ -775,6 +787,7 @@ a.bul {
 	background: #8b0000;
 	color: #fff;
 	padding: 6px 10px;
+	width: 237px;
 }
 
 .product-info h4 {
@@ -790,7 +803,7 @@ a.bul {
 	width: 237px;
 }
 
-.product-info.red{
+.product-info.red {
 	display: block;
 	font-size: 20px;
 	color: #888880;
@@ -982,7 +995,7 @@ h3.ico4 {
 	float: left;
 	width: 231px;
 	margin-right: 0px;
-	height: 383px;
+	height: 400px;
 	overflow: hidden;
 }
 

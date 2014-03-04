@@ -36,20 +36,24 @@
 				<p:carousel value="#{recommandationClient.recommandedProducts}"
 					var="p" itemStyle="width:237px"
 					styleClass="products-reduce-recommand"
-					itemStyleClass="product-info"
 					rendered="#{recommandationClient.isEmpty()}">
 					<p:commandLink
 						actionListener="#{recommandationClient.chooseAProduct(p)}">
 						<center>
-							<h3>Product name</h3>
-							<p:outputLabel value="#{p.name}">
-							</p:outputLabel>
-							<br /> <br /> <strong class="price">Price</strong>
-							<p:outputLabel value="#{p.price}"></p:outputLabel>
-							<br /> <br />
-							<div class="reduction">
-								<p:outputLabel value="-#{p.reduction}%"
-									rendered="#{p.reduction != 0.0}"></p:outputLabel>
+							<p:graphicImage
+								url="http://localhost:8080/Shop4j/rest/products/id#{productColor.id}"
+								width="170" height="190" />
+							<div class="product-info">
+								<div class="reduction">
+									<p:outputLabel value="-#{p.reduction}%"
+										rendered="#{p.reduction != 0.0}"></p:outputLabel>
+								</div>
+								<h3>Product name</h3>
+								<p:outputLabel value="#{p.name}">
+								</p:outputLabel>
+								<br /> <br /> <strong class="price">Price</strong>
+								<p:outputLabel value="#{p.price}"></p:outputLabel>
+								<br /> <br />
 							</div>
 						</center>
 					</p:commandLink>

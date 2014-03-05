@@ -4,10 +4,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.PreDestroy;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
+
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
 import com.siemens.ctbav.intership.shop.model.Product;
@@ -15,14 +17,15 @@ import com.siemens.ctbav.intership.shop.model.ProductColor;
 import com.siemens.ctbav.intership.shop.model.ProductColorSize;
 import com.siemens.ctbav.intership.shop.service.client.ProductColorService;
 
-@ManagedBean(name = "productDescriptionReduceClient")
+@ManagedBean(name = "productDescriptionSearchClient")
 @ViewScoped
-@URLMappings(mappings = { @URLMapping(id = "productReduceDescription2", pattern = "/client/user/productReduceDescription/#{productDescriptionReduceClient.id}", viewId = "/client/user/productReduceDescription.xhtml") })
-public class DescriptionProductReduceBean implements Serializable {
+@URLMappings(mappings = { @URLMapping(id = "productSearchDescription", pattern = "/client/user/productSearchDescription/#{productDescriptionSearchClient.id}", viewId = "/client/user/productSearchDescription.xhtml") })
+public class DescriptionProductSearchBean implements Serializable {
+
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -7926484330132672880L;
+	private static final long serialVersionUID = -8907859600921057361L;
 
 	@ManagedProperty(value = "#{id}")
 	private long id;
@@ -31,8 +34,6 @@ public class DescriptionProductReduceBean implements Serializable {
 	private ProductColorService productColorService;
 
 	private List<ProductColor> productsColor;
-
-	private List<ProductColorSize> productsColorSize;
 
 	private Product selectedProduct;
 
@@ -48,13 +49,7 @@ public class DescriptionProductReduceBean implements Serializable {
 
 	private Integer nrOfPieces;
 
-	public List<ProductColor> getProductsColor() {
-		return productsColor;
-	}
-
-	public void setProductsColor(List<ProductColor> productsColor) {
-		this.productsColor = productsColor;
-	}
+	private List<ProductColorSize> productsColorSize;
 
 	public long getId() {
 		return id;
@@ -62,17 +57,25 @@ public class DescriptionProductReduceBean implements Serializable {
 
 	public void setId(long id) {
 		this.id = id;
-		if (id != 0) {
+
+		if (id != 0)
 			initialize();
-		}
 	}
 
 	public Product getSelectedProduct() {
 		return selectedProduct;
 	}
 
-	public void setSelectedProduct(Product selectdProduct) {
-		this.selectedProduct = selectdProduct;
+	public void setSelectedProduct(Product selectedProduct) {
+		this.selectedProduct = selectedProduct;
+	}
+
+	public List<ProductColor> getProductsColor() {
+		return productsColor;
+	}
+
+	public void setProductsColor(List<ProductColor> productsColor) {
+		this.productsColor = productsColor;
 	}
 
 	public Long getIdProductColor() {
@@ -83,12 +86,12 @@ public class DescriptionProductReduceBean implements Serializable {
 		this.idProductColor = idProductColor;
 	}
 
-	public List<ProductColorSize> getProductsColorSize() {
-		return productsColorSize;
+	public ProductColorService getProductColorService() {
+		return productColorService;
 	}
 
-	public void setProductsColorSize(List<ProductColorSize> productsColorSize) {
-		this.productsColorSize = productsColorSize;
+	public void setProductColorService(ProductColorService productColorService) {
+		this.productColorService = productColorService;
 	}
 
 	public Long getIdProductColorSize() {
@@ -131,15 +134,19 @@ public class DescriptionProductReduceBean implements Serializable {
 		this.nrOfPieces = nrOfPieces;
 	}
 
+	public List<ProductColorSize> getProductsColorSize() {
+		return productsColorSize;
+	}
+
+	public void setProductsColorSize(List<ProductColorSize> productsColorSize) {
+		this.productsColorSize = productsColorSize;
+	}
+
 	private void initialize() {
-		// System.out.println("postconstruct reduction description isVisible="+isAvailabel);
-		// System.out.println("iau culorile cu id=" + id);
 		productsColor = productColorService.getColorsForProduct(id);
 
 		if (productsColor.size() > 0) {
 			selectedProduct = productsColor.get(0).getProduct();
-			// System.out.println("name" + selectedProduct.getName());
-			// System.out.println("price" + selectedProduct.getPrice());
 		}
 	}
 
@@ -173,15 +180,5 @@ public class DescriptionProductReduceBean implements Serializable {
 			this.availabel = "Not in stock";
 			this.isAvailabel = false;
 		}
-	}
-
-	public String getProductColorId(Product p) {
-		if(idProductColor != null)
-			return idProductColor.toString();
-		List<ProductColor> productsColor = productColorService
-				.getColorsForProduct(p.getId());
-		if (productsColor.size() > 0)
-			return productsColor.get(0).getId().toString();
-		return "-1";
 	}
 }

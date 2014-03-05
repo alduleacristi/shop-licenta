@@ -10,7 +10,10 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+
 import com.siemens.ctbav.intership.shop.model.Product;
+import com.siemens.ctbav.intership.shop.model.ProductColor;
+import com.siemens.ctbav.intership.shop.service.client.ProductColorService;
 import com.siemens.ctbav.intership.shop.service.client.ProductService;
 
 @ManagedBean(name = "reductionProductsClient")
@@ -24,6 +27,9 @@ public class ReductionBean implements Serializable {
 
 	@EJB
 	private ProductService productService;
+	
+	@EJB
+	private ProductColorService productColorService;
 
 	private List<Product> products;
 
@@ -53,14 +59,21 @@ public class ReductionBean implements Serializable {
 					"Error", "Sorry.Description is not availabel."));
 		}
 	}
+	
+	public String getProductColorId(Product p){
+		List<ProductColor> productsColor = productColorService.getColorsForProduct(p.getId());
+		if(productsColor.size() > 0)
+			return productsColor.get(0).getId().toString();
+		return "-1";
+	}
 
 	public void chooseAProduct(Product product) {
 		redirect("/Shop4j/client/user/productReduceDescription/"
 				+ product.getId());
 	}
-	
-	public void reindex(){
+
+	public void reindex() {
 		productService.reindex();
-		System.out.println("sa facut reindexare");
+		// System.out.println("sa facut reindexare");
 	}
 }

@@ -1,0 +1,7 @@
+import java.util.logging.Logger;
+
+
+private static final Logger logger = Logger.getLogger("numele clasei si al pachetului");
+logger.info("Calling getAllCurrentEvents");
+logger.warning("No current events!");
+//etc.

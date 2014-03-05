@@ -9,11 +9,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import com.siemens.ctbav.intership.shop.convert.operator.ConvertProductColorSize;
+import com.siemens.ctbav.intership.shop.dto.operator.MissingProduct;
 import com.siemens.ctbav.intership.shop.dto.operator.ProductColorSizeDTO;
 import com.siemens.ctbav.intership.shop.exception.operator.ProductException;
 import com.siemens.ctbav.intership.shop.model.ClientProduct;
 import com.siemens.ctbav.intership.shop.model.ProductColorSize;
-import com.siemens.ctbav.intership.shop.view.operator.*;
 
 
 @Stateless

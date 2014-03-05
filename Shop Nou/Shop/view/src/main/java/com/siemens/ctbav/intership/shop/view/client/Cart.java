@@ -175,18 +175,22 @@ public class Cart {
 						.getProductColorSizeById(ob.getKey());
 				addProduct(product, ob.getValue());
 			} catch (ProductColorSizeDoesNotExistException e) {
-				e.printStackTrace();
+				FacesContext context = FacesContext.getCurrentInstance();
+				context.addMessage(
+						null,
+						new FacesMessage(FacesMessage.SEVERITY_WARN, "Info",
+								"Some products was removed from stock,so it was removed from your cart."));
 			}
 
 		}
 	}
 
-	public void readCookie() {
+	public String readCookie() {
 		Client client = (Client) FacesContext.getCurrentInstance()
 				.getExternalContext().getSessionMap().get("client");
 
 		if (client == null)
-			return;
+			return null;
 
 		Map<String, Object> cookies = FacesContext.getCurrentInstance()
 				.getExternalContext().getRequestCookieMap();
@@ -195,16 +199,16 @@ public class Cart {
 		if (cookies.containsKey(client.getUser().getUsername()))
 			cookie = (Cookie) cookies.get(client.getUser().getUsername());
 		else
-			return;
+			return null;
 
 		String valCookie = CookieEncryption.decrypt(cookie.getValue());
-		// System.out.println("valoare cookie: "+aux);
 
 		String[] elements = valCookie.split("/");
 		Map<Long, Integer> mapProducts = new HashMap<Long, Integer>();
 
 		for (int i = 0; i < elements.length; i++) {
 			{
+				System.out.println("in for");
 				String[] pairs = elements[i].split(":");
 				Long idProduct = null;
 				Integer numberOfPcs = null;
@@ -213,6 +217,7 @@ public class Cart {
 					try {
 
 						idProduct = Long.parseLong(pairs[0]);
+						System.out.println("idProduct: " + idProduct);
 						numberOfPcs = Integer.parseInt(pairs[1]);
 						mapProducts.put(idProduct, numberOfPcs);
 					} catch (NumberFormatException exc) {
@@ -223,6 +228,8 @@ public class Cart {
 		}
 
 		populateCartFromCookie(mapProducts);
+
+		return null;
 	}
 
 	private void clearCart() {

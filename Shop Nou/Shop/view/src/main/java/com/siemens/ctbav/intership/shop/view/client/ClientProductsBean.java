@@ -22,6 +22,7 @@ import com.siemens.ctbav.intership.shop.model.ProductColor;
 import com.siemens.ctbav.intership.shop.model.ProductColorSize;
 import com.siemens.ctbav.intership.shop.service.client.ProductColorService;
 import com.siemens.ctbav.intership.shop.service.client.ProductColorSizeService;
+import com.siemens.ctbav.intership.shop.service.superadmin.PhotoService;
 
 @ManagedBean(name = "clientProducts")
 @ViewScoped
@@ -42,6 +43,9 @@ public class ClientProductsBean implements Serializable {
 	@EJB
 	ProductColorSizeService productColorSizeService;
 
+	@EJB
+	private PhotoService photoService;
+
 	private ProductColor selectedProduct;
 	private Category selectedCategory;
 	private List<ProductColor> productList;
@@ -49,6 +53,7 @@ public class ClientProductsBean implements Serializable {
 	private boolean isAvailabel;
 	private ProductColorSize productColorSize;
 	private Long idProductColorSize;
+	private List<String> photos;
 
 	private Integer nrOfPieces;
 
@@ -56,7 +61,7 @@ public class ClientProductsBean implements Serializable {
 	private void postConstruct() {
 		nrOfPieces = 1;
 		setIsAvailabel(false);
-		//System.out.println("postconstruct products isVisible="+isAvailabel);
+		// System.out.println("postconstruct products isVisible="+isAvailabel);
 		productList = new ArrayList<ProductColor>();
 
 		if (selectedCategory == null) {
@@ -82,6 +87,10 @@ public class ClientProductsBean implements Serializable {
 			try {
 				selectedProduct = productColorService.getProductById(id);
 				this.isAvailabel = false;
+				FacesContext.getCurrentInstance().getExternalContext()
+						.getSessionMap()
+						.put("selectedProduct", selectedProduct);
+				displayPhotos();
 			} catch (ProductDoesNotExistException e) {
 				FacesContext ctx = FacesContext.getCurrentInstance();
 				ctx.addMessage(null, new FacesMessage(
@@ -122,7 +131,7 @@ public class ClientProductsBean implements Serializable {
 	}
 
 	public void setIsAvailabel(Boolean isAvailabel) {
-		//System.out.println("sa setat isAvailabel la: "+isAvailabel);
+		// System.out.println("sa setat isAvailabel la: "+isAvailabel);
 		this.isAvailabel = isAvailabel;
 	}
 
@@ -158,6 +167,14 @@ public class ClientProductsBean implements Serializable {
 		this.nrOfPieces = nrOfPieces;
 	}
 
+	public List<String> getPhotos() {
+		return photos;
+	}
+
+	public void setPhotos(List<String> photos) {
+		this.photos = photos;
+	}
+
 	private void redirect(String url) {
 		FacesContext fc = FacesContext.getCurrentInstance();
 
@@ -178,10 +195,10 @@ public class ClientProductsBean implements Serializable {
 	}
 
 	public void changeSize() {
-		//System.out.println("change size "+idProductColorSize);
+		// System.out.println("change size "+idProductColorSize);
 		try {
-			//idProductColorSize = (Long) event.getNewValue();
-			if(idProductColorSize == 0){
+			// idProductColorSize = (Long) event.getNewValue();
+			if (idProductColorSize == 0) {
 				this.availabel = "";
 				setIsAvailabel(true);
 				return;
@@ -201,8 +218,18 @@ public class ClientProductsBean implements Serializable {
 			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
 					"Error", "Sorry. You can't choose products now."));
 			this.availabel = "";
-		}catch(Exception exc){
+		} catch (Exception exc) {
 			exc.printStackTrace();
+		}
+	}
+
+	private void displayPhotos() {
+		photos = new ArrayList<String>();
+		try {
+			photos = photoService.displayOfPhotos("id"
+					+ selectedProduct.getId());
+		} catch (Exception e) {
+			System.out.println(e);
 		}
 	}
 

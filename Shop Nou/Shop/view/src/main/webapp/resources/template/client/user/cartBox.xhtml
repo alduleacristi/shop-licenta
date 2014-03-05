@@ -21,6 +21,7 @@
 				</span> &nbsp;&nbsp; <span> Cost: <h:outputText
 						value="#{cart.totalPrice}" id="totalPrice"></h:outputText>
 				</span>
+				<p:growl id="cartMessage" showDetail="true" sticky="true"/>
 				<p:dialog header="Your product" widgetVar="dlg3"
 					showEffect="explode" position="1160,6" hideEffect="explode"
 					height="100" id="dialog">
@@ -30,15 +31,11 @@
 								#{p.productcolor.product.name} - #{cart.getNumberOfProducts(p)}
 							</div>
 							<p:commandLink actionListener="#{cart.removeProduct(p)}"
-								update=":cartLink">
-								<center>
-									Remove
-								</center>
+								update=":cartLink,:cartLink:cartMessage">
+								<center> Remove </center>
 							</p:commandLink>
 						</p:column>
-
 					</p:dataList>
-
 				</p:dialog>
 			</div>
 		</h:form>

@@ -30,8 +30,8 @@
 
 		<ui:define name="mainContent">
 			<h:form id="formChange">
-				<p:messages autoUpdate="true" showDetail="true"
-					id="messageConverter" />
+				<p:growl autoUpdate="true" showDetail="true" id="messageConverter"
+					sticky="true" />
 				<div class="products2">
 					<div class="cl">&nbsp;</div>
 					<ul>
@@ -65,12 +65,11 @@
 								<center>
 									<h3>Description</h3>
 									<br></br>
-									<p:inputTextarea cols="55" rows="9" maxlength="200"
+									<p:inputTextarea cols="55" rows="12" maxlength="200"
 										value="#{productDescriptionReduceClient.selectedProduct.description}"
 										readonly="true" style="width: 300px">
 									</p:inputTextarea>
 								</center>
-
 							</div>
 						</li>
 					</ul>
@@ -80,48 +79,45 @@
 						<li>
 							<div class="product-info2">
 								<h3>Choose the color</h3>
-
 								<div style="width: 100%">
-									<center>
-										<br></br>
-										<p:selectOneMenu
-											value="#{productDescriptionReduceClient.idProductColor}"
-											style="width:160px">
-											<f:selectItem itemLabel="Choose a color"></f:selectItem>
-											<f:selectItems id="selectColor"
-												value="#{productDescriptionReduceClient.productsColor}"
-												var="p" itemLabel="#{p.color.name}" itemValue="#{p.id}" />
-											<f:ajax event="valueChange"
-												listener="#{productDescriptionReduceClient.changeColor}"
-												update="selectSize,ava,addButton" render="formChange" />
-										</p:selectOneMenu>
-										<br /> <br />
-										<p:selectOneMenu id="selectProductColorSize"
-											value="#{productDescriptionReduceClient.idProductColorSize}"
-											style="width:160px">
-											<f:selectItem itemLabel="Choose a size"></f:selectItem>
-											<f:selectItems id="selectSize"
-												value="#{productDescriptionReduceClient.productsColorSize}"
-												var="pcs" itemLabel="#{pcs.size.size}" itemValue="#{pcs.id}" />
-											<p:ajax event="valueChange"
-												listener="#{productDescriptionReduceClient.changeSize}"
-												update="ava,addButton" />
-										</p:selectOneMenu>
-										<br /> <br /> <strong class="price"><p:outputLabel
-												value="#{productDescriptionReduceClient.availabel}" id="ava"></p:outputLabel></strong>
-										<strong class="price">Number of pieces</strong>
-										<p:inputText style="width:160px"
-											value="#{productDescriptionReduceClient.nrOfPieces}">
-											<f:converter converterId="NrOfPiecesConverter"></f:converter>
-										</p:inputText>
-										<br /> <br />
-										<p:commandButton value="Add to cart" id="addButton"
-											styleClass="update-submit"
-											disabled="#{!productDescriptionReduceClient.isAvailabel}"
-											actionListener="#{cart.addProduct(productDescriptionReduceClient.productColorSize,productDescriptionReduceClient.nrOfPieces)}"
-											update="selectProductColorSize,:cartLink:nrProducts,:cartLink:totalPrice,:cartLink:dialog" />
-
-									</center>
+									<br></br>
+									<p:selectOneMenu
+										value="#{productDescriptionReduceClient.idProductColor}"
+										style="width:175px">
+										<f:selectItem itemLabel="Choose a color"></f:selectItem>
+										<f:selectItems id="selectColor"
+											value="#{productDescriptionReduceClient.productsColor}"
+											var="p" itemLabel="#{p.color.name}" itemValue="#{p.id}" />
+										<f:ajax event="valueChange"
+											listener="#{productDescriptionReduceClient.changeColor}"
+											update="selectSize,ava,addButton,image" render="formChange" />
+									</p:selectOneMenu>
+									<br /> <br />
+									<p:selectOneMenu id="selectProductColorSize"
+										value="#{productDescriptionReduceClient.idProductColorSize}"
+										style="width:175px">
+										<f:selectItem itemLabel="Choose a size"></f:selectItem>
+										<f:selectItems id="selectSize"
+											value="#{productDescriptionReduceClient.productsColorSize}"
+											var="pcs" itemLabel="#{pcs.size.size}" itemValue="#{pcs.id}" />
+										<p:ajax event="valueChange"
+											listener="#{productDescriptionReduceClient.changeSize}"
+											update="ava,addButton" />
+									</p:selectOneMenu>
+									<br /> <br /> <strong class="price"><p:outputLabel
+											value="#{productDescriptionReduceClient.availabel}" id="ava"></p:outputLabel></strong>
+									<strong class="price">Number of pieces</strong>
+									<p:inputText style="width:165px"
+										value="#{productDescriptionReduceClient.nrOfPieces}">
+										<f:converter converterId="NrOfPiecesConverter"></f:converter>
+									</p:inputText>
+									<br /> <br />
+									<p:commandButton value="Add to cart" id="addButton"
+										styleClass="update-submit"
+										disabled="#{!productDescriptionReduceClient.isAvailabel}"
+										actionListener="#{cart.addProduct(productDescriptionReduceClient.productColorSize,productDescriptionReduceClient.nrOfPieces)}"
+										update="selectProductColorSize,:cartLink:nrProducts,:cartLink:totalPrice,:cartLink:dialog"
+										style="width:173px" />
 								</div>
 
 							</div>
@@ -129,6 +125,13 @@
 					</ul>
 					<div class="cl">&nbsp;</div>
 				</div>
+				<br />
+				<center>
+					<p:graphicImage
+						url="http://localhost:8080/Shop4j/rest/products/id#{productDescriptionReduceClient.getProductColorId(productDescriptionReduceClient.selectedProduct)}"
+						width="170" height="190" id="image" cache="false"/>
+				</center>
+				<br />
 			</h:form>
 		</ui:define>
 

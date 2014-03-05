@@ -29,15 +29,15 @@
 		</ui:define>
 
 		<ui:define name="mainContent">
-			<h:form id="reduceForm">
-				<p:carousel value="#{reductionProductsClient.products}" var="p"
+			<h:form id="searchForm">
+				<p:carousel value="#{searchClient.products}" var="p"
 					itemStyle="width:237px" styleClass="products-reduce-index"
-					rendered="#{reductionProductsClient.products.size() > 0}">
+					rendered="#{searchClient.noProducts}">
 					<p:commandLink
-						actionListener="#{reductionProductsClient.chooseAProduct(p)}">
+						actionListener="#{searchClient.chooseAProduct(p)}">
 						<center>
 							<p:graphicImage
-								url="http://localhost:8080/Shop4j/rest/products/id#{reductionProductsClient.getProductColorId(p)}"
+								url="http://localhost:8080/Shop4j/rest/products/id#{productColor.id}"
 								width="170" height="190" />
 							<div class="product-info">
 								<div class="reduction">
@@ -53,10 +53,7 @@
 					</p:commandLink>
 				</p:carousel>
 				<p:outputLabel value="No records found"
-					rendered="#{reductionProductsClient.products.size() == 0}"></p:outputLabel>
-				<br />
-				<p:commandButton action="#{reductionProductsClient.reindex()}"
-					value="Reindex"></p:commandButton>
+					rendered="#{!searchClient.noProducts}"></p:outputLabel>
 			</h:form>
 		</ui:define>
 

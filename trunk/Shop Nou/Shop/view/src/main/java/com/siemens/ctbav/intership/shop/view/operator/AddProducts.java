@@ -13,6 +13,7 @@ import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 
 import com.siemens.ctbav.intership.shop.dto.operator.ClientProductDTO;
+import com.siemens.ctbav.intership.shop.dto.operator.MissingProduct;
 import com.siemens.ctbav.intership.shop.dto.operator.ProductColorSizeDTO;
 import com.siemens.ctbav.intership.shop.exception.superadmin.ProductException;
 import com.siemens.ctbav.intership.shop.service.operator.ProductService;

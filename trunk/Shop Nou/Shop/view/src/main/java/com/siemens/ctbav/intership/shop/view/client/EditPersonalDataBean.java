@@ -51,7 +51,7 @@ public class EditPersonalDataBean implements Serializable {
 		this.client = client;
 	}
 	
-	public void update(){
+	public String update(){
 		oldClient.setFirstname(client.getFirstName());
 		oldClient.setLastname(client.getLastName());
 		oldClient.setPhoneNumber(client.getPhone());
@@ -68,6 +68,8 @@ public class EditPersonalDataBean implements Serializable {
 					FacesMessage.SEVERITY_ERROR, "Error ",
 					"Sorry. You can not make modification now. Please try again later"));
 		}
+		
+		return "";
 	}	
 	
 }

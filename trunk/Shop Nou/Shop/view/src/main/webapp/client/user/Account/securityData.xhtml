@@ -23,7 +23,7 @@
 		
 
 		<ui:define name="search">
-			<ui:include src="/resources/template/client/user/searchBox.xhtml"></ui:include>
+			<ui:include src="/resources/template/client/searchBox.xhtml"></ui:include>
 		</ui:define>
 
 		<ui:define name="categories">
@@ -46,17 +46,15 @@
 							<f:validator validatorId="validatePassword" />
 							<f:attribute name="confirm" value="#{confirm}" />
 						</p:password>
-						<p:message for="password" />
 
 						<h:outputLabel for="confirm" value="Retype password: " />
 						<p:password id="confirm"
 							value="#{updateClientSecurityData.client.retypedPassword}"
 							label="Retyped password" binding="#{confirm}" />
-						<p:message for="confirm" />
 
 					</h:panelGrid>
 					<h:commandButton value="Update Account" ajax="false"
-						action="#{updateClientSecurityData.update}"
+						action="#{updateClientSecurityData.update()}"
 						styleClass="update-submit" />
 				</p:panel>
 			</h:form>

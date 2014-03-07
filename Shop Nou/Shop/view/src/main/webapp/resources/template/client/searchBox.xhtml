@@ -25,17 +25,17 @@
 						<br />
 						<h:panelGrid columns="1" style="margin-bottom:10px">
 							<h:outputText id="displayRange"
-								value="Between #{searchClient.minPrice} and #{searchClient.maxPrice}" />
+								value="Price must be between #{searchClient.minPrice}$ and #{searchClient.maxPrice}$" />
 							<p:slider for="txt6,txt7" display="displayRange"
 								style="width:210px" range="true"
-								displayTemplate="Between {min} and {max}" minValue="0"
+								displayTemplate="Price must be between {min}$ and {max}$" minValue="0"
 								maxValue="200" />
 						</h:panelGrid>
 						<h:inputHidden id="txt6" value="#{searchClient.minPrice}" />
 						<h:inputHidden id="txt7" value="#{searchClient.maxPrice}" />
-						<center> <p:commandButton value="Search"
+						<p:commandButton value="Search"
 							styleClass="search-submit"
-							action="#{searchClient.search(searchClient.query)}"/> </center>
+							action="#{searchClient.search(searchClient.query)}"/>
 					</div>
 					<p>
 						<a href="/Shop4j/client/user/contact" class="bul">Contact

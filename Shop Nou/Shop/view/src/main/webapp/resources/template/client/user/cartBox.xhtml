@@ -28,7 +28,7 @@
 					<p:dataList id="carousel" value="#{cart.products}" var="p">
 						<p:column style="width:75%;">
 							<div class="cart-dialog-item">
-								#{p.productcolor.product.name} - #{cart.getNumberOfProducts(p)}
+								#{p.name} - #{p.nrOfPieces}
 							</div>
 							<p:commandLink actionListener="#{cart.removeProduct(p)}"
 								update=":cartLink,:cartLink:cartMessage">

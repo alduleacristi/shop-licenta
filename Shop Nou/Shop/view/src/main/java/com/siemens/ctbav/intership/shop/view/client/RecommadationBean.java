@@ -14,17 +14,15 @@ import javax.faces.context.FacesContext;
 
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.siemens.ctbav.intership.shop.exception.client.ProductDoesNotExistException;
+import com.siemens.ctbav.intership.shop.model.Client;
 import com.siemens.ctbav.intership.shop.model.Product;
 import com.siemens.ctbav.intership.shop.service.client.ProductService;
 import com.siemens.ctbav.intership.shop.service.client.RecommandService;
 
 @ManagedBean(name = "recommandationClient")
 @SessionScoped
-@URLMapping(id = "recommandationClient" , pattern = "/client/user/recommandation/#{recommandationClient.id}", viewId = "/client/user/recommandation.xhtml")
-public class RecommadationBean {
-	@ManagedProperty(value = "#{id}")
-	private long id;
-	
+@URLMapping(id = "recommandationClient" , pattern = "/client/user/recommandation", viewId = "/client/user/recommandation.xhtml")
+public class RecommadationBean {	
 	@EJB
 	private RecommandService recommandService;
 	
@@ -36,16 +34,9 @@ public class RecommadationBean {
 	@PostConstruct
 	private void initialize(){
 		recommandedProducts = new ArrayList<Product>();
-	}
-
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {		
-		if(id != 0)
-			populateRecomandedProducts(id);
-		this.id = id;
+		
+		Client client = (Client) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("client");
+		populateRecomandedProducts(client.getId());
 	}
 
 	public List<Product> getRecommandedProducts() {

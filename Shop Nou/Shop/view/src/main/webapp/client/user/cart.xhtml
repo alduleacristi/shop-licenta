@@ -20,7 +20,7 @@
 		</ui:define>
 
 		<ui:define name="search">
-			<ui:include src="/resources/template/client/user/searchBox.xhtml"></ui:include>
+			<ui:include src="/resources/template/client/searchBox.xhtml"></ui:include>
 		</ui:define>
 
 		<ui:define name="categories">
@@ -32,39 +32,48 @@
 			<h:form id="cartForm">
 				<p:carousel id="carousel" value="#{cart.products}"
 					headerText="Products" itemStyle="width:237px"
-					styleClass="products-reduce" itemStyleClass="product-info" var="p"
+					styleClass="products-reduce"  var="p"
 					rendered="#{cart.isEmpty()}">
 					<center>
-						<h3>Product name</h3>
-						<p:outputLabel value="#{p.productcolor.product.name}"></p:outputLabel>
-						<br /> <br /> <strong class="price">Price</strong>
-						<p:outputLabel value="#{p.productcolor.product.price}"></p:outputLabel>
-						<br /> <br /> <strong class="price">Color</strong>
-						<p:outputLabel value="#{p.productcolor.color.name}"></p:outputLabel>
-						<br /> <br /> <strong class="price">Size</strong>
-						<p:outputLabel value="#{p.size.size}"></p:outputLabel>
-						<br /> <br />
-						<p:commandButton id="selectButton"
-							oncomplete="PF('descriptionDialog').show()" icon="ui-icon-search"
-							value="Description" title="Description"
-							styleClass="update-submit" update=":cartForm:descriptionDlg">
-							<f:setPropertyActionListener value="#{p}"
-								target="#{cart.selectedProductForDescription}" />
-						</p:commandButton>
-						<br /> <br /> Change quantity: (#{cart.getNumberOfProducts(p)}
-						items now.) <br /> <br />
-						<p:inputText value="">
-							<f:converter converterId="NrOfPiecesConverter"></f:converter>
-						</p:inputText>
-						<br />
-						<p:commandButton value="Change" title="Change quantity"
-							styleClass="update-submit" update=":cartForm:descriptionDlg"
-							action="#{cart.changeQuantity(p)}" process="@this"></p:commandButton>
-						<br /> <br />
-						<p:commandLink value="Remove product"
-							styleClass="remove-form-cart"
-							actionListener="#{cart.removeProduct(p)}"
-							update=":cartForm:descriptionDlg" process="@this"></p:commandLink>
+						<p:graphicImage
+							url="http://localhost:8080/Shop4j/rest/products/id#{p.productColor.id}"
+							width="170" height="190" id="image" cache="false" />
+						<div class="product-info">
+							<div class="reduction">
+								<p:outputLabel value="-#{p.reduction}%"
+									rendered="#{p.reduction != 0.0}"></p:outputLabel>
+							</div>
+							<h3>Product name</h3>
+							<p:outputLabel value="#{p.name}"></p:outputLabel>
+							<br /> <br /> <strong class="price">Price</strong>
+							<p:outputLabel value="#{p.price}$"></p:outputLabel>
+							<br /> <br /> <strong class="price">Color</strong>
+							<p:outputLabel value="#{p.name}"></p:outputLabel>
+							<br /> <br /> <strong class="price">Size</strong>
+							<p:outputLabel value="#{p.size}"></p:outputLabel>
+							<br /> <br />
+							<p:commandButton id="selectButton"
+								oncomplete="PF('descriptionDialog').show()"
+								icon="ui-icon-search" value="Description" title="Description"
+								styleClass="update-submit" update=":cartForm:descriptionDlg">
+								<f:setPropertyActionListener value="#{p}"
+									target="#{cart.selectedProductForDescription}" />
+							</p:commandButton>
+							<br /> <br /> Change quantity: #{p.nrOfPieces}
+							items now.) <br /> 
+							<p:inputText value="#{p.nrOfPieces}">
+								<f:converter converterId="NrOfPiecesConverter"></f:converter>
+							</p:inputText>
+							<br /><br />
+							<p:commandButton value="Change" title="Change quantity"
+								styleClass="update-submit" update=":cartForm,:cartLink"
+								action="#{cart.changeQuantity(p)}"></p:commandButton>
+							<br /> <br />
+							<p:commandLink value="Remove product"
+								styleClass="remove-form-cart"
+								actionListener="#{cart.removeProduct(p)}"
+								update=":cartForm:descriptionDlg" process="@this"></p:commandLink>
+						</div>
 					</center>
 				</p:carousel>
 				<p:outputLabel value="No records found"
@@ -84,7 +93,6 @@
 					<p:commandButton styleClass="update-submit" value="Send command"
 						rendered="#{cart.isEmpty()}"></p:commandButton>
 				</center>
-
 				<br />
 				<br />
 			</h:form>

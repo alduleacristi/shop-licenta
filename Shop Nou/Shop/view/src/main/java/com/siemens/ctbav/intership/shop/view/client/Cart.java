@@ -19,6 +19,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
+import com.siemens.ctbav.intership.shop.convert.client.ConvertProductColorSizeNumber;
+import com.siemens.ctbav.intership.shop.dto.client.ProductColorSizeNumberDTO;
 import com.siemens.ctbav.intership.shop.exception.client.ProductColorSizeDoesNotExistException;
 import com.siemens.ctbav.intership.shop.model.Client;
 import com.siemens.ctbav.intership.shop.model.ProductColorSize;
@@ -35,7 +37,7 @@ public class Cart {
 
 	private Double totalPrice;
 
-	private List<ProductColorSize> products;
+	private List<ProductColorSizeNumberDTO> products;
 
 	private ProductColorSize selectedProductForDescription;
 
@@ -47,7 +49,7 @@ public class Cart {
 		cart = new HashMap<ProductColorSize, Integer>();
 		setNrOfProducts(0);
 		setTotalPrice(0.0);
-		products = new ArrayList<ProductColorSize>();
+		products = new ArrayList<ProductColorSizeNumberDTO>();
 	}
 
 	public Integer getNrOfProducts() {
@@ -67,20 +69,23 @@ public class Cart {
 	}
 
 	public void setProducts() {
-		// System.out.println("in set products");
 		products.clear();
-		Set<ProductColorSize> list = cart.keySet();
-		for (ProductColorSize pcs : list)
-			products.add(pcs);
+
+		Iterator<Map.Entry<ProductColorSize, Integer>> it = cart.entrySet()
+				.iterator();
+
+		while (it.hasNext()) {
+			Map.Entry<ProductColorSize, Integer> ob = it.next();
+
+			ProductColorSizeNumberDTO p = ConvertProductColorSizeNumber
+					.convertToProductColorSizeNumberDTO(ob.getKey(),
+							ob.getValue());
+			products.add(p);
+		}
 	}
 
-	public List<ProductColorSize> getProducts() {
+	public List<ProductColorSizeNumberDTO> getProducts() {
 		return products;
-	}
-
-	public String getNumberOfProducts(ProductColorSize pcs) {
-		System.out.println("in number of products " + cart.get(pcs));
-		return String.valueOf(cart.get(pcs));
 	}
 
 	public ProductColorSize getSelectedProductForDescription() {
@@ -90,6 +95,14 @@ public class Cart {
 	public void setSelectedProductForDescription(
 			ProductColorSize selectedProductForDescription) {
 		this.selectedProductForDescription = selectedProductForDescription;
+	}
+
+	public Map<ProductColorSize, Integer> getCart() {
+		return cart;
+	}
+
+	public void setCart(Map<ProductColorSize, Integer> cart) {
+		this.cart = cart;
 	}
 
 	public boolean isEmpty() {
@@ -141,8 +154,10 @@ public class Cart {
 				"Succes", "Products added succesfully"));
 	}
 
-	public void removeProduct(ProductColorSize product) {
-		System.out.println("sa apelat remove");
+	public void removeProduct(ProductColorSizeNumberDTO productDTO) {
+		// System.out.println("sa apelat remove");
+		ProductColorSize product = ConvertProductColorSizeNumber
+				.convertToProductColorSize(productDTO);
 		if (cart.containsKey(product)) {
 			int nr = cart.get(product);
 			cart.remove(product);
@@ -269,7 +284,28 @@ public class Cart {
 		clearCart();
 	}
 
-	public void changeQuantity(ProductColorSize product) {
-		System.out.println("sa apelat change quantity: " + product);
+	public void changeQuantity(ProductColorSizeNumberDTO productDTO) {
+		ProductColorSize product = ConvertProductColorSizeNumber.convertToProductColorSize(productDTO);
+		
+		if (cart.containsKey(product)) {
+			if (product.getNrOfPieces() < productDTO.getNrOfPieces()) {
+				productDTO.setNrOfPieces(cart.get(product));
+				
+				FacesContext context = FacesContext.getCurrentInstance();
+				context.addMessage(null, new FacesMessage(
+						FacesMessage.SEVERITY_WARN, "Info",
+						"Sorry we don't have enought products in stock."));
+				return;
+			}else{
+				 setTotalPrice(getTotalPrice() - cart.get(product)
+				 * product.getProductcolor().getProduct().getPrice());
+				 setTotalPrice(getTotalPrice()
+				 + product.getProductcolor().getProduct().getPrice()
+				 * productDTO.getNrOfPieces());
+				 
+				 cart.put(product, productDTO.getNrOfPieces());
+			}
+		}
+
 	}
 }

@@ -20,7 +20,7 @@
 		</ui:define>
 
 		<ui:define name="search">
-			<ui:include src="/resources/template/client/user/searchBox.xhtml"></ui:include>
+			<ui:include src="/resources/template/client/searchBox.xhtml"></ui:include>
 		</ui:define>
 
 		<ui:define name="categories">
@@ -51,7 +51,7 @@
 										<br /> <strong class="price">Category</strong>
 										#{productDescriptionSearchClient.selectedProduct.category.name}<br />
 										<br /> <strong class="price">Price</strong>
-										#{productDescriptionSearchClient.selectedProduct.price}
+										#{productDescriptionSearchClient.selectedProduct.price}$
 									</center>
 								</div>
 							</div>
@@ -82,46 +82,44 @@
 								<h3>Choose the color</h3>
 
 								<div style="width: 100%">
-									<center>
-										<br></br>
-										<p:selectOneMenu
-											value="#{productDescriptionSearchClient.idProductColor}"
-											style="width:160px">
-											<f:selectItem itemLabel="Choose a color"></f:selectItem>
-											<f:selectItems id="selectColor"
-												value="#{productDescriptionSearchClient.productsColor}"
-												var="p" itemLabel="#{p.color.name}" itemValue="#{p.id}" />
-											<f:ajax event="valueChange"
-												listener="#{productDescriptionSearchClient.changeColor}"
-												update="selectSize,ava,addButton" render="formChange" />
-										</p:selectOneMenu>
-										<br /> <br />
-										<p:selectOneMenu id="selectProductColorSize"
-											value="#{productDescriptionSearchClient.idProductColorSize}"
-											style="width:160px">
-											<f:selectItem itemLabel="Choose a size"></f:selectItem>
-											<f:selectItems id="selectSize"
-												value="#{productDescriptionSearchClient.productsColorSize}"
-												var="pcs" itemLabel="#{pcs.size.size}" itemValue="#{pcs.id}" />
-											<p:ajax event="valueChange"
-												listener="#{productDescriptionSearchClient.changeSize}"
-												update="ava,addButton" />
-										</p:selectOneMenu>
-										<br /> <br /> <strong class="price"><p:outputLabel
-												value="#{productDescriptionSearchClient.availabel}" id="ava"></p:outputLabel></strong>
-										<strong class="price">Number of pieces</strong>
-										<p:inputText style="width:160px"
-											value="#{productDescriptionSearchClient.nrOfPieces}">
-											<f:converter converterId="NrOfPiecesConverter"></f:converter>
-										</p:inputText>
-										<br /> <br />
-										<p:commandButton value="Add to cart" id="addButton"
-											styleClass="update-submit"
-											disabled="#{!productDescriptionSearchClient.isAvailabel}"
-											actionListener="#{cart.addProduct(productDescriptionSearchClient.productColorSize,productDescriptionSearchClient.nrOfPieces)}"
-											update="selectProductColorSize,:cartLink:nrProducts,:cartLink:totalPrice,:cartLink:dialog" />
-
-									</center>
+									<br></br>
+									<p:selectOneMenu
+										value="#{productDescriptionSearchClient.idProductColor}"
+										style="width:175px">
+										<f:selectItem itemLabel="Choose a color"></f:selectItem>
+										<f:selectItems id="selectColor"
+											value="#{productDescriptionSearchClient.productsColor}"
+											var="p" itemLabel="#{p.color.name}" itemValue="#{p.id}" />
+										<f:ajax event="valueChange"
+											listener="#{productDescriptionSearchClient.changeColor}"
+											update="selectSize,ava,addButton" render="formChange" />
+									</p:selectOneMenu>
+									<br /> <br />
+									<p:selectOneMenu id="selectProductColorSize"
+										value="#{productDescriptionSearchClient.idProductColorSize}"
+										style="width:175px">
+										<f:selectItem itemLabel="Choose a size"></f:selectItem>
+										<f:selectItems id="selectSize"
+											value="#{productDescriptionSearchClient.productsColorSize}"
+											var="pcs" itemLabel="#{pcs.size.size}" itemValue="#{pcs.id}" />
+										<p:ajax event="valueChange"
+											listener="#{productDescriptionSearchClient.changeSize}"
+											update="ava,addButton" />
+									</p:selectOneMenu>
+									<br /> <br /> <strong class="price"><p:outputLabel
+											value="#{productDescriptionSearchClient.availabel}" id="ava"></p:outputLabel></strong>
+									<strong class="price">Number of pieces</strong>
+									<p:inputText style="width:165px"
+										value="#{productDescriptionSearchClient.nrOfPieces}">
+										<f:converter converterId="NrOfPiecesConverter"></f:converter>
+									</p:inputText>
+									<br /> <br />
+									<p:commandButton value="Add to cart" id="addButton"
+										styleClass="update-submit"
+										disabled="#{!productDescriptionSearchClient.isAvailabel}"
+										actionListener="#{cart.addProduct(productDescriptionSearchClient.productColorSize,productDescriptionSearchClient.nrOfPieces)}"
+										update="selectProductColorSize,:cartLink:nrProducts,:cartLink:totalPrice,:cartLink:dialog"
+										style="width:173px" />
 								</div>
 
 							</div>

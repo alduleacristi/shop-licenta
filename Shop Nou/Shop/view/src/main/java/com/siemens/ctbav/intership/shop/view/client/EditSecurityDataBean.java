@@ -60,13 +60,13 @@ public class EditSecurityDataBean implements Serializable {
 		this.oldPassword = oldPassword;
 	}
 
-	public void update() {
+	public String update() {
 		if (!oldClient.getUser().getUserPassword().equals(oldPassword)) {
 			FacesContext context = FacesContext.getCurrentInstance();
 			context.addMessage(null, new FacesMessage(
 					FacesMessage.SEVERITY_ERROR, "Error",
 					"The old password is incorect."));
-			return;
+			return "";
 		}
 
 		User user = oldClient.getUser();
@@ -85,5 +85,7 @@ public class EditSecurityDataBean implements Serializable {
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error ",
 							"Sorry. You can not make modification now. Please try again later"));
 		}
+		
+		return "";
 	}
 }

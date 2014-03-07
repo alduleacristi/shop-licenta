@@ -10,13 +10,34 @@
 	<title>Client</title>
 </h:head>
 <h:body>
-
-
 	<ui:composition template="/resources/template/template.xhtml">
+		<ui:define name="menu">
+			<ui:include src="/resources/template/client/menuBox.xhtml"></ui:include>
+		</ui:define>
+
+		<ui:define name="search">
+			<ui:include src="/resources/template/client/searchBox.xhtml"></ui:include>
+		</ui:define>
+
+		<ui:define name="categories">
+			<ui:include
+				src="/resources/template/client/productsCategoryBox.xhtml"></ui:include>
+		</ui:define>
+
 		<ui:define name="mainContent">
-<!--         	<p:commandButton value="Command Button"></p:commandButton> -->
-    	</ui:define>
+			
+		</ui:define>
+
+		<ui:define name="advertise">
+			<ui:include src="/resources/template/advertise.xhtml"></ui:include>
+		</ui:define>
+
+		<ui:define name="footer">
+			<ui:include src="/resources/template/footer.xhtml"></ui:include>
+		</ui:define>
 	</ui:composition>
+
+
 
 </h:body>
 

@@ -26,7 +26,9 @@ import com.siemens.ctbav.intership.shop.service.superadmin.PhotoService;
 
 @ManagedBean(name = "clientProducts")
 @ViewScoped
-@URLMappings(mappings = { @URLMapping(id = "id6", pattern = "/client/user/products/#{clientProducts.id}", viewId = "/client/user/productDescription.xhtml") })
+@URLMappings(mappings = {
+		@URLMapping(id = "productForClient", pattern = "/client/user/products/#{clientProducts.id}", viewId = "/client/user/productDescription.xhtml"),
+		@URLMapping(id = "productForVisitor", pattern = "/client/products/#{clientProducts.id}", viewId = "/client/productDescription.xhtml") })
 public class ClientProductsBean implements Serializable {
 
 	/**

@@ -56,6 +56,7 @@ public class ProductService {
 			throw new ProductException("Category not found in the database!");
 		Product product = new Product(productDto.getName(),
 				productDto.getDescription(), productDto.getPrice(), category);
+		product.setReduction((double) 0);
 		em.persist(product);
 		em.flush();
 	}
@@ -83,6 +84,15 @@ public class ProductService {
 		product.setName(updated.getName());
 		product.setPrice(updated.getPrice());
 		product.setDescription(updated.getDescription());
+		em.merge(product);
+		em.flush();
+	}
+
+	public void setSale(long idProduct, double sale) throws ProductException {
+		Product product = em.find(Product.class, idProduct);
+		if (product == null)
+			throw new ProductException("Product not found in the database");
+		product.setReduction(sale);
 		em.merge(product);
 		em.flush();
 	}

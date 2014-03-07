@@ -38,7 +38,7 @@ create table product(
     name varchar(20) not null,
     description varchar(200),
     price float not null,
-	perc_reduction float default 0,
+	perc_reduction float not null default 0,
 
     foreign key product_category(id_category)
     references category(id)
@@ -146,7 +146,7 @@ create table user(
     username varchar(20) not null unique,
     user_password char(32) not null,
     rolename varchar(50) not null,
-    email varchar(30) unique,
+    email varchar(30) not null unique,
     passwordStatus int not null,
 	ban int not null
 );

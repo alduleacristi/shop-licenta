@@ -33,7 +33,8 @@ import com.siemens.ctbav.intership.shop.util.client.ProductCategoryIndex;
 @NamedQueries({
 		@NamedQuery(name = Product.GET_PRODUCTS_BY_CATEGORY, query = "SELECT p FROM Product p where p.category.id = :id"),
 		@NamedQuery(name = Product.GET_REDUCE_PRODUCTS, query = "SELECT p FROM Product p WHERE p.reduction > 0"),
-		@NamedQuery(name = Product.GET_PRODUCT_BY_ID, query = "SELECT p FROM Product p WHERE p.id = :id") })
+		@NamedQuery(name = Product.GET_PRODUCT_BY_ID, query = "SELECT p FROM Product p WHERE p.id = :id"),
+		@NamedQuery(name = Product.GET_PRODUCTS_BY_RAND , query = "SELECT p from Product p order by rand()")})
 @NamedNativeQueries({ @NamedNativeQuery(name = Product.GET_GENERIC_PRODUCTS_FROM_CATEGORY, query = "CALL generic_products_child_categories(:param)", resultClass = Product.class) })
 @Indexed()
 @ClassBridges({
@@ -61,6 +62,7 @@ public class Product implements Serializable {
 	public final static String GET_GENERIC_PRODUCTS_FROM_CATEGORY = "getGenericProductsFromCategory";
 	public final static String GET_REDUCE_PRODUCTS = "get_reduce_products";
 	public final static String GET_PRODUCT_BY_ID = "get_product_by_id";
+	public final static String GET_PRODUCTS_BY_RAND = "getProductsRandom";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

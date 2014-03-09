@@ -19,9 +19,14 @@ public class ProductService {
 	private EntityManager em;
 
 	@SuppressWarnings("unchecked")
-	public List<Product> getReducedProducts() {
-		return (List<Product>) em.createNamedQuery(Product.GET_REDUCE_PRODUCTS)
+	public List<Product> getReducedProducts() throws ProductDoesNotExistException {
+		List<Product> products = em.createNamedQuery(Product.GET_REDUCE_PRODUCTS)
 				.getResultList();
+		
+		if(products.size() == 0)
+			throw new ProductDoesNotExistException("There are not products reduced");
+		
+		return products;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -36,6 +41,16 @@ public class ProductService {
 					+ "does not exist.");
 	}
 
+	public List<Product> getProductsRandom(int numberOfProducts) throws ProductDoesNotExistException{
+		@SuppressWarnings("unchecked")
+		List<Product> products = em.createNamedQuery(Product.GET_PRODUCTS_BY_RAND).setMaxResults(numberOfProducts).getResultList();
+		
+		if(products.size() < numberOfProducts)
+			throw new ProductDoesNotExistException("There are not enough products");
+		
+		return products;
+	}
+	
 	public void reindex() {
 		FullTextEntityManager fullTextEm = Search.getFullTextEntityManager(em);
 		MassIndexer massIndexer = fullTextEm.createIndexer(Product.class);

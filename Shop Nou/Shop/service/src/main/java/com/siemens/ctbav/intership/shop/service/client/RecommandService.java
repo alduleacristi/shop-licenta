@@ -3,11 +3,11 @@ package com.siemens.ctbav.intership.shop.service.client;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.ejb.Stateful;
+import javax.ejb.Stateless;
 
 import com.siemens.ctbav.intership.shop.service.util.recommandation.RecommandService_Service;
 
-@Stateful(name = "recommandServiceClient")
+@Stateless(name = "recommandServiceClient")
 public class RecommandService {
 	private RecommandService_Service recommandEngine;
 	private com.siemens.ctbav.intership.shop.service.util.recommandation.RecommandService recommand;

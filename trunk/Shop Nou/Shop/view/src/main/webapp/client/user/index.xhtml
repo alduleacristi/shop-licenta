@@ -47,7 +47,14 @@
 								<h3>Product name</h3>
 								<p:outputLabel value="#{p.name}"></p:outputLabel>
 								<br /> <br /> <strong class="price">Price</strong>
-								<p:outputLabel value="#{p.price}$"></p:outputLabel>
+								<p:outputLabel value="#{p.price}$"
+									rendered="#{p.reduction == 0.0}"></p:outputLabel>
+								<p:outputLabel value="#{p.price}$"
+									rendered="#{p.reduction != 0.0}"
+									style="text-decoration:line-through;"></p:outputLabel>
+								<br />
+								<p:outputLabel value="#{p.price - p.price * p.reduction / 100}$"
+									rendered="#{p.reduction != 0.0}"></p:outputLabel>
 							</div>
 						</center>
 					</p:commandLink>
@@ -56,9 +63,11 @@
 					rendered="#{reductionProductsClient.products.size() == 0}"></p:outputLabel>
 				<br />
 				<br />
-				
-					<font color="#8b0000" size="3px"><b>Products recommanded for you</b></font>
-				
+
+				<b><p:outputLabel style="color: #8b0000;size: 3px"
+						value="Products recommanded for you"
+						rendered="#{recommandationClient.isEmpty()}" /></b>
+
 				<br />
 				<br />
 				<p:carousel value="#{recommandationClient.recommandedProducts}"
@@ -80,14 +89,19 @@
 								<p:outputLabel value="#{p.name}">
 								</p:outputLabel>
 								<br /> <br /> <strong class="price">Price</strong>
-								<p:outputLabel value="#{p.price}"></p:outputLabel>
+								<p:outputLabel value="#{p.price}$"
+									rendered="#{p.reduction == 0.0}"></p:outputLabel>
+								<p:outputLabel value="#{p.price}$"
+									rendered="#{p.reduction != 0.0}"
+									style="text-decoration:line-through;"></p:outputLabel>
+								<br />
+								<p:outputLabel value="#{p.price - p.price * p.reduction / 100}$"
+									rendered="#{p.reduction != 0.0}"></p:outputLabel>
 								<br /> <br />
 							</div>
 						</center>
 					</p:commandLink>
 				</p:carousel>
-				<p:outputLabel value="No records found"
-					rendered="#{recommandationClient.isEmpty() == false}"></p:outputLabel>
 				<p:commandButton action="#{reductionProductsClient.reindex()}"
 					value="Reindex"></p:commandButton>
 				<br />

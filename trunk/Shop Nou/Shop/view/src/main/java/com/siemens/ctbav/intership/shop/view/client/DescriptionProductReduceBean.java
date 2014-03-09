@@ -8,12 +8,14 @@ import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
+
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
 import com.siemens.ctbav.intership.shop.model.Product;
 import com.siemens.ctbav.intership.shop.model.ProductColor;
 import com.siemens.ctbav.intership.shop.model.ProductColorSize;
 import com.siemens.ctbav.intership.shop.service.client.ProductColorService;
+import com.siemens.ctbav.intership.shop.service.superadmin.PhotoService;
 
 @ManagedBean(name = "productDescriptionReduceClient")
 @ViewScoped
@@ -29,6 +31,9 @@ public class DescriptionProductReduceBean implements Serializable {
 
 	@EJB
 	private ProductColorService productColorService;
+
+	@EJB
+	private PhotoService photoService;
 
 	private List<ProductColor> productsColor;
 
@@ -47,6 +52,8 @@ public class DescriptionProductReduceBean implements Serializable {
 	private String availabel;
 
 	private Integer nrOfPieces;
+
+	private List<String> photos;
 
 	public List<ProductColor> getProductsColor() {
 		return productsColor;
@@ -131,15 +138,21 @@ public class DescriptionProductReduceBean implements Serializable {
 		this.nrOfPieces = nrOfPieces;
 	}
 
+	public List<String> getPhotos() {
+		return photos;
+	}
+
+	public void setPhotos(List<String> photos) {
+		this.photos = photos;
+	}
+
 	private void initialize() {
-		// System.out.println("postconstruct reduction description isVisible="+isAvailabel);
-		// System.out.println("iau culorile cu id=" + id);
+		nrOfPieces = 1;
 		productsColor = productColorService.getColorsForProduct(id);
 
 		if (productsColor.size() > 0) {
 			selectedProduct = productsColor.get(0).getProduct();
-			// System.out.println("name" + selectedProduct.getName());
-			// System.out.println("price" + selectedProduct.getPrice());
+			displayPhotos(productsColor.get(0).getId());
 		}
 	}
 
@@ -148,6 +161,7 @@ public class DescriptionProductReduceBean implements Serializable {
 		for (ProductColor pc : productsColor) {
 			if (pc.getId() == idProductColor) {
 				productsColorSize = pc.getProductColorSize();
+				displayPhotos(idProductColor);
 				ok = true;
 			}
 		}
@@ -176,12 +190,25 @@ public class DescriptionProductReduceBean implements Serializable {
 	}
 
 	public String getProductColorId(Product p) {
-		if(idProductColor != null)
+		if (idProductColor != null)
 			return idProductColor.toString();
+		if (p == null)
+			System.out.println("e null");
 		List<ProductColor> productsColor = productColorService
 				.getColorsForProduct(p.getId());
 		if (productsColor.size() > 0)
 			return productsColor.get(0).getId().toString();
 		return "-1";
+	}
+
+	private void displayPhotos(Long idProductColor) {
+		System.out.println("display photos: "+idProductColor);
+		photos = new ArrayList<String>();
+		try {
+			photos = photoService.displayOfPhotos("id"
+					+ idProductColor);
+		} catch (Exception e) {
+			System.out.println(e);
+		}
 	}
 }

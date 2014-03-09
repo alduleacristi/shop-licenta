@@ -32,6 +32,35 @@
 			<h:form id="formChange">
 				<p:growl autoUpdate="true" showDetail="true" id="messageConverter"
 					sticky="true" />
+				<b><p:outputLabel style="color: #8b0000;size: 3px"
+						value="The product is not in stock"
+						rendered="#{productDescriptionReduceClient.selectedProduct == null}" /></b>
+				<center>
+					<center>
+						<p:commandLink onclick="PF('galleryDialog').show()"
+							partialSubmit="true">
+							<p:graphicImage
+								url="http://localhost:8080/Shop4j/rest/products/id#{productDescriptionReduceClient.getProductColorId(productDescriptionReduceClient.selectedProduct)}"
+								width="170" height="190" id="image" cache="false"
+								rendered="#{productDescriptionReduceClient.selectedProduct != null}" />
+						</p:commandLink>
+					</center>
+
+				</center>
+				<p:dialog header="Gallery" widgetVar="galleryDialog"
+					id="descriptionDlg" showEffect="fade" hideEffect="explode"
+					modal="true">
+					<p:galleria id="refreshMe"
+						value="#{productDescriptionReduceClient.photos}" var="image"
+						panelWidth="500" panelHeight="250" showCaption="false"
+						rendered="#{productDescriptionReduceClient.selectedProduct != null}">
+						<p:graphicImage url="#{image}" height="250"
+							rendered="#{productDescriptionReduceClient.selectedProduct != null}">>
+						</p:graphicImage>
+					</p:galleria>
+				</p:dialog>
+				<br />
+				<br />
 				<div class="products2">
 					<div class="cl">&nbsp;</div>
 					<ul>
@@ -51,7 +80,17 @@
 										<br /> <strong class="price">Category</strong>
 										#{productDescriptionReduceClient.selectedProduct.category.name}<br />
 										<br /> <strong class="price">Price</strong>
-										#{productDescriptionReduceClient.selectedProduct.price}$
+										<p:outputLabel
+											value="#{productDescriptionReduceClient.selectedProduct.price}$"
+											rendered="#{productDescriptionReduceClient.selectedProduct.reduction == 0.0 and productDescriptionReduceClient.selectedProduct != null}"></p:outputLabel>
+										<p:outputLabel
+											value="#{productDescriptionReduceClient.selectedProduct.price}$"
+											rendered="#{productDescriptionReduceClient.selectedProduct.reduction != 0.0 and productDescriptionReduceClient.selectedProduct != null}"
+											style="text-decoration:line-through;"></p:outputLabel>
+										<br />
+										<p:outputLabel
+											value="#{productDescriptionReduceClient.selectedProduct.price - productDescriptionReduceClient.selectedProduct.price * productDescriptionReduceClient.selectedProduct.reduction / 100}$"
+											rendered="#{productDescriptionReduceClient.selectedProduct.reduction != 0.0 and productDescriptionReduceClient.selectedProduct != null}"></p:outputLabel>
 									</center>
 								</div>
 							</div>
@@ -125,14 +164,53 @@
 					</ul>
 					<div class="cl">&nbsp;</div>
 				</div>
+			</h:form>
+
+			<h:form id="recommand">
+				<br />
 				<br />
 				<center>
-					<p:graphicImage
-						url="http://localhost:8080/Shop4j/rest/products/id#{productDescriptionReduceClient.getProductColorId(productDescriptionReduceClient.selectedProduct)}"
-						width="170" height="190" id="image" cache="false"/>
+					<b><p:outputLabel style="color: #8b0000;size: 3px"
+							value="Products recommanded for you"
+							rendered="#{recommandationClient.isEmpty()}" /></b>
 				</center>
 				<br />
+				<br />
+				<p:carousel value="#{recommandationClient.recommandedProducts}"
+					var="p" itemStyle="width:237px"
+					styleClass="products-reduce-recommand"
+					rendered="#{recommandationClient.isEmpty()}">
+					<p:commandLink
+						actionListener="#{recommandationClient.chooseAProduct(p)}">
+						<center>
+							<p:graphicImage
+								url="http://localhost:8080/Shop4j/rest/products/id#{productColor.id}"
+								width="170" height="190" />
+							<div class="product-info">
+								<div class="reduction">
+									<p:outputLabel value="-#{p.reduction}%"
+										rendered="#{p.reduction != 0.0}"></p:outputLabel>
+								</div>
+								<h3>Product name</h3>
+								<p:outputLabel value="#{p.name}">
+								</p:outputLabel>
+								<br /> <br /> <strong class="price">Price</strong>
+								<p:outputLabel value="#{p.price}$"
+									rendered="#{p.reduction == 0.0}"></p:outputLabel>
+								<p:outputLabel value="#{p.price}$"
+									rendered="#{p.reduction != 0.0}"
+									style="text-decoration:line-through;"></p:outputLabel>
+								<br />
+								<p:outputLabel value="#{p.price - p.price * p.reduction / 100}$"
+									rendered="#{p.reduction != 0.0}"></p:outputLabel>
+								<br /> <br />
+							</div>
+						</center>
+					</p:commandLink>
+				</p:carousel>
 			</h:form>
+			<br />
+			<br />
 		</ui:define>
 
 		<ui:define name="advertise">

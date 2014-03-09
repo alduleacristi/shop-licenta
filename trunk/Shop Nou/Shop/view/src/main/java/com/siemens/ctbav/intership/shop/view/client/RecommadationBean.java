@@ -8,8 +8,7 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
@@ -20,7 +19,7 @@ import com.siemens.ctbav.intership.shop.service.client.ProductService;
 import com.siemens.ctbav.intership.shop.service.client.RecommandService;
 
 @ManagedBean(name = "recommandationClient")
-@SessionScoped
+@ViewScoped
 @URLMapping(id = "recommandationClient" , pattern = "/client/user/recommandation", viewId = "/client/user/recommandation.xhtml")
 public class RecommadationBean {	
 	@EJB

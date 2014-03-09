@@ -7,9 +7,11 @@
 	xmlns:p="http://primefaces.org/ui">
 <h:head>
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
-	<title>Client</title>
+	<title>View history</title>
 </h:head>
 <h:body>
+
+
 	<ui:composition template="/resources/template/template.xhtml">
 		<ui:define name="menu">
 			<ui:include src="/resources/template/client/user/menuBox.xhtml"></ui:include>
@@ -19,48 +21,65 @@
 			<ui:include src="/resources/template/client/user/cartBox.xhtml"></ui:include>
 		</ui:define>
 
+
 		<ui:define name="search">
 			<ui:include src="/resources/template/client/searchBox.xhtml"></ui:include>
 		</ui:define>
 
 		<ui:define name="categories">
-			<ui:include
-				src="/resources/template/client/user/productsCategoryBox.xhtml"></ui:include>
+			<ui:include src="/resources/template/client/user/verticalMenu.xhtml"></ui:include>
 		</ui:define>
 
 		<ui:define name="mainContent">
-			<h:form id="searchForm">
-				<p:carousel value="#{searchClient.products}" var="p"
-					itemStyle="width:237px" styleClass="products-reduce-index"
-					rendered="#{searchClient.noProducts}">
-					<p:commandLink
-						actionListener="#{searchClient.chooseAProduct(p)}">
+			<h:form id="commandHistory">
+				<p:carousel value="#{CommandBean.commands}" vertical="true" var="c"
+					rendered="#{CommandBean.existCommands}" numVisible="1">
+					<center>
+						<strong class="price">Number of Items:</strong>
+						#{c.getClientProducts().size()} <br /> <strong class="price">Total
+							price:</strong> #{CommandBean.getTotalPrice(c)}$
+
+					</center>
+					<br />
+					<p:carousel value="#{c.getClientProducts()}" var="p"
+						itemStyle="width:237px" styleClass="products-reduce-commandHistory">
 						<center>
 							<p:graphicImage
-								url="http://localhost:8080/Shop4j/rest/products/id#{searchClient.getProductColorId(p)}"
+								url="http://localhost:8080/Shop4j/rest/products/id#{p.product.id}"
 								width="170" height="190" />
 							<div class="product-info">
 								<div class="reduction">
-									<p:outputLabel value="-#{p.reduction}%"
-										rendered="#{p.reduction != 0.0}"></p:outputLabel>
+									<p:outputLabel value="-#{p.percRedution}%"
+										rendered="#{p.percRedution != 0.0}"></p:outputLabel>
 								</div>
 								<h3>Product name</h3>
-								<p:outputLabel value="#{p.name}"></p:outputLabel>
+								<p:outputLabel value="#{p.product.productcolor.product.name}"></p:outputLabel>
 								<br /> <br /> <strong class="price">Price</strong>
 								<p:outputLabel value="#{p.price}$"
-									rendered="#{p.reduction == 0.0}"></p:outputLabel>
+									rendered="#{p.percRedution == 0.0}"></p:outputLabel>
 								<p:outputLabel value="#{p.price}$"
-									rendered="#{p.reduction != 0.0}"
+									rendered="#{p.percRedution != 0.0}"
 									style="text-decoration:line-through;"></p:outputLabel>
 								<br />
-								<p:outputLabel value="#{p.price - p.price * p.reduction / 100}$"
-									rendered="#{p.reduction != 0.0}"></p:outputLabel>
+								<p:outputLabel
+									value="#{p.price - p.price * p.percRedution / 100}$"
+									rendered="#{p.percRedution != 0.0}"></p:outputLabel>
+								<strong class="price">Number of Items</strong> #{p.nrPieces}
 							</div>
 						</center>
-					</p:commandLink>
+					</p:carousel>
+					<br /><br />
+					<center>
+						<p:commandButton rendered="#{CommandBean.canBeReturned(c)}"
+							value="Return command" style="background: #8b0000;color: #fff;"></p:commandButton>
+					</center>
+					<br />
 				</p:carousel>
-				<p:outputLabel value="No records found"
-					rendered="#{!searchClient.noProducts}"></p:outputLabel>
+				<p:outputLabel value="No commands found"
+					rendered="#{!CommandBean.existCommands}"></p:outputLabel>
+				<br />
+				<br />
+				<br />
 			</h:form>
 		</ui:define>
 
@@ -72,8 +91,6 @@
 			<ui:include src="/resources/template/footer.xhtml"></ui:include>
 		</ui:define>
 	</ui:composition>
-
-
 
 </h:body>
 

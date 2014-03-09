@@ -3,13 +3,17 @@ package com.siemens.ctbav.intership.shop.view.client;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
+
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.siemens.ctbav.intership.shop.model.Product;
+import com.siemens.ctbav.intership.shop.model.ProductColor;
+import com.siemens.ctbav.intership.shop.service.client.ProductColorService;
 import com.siemens.ctbav.intership.shop.service.client.SearchService;
 
 @SessionScoped
@@ -23,6 +27,9 @@ public class SearchBean implements Serializable {
 
 	@EJB
 	private SearchService searchService;
+	
+	@EJB
+	private ProductColorService productColorService;
 
 	private String query;
 
@@ -128,5 +135,13 @@ public class SearchBean implements Serializable {
 	public void chooseAProduct(Product product) {
 		redirect("/Shop4j/client/user/productSearchDescription/"
 				+ product.getId());
+	}
+	
+	public String getProductColorId(Product p) {
+		List<ProductColor> productsColor = productColorService
+				.getColorsForProduct(p.getId());
+		if (productsColor.size() > 0)
+			return productsColor.get(0).getId().toString();
+		return "-1";
 	}
 }

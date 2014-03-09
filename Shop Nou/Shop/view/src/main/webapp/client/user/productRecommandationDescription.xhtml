@@ -29,7 +29,127 @@
 		</ui:define>
 
 		<ui:define name="mainContent">
-			
+			<h:form id="formChange">
+				<p:growl autoUpdate="true" showDetail="true" id="messageConverter"
+					sticky="true" />
+				<center>
+					<p:graphicImage
+						url="http://localhost:8080/Shop4j/rest/products/id#{DescriptionRecommandedProductBean.getProductColorId(DescriptionRecommandedProductBean.selectedProduct)}"
+						width="170" height="190" id="image" cache="false"
+						rendered="#{DescriptionRecommandedProductBean.selectedProduct != null}" />
+				</center>
+
+				<b><p:outputLabel style="color: #8b0000;size: 3px"
+						value="The product is not in stock"
+						rendered="#{DescriptionRecommandedProductBean.selectedProduct == null}" /></b>
+				<br />
+				<br />
+				<div class="products2">
+					<div class="cl">&nbsp;</div>
+					<ul>
+						<li>
+							<div class="product-info2">
+								<h3>Product info</h3>
+								<div class="reduction">
+									<p:outputLabel
+										value="-#{DescriptionRecommandedProductBean.selectedProduct.reduction}%"
+										rendered="#{DescriptionRecommandedProductBean.selectedProduct.reduction != 0.0}"
+										styleClass="reduction"></p:outputLabel>
+								</div>
+								<div class="product-desc">
+									<center>
+										<strong class="price">Name</strong>
+										#{DescriptionRecommandedProductBean.selectedProduct.name}<br />
+										<br /> <strong class="price">Category</strong>
+										#{DescriptionRecommandedProductBean.selectedProduct.category.name}<br />
+										<br /> <strong class="price">Price</strong>
+										<p:outputLabel
+											value="#{DescriptionRecommandedProductBean.selectedProduct.price}$"
+											rendered="#{DescriptionRecommandedProductBean.selectedProduct.reduction == 0.0 and DescriptionRecommandedProductBean.selectedProduct != null}"></p:outputLabel>
+										<p:outputLabel
+											value="#{DescriptionRecommandedProductBean.selectedProduct.price}$"
+											rendered="#{DescriptionRecommandedProductBean.selectedProduct.reduction != 0.0 and DescriptionRecommandedProductBean.selectedProduct != null}"
+											style="text-decoration:line-through;"></p:outputLabel>
+										<br />
+										<p:outputLabel
+											value="#{DescriptionRecommandedProductBean.selectedProduct.price - DescriptionRecommandedProductBean.selectedProduct.price * DescriptionRecommandedProductBean.selectedProduct.reduction / 100}$"
+											rendered="#{DescriptionRecommandedProductBean.selectedProduct.reduction != 0.0 and DescriptionRecommandedProductBean.selectedProduct != null}"></p:outputLabel>
+									</center>
+								</div>
+							</div>
+						</li>
+					</ul>
+				</div>
+				<div class="products2description">
+					<ul>
+						<li>
+							<div class="product-info2description">
+								<center>
+									<h3>Description</h3>
+									<br></br>
+									<p:inputTextarea cols="55" rows="12" maxlength="200"
+										value="#{DescriptionRecommandedProductBean.selectedProduct.description}"
+										readonly="true" style="width: 300px">
+									</p:inputTextarea>
+								</center>
+							</div>
+						</li>
+					</ul>
+				</div>
+				<div class="products2">
+					<ul>
+						<li>
+							<div class="product-info2">
+								<h3>Choose the color</h3>
+								<div style="width: 100%">
+									<br></br>
+									<p:selectOneMenu
+										value="#{DescriptionRecommandedProductBean.idProductColor}"
+										style="width:175px">
+										<f:selectItem itemLabel="Choose a color"></f:selectItem>
+										<f:selectItems id="selectColor"
+											value="#{DescriptionRecommandedProductBean.productsColor}"
+											var="p" itemLabel="#{p.color.name}" itemValue="#{p.id}" />
+										<f:ajax event="valueChange"
+											listener="#{DescriptionRecommandedProductBean.changeColor}"
+											update="selectSize,ava,addButton,image" render="formChange" />
+									</p:selectOneMenu>
+									<br /> <br />
+									<p:selectOneMenu id="selectProductColorSize"
+										value="#{DescriptionRecommandedProductBean.idProductColorSize}"
+										style="width:175px">
+										<f:selectItem itemLabel="Choose a size"></f:selectItem>
+										<f:selectItems id="selectSize"
+											value="#{DescriptionRecommandedProductBean.productsColorSize}"
+											var="pcs" itemLabel="#{pcs.size.size}" itemValue="#{pcs.id}" />
+										<p:ajax event="valueChange"
+											listener="#{DescriptionRecommandedProductBean.changeSize}"
+											update="ava,addButton" />
+									</p:selectOneMenu>
+									<br /> <br /> <strong class="price"><p:outputLabel
+											value="#{DescriptionRecommandedProductBean.availabel}" id="ava"></p:outputLabel></strong>
+									<strong class="price">Number of pieces</strong>
+									<p:inputText style="width:165px"
+										value="#{DescriptionRecommandedProductBean.nrOfPieces}">
+										<f:converter converterId="NrOfPiecesConverter"></f:converter>
+									</p:inputText>
+									<br /> <br />
+									<p:commandButton value="Add to cart" id="addButton"
+										styleClass="update-submit"
+										disabled="#{!DescriptionRecommandedProductBean.isAvailabel}"
+										actionListener="#{cart.addProduct(DescriptionRecommandedProductBean.productColorSize,DescriptionRecommandedProductBean.nrOfPieces)}"
+										update="selectProductColorSize,:cartLink:nrProducts,:cartLink:totalPrice,:cartLink:dialog"
+										style="width:173px" />
+								</div>
+
+							</div>
+						</li>
+					</ul>
+					<div class="cl">&nbsp;</div>
+				</div>
+				<br />
+				<br />
+			</h:form>
 		</ui:define>
 
 		<ui:define name="advertise">

@@ -3,6 +3,7 @@ package com.siemens.ctbav.intership.shop.view.client;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -178,5 +179,17 @@ public class DescriptionProductSearchBean implements Serializable {
 			this.availabel = "Not in stock";
 			this.isAvailabel = false;
 		}
+	}
+
+	public String getProductColorId(Product p) {
+		if (idProductColor != null)
+			return idProductColor.toString();
+		if (p == null)
+			System.out.println("e null");
+		List<ProductColor> productsColor = productColorService
+				.getColorsForProduct(p.getId());
+		if (productsColor.size() > 0)
+			return productsColor.get(0).getId().toString();
+		return "-1";
 	}
 }

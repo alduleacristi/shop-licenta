@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -139,13 +138,19 @@ public class Cart {
 		if (cart.containsKey(pcs)) {
 			// System.out.println("exista deja");
 			cart.put(pcs, cart.get(pcs) + nrOfProducts);
-			setTotalPrice(getTotalPrice() + nrOfProducts
-					* pcs.getProductcolor().getProduct().getPrice());
+			setTotalPrice(getTotalPrice()
+					+ nrOfProducts
+					* (pcs.getProductcolor().getProduct().getPrice() - pcs
+							.getProductcolor().getProduct().getPrice()
+					* pcs.getProductcolor().getProduct().getReduction() / 100));
 		} else {
 			cart.put(pcs, nrOfProducts);
 			setNrOfProducts(getNrOfProducts() + 1);
-			setTotalPrice(getTotalPrice() + nrOfProducts
-					* pcs.getProductcolor().getProduct().getPrice());
+			setTotalPrice(getTotalPrice()
+					+ nrOfProducts
+					* (pcs.getProductcolor().getProduct().getPrice() - pcs
+							.getProductcolor().getProduct().getPrice()
+					* pcs.getProductcolor().getProduct().getReduction() / 100));
 		}
 
 		setProducts();
@@ -285,25 +290,26 @@ public class Cart {
 	}
 
 	public void changeQuantity(ProductColorSizeNumberDTO productDTO) {
-		ProductColorSize product = ConvertProductColorSizeNumber.convertToProductColorSize(productDTO);
-		
+		ProductColorSize product = ConvertProductColorSizeNumber
+				.convertToProductColorSize(productDTO);
+
 		if (cart.containsKey(product)) {
 			if (product.getNrOfPieces() < productDTO.getNrOfPieces()) {
 				productDTO.setNrOfPieces(cart.get(product));
-				
+
 				FacesContext context = FacesContext.getCurrentInstance();
 				context.addMessage(null, new FacesMessage(
 						FacesMessage.SEVERITY_WARN, "Info",
 						"Sorry we don't have enought products in stock."));
 				return;
-			}else{
-				 setTotalPrice(getTotalPrice() - cart.get(product)
-				 * product.getProductcolor().getProduct().getPrice());
-				 setTotalPrice(getTotalPrice()
-				 + product.getProductcolor().getProduct().getPrice()
-				 * productDTO.getNrOfPieces());
-				 
-				 cart.put(product, productDTO.getNrOfPieces());
+			} else {
+				setTotalPrice(getTotalPrice() - cart.get(product)
+						* product.getProductcolor().getProduct().getPrice());
+				setTotalPrice(getTotalPrice()
+						+ product.getProductcolor().getProduct().getPrice()
+						* productDTO.getNrOfPieces());
+
+				cart.put(product, productDTO.getNrOfPieces());
 			}
 		}
 

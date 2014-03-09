@@ -2,6 +2,7 @@ package com.siemens.ctbav.intership.shop.view.client;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -11,6 +12,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
+import com.siemens.ctbav.intership.shop.exception.client.ProductDoesNotExistException;
 import com.siemens.ctbav.intership.shop.model.Product;
 import com.siemens.ctbav.intership.shop.model.ProductColor;
 import com.siemens.ctbav.intership.shop.service.client.ProductColorService;
@@ -27,7 +29,7 @@ public class ReductionBean implements Serializable {
 
 	@EJB
 	private ProductService productService;
-	
+
 	@EJB
 	private ProductColorService productColorService;
 
@@ -35,7 +37,27 @@ public class ReductionBean implements Serializable {
 
 	@PostConstruct
 	private void initialize() {
-		products = productService.getReducedProducts();
+		products = new ArrayList<Product>();
+		try {
+			products = productService.getReducedProducts();
+
+			if (products.size() < 6)
+				throw new ProductDoesNotExistException(
+						"There are not enough products reduced");
+		} catch (ProductDoesNotExistException e) {
+			if (products.size() < 6) {
+				try {
+					List<Product> randProducts = productService
+							.getProductsRandom(6 - products.size());
+
+					for (Product p : randProducts)
+						if (!products.contains(p))
+							products.add(p);
+				} catch (ProductDoesNotExistException e1) {
+				}
+			}
+
+		}
 	}
 
 	public List<Product> getProducts() {
@@ -59,10 +81,11 @@ public class ReductionBean implements Serializable {
 					"Error", "Sorry.Description is not availabel."));
 		}
 	}
-	
-	public String getProductColorId(Product p){
-		List<ProductColor> productsColor = productColorService.getColorsForProduct(p.getId());
-		if(productsColor.size() > 0)
+
+	public String getProductColorId(Product p) {
+		List<ProductColor> productsColor = productColorService
+				.getColorsForProduct(p.getId());
+		if (productsColor.size() > 0)
 			return productsColor.get(0).getId().toString();
 		return "-1";
 	}

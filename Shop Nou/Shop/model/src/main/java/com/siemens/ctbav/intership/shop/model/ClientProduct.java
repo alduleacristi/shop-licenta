@@ -16,17 +16,16 @@ import javax.persistence.Table;
 
 @Entity
 @NamedQueries({
-@NamedQuery(name=ClientProduct.GET_PRODUCTS_FROM_COMMAND, query="SELECT c FROM ClientProduct c"),
-@NamedQuery(name=ClientProduct.GET_CLIENT_PRODUCTS_FOR_PRODUCTS, query="select c from ClientProduct c where c.product.id=:id")}
-)
+		@NamedQuery(name = ClientProduct.GET_PRODUCTS_FROM_COMMAND, query = "SELECT c FROM ClientProduct c"),
+		@NamedQuery(name = ClientProduct.GET_CLIENT_PRODUCTS_FOR_PRODUCTS, query = "select c from ClientProduct c where c.product.id=:id") })
 @Table(name = "client_product")
 public class ClientProduct implements Serializable {
 	private static final long serialVersionUID = 1L;
 	public static final String GET_PRODUCTS_FROM_COMMAND = "getProductsFromCommand";
-	public static final String GET_CLIENT_PRODUCTS_FOR_PRODUCTS="getclientproducts";
+	public static final String GET_CLIENT_PRODUCTS_FOR_PRODUCTS = "getclientproducts";
 	@Id
 	@Column(name = "id_client_product")
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long idProductClient;
 
 	@Column(name = "nr_pieces")
@@ -35,21 +34,20 @@ public class ClientProduct implements Serializable {
 	@Column(name = "perc_reduction")
 	private Double percRedution;
 
+	@Column(name = "price")
 	private Double price;
 
-	
+	@OneToOne
+	@JoinColumn(name = "id_pcs")
+	private ProductColorSize product;
+
 	@ManyToOne
-	@JoinColumn(name="id_command")
+	@JoinColumn(name = "id_command")
 	private Command command;
-	
-	
+
 	public Command getCommand() {
 		return command;
 	}
-
-	@OneToOne
-	@JoinColumn(name="id_pcs")
-	private ProductColorSize product;
 
 	public ClientProduct() {
 	}

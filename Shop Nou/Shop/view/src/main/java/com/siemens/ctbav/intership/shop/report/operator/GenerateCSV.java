@@ -14,26 +14,31 @@ public class GenerateCSV extends GenerateReport {
 	}
 
 	@Override
-	public void generate()
-			throws IOException {
-		
+	public void generate() throws IOException {
+
 		System.out.println(list.size());
-		if(list == null || list.size() ==0) return;
+		if (list == null || list.size() == 0)
+			return;
 		Class cls = list.get(0).getClass();
 		Field[] fields = cls.getDeclaredFields();
-		//setez campurile ca fiind publice ca sa pot sa iau valorile
-		for(int i=0; i<fields.length; i++) fields[i].setAccessible(true);
-		for(int i =0; i<fields.length; i++) System.out.println(fields[i].getName());
+		// setez campurile ca fiind publice ca sa pot sa iau valorile
+		for (int i = 0; i < fields.length; i++)
+			fields[i].setAccessible(true);
+		for (int i = 0; i < fields.length; i++)
+			System.out.println(fields[i].getName());
 		for (int i = 0; i < fields.length; i++)
 			stream.write(fields[i].getName() + ",");
 		stream.write('\n');
 		for (int i = 0; i < list.size(); i++) {
 			Object obj = list.get(i);
-			for(int j=0; j<fields.length; j++){
+			for (int j = 0; j < fields.length; j++) {
 				try {
 					Object val = fields[j].get(obj);
-					System.out.println("val  "+val.toString());
-					stream.write(val.toString());
+					if (val != null) {
+						System.out.println("val  " + val.toString());
+						stream.write(val.toString());
+					} else
+						stream.write("null");
 					stream.write(',');
 				} catch (Exception e) {
 					throw new IOException(e);

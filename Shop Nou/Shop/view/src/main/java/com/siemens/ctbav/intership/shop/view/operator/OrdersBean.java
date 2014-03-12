@@ -1,7 +1,6 @@
 package com.siemens.ctbav.intership.shop.view.operator;
 
 import java.io.FileWriter;
-import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -20,8 +19,11 @@ import com.siemens.ctbav.intership.shop.exception.operator.CommandNotFoundExcept
 import com.siemens.ctbav.intership.shop.exception.operator.IncorrectInputException;
 import com.siemens.ctbav.intership.shop.exception.operator.NotEnoughProductsException;
 import com.siemens.ctbav.intership.shop.model.User;
+import com.siemens.ctbav.intership.shop.report.operator.GenerateCSV;
 import com.siemens.ctbav.intership.shop.report.operator.GenerateJson;
+import com.siemens.ctbav.intership.shop.report.operator.GeneratePDF;
 import com.siemens.ctbav.intership.shop.report.operator.GenerateReport;
+import com.siemens.ctbav.intership.shop.report.operator.GenerateXML;
 import com.siemens.ctbav.intership.shop.service.operator.CommandService;
 import com.siemens.ctbav.intership.shop.util.operator.AES;
 import com.siemens.ctbav.intership.shop.util.operator.MailService;
@@ -36,16 +38,18 @@ public class OrdersBean {
 	private static final String clientHasToPayTransport = "Client will have to pay 20 RON for transport";
 	private static final String clientDoesentHaveToPayTransport = "The client doesen't have to pay transport";
 	private List<CommandDTO> orderList;
+	private String[] reports;
 	@EJB
 	private CommandService commService;
 
 	private Date from, to;
 	private Double minValue, maxValue;
 
-	
+	private GenerateReport generate;
 	public String getFilename() {
-		java.sql.Date currDate = new java.sql.Date(Calendar.getInstance().getTimeInMillis());
-		return selectedOrder.getClient().getFirstName()+" "+selectedOrder.getClient().getLastName()+currDate;
+		java.sql.Date currDate = new java.sql.Date(Calendar.getInstance()
+				.getTimeInMillis());
+		return "d:\\Reports\\orders" + currDate;
 	}
 
 	// private List<CommandDTO> allOrders;
@@ -103,6 +107,13 @@ public class OrdersBean {
 		this.maxValue = maxValue;
 	}
 
+	public String[] getReports() {
+		return reports;
+	}
+
+	public void setReports(String[] reports) {
+		this.reports = reports;
+	}
 	@PostConstruct
 	private void postConstruct() {
 		// setAllOrders(ConvertCommand.convertListOfOrders(commService.ordersInProgress()));
@@ -255,7 +266,8 @@ public class OrdersBean {
 			testAnythingSelected();
 			testCorrectDates();
 			testTotalLimits();
-			if (minValue == null && maxValue == null && minValue!= 0.0 && maxValue!= 0.0) {
+			if (minValue == null && maxValue == null && minValue != 0.0
+					&& maxValue != 0.0) {
 				// inseamna ca il intereseza doar data
 				orders = ConvertCommand.convertListOfOrders(commService
 						.getOrdersBetweenDates(from, to));
@@ -273,8 +285,11 @@ public class OrdersBean {
 
 			// se face filtrare dupa ambele campuri
 
-			orders = ConvertCommand.convertListOfOrders(commService.getOrdersBetweenDateAndTotals(from, to, minValue, maxValue));
-			
+			orders = ConvertCommand
+					.convertListOfOrders(commService
+							.getOrdersBetweenDateAndTotals(from, to, minValue,
+									maxValue));
+
 		} catch (IncorrectInputException e) {
 			FacesContext.getCurrentInstance().addMessage(
 					null,
@@ -296,15 +311,14 @@ public class OrdersBean {
 
 		}
 
-		if (minValue!= maxValue && maxValue!=0.0 && minValue >= maxValue) {
+		if (minValue != maxValue && maxValue != 0.0 && minValue >= maxValue) {
 			throw new IncorrectInputException(
 					"Max value must be greater than min value");
 		}
 	}
 
 	private void testCorrectDates() throws IncorrectInputException {
-		
-		
+
 		if ((from != null && to == null) || (from == null && to != null)) {
 			to = from = null;
 			throw new IncorrectInputException("Please insert both dates");
@@ -324,17 +338,59 @@ public class OrdersBean {
 		}
 
 	}
+
+	private boolean contains(int val) {
+		for (int i = 0; i < reports.length; i++) {
+			int value = Integer.parseInt(reports[i]);
+			if (value == val)
+				return true;
+		}
+		return false;
+	}
+
+	public void generateReports() {
+	//	for (int i = 0; i < reports.length; i++)
+		//	System.out.println(reports[i]);
+		try {
+			if (contains(Reports.PDF.getValue())) {
+				generate = new GeneratePDF(orderList, new FileWriter(
+						getFilename() + ".pdf"));
+				generate.generate();
+			}
+
+			if (contains(Reports.XML.getValue())) {
+
+				generate = new GenerateXML(orderList, new FileWriter(
+						getFilename() + ".xml"));
+			//	System.out.println(getFilename() + ".xml");
+				generate.generate();
+			}
+			if (contains(Reports.JSON.getValue())) {
+				generate = new GenerateJson(orderList, new FileWriter(
+						getFilename() + ".json"));
+				generate.generate();
+			}
+			if (contains(Reports.CSV.getValue())) {
+				generate = new GenerateCSV(orderList, new FileWriter(
+						getFilename() + ".csv"));
+				generate.generate();
+			}
+			FacesContext
+					.getCurrentInstance()
+					.addMessage(
+							null,
+							new FacesMessage(
+									FacesMessage.SEVERITY_INFO,
+									"The reports have been generated in folder Reports",
+									""));
+		} catch (Exception e) {
+			FacesContext.getCurrentInstance().addMessage(
+					null,
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, e
+							.getMessage(), e.getMessage()));
+		}
+	}
+
 	
-//	public void generateJson(){
-//		GenerateReport rep = new GenerateJson();
-//		try {
-//			rep.generate(orderList, new FileWriter("d:\\Delia\\fileOrders.json"));
-//		} catch (IOException e) {
-//			FacesContext.getCurrentInstance().addMessage(
-//					null,
-//					new FacesMessage(FacesMessage.SEVERITY_ERROR, e
-//							.getMessage(), e.getMessage()));
-//		}
-//	}
 
 }

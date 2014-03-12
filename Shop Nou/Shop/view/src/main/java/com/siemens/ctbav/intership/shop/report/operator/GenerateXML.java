@@ -2,6 +2,7 @@ package com.siemens.ctbav.intership.shop.report.operator;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.JAXBContext;
@@ -31,37 +32,39 @@ public class GenerateXML extends GenerateReport {
 
 		if (list == null || list.size() == 0)
 			return;
-
 		Object obj = list.get(0);
 
 		if (obj instanceof ClientDTO)
 			try {
-				generateForClients(list, stream);
+				generateForClients();
 			} catch (JAXBException e) {
 				throw new IOException(e);
 			}
 		else if (obj instanceof CommandDTO)
-			generateForOrders(list, stream);
+			generateForOrders();
 	}
 
-	private void generateForOrders(List<? extends Object> list,
-			FileWriter stream) {
+	private void generateForOrders() {
 
+		System.out.println("vreau sa generez comenzile");
+	//	List<OrderJAXB> convertedList = 
 	}
 
-	private void generateForClients(List<? extends Object> list,
-			FileWriter stream) throws JAXBException {
-		
-		MyJAXBList lista = new MyJAXBList();
-		lista.setList(list);
-		marsh.marshal(lista, System.out);
+	private void generateForClients() throws JAXBException {
+
+		System.out.println("generate for clients");
+		List<ClientJAXB> convertedList = convertClientsToJAXB(); 
+		MyJAXBList lista = new MyJAXBList(convertedList);
 		marsh.marshal(lista, stream);
-//		for (int i = 0; i < list.size(); i++) {
-//			ClientJAXB client = new ClientJAXB((ClientDTO) list.get(i));
-//			System.out.println(client);
-//			marsh.marshal(client, stream);
-//			marsh.marshal(client, System.out);
-//		}
+	}
 
+	private List<ClientJAXB> convertClientsToJAXB() {
+		List<ClientJAXB> lista = new ArrayList<ClientJAXB>();
+		for(Object cl : list){
+			ClientDTO dto = (ClientDTO) cl;
+			ClientJAXB c = new ClientJAXB(dto);
+			lista.add(c);
+		}
+		return lista;
 	}
 }

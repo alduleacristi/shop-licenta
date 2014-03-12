@@ -37,7 +37,7 @@
 						actionListener="#{reductionProductsClient.chooseAProduct(p)}">
 						<center>
 							<p:graphicImage
-								url="http://localhost:8080/Shop4j/rest/products/id#{reductionProductsClient.getProductColorId(p)}"
+								url="#{reductionProductsClient.host}/Shop4j/rest/products/id#{reductionProductsClient.getProductColorId(p)}"
 								width="170" height="190" />
 							<div class="product-info">
 								<div class="reduction">
@@ -78,7 +78,7 @@
 						actionListener="#{recommandationClient.chooseAProduct(p)}">
 						<center>
 							<p:graphicImage
-								url="http://localhost:8080/Shop4j/rest/products/id#{productColor.id}"
+								url="#{recommandationClient.host}/Shop4j/rest/products/id#{productColor.id}"
 								width="170" height="190" />
 							<div class="product-info">
 								<div class="reduction">

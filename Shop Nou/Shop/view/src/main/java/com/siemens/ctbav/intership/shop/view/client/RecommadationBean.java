@@ -12,6 +12,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
+import com.siemens.ctbav.intership.shop.conf.ConfigurationService;
 import com.siemens.ctbav.intership.shop.exception.client.ProductDoesNotExistException;
 import com.siemens.ctbav.intership.shop.model.Client;
 import com.siemens.ctbav.intership.shop.model.Product;
@@ -27,13 +28,18 @@ public class RecommadationBean {
 
 	@EJB
 	private ProductService productService;
+	
+	@EJB
+	private ConfigurationService confService;
 
 	private List<Product> recommandedProducts;
 
-	private String message;
+	private String message,host;
 
 	@PostConstruct
 	private void initialize() {
+		this.host = confService.getHost();
+		
 		message = (String) FacesContext.getCurrentInstance()
 				.getExternalContext().getSessionMap().get("addProductMessage");
 
@@ -69,6 +75,14 @@ public class RecommadationBean {
 	public void setMessage(String message) {
 		System.out.println("in set message: " + message);
 		this.message = message;
+	}
+
+	public String getHost() {
+		return host;
+	}
+
+	public void setHost(String host) {
+		this.host = host;
 	}
 
 	private void populateRecomandedProducts(Long id) {

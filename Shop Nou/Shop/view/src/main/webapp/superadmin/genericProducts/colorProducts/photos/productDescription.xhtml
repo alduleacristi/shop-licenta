@@ -52,7 +52,7 @@
 							<div class="products2description">
 								<div align="center">
 									<p:graphicImage id="firstImage"
-										url="http://localhost:8080/Shop4j/rest/products/id#{colorProductSelectPhotoBean.selectedProduct.id}"
+										url="#{colorProductSelectPhotoBean.host}/Shop4j/rest/products/id#{colorProductSelectPhotoBean.selectedProduct.id}"
 										width="170" height="198" />
 									<h:commandButton value="Remove all the photos from product"
 										type="button" onclick="cd.show()" style="width: 100%"

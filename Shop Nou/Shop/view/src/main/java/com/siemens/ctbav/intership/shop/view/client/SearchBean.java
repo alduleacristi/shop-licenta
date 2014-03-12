@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -11,6 +12,7 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
+import com.siemens.ctbav.intership.shop.conf.ConfigurationService;
 import com.siemens.ctbav.intership.shop.model.Product;
 import com.siemens.ctbav.intership.shop.model.ProductColor;
 import com.siemens.ctbav.intership.shop.service.client.ProductColorService;
@@ -30,14 +32,22 @@ public class SearchBean implements Serializable {
 	
 	@EJB
 	private ProductColorService productColorService;
+	
+	@EJB
+	private ConfigurationService confService;
 
-	private String query;
+	private String query,host;
 
 	private int minPrice = 0, maxPrice = 80;
 
 	private List<Product> products;
 	
 	private boolean noProducts;
+	
+	@PostConstruct
+	private void initialize(){
+		this.host = confService.getHost();
+	}
 
 	public String getQuery() {
 		return query;
@@ -77,6 +87,14 @@ public class SearchBean implements Serializable {
 
 	public void setNoProducts(boolean noProducts) {
 		this.noProducts = noProducts;
+	}
+
+	public String getHost() {
+		return host;
+	}
+
+	public void setHost(String host) {
+		this.host = host;
 	}
 
 	private void redirect(String url) {

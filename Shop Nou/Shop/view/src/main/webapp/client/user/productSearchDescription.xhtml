@@ -41,7 +41,7 @@
 						<p:commandLink onclick="PF('galleryDialog').show()"
 							partialSubmit="true" process="@this">
 							<p:graphicImage
-								url="http://localhost:8080/Shop4j/rest/products/id#{productDescriptionSearchClient.getProductColorId(productDescriptionSearchClient.selectedProduct)}"
+								url="#{productDescriptionSearchClient.host}/Shop4j/rest/products/id#{productDescriptionSearchClient.getProductColorId(productDescriptionSearchClient.selectedProduct)}"
 								width="170" height="190" id="image" cache="false"
 								rendered="#{productDescriptionSearchClient.selectedProduct != null}">
 							</p:graphicImage>

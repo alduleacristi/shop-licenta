@@ -3,6 +3,7 @@ package com.siemens.ctbav.intership.shop.view.superadmin;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -13,6 +14,7 @@ import org.primefaces.model.TreeNode;
 
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
+import com.siemens.ctbav.intership.shop.conf.ConfigurationService;
 import com.siemens.ctbav.intership.shop.model.Category;
 import com.siemens.ctbav.intership.shop.model.ProductColor;
 import com.siemens.ctbav.intership.shop.model.ProductColorSize;
@@ -29,9 +31,18 @@ public class ColorProductsSizeBean implements Serializable {
 
 	@EJB
 	ColorProductService colorProductService;
+	
+	@EJB
+	private ConfigurationService confService;
 
 	private boolean selectedCategory;
 	private List<ProductColor> productList;
+	private String host;
+	
+	@PostConstruct
+	private void postConstruct(){
+		this.host = confService.getHost();
+	}
 
 	public boolean isSelectedCategory() {
 		return selectedCategory;
@@ -47,6 +58,14 @@ public class ColorProductsSizeBean implements Serializable {
 
 	public void setProductList(List<ProductColor> productList) {
 		this.productList = productList;
+	}
+
+	public String getHost() {
+		return host;
+	}
+
+	public void setHost(String host) {
+		this.host = host;
 	}
 
 	public void onNodeSelect(NodeSelectEvent event) {

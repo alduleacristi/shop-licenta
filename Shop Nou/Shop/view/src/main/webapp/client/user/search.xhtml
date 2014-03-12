@@ -37,7 +37,7 @@
 						actionListener="#{searchClient.chooseAProduct(p)}">
 						<center>
 							<p:graphicImage
-								url="http://localhost:8080/Shop4j/rest/products/id#{searchClient.getProductColorId(p)}"
+								url="#{searchClient.host}/Shop4j/rest/products/id#{searchClient.getProductColorId(p)}"
 								width="170" height="190" />
 							<div class="product-info">
 								<div class="reduction">

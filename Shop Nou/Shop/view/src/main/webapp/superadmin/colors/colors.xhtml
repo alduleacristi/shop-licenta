@@ -35,7 +35,7 @@
 						<p:inputText id="name" label="name" value="#{colorsBean.newName}"
 							required="true" />
 						<h:outputLabel for="description"
-							value="#{internationalizationColor.description}:" />
+							value="#{internationalizationColor.colorDescription}:" />
 						<p:inputText id="description" label="description"
 							value="#{colorsBean.newDescription}">
 						</p:inputText>
@@ -113,7 +113,7 @@
 					<p:commandButton value="#{internationalizationGeneric.yes}"
 						actionListener="#{colorsBean.delete}" update="messages, colors"
 						oncomplete="cd.hide(), colorDialog.hide()" immediate="true" />
-					<p:commandButton value="#{internationalizationgeneric.no}"
+					<p:commandButton value="#{internationalizationGeneric.no}"
 						onclick="cd.hide();" type="button" />
 				</p:confirmDialog>
 				<script type="text/javascript">

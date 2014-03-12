@@ -22,7 +22,7 @@
 					height="100" />
 			</div>
 			<br />
-			In order to add, edit or delete you have to pick a category
+			#{internationalizationColorProducts.message}
 			<br />
 			<br />
 
@@ -58,9 +58,11 @@
 						<div class="productsA">
 							<div class="cl">&nbsp;</div>
 							<p:panel header="#{product.name}" style="text-align:center">
-								<h:outputText value="Category: #{product.category.name}" />
+								<h:outputText
+									value="#{internationalizationColorProducts.category}: #{product.category.name}" />
 								<br />
-								<p:outputLabel value="Price:"
+								<p:outputLabel
+									value="#{internationalizationColorProducts.price}:"
 									rendered="#{product.reduction == 0.0}" />
 								<strong class="price"> <p:outputLabel
 										value="$#{product.price}"
@@ -73,15 +75,17 @@
 										rendered="#{product.reduction != 0.0}"></p:outputLabel></strong>
 								<br />
 								<h:outputText
-									value="Colors: #{colorProductBean.displayColors(product)}" />
+									value="#{internationalizationColorProducts.colors}: #{colorProductBean.displayColors(product)}" />
 								<br />
-								<h:outputText value="Description: " />
+								<h:outputText
+									value="#{internationalizationColorProducts.description}: " />
 								<br />
 								<p:inputTextarea cols="20" rows="11" maxlength="200"
 									value="#{product.description}" readonly="true">
 								</p:inputTextarea>
 								<br />
-								<p:commandLink title="Manage colors"
+								<p:commandLink
+									title="#{internationalizationColorProducts.colors}"
 									update=":formProducts:productDetail"
 									actionListener="#{colorProductBean.initializeFirst}"
 									oncomplete="productDialog.show()">
@@ -96,28 +100,34 @@
 					</p:column>
 				</p:dataGrid>
 
-				<p:dialog header="Product Detail" widgetVar="productDialog"
-					modal="true" id="pdetail">
+				<p:dialog
+					header="#{internationalizationColorProducts.productDetail}"
+					widgetVar="productDialog" modal="true" id="pdetail">
 					<p:outputPanel id="productDetail" style="text-align:center;">
 						<h:panelGrid columns="2" cellpadding="4"
 							rendered="#{colorProductBean.selectedProduct != null}">
-							<h:outputText value="Product's name: " />
+							<h:outputText
+								value="#{internationalizationColorProducts.productName}: " />
 							<p:inputText value="#{colorProductBean.selectedProduct.name}"
 								readonly="true">
 							</p:inputText>
-							<h:outputText value="Product's category: " />
+							<h:outputText
+								value="#{internationalizationColorProducts.productCategory}: " />
 							<p:inputText
 								value="#{colorProductBean.selectedProduct.category.name}"
 								readonly="true" />
-							<h:outputText value="Product's price: " />
+							<h:outputText
+								value="#{internationalizationColorProducts.productPrice}: " />
 							<p:inputText value="#{colorProductBean.selectedProduct.price}"
 								readonly="true">
 							</p:inputText>
-							<h:outputText value="Product's description: " />
+							<h:outputText
+								value="#{internationalizationColorProducts.productDescription}: " />
 							<p:inputTextarea cols="22" rows="10" maxlength="200"
 								value="#{colorProductBean.selectedProduct.description}"
 								maxLength="200" readonly="true" />
-							<h:outputText value="Select a color:" />
+							<h:outputText
+								value="#{internationalizationColorProducts.selectColor}:" />
 							<p:selectOneMenu id="selectOneMenu"
 								value="#{colorProductBean.idSelectedProductColor}"
 								style="width:155px">
@@ -128,7 +138,8 @@
 									itemValue="#{pcolor.id}" />
 								<p:ajax event="valueChange" update="description,color" />
 							</p:selectOneMenu>
-							<h:outputText value="Description: " />
+							<h:outputText
+								value="#{internationalizationColorProducts.description}: " />
 							<h:outputText value="" />
 							<h:outputText id="color"
 								value="#{colorProductBean.selectedProductColor.color.name}"
@@ -138,28 +149,30 @@
 								value="#{colorProductBean.selectedProductColor.color.description}"
 								readonly="true" />
 						</h:panelGrid>
-						<p:commandButton value="Add color for product"
+						<p:commandButton value="#{internationalizationGeneric.create}"
 							onclick="addDialog.show()" update="messages1" />
-						<p:commandButton value="Edit color for product"
+						<p:commandButton value="#{internationalizationGeneric.update}"
 							onclick="editDialog.show()" update="messages1" />
-						<p:commandButton value="Delete color from product"
+						<p:commandButton value="#{internationalizationGeneric.delete}"
 							onclick="cd.show()" />
 					</p:outputPanel>
 				</p:dialog>
 			</h:form>
 			<h:form id="add">
 				<p:growl id="messages2" showDetail="true" />
-				<p:dialog header="Chose a color" widgetVar="addDialog"
-					resizable="false">
+				<p:dialog header="#{internationalizationColorProducts.selectColor}"
+					widgetVar="addDialog" resizable="false">
 					<h:panelGrid columns="2" cellpadding="4">
-						<h:outputText value="Available colors:" />
+						<h:outputText
+							value="#{internationalizationColorProducts.selectColor}:" />
 						<p:selectOneMenu id="selectAColor"
 							value="#{colorProductBean.idSelectedColor}" style="width:155px">
 							<f:selectItems value="#{colorProductBean.allColors}" var="color"
 								itemLabel="#{color.name}" itemValue="#{color.id}" />
 							<p:ajax event="valueChange" update="descriptionCol,colorC" />
 						</p:selectOneMenu>
-						<h:outputText value="Description: " />
+						<h:outputText
+							value="#{internationalizationColorProducts.description}: " />
 						<h:outputText value="" />
 						<h:outputText id="colorC"
 							value="#{colorProductBean.selectedColor.name}"
@@ -168,11 +181,12 @@
 							maxlength="100"
 							value="#{colorProductBean.selectedColor.description}"
 							readonly="true" />
-						<p:commandButton value="Add"
+						<p:commandButton value="#{internationalizationGeneric.create}"
 							actionListener="#{colorProductBean.add}"
 							oncomplete="handleCreateRequest(xhr, status, args)"
 							update="messages2, :formProducts:dataGrid, :formProducts:productDetail" />
-						<p:commandButton value="Cancel" onclick="addDialog.hide()" />
+						<p:commandButton value="#{internationalizationGeneric.cancel}"
+							onclick="addDialog.hide()" />
 					</h:panelGrid>
 				</p:dialog>
 				<script type="text/javascript">
@@ -189,26 +203,29 @@
 			</h:form>
 			<h:form id="edit">
 				<p:growl id="messages3" showDetail="true" />
-				<p:dialog header="Edit a color" widgetVar="editDialog"
-					resizable="false">
+				<p:dialog header="#{internationalizationGeneric.update}"
+					widgetVar="editDialog" resizable="false">
 					<h:panelGrid columns="2" cellpadding="4">
-						<h:outputText value="Available colors:" />
+						<h:outputText
+							value="#{internationalizationColorProducts.selectColor}:" />
 						<p:selectOneMenu id="selectACol"
 							value="#{colorProductBean.idSelectedColor}" style="width:155px">
 							<f:selectItems value="#{colorProductBean.allColors}" var="color"
 								itemLabel="#{color.name}" itemValue="#{color.id}" />
 							<p:ajax event="valueChange" update="descriptionColor" />
 						</p:selectOneMenu>
-						<h:outputText value="Description: " />
+						<h:outputText
+							value="#{internationalizationColorProducts.description}: " />
 						<p:inputTextarea id="descriptionColor" cols="22" rows="5"
 							maxlength="100"
 							value="#{colorProductBean.selectedColor.description}"
 							readonly="true" />
-						<p:commandButton value="Edit"
+						<p:commandButton value="#{internationalizationGeneric.update}"
 							actionListener="#{colorProductBean.edit}"
 							oncomplete="handleUpdateRequest(xhr, status, args)"
 							update="messages3, :formProducts:dataGrid, :formProducts:productDetail" />
-						<p:commandButton value="Cancel" onclick="editDialog.hide()" />
+						<p:commandButton value="#{internationalizationGeneric.cancel}"
+							onclick="editDialog.hide()" />
 					</h:panelGrid>
 				</p:dialog>
 				<script type="text/javascript">
@@ -225,14 +242,16 @@
 			</h:form>
 			<h:form id="delete">
 				<p:growl id="messages4" showDetail="true" />
-				<p:dialog header="Confirmation" widgetVar="cd" resizable="false">
-					<h:outputText value="Are you sure?" />
+				<p:dialog header="#{internationalizationGeneric.confirmation}"
+					widgetVar="cd" resizable="false">
+					<h:outputText value="#{internationalizationGeneric.confirmMessage}" />
 					<br />
-					<p:commandButton value="Yes"
+					<p:commandButton value="#{internationalizationGeneric.yes}"
 						actionListener="#{colorProductBean.delete}"
 						update="messages4, :formProducts:dataGrid, :formProducts:productDetail"
 						oncomplete="cd.hide()" immediate="true" />
-					<p:commandButton value="No" onclick="cd.hide();" type="button" />
+					<p:commandButton value="#{internationalizationGeneric.no}"
+						onclick="cd.hide();" type="button" />
 				</p:dialog>
 			</h:form>
 

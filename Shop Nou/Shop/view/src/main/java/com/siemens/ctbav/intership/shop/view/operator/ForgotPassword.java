@@ -10,11 +10,11 @@ import javax.faces.context.FacesContext;
 
 import com.siemens.ctbav.intership.shop.convert.operator.ConvertUser;
 import com.siemens.ctbav.intership.shop.dto.operator.UserDTO;
+import com.siemens.ctbav.intership.shop.enums.operator.PasswordStatus;
 import com.siemens.ctbav.intership.shop.service.operator.UserService;
 import com.siemens.ctbav.intership.shop.util.operator.AES;
 import com.siemens.ctbav.intership.shop.util.operator.GenerateString;
 import com.siemens.ctbav.intership.shop.util.operator.MailService;
-import com.siemens.ctbav.intership.shop.view.operator.PasswordStatus;
 
 @ManagedBean(name = "forgotPassword")
 @RequestScoped
@@ -46,9 +46,8 @@ public class ForgotPassword {
 			} while (userService.passwordAlreadyExists(password));
 
 			user.setPassword(password);
-		//     user.setPasswordStatus(PasswordStatus.NEW_GENERATED);
+			user.setPasswordStatus(PasswordStatus.NEW_GENERATED);
 			// setez parola random utilizatorului
-			// user.setStatus(PasswordStatus.NEW_GENERATED);
 			// adica e nou generata,utilizatorul
 			// poate
 			// sa acceseze pagina daca timpul nu a

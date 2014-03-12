@@ -62,8 +62,8 @@ public class MissingProduct implements Comparable<MissingProduct> {
 	@Override
 	public int compareTo(MissingProduct other) {
 		if(nrPieces == other.nrPieces) return 0;
-		if(nrPieces < other.nrPieces) return -1;
-		return 1;
+		if(nrPieces < other.nrPieces) return 1;
+		return -1;
 	}
 
 	

@@ -15,145 +15,167 @@
 	<ui:composition template="/resources/template/operator/index.xhtml">
 		<ui:define name="mainContent">
 			<h:form id="form">
+				<p:growl id="error">
 			
-				<p:dataTable id="ordersTable" var="order"
-					value="#{orders.orderList}" paginator="true" rows="20"
-					paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
-					rowsPerPageTemplate="5,10,15" selection="#{orders.selectedOrder}"
-					rowKey="#{order.id}" selectionMode="single">
+			Choose date interval:
+			<br />
+					<h:outputLabel for="from" value="From" />
+					<p:calendar id="from" value="#{orders.from}"></p:calendar>
+					<h:outputLabel for="to" value="To" />
+					<p:calendar id="to" value="#{orders.to}"></p:calendar>
+					<br />
+					<br />
+			
+			Choose total amount interval:
+			<br />
+					<h:outputLabel for="from" value="From" />
+					<p:inputText name="minvalue" value="#{orders.minValue}" />
+					<h:outputLabel for="to" value="To" />
+					<p:inputText name="maxvalue" value="#{orders.maxValue}" />
+					<br />
+					<br />
+					<h:commandButton value="Show me the results"
+						action="#{orders.results}" update=":form:error" />
+					<br />
+					<br />
+					<p:dataTable id="ordersTable" var="order"
+						value="#{orders.orderList}" paginator="true" rows="20"
+						paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+						rowsPerPageTemplate="5,10,15" selection="#{orders.selectedOrder}"
+						rowKey="#{order.id}" selectionMode="single">
 
-					<p:column style="width:7%">
+						<p:column style="width:7%">
 
-						<f:facet name="header">  
+							<f:facet name="header">  
                     Order date 
          		   </f:facet>
-						<h:outputText value="#{order.orderDate}" />
-					</p:column>
-					<p:column style="width:20%">
-						<f:facet name="header">  
+							<h:outputText value="#{order.orderDate}" />
+						</p:column>
+						<p:column style="width:20%">
+							<f:facet name="header">  
                   First name
             </f:facet>
-						<h:outputText value="#{order.client.firstName}" />
-					</p:column>
-					<p:column style="width:20%">
-						<f:facet name="header">  
+							<h:outputText value="#{order.client.firstName}" />
+						</p:column>
+						<p:column style="width:20%">
+							<f:facet name="header">  
                    Last name
             </f:facet>
-						<h:outputText value="#{order.client.lastName}" />
-					</p:column>
-					<p:column style="width:10%">
-						<f:facet name="header">  
+							<h:outputText value="#{order.client.lastName}" />
+						</p:column>
+						<p:column style="width:10%">
+							<f:facet name="header">  
                    Phone number
             </f:facet>
-						<h:outputText value="#{order.client.phoneNumber}" />
-					</p:column>
-					<p:column style="width:30%">
-						<f:facet name="header">  
+							<h:outputText value="#{order.client.phoneNumber}" />
+						</p:column>
+						<p:column style="width:30%">
+							<f:facet name="header">  
                   Email
             </f:facet>
-						<h:outputText value="#{order.client.user.email}" />
-					</p:column>
+							<h:outputText value="#{order.client.user.email}" />
+						</p:column>
 
-					<p:column>
+						<p:column exportable="false">
 
-						<p:commandButton value="Delivered" 
-							actionListener="#{orders.deliveredOrder(order)}"
-							styleClass="ui-priority-primary" update=":form:ordersTable"/>
-					</p:column>
+							<p:commandButton value="Delivered"
+								actionListener="#{orders.deliveredOrder(order)}"
+								styleClass="ui-priority-primary" update=":form:ordersTable" />
+						</p:column>
 
-					<p:column>
+						<p:column exportable="false">
 
-						<p:commandButton value="Change order"
-							actionListener="#{orders.changeOrder(order)}"
-							styleClass="ui-priority-primary"  update =":form:ordersTable"/>
-					</p:column>
-					<f:facet name="footer">
-						<p:commandButton value="View" icon="ui-icon-search"
-							update=":form:display" oncomplete="PF('dialog').show()"></p:commandButton>
-					</f:facet>
-					<p:growl id ="growl"/>
-				</p:dataTable>
-				<br></br>
-				<br></br>
-				<br></br>
-
-
+							<p:commandButton value="Change order"
+								actionListener="#{orders.changeOrder(order)}"
+								styleClass="ui-priority-primary" update=":form:ordersTable" />
+						</p:column>
+						<f:facet name="footer">
+							<p:commandButton value="View" icon="ui-icon-search"
+								update=":form:display" oncomplete="PF('dialog').show()"></p:commandButton>
+						</f:facet>
+						<p:growl id="growl" />
+					</p:dataTable>
+					<br></br>
+					<br></br>
+					<br></br>
 
 
-				<p:dialog header="Detalii comanda" widgetVar="dialog" width="600"
-					showEffect="explode" hideEffect="explode">
-					<h:dataTable id="display" var="prodClient"
-						value="#{orders.selectedOrder.listProducts}" border="1">
 
-						<f:facet name="header">
+
+					<p:dialog header="Detalii comanda" widgetVar="dialog" width="600"
+						showEffect="explode" hideEffect="explode">
+						<p:dataTable id="display" var="prodClient"
+							value="#{orders.selectedOrder.listProducts}" border="1">
+
+							<f:facet name="header">
 						Adresa:<br></br>    Oras #{orders.selectedOrder.adress.locality}, numarul #{orders.selectedOrder.adress.number} bloc #{orders.selectedOrder.adress.block} scara #{orders.selectedOrder.adress.staircase} apartament #{orders.selectedOrder.adress.flat}
 						</f:facet>
 
-						<p:column>
-							<f:facet name="header">
+							<p:column>
+								<f:facet name="header">
 									Produs
 							</f:facet>
-							<h:outputText
-								value="#{prodClient.product.prodColor.product.name}"></h:outputText>
-						</p:column>
+								<h:outputText
+									value="#{prodClient.product.prodColor.product.name}"></h:outputText>
+							</p:column>
 
-						<p:column>
-							<f:facet name="header">
+							<p:column>
+								<f:facet name="header">
 									Descriere
 							</f:facet>
-							<h:outputText
-								value="#{prodClient.product.prodColor.product.description}"></h:outputText>
-						</p:column>
+								<h:outputText
+									value="#{prodClient.product.prodColor.product.description}"></h:outputText>
+							</p:column>
 
-						<p:column>
-							<f:facet name="header">
+							<p:column>
+								<f:facet name="header">
 									Categorie
 							</f:facet>
-							<h:outputText
-								value="#{prodClient.product.prodColor.product.category.name}"></h:outputText>
-						</p:column>
-						<p:column>
-							<f:facet name="header">
+								<h:outputText
+									value="#{prodClient.product.prodColor.product.category.name}"></h:outputText>
+							</p:column>
+							<p:column>
+								<f:facet name="header">
 									Culoare
 							</f:facet>
-							<h:outputText value="#{prodClient.product.prodColor.color.name}"></h:outputText>
-						</p:column>
-						<p:column>
-							<f:facet name="header">
+								<h:outputText value="#{prodClient.product.prodColor.color.name}"></h:outputText>
+							</p:column>
+							<p:column>
+								<f:facet name="header">
 									Pret
 							</f:facet>
-							<h:outputText
-								value="#{prodClient.product.prodColor.product.price}"></h:outputText>
-						</p:column>
+								<h:outputText
+									value="#{prodClient.product.prodColor.product.price}"></h:outputText>
+							</p:column>
 
-						<p:column>
-							<f:facet name="header">
+							<p:column>
+								<f:facet name="header">
 									Numar bucati
 							</f:facet>
-							<h:outputText value="#{prodClient.nrPieces}"></h:outputText>
-						</p:column>
+								<h:outputText value="#{prodClient.nrPieces}"></h:outputText>
+							</p:column>
 
-						<p:column>
-							<f:facet name="header">
+							<p:column>
+								<f:facet name="header">
 									Procent reducere
 							</f:facet>
-							<h:outputText value="#{prodClient.percReduction}"></h:outputText>
-						</p:column>
-						<p:column>
-							<f:facet name="header">
+								<h:outputText value="#{prodClient.percReduction}"></h:outputText>
+							</p:column>
+							<p:column>
+								<f:facet name="header">
 									Pret redus
 							</f:facet>
-							<h:outputText value="#{prodClient.price}"></h:outputText>
-						</p:column>
+								<h:outputText value="#{prodClient.price}"></h:outputText>
+							</p:column>
 
-						<p:column>
-							<f:facet name="header">
+							<p:column>
+								<f:facet name="header">
 									Pret total
 							</f:facet>
-							<h:outputText value="#{prodClient.totalPrice()}"></h:outputText>
-						</p:column>
+								<h:outputText value="#{prodClient.totalPrice()}"></h:outputText>
+							</p:column>
 
-						<f:facet name="footer">
+							<f:facet name="footer">
 								Pret total: #{orders.total()}
 								<br></br>
 								#{orders.message()}
@@ -162,12 +184,31 @@
 								<br></br>
 								Pret final(cu transport) : #{orders.totalPerOrder}
 						</f:facet>
-					</h:dataTable>
+						</p:dataTable>
 
-				</p:dialog>
-				<br></br>
-				<br></br>
+					</p:dialog>
+					<br></br>
+					<br></br>
 
+					<h:commandButton value="PDF export" icon="pdf-icon">
+						<p:dataExporter type="pdf" target="display"
+							fileName="#{orders.filename}"></p:dataExporter>
+					</h:commandButton>
+					&nbsp;&nbsp;
+					<h:commandButton value="CSV export" icon="csv-icon">
+						<p:dataExporter type="csv" target="display"
+							fileName="#{orders.filename}"></p:dataExporter>
+					</h:commandButton>
+					&nbsp;&nbsp;
+					<h:commandButton value="XML export" icon="xml-icon">
+						<p:dataExporter type="xml" target="display"
+							fileName="#{orders.filename}"></p:dataExporter>
+					</h:commandButton>
+					&nbsp;&nbsp;
+					<h:commandButton value="JSON export"
+						actionListener="#{orders.generateJson}">
+					</h:commandButton>
+				</p:growl>
 			</h:form>
 		</ui:define>
 		<ui:define name="footer">

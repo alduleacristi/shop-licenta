@@ -22,6 +22,7 @@ public class ConvertCommand {
 	
 	public static List<CommandDTO> convertListOfOrders(List<Command> list){
 		List<CommandDTO> listDTO = new ArrayList<CommandDTO>();
+		if(list == null) return null;
 		for(Command command : list){
 			listDTO.add(ConvertCommand.convertCommand(command));
 		}

@@ -25,7 +25,8 @@ public class OperatorsImages {
 	public void postConstruct() {
 		System.out.println("post construct");
 		images = new ArrayList<String>();
-		images.add("/resources/n5.jpg");
+		for(int i=0; i<4; i++)
+		images.add("/resources/operator/img"+i+".jpg");
 
 	}
 

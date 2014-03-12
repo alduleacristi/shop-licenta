@@ -1,5 +1,9 @@
 package com.siemens.ctbav.intership.shop.view.operator;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.sql.Date;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -8,6 +12,8 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
+import javax.xml.bind.JAXBException;
+
 import org.primefaces.event.ToggleEvent;
 
 import com.siemens.ctbav.intership.shop.convert.operator.ConvertClient;
@@ -15,6 +21,11 @@ import com.siemens.ctbav.intership.shop.convert.operator.ConvertCommand;
 import com.siemens.ctbav.intership.shop.dto.operator.ClientDTO;
 import com.siemens.ctbav.intership.shop.dto.operator.CommandDTO;
 import com.siemens.ctbav.intership.shop.exception.operator.ClientWithOrdersException;
+import com.siemens.ctbav.intership.shop.report.operator.GenerateCSV;
+import com.siemens.ctbav.intership.shop.report.operator.GenerateJson;
+import com.siemens.ctbav.intership.shop.report.operator.GeneratePDF;
+import com.siemens.ctbav.intership.shop.report.operator.GenerateReport;
+import com.siemens.ctbav.intership.shop.report.operator.GenerateXML;
 //import com.siemens.ctbav.intership.shop.exception.operator.ClientWithOrdersException;
 import com.siemens.ctbav.intership.shop.service.operator.ClientService;
 import com.siemens.ctbav.intership.shop.service.operator.CommandService;
@@ -33,6 +44,15 @@ public class ClientBean {
 	private UserService userService;
 	private List<ClientDTO> allClients;
 
+	private List<Integer> reports;
+	
+	public String getFilename() {
+		java.sql.Date currDate = new Date(Calendar.getInstance()
+				.getTimeInMillis());
+		return "clients" + currDate;
+	}
+
+	
 	@PostConstruct
 	public void initClientList() {
 		setAllClients(ConvertClient.convertClientListDate(clientService
@@ -69,7 +89,8 @@ public class ClientBean {
 			userService.deleteUserClient(username);
 			FacesContext.getCurrentInstance().addMessage(
 					null,
-					new FacesMessage(FacesMessage.SEVERITY_INFO,"Client deleted", "Client deleted"));
+					new FacesMessage(FacesMessage.SEVERITY_INFO,
+							"Client deleted", "Client deleted"));
 		} catch (Exception e) {
 			FacesContext.getCurrentInstance().addMessage(
 					null,
@@ -78,5 +99,22 @@ public class ClientBean {
 			return;
 		}
 	}
+
+	
+	public void generateReports(){
+		for(int i=0; i<reports.size(); i++)
+			System.out.println(reports.get(i));
+	}
+
+
+	public List<Integer> getReports() {
+		return reports;
+	}
+
+
+	public void setReports(List<Integer> reports) {
+		this.reports = reports;
+	}
+
 
 }

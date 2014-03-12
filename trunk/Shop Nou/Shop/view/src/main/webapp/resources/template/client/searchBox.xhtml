@@ -16,8 +16,9 @@
 
 					<br></br> <label>Keyword</label> <br />
 					<p:autoComplete id="acMinLength" minQueryLength="3"
-						value="#{searchClient.query}" effect="fade" style="width:210px !important"
-						size="10" completeMethod="#{searchClient.complete}"/>
+						value="#{searchClient.query}" effect="fade"
+						style="width:210px !important" size="10"
+						completeMethod="#{searchClient.complete}" />
 
 					<br />
 					<div class="inline-field">
@@ -28,14 +29,13 @@
 								value="Price must be between #{searchClient.minPrice}$ and #{searchClient.maxPrice}$" />
 							<p:slider for="txt6,txt7" display="displayRange"
 								style="width:210px" range="true"
-								displayTemplate="Price must be between {min}$ and {max}$" minValue="0"
-								maxValue="200" />
+								displayTemplate="Price must be between {min}$ and {max}$"
+								minValue="0" maxValue="200" />
 						</h:panelGrid>
 						<h:inputHidden id="txt6" value="#{searchClient.minPrice}" />
 						<h:inputHidden id="txt7" value="#{searchClient.maxPrice}" />
-						<p:commandButton value="Search"
-							styleClass="search-submit"
-							action="#{searchClient.search(searchClient.query)}"/>
+						<p:commandButton value="Search" styleClass="search-submit"
+							action="#{searchClient.search(searchClient.query)}" />
 					</div>
 					<p>
 						<a href="/Shop4j/client/user/contact" class="bul">Contact
@@ -47,30 +47,5 @@
 		</h:form>
 
 	</ui:composition>
-	<!-- asta nu mai trebuie
-		<h:form> -->
-	<!-- 			<div class="box categories"> -->
-	<!-- 				<h2> -->
-	<!-- 					Categories <span></span> -->
-	<!-- 				</h2> -->
-	<!-- 				<div class="box-content"> -->
-
-	<!-- 					<p:tree id="treeSingle" var="node" value="#{treeBean.root}" -->
-	<!-- 						selectionMode="single" selection="#{treeBean.selectedCategory}" -->
-	<!-- 						styleClass="tree"> -->
-	<!-- 						<p:ajax event="select" listener="#{treeBean.onNodeSelect}" /> -->
-	<!-- 						<p:treeNode> -->
-	<!-- 							<h:outputText value="#{node}" /> -->
-	<!-- 						</p:treeNode> -->
-	<!-- 					</p:tree> -->
-
-
-	<!-- 				</div> -->
-
-	<!-- 			</div> -->
-	<!-- 		</h:form>
-	pana aici -->
-
-
 </h:body>
 </html>

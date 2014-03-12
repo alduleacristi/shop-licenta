@@ -34,6 +34,33 @@
 			<h:form id="formSelect">
 				<p:growl autoUpdate="true" showDetail="true" id="messageConverter"
 					sticky="true" />
+				<center>
+					<center>
+						<p:commandLink onclick="PF('galleryDialog').show()"
+							partialSubmit="true" process="@this">
+							<p:graphicImage
+								url="http://localhost:8080/Shop4j/rest/products/id#{clientProducts.selectedProduct.id}"
+								width="170" height="190" id="image" cache="false">
+							</p:graphicImage>
+						</p:commandLink>
+					</center>
+					<p:tooltip for="image" showEffect="fade" hideEffect="fade"
+						value="Click to open gallery"></p:tooltip>
+				</center>
+				<p:dialog header="Gallery" widgetVar="galleryDialog"
+					id="descriptionDlg" showEffect="fade" hideEffect="explode"
+					modal="true">
+					<p:galleria id="refreshMe"
+						value="#{clientProducts.photos}" var="image"
+						panelWidth="500" panelHeight="250" showCaption="false"
+						rendered="#{clientProducts.selectedProduct != null}">
+						<p:graphicImage url="#{image}" height="250"
+							rendered="#{clientProducts.selectedProduct != null}">>
+						</p:graphicImage>
+					</p:galleria>
+				</p:dialog>
+				<br />
+				<br />
 				<div class="products2">
 					<div class="cl">&nbsp;</div>
 					<ul>
@@ -109,7 +136,7 @@
 									<br /> <br />
 									<p:commandButton value="Add to cart" id="addButton"
 										styleClass="update-submit"
-										actionListener="#{cart.addProduct(clientProducts.productColorSize,clientProducts.nrOfPieces)}"
+										actionListener="#{cart.addProductFromPage(clientProducts.productColorSize,clientProducts.nrOfPieces)}"
 										disabled="#{clientProducts.isAvailabel}"
 										update="messageConverter,:cartLink:nrProducts,:cartLink:totalPrice,:cartLink:dialog"
 										style="width:173px" />
@@ -120,16 +147,6 @@
 					</ul>
 					<div class="cl">&nbsp;</div>
 				</div>
-				<br />
-				<center>
-					<p:galleria id="refreshMe" value="#{clientProducts.photos}"
-						var="image" panelWidth="500" panelHeight="313" showCaption="false"
-						title="#{clientProducts.selectedProduct.product.name}">
-						<p:graphicImage url="#{image}">
-						</p:graphicImage>
-					</p:galleria>
-					<br />
-				</center>
 			</h:form>
 		</ui:define>
 

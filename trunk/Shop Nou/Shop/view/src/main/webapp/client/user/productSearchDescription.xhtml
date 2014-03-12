@@ -31,15 +31,37 @@
 		<ui:define name="mainContent">
 			<h:form id="formChange">
 				<p:growl autoUpdate="true" showDetail="true" id="messageConverter" />
-				<center>
-					<p:graphicImage
-						url="http://localhost:8080/Shop4j/rest/products/id#{productDescriptionSearchClient.getProductColorId(productDescriptionSearchClient.selectedProduct)}"
-						width="170" height="190" id="image" cache="false"
-						rendered="#{productDescriptionSearchClient.selectedProduct != null}" />
-				</center>
 				<b><p:outputLabel style="color: #8b0000;size: 3px"
 						value="The product is not in stock"
 						rendered="#{productDescriptionSearchClient.selectedProduct == null}" /></b>
+				<br />
+				<br />
+				<center>
+					<center>
+						<p:commandLink onclick="PF('galleryDialog').show()"
+							partialSubmit="true" process="@this">
+							<p:graphicImage
+								url="http://localhost:8080/Shop4j/rest/products/id#{productDescriptionSearchClient.getProductColorId(productDescriptionSearchClient.selectedProduct)}"
+								width="170" height="190" id="image" cache="false"
+								rendered="#{productDescriptionSearchClient.selectedProduct != null}">
+							</p:graphicImage>
+						</p:commandLink>
+					</center>
+					<p:tooltip for="image" showEffect="fade" hideEffect="fade"
+						value="Click to open gallery"></p:tooltip>
+				</center>
+				<p:dialog header="Gallery" widgetVar="galleryDialog"
+					id="descriptionDlg" showEffect="fade" hideEffect="explode"
+					modal="true">
+					<p:galleria id="refreshMe"
+						value="#{productDescriptionSearchClient.photos}" var="image"
+						panelWidth="500" panelHeight="250" showCaption="false"
+						rendered="#{productDescriptionSearchClient.selectedProduct != null}">
+						<p:graphicImage url="#{image}" height="250"
+							rendered="#{productDescriptionSearchClient.selectedProduct != null}">>
+						</p:graphicImage>
+					</p:galleria>
+				</p:dialog>
 				<br />
 				<br />
 				<div class="products2">
@@ -137,7 +159,7 @@
 									<p:commandButton value="Add to cart" id="addButton"
 										styleClass="update-submit"
 										disabled="#{!productDescriptionSearchClient.isAvailabel}"
-										actionListener="#{cart.addProduct(productDescriptionSearchClient.productColorSize,productDescriptionSearchClient.nrOfPieces)}"
+										actionListener="#{cart.addProductFromPage(productDescriptionSearchClient.productColorSize,productDescriptionSearchClient.nrOfPieces)}"
 										update="selectProductColorSize,:cartLink:nrProducts,:cartLink:totalPrice,:cartLink:dialog"
 										style="width:173px" />
 								</div>
@@ -147,50 +169,6 @@
 					</ul>
 					<div class="cl">&nbsp;</div>
 				</div>
-			</h:form>
-
-			<br />
-			<br />
-
-			<b><p:outputLabel style="color: #8b0000;size: 3px"
-					value="Products recommanded for you"
-					rendered="#{recommandationClient.isEmpty()}" /></b>
-
-			<h:form id="recommand">
-				<br />
-				<br />
-				<p:carousel value="#{recommandationClient.recommandedProducts}"
-					var="p" itemStyle="width:237px"
-					styleClass="products-reduce-recommand"
-					rendered="#{recommandationClient.isEmpty()}">
-					<p:commandLink
-						actionListener="#{recommandationClient.chooseAProduct(p)}">
-						<center>
-							<p:graphicImage
-								url="http://localhost:8080/Shop4j/rest/products/id#{productColor.id}"
-								width="170" height="190" />
-							<div class="product-info">
-								<div class="reduction">
-									<p:outputLabel value="-#{p.reduction}%"
-										rendered="#{p.reduction != 0.0}"></p:outputLabel>
-								</div>
-								<h3>Product name</h3>
-								<p:outputLabel value="#{p.name}">
-								</p:outputLabel>
-								<br /> <br /> <strong class="price">Price</strong>
-								<p:outputLabel value="#{p.price}$"
-									rendered="#{p.reduction == 0.0}"></p:outputLabel>
-								<p:outputLabel value="#{p.price}$"
-									rendered="#{p.reduction != 0.0}"
-									style="text-decoration:line-through;"></p:outputLabel>
-								<br />
-								<p:outputLabel value="#{p.price - p.price * p.reduction / 100}$"
-									rendered="#{p.reduction != 0.0}"></p:outputLabel>
-								<br /> <br />
-							</div>
-						</center>
-					</p:commandLink>
-				</p:carousel>
 			</h:form>
 			<br />
 			<br />

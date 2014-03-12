@@ -1,6 +1,8 @@
 package com.siemens.ctbav.intership.shop.util.superadmin.validations;
 
 import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
@@ -19,19 +21,21 @@ public class SizeNameValidate implements Validator {
 	@Override
 	public void validate(FacesContext arg0, UIComponent component, Object value)
 			throws ValidatorException {
+		ResourceBundle messages = internationalization();
+
 		String name = value.toString();
 		if (name.length() < 1 || name.length() > 5 || name.equals(null)) {
 			throw new ValidatorException(new FacesMessage(
-					FacesMessage.SEVERITY_ERROR, "Invalid name",
-					"Length must be between 1 and 5 characters"));
+					FacesMessage.SEVERITY_ERROR, messages.getString("error"),
+					messages.getString("length")));
 		}
 
-		uniqueCheck(name);
+		uniqueCheck(name, messages);
 
 	}
 
 	@SuppressWarnings("unchecked")
-	private void uniqueCheck(String name) {
+	private void uniqueCheck(String name, ResourceBundle messages) {
 		SizeDTO search = new SizeDTO(name, null);
 
 		List<SizeDTO> allSizes = ConvertSize
@@ -40,8 +44,35 @@ public class SizeNameValidate implements Validator {
 
 		if (allSizes.contains(search)) {
 			throw new ValidatorException(new FacesMessage(
-					FacesMessage.SEVERITY_ERROR, "Invalid name",
-					"The category already has a size with the same name"));
+					FacesMessage.SEVERITY_ERROR, messages.getString("error"),
+					messages.getString("sizeExceptionUnique")));
 		}
+	}
+
+	private ResourceBundle internationalization() {
+		String language;
+		String country;
+
+		boolean isEnglishSelected;
+		Boolean b = (Boolean) FacesContext.getCurrentInstance()
+				.getExternalContext().getSessionMap().get("isEnglishSelected");
+		if (b == null)
+			isEnglishSelected = true;
+		else
+			isEnglishSelected = b;
+
+		if (isEnglishSelected) {
+			language = new String("en");
+			country = new String("US");
+		} else {
+			language = new String("ro");
+			country = new String("RO");
+		}
+
+		Locale currentLocale = new Locale(language, country);
+		ResourceBundle messages = ResourceBundle.getBundle(
+				"internationalization/superadmin/messages/sizes/Sizes",
+				currentLocale);
+		return messages;
 	}
 }

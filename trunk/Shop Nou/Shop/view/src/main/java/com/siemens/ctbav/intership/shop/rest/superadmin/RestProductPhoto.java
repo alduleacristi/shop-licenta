@@ -13,6 +13,7 @@ import com.siemens.ctbav.intership.shop.service.superadmin.*;
 @Stateless
 @Path("/products")
 public class RestProductPhoto {
+	
 	@EJB
 	PhotoService photoService;
 

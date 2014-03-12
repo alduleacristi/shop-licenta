@@ -8,6 +8,7 @@ import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
 import org.primefaces.context.RequestContext;
@@ -17,8 +18,10 @@ import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
 import com.siemens.ctbav.intership.shop.exception.superadmin.ColorException;
 import com.siemens.ctbav.intership.shop.model.Color;
+import com.siemens.ctbav.intership.shop.service.internationalization.InternationalizationService;
 import com.siemens.ctbav.intership.shop.service.superadmin.ColorService;
 import com.siemens.ctbav.intership.shop.util.superadmin.NavigationUtils;
+import com.siemens.ctbav.intership.shop.view.internationalization.enums.EColor;
 
 @ManagedBean(name = "colorsBean")
 @ViewScoped
@@ -30,6 +33,9 @@ public class ColorsBean implements Serializable {
 	@EJB
 	ColorService colorService;
 
+	@EJB
+	private InternationalizationService internationalizationService;
+
 	private String color;
 	private List<Color> allColors;
 	private Color selectedColor;
@@ -39,6 +45,28 @@ public class ColorsBean implements Serializable {
 	@PostConstruct
 	void initialization() {
 		allColors = colorService.getAllColors();
+		internationalizationInit();
+	}
+
+	private void internationalizationInit() {
+		boolean isEnglishSelected;
+		Boolean b = (Boolean) FacesContext.getCurrentInstance()
+				.getExternalContext().getSessionMap().get("isEnglishSelected");
+		if (b == null)
+			isEnglishSelected = true;
+		else
+			isEnglishSelected = b;
+		if (isEnglishSelected) {
+			String language = new String("en");
+			String country = new String("US");
+			internationalizationService.setCurrentLocale(language, country,
+					"internationalization/superadmin/messages/colors/Colors");
+		} else {
+			String language = new String("ro");
+			String country = new String("RO");
+			internationalizationService.setCurrentLocale(language, country,
+					"internationalization/superadmin/messages/colors/Colors");
+		}
 	}
 
 	public String getColor() {
@@ -99,13 +127,17 @@ public class ColorsBean implements Serializable {
 						selectedColor.getName(),
 						selectedColor.getDescription(), "#" + color);
 			}
-			msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Succes",
-					"Successfully edited!");
+			msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
+					internationalizationService.getMessage(EColor.SUCCESS
+							.getName()),
+					internationalizationService.getMessage(EColor.COLOR_EDITED
+							.getName()));
 			update = true;
 			allColors = colorService.getAllColors();
 		} catch (ColorException e) {
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
-					e.getMessage());
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+					internationalizationService.getMessage(EColor.ERROR
+							.getName()), e.getMessage());
 			update = false;
 		} finally {
 			setColor("");
@@ -121,8 +153,11 @@ public class ColorsBean implements Serializable {
 
 		colorService.addColor(newName, newDescription, "#" + color);
 		create = true;
-		msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Success",
-				"Color successfully added!");
+		msg = new FacesMessage(
+				FacesMessage.SEVERITY_INFO,
+				internationalizationService.getMessage(EColor.SUCCESS.getName()),
+				internationalizationService.getMessage(EColor.COLOR_ADDED
+						.getName()));
 
 		NavigationUtils.addMessage(msg);
 		context.addCallbackParam("create", create);
@@ -135,12 +170,16 @@ public class ColorsBean implements Serializable {
 
 		try {
 			colorService.removeColor(selectedColor.getId());
-			msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Success",
-					"Color successfully deleted!");
+			msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
+					internationalizationService.getMessage(EColor.SUCCESS
+							.getName()),
+					internationalizationService.getMessage(EColor.COLOR_DELETED
+							.getName()));
 			allColors = colorService.getAllColors();
 		} catch (ColorException e) {
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
-					e.getMessage());
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+					internationalizationService.getMessage(EColor.ERROR
+							.getName()), e.getMessage());
 		} finally {
 			setColor("");
 			NavigationUtils.addMessage(msg);

@@ -14,6 +14,7 @@ import javax.faces.validator.ValidatorException;
 import com.siemens.ctbav.intership.shop.convert.superadmin.ConvertSize;
 import com.siemens.ctbav.intership.shop.dto.superadmin.SizeDTO;
 import com.siemens.ctbav.intership.shop.model.Size;
+import com.siemens.ctbav.intership.shop.view.internationalization.enums.ESize;
 
 @FacesValidator("validateSize")
 public class SizeNameValidate implements Validator {
@@ -26,8 +27,9 @@ public class SizeNameValidate implements Validator {
 		String name = value.toString();
 		if (name.length() < 1 || name.length() > 5 || name.equals(null)) {
 			throw new ValidatorException(new FacesMessage(
-					FacesMessage.SEVERITY_ERROR, messages.getString("error"),
-					messages.getString("length")));
+					FacesMessage.SEVERITY_ERROR, messages.getString(ESize.ERROR
+							.getName()), messages.getString(ESize.LENGTH
+							.getName())));
 		}
 
 		uniqueCheck(name, messages);
@@ -44,8 +46,9 @@ public class SizeNameValidate implements Validator {
 
 		if (allSizes.contains(search)) {
 			throw new ValidatorException(new FacesMessage(
-					FacesMessage.SEVERITY_ERROR, messages.getString("error"),
-					messages.getString("sizeExceptionUnique")));
+					FacesMessage.SEVERITY_ERROR, messages.getString(ESize.ERROR
+							.getName()),
+					messages.getString(ESize.SIZE_EX_UNIQUE.getName())));
 		}
 	}
 

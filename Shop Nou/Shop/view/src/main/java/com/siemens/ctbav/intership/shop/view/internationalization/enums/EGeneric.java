@@ -19,5 +19,4 @@ public enum EGeneric {
 	public String toString() {
 		return this.name;
 	}
-
 }

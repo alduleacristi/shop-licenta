@@ -22,13 +22,11 @@ import com.siemens.ctbav.intership.shop.model.Size;
 })
 public class ProductColorSize implements Serializable {
 
-
+	private static final long serialVersionUID = 1L;
+	
 	public final static String GET_PRODUCT_COLOR_SIZE = "getProductbyColor,size,name";
 	public static final String GET_PRODUCT_COLOR_SIZE_BY_ID = "getColorProductSizeById";
 	public final static String GET_ALL_PRODUCTS_COLOR_SIZE = "getAllProductsColorSize";
-	
-	
-	private static final long serialVersionUID = -8254096206057865195L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

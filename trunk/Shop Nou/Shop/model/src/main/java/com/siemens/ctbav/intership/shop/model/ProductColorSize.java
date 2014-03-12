@@ -17,7 +17,7 @@ import com.siemens.ctbav.intership.shop.model.Size;
 
 @Entity(name = "product_color_size")
 @NamedQueries({
-		@NamedQuery(name = ProductColorSize.GET_ALL_PRODUCTS_COLOR_SIZE, query = "SELECT p FROM product_color_size p ") ,
+		@NamedQuery(name = ProductColorSize.GET_ALL_PRODUCTS_COLOR_SIZE, query = "SELECT p FROM product_color_size p "),
 		@NamedQuery(name=ProductColorSize.GET_PRODUCT_COLOR_SIZE, query="select p from product_color_size p where p.size.size=:size and p.productcolor.color.name=:color and p.productcolor.product.name=:name")
 })
 public class ProductColorSize implements Serializable {
@@ -25,7 +25,6 @@ public class ProductColorSize implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	public final static String GET_PRODUCT_COLOR_SIZE = "getProductbyColor,size,name";
-	public static final String GET_PRODUCT_COLOR_SIZE_BY_ID = "getColorProductSizeById";
 	public final static String GET_ALL_PRODUCTS_COLOR_SIZE = "getAllProductsColorSize";
 
 	@Id

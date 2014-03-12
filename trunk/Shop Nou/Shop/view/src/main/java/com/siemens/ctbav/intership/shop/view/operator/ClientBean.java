@@ -98,7 +98,7 @@ public class ClientBean {
 						"There are products ordered by this client; you can't delete it ");
 			}
 			userService.deleteUserClient(username);
-			FacesContext.getCurrentInstance().getExternalContext()
+			FacesContext.getCurrentInstance().getExternalContext();
 			FacesContext.getCurrentInstance().addMessage(
 					null,
 					new FacesMessage(FacesMessage.SEVERITY_INFO,

@@ -20,6 +20,7 @@ import com.siemens.ctbav.intership.shop.convert.operator.ConvertClient;
 import com.siemens.ctbav.intership.shop.convert.operator.ConvertCommand;
 import com.siemens.ctbav.intership.shop.dto.operator.ClientDTO;
 import com.siemens.ctbav.intership.shop.dto.operator.CommandDTO;
+
 import com.siemens.ctbav.intership.shop.exception.operator.ClientWithOrdersException;
 import com.siemens.ctbav.intership.shop.report.operator.GenerateCSV;
 import com.siemens.ctbav.intership.shop.report.operator.GenerateJson;
@@ -87,6 +88,7 @@ public class ClientBean {
 						"There are products ordered by this client; you can't delete it ");
 			}
 			userService.deleteUserClient(username);
+			FacesContext.getCurrentInstance().getExternalContext()
 			FacesContext.getCurrentInstance().addMessage(
 					null,
 					new FacesMessage(FacesMessage.SEVERITY_INFO,

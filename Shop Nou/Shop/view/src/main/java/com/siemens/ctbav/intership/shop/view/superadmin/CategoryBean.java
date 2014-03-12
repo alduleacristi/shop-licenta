@@ -21,10 +21,11 @@ import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
 import com.siemens.ctbav.intership.shop.exception.superadmin.CategoryException;
 import com.siemens.ctbav.intership.shop.model.Category;
+import com.siemens.ctbav.intership.shop.service.internationalization.InternationalizationService;
 import com.siemens.ctbav.intership.shop.service.superadmin.CategoryService;
 import com.siemens.ctbav.intership.shop.util.superadmin.NavigationUtils;
-import com.siemens.ctbav.intership.shop.util.superadmin.validations.CategoryNameValidate;
 import com.siemens.ctbav.intership.shop.util.superadmin.validations.CategoryUpdateNameValidate;
+import com.siemens.ctbav.intership.shop.view.internationalization.enums.ECategory;
 
 @URLMappings(mappings = { @URLMapping(id = "categories", pattern = "/superadmin/categories/", viewId = "categories.xhtml") })
 @ManagedBean(name = "categoryBean")
@@ -35,6 +36,9 @@ public class CategoryBean implements Serializable {
 
 	@EJB
 	private CategoryService categoryService;
+
+	@EJB
+	private InternationalizationService internationalizationService;
 
 	private TreeNode root;
 	private TreeNode rootUpdate;
@@ -54,6 +58,31 @@ public class CategoryBean implements Serializable {
 			selected = true;
 		setTheRootUpdate(categories);
 		NavigationUtils.addSuccesMessage();
+
+		internationalizationInit();
+	}
+
+	private void internationalizationInit() {
+		boolean isEnglishSelected;
+		Boolean b = (Boolean) FacesContext.getCurrentInstance()
+				.getExternalContext().getSessionMap().get("isEnglishSelected");
+		if (b == null)
+			isEnglishSelected = true;
+		else
+			isEnglishSelected = b;
+		if (isEnglishSelected) {
+			String language = new String("en");
+			String country = new String("US");
+			internationalizationService
+					.setCurrentLocale(language, country,
+							"internationalization/superadmin/messages/categories/Categories");
+		} else {
+			String language = new String("ro");
+			String country = new String("RO");
+			internationalizationService
+					.setCurrentLocale(language, country,
+							"internationalization/superadmin/messages/categories/Categories");
+		}
 	}
 
 	public TreeNode getRoot() {
@@ -125,22 +154,27 @@ public class CategoryBean implements Serializable {
 		try {
 			if (selectedNode == null) {
 				throw new CategoryException(
-						"You have to select a category to delete!");
+						internationalizationService
+								.getMessage(ECategory.NOCATEGORYSELECTED
+										.getName()));
 			}
 			deleteCategory();
 		} catch (CategoryException e) {
 			FacesMessage message = new FacesMessage(
-					FacesMessage.SEVERITY_ERROR, "Error", e.getMessage());
+					FacesMessage.SEVERITY_ERROR,
+					internationalizationService.getMessage(ECategory.ERROR
+							.getName()), e.getMessage());
 			NavigationUtils.addMessage(message);
 		} finally {
-			NavigationUtils
-					.redirect("/Shop4j/superadmin/categories");
+			NavigationUtils.redirect("/Shop4j/superadmin/categories");
 		}
 	}
 
 	private void deleteCategory() throws CategoryException {
 		if (selectedNode.getParent() == null) {
-			throw new CategoryException("Couldn't delete the root category");
+			throw new CategoryException(
+					internationalizationService
+							.getMessage(ECategory.DONTDELETEROOT.getName()));
 		}
 		if (!selectedNode.isLeaf()) {
 			changeParentOfTheChildren();
@@ -163,7 +197,10 @@ public class CategoryBean implements Serializable {
 		categoryService.removeCategory(((Category) selectedNode.getData())
 				.getId());
 		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
-				"Success!", "Category deleted!");
+				internationalizationService.getMessage(ECategory.SUCCESS
+						.getName()),
+				internationalizationService
+						.getMessage(ECategory.CATEGORYDELETED.getName()));
 		NavigationUtils.addMessage(message);
 	}
 
@@ -177,8 +214,9 @@ public class CategoryBean implements Serializable {
 			msg = checkAndCreateCategory();
 			create = true;
 		} catch (CategoryException e) {
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
-					e.getMessage());
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+					internationalizationService.getMessage(ECategory.ERROR
+							.getName()), e.getMessage());
 			create = false;
 		} finally {
 			NavigationUtils.addMessage(msg);
@@ -189,11 +227,10 @@ public class CategoryBean implements Serializable {
 	private FacesMessage checkAndCreateCategory() throws CategoryException {
 		if (selectedNode == null && root != null) {
 			throw new CategoryException(
-					"You must select the parent of the new category");
+					internationalizationService
+							.getMessage(ECategory.CREATEPARENTEXCEPTION
+									.getName()));
 		}
-		new CategoryNameValidate().validate(FacesContext.getCurrentInstance(),
-				null, newName);
-
 		if (root == null) {
 			categoryService.createRoot(newName);
 		} else {
@@ -202,7 +239,10 @@ public class CategoryBean implements Serializable {
 		}
 
 		FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
-				"Succes", "New category added");
+				internationalizationService.getMessage(ECategory.SUCCESS
+						.getName()),
+				internationalizationService.getMessage(ECategory.CATEGORYADDED
+						.getName()));
 		FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
 				.put("success", msg);
 		return msg;
@@ -221,8 +261,9 @@ public class CategoryBean implements Serializable {
 			msg = checkAndUpdateCategory();
 			update = true;
 		} catch (CategoryException e) {
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
-					e.getMessage());
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+					internationalizationService.getMessage(ECategory.ERROR
+							.getName()), e.getMessage());
 			update = false;
 		} finally {
 			NavigationUtils.addMessage(msg);
@@ -241,7 +282,8 @@ public class CategoryBean implements Serializable {
 				FacesContext.getCurrentInstance(), null, newName);
 		if (selectedNode == null) {
 			throw new CategoryException(
-					"You have to select a category in order to update it!");
+					internationalizationService
+							.getMessage(ECategory.NOCATEGORYSELECTED.getName()));
 		}
 		if (newName.equals("")) {
 			msg = keepOldName(msg, idCategory, idParent);
@@ -258,13 +300,21 @@ public class CategoryBean implements Serializable {
 		if (selectedParent == null
 				|| selectedParent.equals(selectedNode.getParent())) {
 			categoryService.updateCategoryName(idCategory, newName);
-			msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Succes",
-					"Category's name succesfully updated");
+			msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
+					internationalizationService.getMessage(ECategory.SUCCESS
+							.getName()),
+					internationalizationService
+							.getMessage(ECategory.CATEGORYSNAMEUPDATED
+									.getName()));
 		} else if (selectedParent != null) {
 			categoryService.updateCategoryNameAndParent(idCategory, idParent,
 					newName);
-			msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Succes",
-					"Category's parent and name succesfully updated");
+			msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
+					internationalizationService.getMessage(ECategory.SUCCESS
+							.getName()),
+					internationalizationService
+							.getMessage(ECategory.CATEGORYSNAMEANDPARENTUPDATED
+									.getName()));
 		}
 		return msg;
 	}
@@ -273,11 +323,17 @@ public class CategoryBean implements Serializable {
 			long idParent) throws CategoryException {
 		if (selectedParent == null
 				|| selectedParent.equals(selectedNode.getParent())) {
-			throw new CategoryException("Nothing to update");
+			throw new CategoryException(
+					internationalizationService
+							.getMessage(ECategory.NOTHINGTOUPDATE.getName()));
 		} else if (selectedParent != null) {
 			categoryService.updateCategoryParent(idCategory, idParent);
-			msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Succes",
-					"Category's parent succesfully updated");
+			msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
+					internationalizationService.getMessage(ECategory.SUCCESS
+							.getName()),
+					internationalizationService
+							.getMessage(ECategory.CATEGORYSPARENTUPDATED
+									.getName()));
 		}
 		return msg;
 	}

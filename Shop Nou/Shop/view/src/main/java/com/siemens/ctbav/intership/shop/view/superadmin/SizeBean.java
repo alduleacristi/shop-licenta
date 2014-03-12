@@ -22,9 +22,11 @@ import com.ocpsoft.pretty.faces.annotation.URLMappings;
 import com.siemens.ctbav.intership.shop.exception.superadmin.SizeException;
 import com.siemens.ctbav.intership.shop.model.Category;
 import com.siemens.ctbav.intership.shop.model.Size;
+import com.siemens.ctbav.intership.shop.service.internationalization.InternationalizationService;
 import com.siemens.ctbav.intership.shop.service.superadmin.SizeService;
 import com.siemens.ctbav.intership.shop.util.superadmin.NavigationUtils;
 import com.siemens.ctbav.intership.shop.util.superadmin.selectable.SelectableSize;
+import com.siemens.ctbav.intership.shop.view.internationalization.enums.ESize;
 
 @ManagedBean(name = "sizeBean")
 @ViewScoped
@@ -36,6 +38,9 @@ public class SizeBean implements Serializable {
 	@EJB
 	private SizeService sizeService;
 
+	@EJB
+	private InternationalizationService internationalizationService;
+
 	private String newName;
 	private boolean addSize;
 	private List<Size> parentsSizes;
@@ -44,6 +49,28 @@ public class SizeBean implements Serializable {
 
 	@PostConstruct
 	void init() {
+		internationalizationInit();
+	}
+
+	private void internationalizationInit() {
+		boolean isEnglishSelected;
+		Boolean b = (Boolean) FacesContext.getCurrentInstance()
+				.getExternalContext().getSessionMap().get("isEnglishSelected");
+		if (b == null)
+			isEnglishSelected = true;
+		else
+			isEnglishSelected = b;
+		if (isEnglishSelected) {
+			String language = new String("en");
+			String country = new String("US");
+			internationalizationService.setCurrentLocale(language, country,
+					"internationalization/superadmin/messages/sizes/Sizes");
+		} else {
+			String language = new String("ro");
+			String country = new String("RO");
+			internationalizationService.setCurrentLocale(language, country,
+					"internationalization/superadmin/messages/sizes/Sizes");
+		}
 	}
 
 	private void initSelectedSize(long idSelectedNode) {
@@ -154,17 +181,23 @@ public class SizeBean implements Serializable {
 			updateSizes();
 		} catch (SizeException e) {
 			FacesMessage message = new FacesMessage(
-					FacesMessage.SEVERITY_ERROR, "Error", e.getMessage());
+					FacesMessage.SEVERITY_ERROR, ESize.ERROR.getName(),
+					e.getMessage());
 			NavigationUtils.addMessage(message);
 		}
 	}
 
 	private void tryToDelete() throws SizeException {
 		if (selectedSize == null)
-			throw new SizeException("You have to select a size to delete!");
+			throw new SizeException(
+					internationalizationService.getMessage(ESize.SIZE_EX_SELECT
+							.getName()));
 		sizeService.removeSize(selectedSize.getId());
-		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
-				"Success!", "Size deleted!");
+		FacesMessage message = new FacesMessage(
+				FacesMessage.SEVERITY_INFO,
+				internationalizationService.getMessage(ESize.SUCCESS.getName()),
+				internationalizationService.getMessage(ESize.SIZE_DELETED
+						.getName()));
 		NavigationUtils.addMessage(message);
 	}
 
@@ -177,8 +210,9 @@ public class SizeBean implements Serializable {
 			create = true;
 			updateSizes();
 		} catch (SizeException e) {
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
-					e.getMessage());
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+					internationalizationService.getMessage(ESize.ERROR
+							.getName()), e.getMessage());
 			create = false;
 		} finally {
 			NavigationUtils.addMessage(msg);
@@ -191,10 +225,14 @@ public class SizeBean implements Serializable {
 				.getExternalContext().getSessionMap().get("selectedNode");
 		if (selectedNode == null)
 			throw new SizeException(
-					"You have to select a category in order to add a size");
+					internationalizationService
+							.getMessage(ESize.CATEG_EX_SELECT.getName()));
 		sizeService.createSize(newName, (Category) selectedNode.getData());
-		FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
-				"Succes", "New size added");
+		FacesMessage msg = new FacesMessage(
+				FacesMessage.SEVERITY_INFO,
+				internationalizationService.getMessage(ESize.SUCCESS.getName()),
+				internationalizationService.getMessage(ESize.SIZE_ADDED
+						.getName()));
 		return msg;
 	}
 
@@ -207,8 +245,9 @@ public class SizeBean implements Serializable {
 			update = true;
 			updateSizes();
 		} catch (SizeException e) {
-			new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
-					e.getMessage());
+			new FacesMessage(FacesMessage.SEVERITY_ERROR,
+					internationalizationService.getMessage(ESize.ERROR
+							.getName()), e.getMessage());
 			update = false;
 		} finally {
 			NavigationUtils.addMessage(msg);
@@ -221,8 +260,11 @@ public class SizeBean implements Serializable {
 		treatExceptionsUpdate();
 		long id = selectedSize.getId();
 		sizeService.updateSize(id, selectedSize.getSize());
-		FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
-				"Succes", "Size edited");
+		FacesMessage msg = new FacesMessage(
+				FacesMessage.SEVERITY_INFO,
+				internationalizationService.getMessage(ESize.SUCCESS.getName()),
+				internationalizationService.getMessage(ESize.SIZE_EDITED
+						.getName()));
 		return msg;
 	}
 
@@ -230,8 +272,12 @@ public class SizeBean implements Serializable {
 		TreeNode selectedNode = (TreeNode) FacesContext.getCurrentInstance()
 				.getExternalContext().getSessionMap().get("selectedNode");
 		if (selectedNode == null)
-			throw new SizeException("No category selected");
+			throw new SizeException(
+					internationalizationService
+							.getMessage(ESize.CATEG_EX_SELECT.getName()));
 		if (selectedSize == null)
-			throw new SizeException("No size selected");
+			throw new SizeException(
+					internationalizationService.getMessage(ESize.SIZE_EX_SELECT
+							.getName()));
 	}
 }

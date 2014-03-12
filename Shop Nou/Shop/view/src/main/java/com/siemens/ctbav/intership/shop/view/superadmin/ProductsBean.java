@@ -261,10 +261,6 @@ public class ProductsBean implements Serializable {
 		RequestContext context = RequestContext.getCurrentInstance();
 		boolean update = false;
 		FacesMessage msg = null;
-		/*
-		 * selectedProduct = (Product) FacesContext.getCurrentInstance()
-		 * .getExternalContext().getSessionMap().get("selectedProduct");
-		 */
 
 		try {
 			msg = tryToUpdate();
@@ -278,7 +274,6 @@ public class ProductsBean implements Serializable {
 			NavigationUtils.addMessage(msg);
 			context.addCallbackParam("update", update);
 		}
-
 	}
 
 	private FacesMessage tryToUpdate() throws ProductException {

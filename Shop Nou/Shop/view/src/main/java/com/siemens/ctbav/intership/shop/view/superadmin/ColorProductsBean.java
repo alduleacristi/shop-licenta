@@ -23,10 +23,12 @@ import com.siemens.ctbav.intership.shop.model.Category;
 import com.siemens.ctbav.intership.shop.model.Color;
 import com.siemens.ctbav.intership.shop.model.Product;
 import com.siemens.ctbav.intership.shop.model.ProductColor;
+import com.siemens.ctbav.intership.shop.service.internationalization.InternationalizationService;
 import com.siemens.ctbav.intership.shop.service.superadmin.ColorProductService;
 import com.siemens.ctbav.intership.shop.service.superadmin.ColorService;
 import com.siemens.ctbav.intership.shop.service.superadmin.ProductService;
 import com.siemens.ctbav.intership.shop.util.superadmin.NavigationUtils;
+import com.siemens.ctbav.intership.shop.view.internationalization.enums.EColorProducts;
 
 @URLMappings(mappings = { @URLMapping(id = "colorProducts", pattern = "/superadmin/genericProducts/colorProducts/", viewId = "colorProducts.xhtml") })
 @ManagedBean(name = "colorProductBean")
@@ -43,6 +45,9 @@ public class ColorProductsBean implements Serializable {
 	@EJB
 	ColorService colorService;
 
+	@EJB
+	private InternationalizationService internationalizationService;
+
 	private boolean selectedCategory;
 	private List<Product> productList;
 	private Product selectedProduct;
@@ -55,6 +60,30 @@ public class ColorProductsBean implements Serializable {
 	@PostConstruct
 	void init() {
 		allColors = colorService.getAllColors();
+		internationalizationInit();
+	}
+
+	private void internationalizationInit() {
+		boolean isEnglishSelected;
+		Boolean b = (Boolean) FacesContext.getCurrentInstance()
+				.getExternalContext().getSessionMap().get("isEnglishSelected");
+		if (b == null)
+			isEnglishSelected = true;
+		else
+			isEnglishSelected = b;
+		if (isEnglishSelected) {
+			String language = new String("en");
+			String country = new String("US");
+			internationalizationService
+					.setCurrentLocale(language, country,
+							"internationalization/superadmin/messages/colorProducts/ColorProducts");
+		} else {
+			String language = new String("ro");
+			String country = new String("RO");
+			internationalizationService
+					.setCurrentLocale(language, country,
+							"internationalization/superadmin/messages/colorProducts/ColorProducts");
+		}
 	}
 
 	public boolean isSelectedCategory() {
@@ -155,8 +184,9 @@ public class ColorProductsBean implements Serializable {
 			msg = addColor();
 			create = true;
 		} catch (ColorProductException e) {
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
-					e.getMessage());
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+					internationalizationService.getMessage(EColorProducts.ERROR
+							.getName()), e.getMessage());
 			create = false;
 		} finally {
 			NavigationUtils.addMessage(msg);
@@ -167,8 +197,11 @@ public class ColorProductsBean implements Serializable {
 	private FacesMessage addColor() {
 		FacesMessage msg;
 		colorProductService.addProductColor(selectedProduct, selectedColor);
-		msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Succes",
-				"Color added!");
+		msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
+				internationalizationService.getMessage(EColorProducts.SUCCESS
+						.getName()),
+				internationalizationService
+						.getMessage(EColorProducts.COLOR_ADDED.getName()));
 		updateListOfProducts();
 		updateSelectedProduct();
 		return msg;
@@ -176,7 +209,10 @@ public class ColorProductsBean implements Serializable {
 
 	private void uniqueCheck() throws ColorProductException {
 		if (selectedProduct == null || selectedColor == null)
-			throw new ColorProductException("No product or no color selected!");
+			throw new ColorProductException(
+					internationalizationService
+							.getMessage(EColorProducts.NO_PROD_OR_COL_SEL
+									.getName()));
 		List<ProductColor> pcs = selectedProduct.getProductColor();
 		List<Color> colors = new ArrayList<Color>();
 		for (ProductColor p : pcs) {
@@ -184,7 +220,9 @@ public class ColorProductsBean implements Serializable {
 				colors.add(p.getColor());
 		}
 		if (colors.contains(selectedColor))
-			throw new ColorProductException("Color already exists!");
+			throw new ColorProductException(
+					internationalizationService
+							.getMessage(EColorProducts.COLOR_EXISTS.getName()));
 	}
 
 	public void edit(ActionEvent actionEvent) {
@@ -195,8 +233,9 @@ public class ColorProductsBean implements Serializable {
 			msg = tryToEdit();
 			update = true;
 		} catch (ColorProductException e) {
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
-					e.getMessage());
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+					internationalizationService.getMessage(EColorProducts.ERROR
+							.getName()), e.getMessage());
 			update = false;
 		} finally {
 			NavigationUtils.addMessage(msg);
@@ -206,17 +245,23 @@ public class ColorProductsBean implements Serializable {
 
 	private FacesMessage tryToEdit() throws ColorProductException {
 		FacesMessage msg = null;
-		if (selectedProduct == null)
-			throw new ColorProductException("No product selected");
-		if (selectedProductColor == null)
+		if (selectedProduct == null || selectedProductColor == null)
 			throw new ColorProductException(
-					"No color selected in order to update it");
+					internationalizationService
+							.getMessage(EColorProducts.NO_PROD_OR_COL_SEL
+									.getName()));
 		if (selectedColor == null)
-			throw new ColorProductException("No new color selected");
+			throw new ColorProductException(
+					internationalizationService
+							.getMessage(EColorProducts.NO_NEW_COL_SEL.getName()));
 		uniqueCheck();
 		colorProductService.editProductColor(selectedProductColor,
 				selectedColor);
-		msg = new FacesMessage("Success!", "Color updated!");
+		msg = new FacesMessage(
+				internationalizationService.getMessage(EColorProducts.SUCCESS
+						.getName()),
+				internationalizationService
+						.getMessage(EColorProducts.COLOR_UPDATED.getName()));
 
 		updateListOfProducts();
 		updateSelectedProduct();
@@ -228,8 +273,9 @@ public class ColorProductsBean implements Serializable {
 		try {
 			msg = tryToDelete();
 		} catch (ColorProductException e) {
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
-					e.getMessage());
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+					internationalizationService.getMessage(EColorProducts.ERROR
+							.getName()), e.getMessage());
 		} finally {
 			NavigationUtils.addMessage(msg);
 		}
@@ -239,10 +285,16 @@ public class ColorProductsBean implements Serializable {
 	private FacesMessage tryToDelete() throws ColorProductException {
 		FacesMessage msg;
 		if (selectedProductColor == null)
-			throw new ColorProductException("No color was selected");
+			throw new ColorProductException(
+					internationalizationService
+							.getMessage(EColorProducts.NO_PROD_OR_COL_SEL
+									.getName()));
 		colorProductService.removeProductColor(selectedProductColor.getId());
-		msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Succes",
-				"Color successfully deleted!");
+		msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
+				internationalizationService.getMessage(EColorProducts.SUCCESS
+						.getName()),
+				internationalizationService
+						.getMessage(EColorProducts.COLOR_DELETED.getName()));
 
 		updateListOfProducts();
 		updateSelectedProduct();

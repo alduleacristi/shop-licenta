@@ -23,8 +23,10 @@ import com.siemens.ctbav.intership.shop.dto.superadmin.ProductDTO;
 import com.siemens.ctbav.intership.shop.exception.superadmin.ProductException;
 import com.siemens.ctbav.intership.shop.model.Product;
 import com.siemens.ctbav.intership.shop.model.Category;
+import com.siemens.ctbav.intership.shop.service.internationalization.InternationalizationService;
 import com.siemens.ctbav.intership.shop.service.superadmin.ProductService;
 import com.siemens.ctbav.intership.shop.util.superadmin.NavigationUtils;
+import com.siemens.ctbav.intership.shop.view.internationalization.enums.EGenericProduct;
 
 @URLMappings(mappings = { @URLMapping(id = "products", pattern = "/superadmin/genericProducts/", viewId = "products.xhtml") })
 @ManagedBean(name = "productBean")
@@ -36,6 +38,9 @@ public class ProductsBean implements Serializable {
 	@EJB
 	ProductService productService;
 
+	@EJB
+	private InternationalizationService internationalizationService;
+
 	private boolean selectedCategory;
 	private List<Product> productList;
 	private Product selectedProduct;
@@ -44,6 +49,30 @@ public class ProductsBean implements Serializable {
 	@PostConstruct
 	void init() {
 		newProduct = new ProductDTO();
+		internationalizationInit();
+	}
+
+	private void internationalizationInit() {
+		boolean isEnglishSelected;
+		Boolean b = (Boolean) FacesContext.getCurrentInstance()
+				.getExternalContext().getSessionMap().get("isEnglishSelected");
+		if (b == null)
+			isEnglishSelected = true;
+		else
+			isEnglishSelected = b;
+		if (isEnglishSelected) {
+			String language = new String("en");
+			String country = new String("US");
+			internationalizationService
+					.setCurrentLocale(language, country,
+							"internationalization/superadmin/messages/genericProducts/GenericProducts");
+		} else {
+			String language = new String("ro");
+			String country = new String("RO");
+			internationalizationService
+					.setCurrentLocale(language, country,
+							"internationalization/superadmin/messages/genericProducts/GenericProducts");
+		}
 	}
 
 	public boolean isSelectedCategory() {
@@ -106,7 +135,10 @@ public class ProductsBean implements Serializable {
 			updateList();
 		} catch (ProductException e) {
 			FacesMessage message = new FacesMessage(
-					FacesMessage.SEVERITY_ERROR, "Error", e.getMessage());
+					FacesMessage.SEVERITY_ERROR,
+					internationalizationService
+							.getMessage(EGenericProduct.ERROR.getName()),
+					e.getMessage());
 			NavigationUtils.addMessage(message);
 		}
 	}
@@ -114,10 +146,14 @@ public class ProductsBean implements Serializable {
 	private void tryToDelete() throws ProductException {
 		if (selectedProduct == null)
 			throw new ProductException(
-					"You have to select a product to delete!");
+					internationalizationService
+							.getMessage(EGenericProduct.SEL_PROD_ERR.getName()));
 		productService.removeProduct(selectedProduct.getId());
 		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
-				"Success!", "Product deleted!");
+				internationalizationService.getMessage(EGenericProduct.SUCCESS
+						.getName()),
+				internationalizationService
+						.getMessage(EGenericProduct.PROD_DELETED.getName()));
 		NavigationUtils.addMessage(message);
 	}
 
@@ -130,7 +166,9 @@ public class ProductsBean implements Serializable {
 			create = true;
 			updateList();
 		} catch (ProductException e) {
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+					internationalizationService
+							.getMessage(EGenericProduct.ERROR.getName()),
 					e.getMessage());
 			create = false;
 		} finally {
@@ -148,15 +186,20 @@ public class ProductsBean implements Serializable {
 
 		long idCategory = ((Category) selectedNode.getData()).getId();
 		productService.createProduct(newProduct, idCategory);
-		msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Succes",
-				"New product added");
+		msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
+				internationalizationService.getMessage(EGenericProduct.SUCCESS
+						.getName()),
+				internationalizationService
+						.getMessage(EGenericProduct.PROD_ADDED.getName()));
 		return msg;
 	}
 
 	private void createExceptions(TreeNode selectedNode)
 			throws ProductException {
 		if (selectedNode == null)
-			throw new ProductException("No category selected");
+			throw new ProductException(
+					internationalizationService
+							.getMessage(EGenericProduct.NO_CATEG_SEL.getName()));
 
 		List<ProductDTO> productsDto = ConvertProduct
 				.convertProducts(productList);
@@ -165,7 +208,10 @@ public class ProductsBean implements Serializable {
 		newProduct.setCategory(c);
 
 		if (productsDto.contains(newProduct))
-			throw new ProductException("Cannot duplicate a product");
+			throw new ProductException(
+					internationalizationService
+							.getMessage(EGenericProduct.DUPLICATE_PROD
+									.getName()));
 	}
 
 	public void changeCategory(ActionEvent actionEvent) {
@@ -180,7 +226,9 @@ public class ProductsBean implements Serializable {
 			msg = tryToChangeParent();
 			change = true;
 		} catch (ProductException e) {
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+					internationalizationService
+							.getMessage(EGenericProduct.ERROR.getName()),
 					e.getMessage());
 			change = false;
 		} finally {
@@ -203,7 +251,10 @@ public class ProductsBean implements Serializable {
 		long idCategory = uniqueCheck(selectedParent, isSon, isParent);
 		productService.changeParent(selectedProduct.getId(), idCategory);
 		FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
-				"Succes", "Product's category changed");
+				internationalizationService.getMessage(EGenericProduct.SUCCESS
+						.getName()),
+				internationalizationService
+						.getMessage(EGenericProduct.CATEG_CHANGED.getName()));
 		productList.clear();
 		productList.addAll(productService
 				.getGenericProductsByCategory(idCategory));
@@ -213,13 +264,19 @@ public class ProductsBean implements Serializable {
 	private void updateParentExceptions(TreeNode selectedNode,
 			TreeNode selectedParent) throws ProductException {
 		if (selectedNode == null) {
-			throw new ProductException("No category selected");
+			throw new ProductException(
+					internationalizationService
+							.getMessage(EGenericProduct.NO_CATEG_SEL.getName()));
 		}
 		if (selectedProduct == null) {
-			throw new ProductException("No product selected");
+			throw new ProductException(
+					internationalizationService
+							.getMessage(EGenericProduct.SEL_PROD_ERR.getName()));
 		}
 		if (selectedParent == null) {
-			throw new ProductException("Not a new parent selected");
+			throw new ProductException(
+					internationalizationService
+							.getMessage(EGenericProduct.NO_PARENT_SEL.getName()));
 		}
 	}
 
@@ -239,7 +296,10 @@ public class ProductsBean implements Serializable {
 		ProductDTO productDto = ConvertProduct.convertProduct(selectedProduct);
 
 		if (productsDto.contains(productDto)) {
-			throw new ProductException("Cannot duplicate the product");
+			throw new ProductException(
+					internationalizationService
+							.getMessage(EGenericProduct.DUPLICATE_PROD
+									.getName()));
 		}
 	}
 
@@ -267,7 +327,9 @@ public class ProductsBean implements Serializable {
 			update = true;
 			updateList();
 		} catch (ProductException e) {
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+					internationalizationService
+							.getMessage(EGenericProduct.ERROR.getName()),
 					e.getMessage());
 			update = false;
 		} finally {
@@ -288,23 +350,32 @@ public class ProductsBean implements Serializable {
 
 		productService.updateProduct(selectedProduct.getId(), selectedProduct);
 
-		msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Succes",
-				"Product successfully updated!");
+		msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
+				internationalizationService.getMessage(EGenericProduct.SUCCESS
+						.getName()),
+				internationalizationService
+						.getMessage(EGenericProduct.PROD_UPDATED.getName()));
 		return msg;
 	}
 
 	private Product updateFieldsExceptions(TreeNode selectedNode)
 			throws ProductException {
 		if (selectedNode == null)
-			throw new ProductException("No category selected");
+			throw new ProductException(
+					internationalizationService
+							.getMessage(EGenericProduct.NO_CATEG_SEL.getName()));
 
 		if (selectedProduct == null)
-			throw new ProductException("No product selected");
+			throw new ProductException(
+					internationalizationService
+							.getMessage(EGenericProduct.SEL_PROD_ERR.getName()));
 
 		Product oldProduct = productService
 				.findProduct(selectedProduct.getId());
 		if (oldProduct == null)
-			throw new ProductException("No such product in the database");
+			throw new ProductException(
+					internationalizationService
+							.getMessage(EGenericProduct.NO_PROD_IN_DB.getName()));
 		return oldProduct;
 	}
 

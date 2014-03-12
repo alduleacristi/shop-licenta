@@ -22,7 +22,7 @@
 					height="100" />
 			</div>
 			<br />
-			In order to add, edit or delete you have to pick a category
+			#{internationalizationGenericProducts.message}
 			<br />
 			<br />
 
@@ -49,37 +49,41 @@
 			<h:form id="formCreate">
 
 				<p:growl id="messages2" showDetail="true" />
-				<h:commandButton id="createLink" value="Create product"
-					type="button" onclick="create.show()" styleClass="update-submit"
+				<h:commandButton id="createLink"
+					value="#{internationalizationGeneric.create}" type="button"
+					onclick="create.show()" styleClass="update-submit"
 					rendered="#{productBean.selectedCategory}" />
 				<br />
 				<br />
 
-				<p:dialog header="Create a new product" modal="true"
-					widgetVar="create" focus="name" resizable="false">
+				<p:dialog header="#{internationalizationGeneric.create}"
+					modal="true" widgetVar="create" focus="name" resizable="false">
 
 					<h:panelGrid columns="2" cellpadding="5">
-						<h:outputLabel for="name" value="Product's name:" />
+						<h:outputLabel for="name"
+							value="#{internationalizationGenericProducts.productName}:" />
 						<p:inputText id="name" label="name" required="true"
-							requiredMessage="Name is required"
+							requiredMessage="#{internationalizationGenericProducts.nameIsRequired}"
 							value="#{productBean.newProduct.name}">
 							<f:validator validatorId="validateProductName" />
 						</p:inputText>
-						<h:outputLabel for="price" value="Product's price:" />
+						<h:outputLabel for="price"
+							value="#{internationalizationGenericProducts.productPrice}:" />
 						<p:inputText id="price" label="price" required="true"
-							requiredMessage="Price is required"
+							requiredMessage="#{internationalizationGenericProducts.priceIsRequired}"
 							value="#{productBean.newProduct.price}">
 							<f:validator validatorId="validateProductPrice" />
 						</p:inputText>
-						<h:outputText value="Product's description: " />
+						<h:outputText
+							value="#{internationalizationGenericProducts.productDescription}: " />
 						<p:inputTextarea cols="22" rows="10" maxlength="200"
 							maxLength="200" value="#{productBean.newProduct.description}" />
-						<p:commandButton value="Create"
+						<p:commandButton value="#{internationalizationGeneric.create}"
 							actionListener="#{productBean.create}"
 							update="messages2, :formProducts:dataGrid"
 							oncomplete="handleCreateRequest(xhr, status, args)" />
-						<p:commandButton value="Cancel" onclick="create.hide();"
-							type="button" />
+						<p:commandButton value="#{internationalizationGeneric.cancel}"
+							onclick="create.hide();" type="button" />
 					</h:panelGrid>
 
 				</p:dialog>
@@ -112,9 +116,11 @@
 					<p:column>
 
 						<p:panel header="#{product.name}" style="text-align:center">
-							<h:outputText value="Category: #{product.category.name}" />
+							<h:outputText
+								value="#{internationalizationGenericProducts.category}: #{product.category.name}" />
 							<br />
-							<p:outputLabel value="Price:"
+							<p:outputLabel
+								value="#{internationalizationGenericProducts.price}:"
 								rendered="#{product.reduction == 0.0}" />
 							<strong class="price"> <p:outputLabel
 									value="$#{product.price}"
@@ -125,13 +131,15 @@
 							<strong class="price"> <p:outputLabel
 									value="$#{product.price-product.price*product.reduction/100}"
 									rendered="#{product.reduction != 0.0}"></p:outputLabel></strong>
-							<h:outputText value="Description:" />
+							<h:outputText
+								value="#{internationalizationGenericProducts.description}:" />
 							<br />
 							<p:inputTextarea cols="20" rows="11" maxlength="200"
 								value="#{product.description}" readonly="true">
 							</p:inputTextarea>
 							<br />
-							<h:outputText value="SALE: #{product.reduction}%" />
+							<h:outputText
+								value="#{internationalizationGenericProducts.sale}: #{product.reduction}%" />
 							<br />
 							<p:commandLink update=":formProducts:productDetail"
 								oncomplete="productDialog.show()" title="View Detail">
@@ -146,50 +154,62 @@
 
 				</p:dataGrid>
 
-				<p:dialog header="Product Detail" widgetVar="productDialog"
-					modal="true">
+				<p:dialog
+					header="#{internationalizationGenericProducts.productDetail}"
+					widgetVar="productDialog" modal="true">
 					<p:outputPanel id="productDetail" style="text-align:center;">
 
 						<h:panelGrid columns="2" cellpadding="4"
 							rendered="#{productBean.selectedProduct != null}">
-							<h:outputText value="Product's name: " />
+							<h:outputText
+								value="#{internationalizationGenericProducts.productName}: " />
 							<p:inputText value="#{productBean.selectedProduct.name}"
-								required="true" requiredMessage="Name is required">
+								required="true"
+								requiredMessage="#{internationalizationGenericProducts.nameIsRequired}">
 								<f:validator validatorId="validateProductName" />
 							</p:inputText>
-							<h:outputText value="Product's category: " />
+							<h:outputText
+								value="#{internationalizationGenericProducts.productCategory}: " />
 							<p:inputText value="#{productBean.selectedProduct.category.name}"
 								readonly="true" />
-							<h:outputText value="Change the product's category" />
+							<h:outputText
+								value="#{internationalizationGenericProducts.changeParent}:" />
 							<p:commandLink update=":formProducts:productDetail"
 								oncomplete="categoryDialog.show()" title="Change Category">
 								<h:outputText styleClass="ui-icon ui-icon-search"
 									style="margin:0 auto;" />
 							</p:commandLink>
-							<h:outputText value="Product's price: " />
+							<h:outputText
+								value="#{internationalizationGenericProducts.productPrice}: " />
 							<p:inputText value="#{productBean.selectedProduct.price}"
-								required="true" requiredMessage="Price is required">
+								required="true"
+								requiredMessage="#{internationalizationGenericProducts.priceIsRequired}">
 								<f:validator validatorId="validateProductPrice" />
 							</p:inputText>
-							<h:outputText value="Product's description: " />
+							<h:outputText
+								value="#{internationalizationGenericProducts.productDescription}: " />
 							<p:inputTextarea cols="22" rows="10" maxlength="200"
 								value="#{productBean.selectedProduct.description}"
 								maxLength="200" />
-							<p:commandButton value="Update"
+							<p:commandButton value="#{internationalizationGeneric.update}"
 								actionListener="#{productBean.update}"
 								update="messages1, :formProducts:dataGrid"
 								oncomplete="handleUpdateRequest(xhr, status, args)" />
-							<p:commandButton value="Delete" type="button" onclick="cd.show()"
-								immediate="true" process="@this" />
+							<p:commandButton value="#{internationalizationGeneric.delete}"
+								type="button" onclick="cd.show()" immediate="true"
+								process="@this" />
 
-							<p:dialog header="Confirmation" widgetVar="cd" resizable="false">
-								<h:outputText value="Are you sure?" />
+							<p:dialog header="#{internationalizationGeneric.confirmation}"
+								widgetVar="cd" resizable="false">
+								<h:outputText
+									value="#{internationalizationGeneric.confirmMessage}" />
 								<br />
-								<p:commandButton value="Yes"
+								<p:commandButton value="#{internationalizationGeneric.yes}"
 									actionListener="#{productBean.delete}"
 									update="messages1, :formProducts:dataGrid"
 									oncomplete="cd.hide(), productDialog.hide()" immediate="true" />
-								<p:commandButton value="No" onclick="cd.hide();" type="button" />
+								<p:commandButton value="#{internationalizationGeneric.no}"
+									onclick="cd.hide();" type="button" />
 							</p:dialog>
 
 						</h:panelGrid>
@@ -198,7 +218,7 @@
 
 				</p:dialog>
 
-				<p:dialog header="Change Category" widgetVar="categoryDialog">
+				<p:dialog header="#{internationalizationGenericProducts.changeParent}" widgetVar="categoryDialog">
 
 					<h:form id="formTreeUpdate">
 
@@ -217,7 +237,7 @@
 						<br />
 					</h:form>
 
-					<p:commandButton value="Change"
+					<p:commandButton value="#{internationalizationGenericProducts.changeParent}"
 						actionListener="#{productBean.changeCategory}"
 						update="messages1, :formProducts:dataGrid"
 						oncomplete="handleChangeCategoryRequest(xhr, status, args)" />

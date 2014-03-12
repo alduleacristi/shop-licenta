@@ -70,6 +70,14 @@ public class User implements Serializable {
 		this.email = email;
 	}
 
+	public User(String username, String userPassword, String rolename,
+			String email) {
+		this.username = username;
+		this.userPassword = userPassword;
+		this.rolename = rolename;
+		this.email = email;
+	}
+
 	public String getEmail() {
 		return this.email;
 	}

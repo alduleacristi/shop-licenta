@@ -27,10 +27,12 @@ import org.hibernate.annotations.NamedNativeQuery;
 @Entity
 @NamedQueries({ @NamedQuery(name = Category.GET_ALL_CATEGORIES, query = "SELECT c FROM Category c") })
 public class Category implements Serializable {
+
 	private static final long serialVersionUID = 1L;
+
 	public static final String GET_ALL_CATEGORIES = "getAllCategories";
-	public static final String GET_PARENTS_CATEGORY = "callParentsCategory";
-	public static final String GET_CHILDREN_CATEGORY = "callChildrenCategory";
+	public static final String GET_PARENTS_CATEGORY = "getParentsCategory";
+	public static final String GET_CHILDREN_CATEGORY = "getChildrenCategory";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

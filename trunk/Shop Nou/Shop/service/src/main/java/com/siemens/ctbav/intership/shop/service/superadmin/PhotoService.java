@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.jcr.ItemExistsException;
 import javax.jcr.LoginException;
@@ -28,8 +29,13 @@ import org.apache.jackrabbit.commons.JcrUtils;
 import org.apache.jackrabbit.value.BinaryValue;
 import org.primefaces.event.FileUploadEvent;
 
+import com.siemens.ctbav.intership.shop.conf.ConfigurationService;
+
 @Stateless(name = "photoService")
 public class PhotoService {
+
+	@EJB
+	private ConfigurationService confService;
 
 	private Repository repository;
 	private SimpleCredentials creds;
@@ -161,7 +167,7 @@ public class PhotoService {
 		String name = event.getFile().getFileName();
 		while (n.hasNext()) {
 			Node aux = n.nextNode();
-			if(name.equals(aux.getName()))
+			if (name.equals(aux.getName()))
 				throw new RepositoryException("Photo already exists");
 		}
 	}
@@ -228,7 +234,7 @@ public class PhotoService {
 			PathNotFoundException, IOException {
 		Node aux = n.nextNode();
 		StringBuilder sb = new StringBuilder(50);
-		sb.append("http://localhost:8080/Shop4j/rest/products/" + path);
+		sb.append(confService.getHost() + "/Shop4j/rest/products/" + path);
 		sb.append("/" + aux.getName());
 
 		return sb.toString();

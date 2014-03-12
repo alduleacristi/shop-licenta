@@ -17,7 +17,6 @@ public class CommandDTO implements Serializable {
 	private CommandStatusDTO status;
 	private Long id_operator;
 	private List<ClientProductDTO> listProducts;
-	private boolean deliverable;
 	
 	
 	public CommandDTO(Long id, Date orderDate, Date deliveryDate,
@@ -75,13 +74,6 @@ public class CommandDTO implements Serializable {
 	public void setId_operator(Long id_operator) {
 		this.id_operator = id_operator;
 	}
-	public boolean isDeliverable() {
-		return deliverable;
-	}
-	public void setDeliverable(boolean deliverable) {
-		this.deliverable = deliverable;
-	}
-
 	
 	
 }

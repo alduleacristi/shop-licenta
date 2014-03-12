@@ -14,7 +14,7 @@ import com.siemens.ctbav.intership.shop.model.Command;
 public class ConvertClient {
 
 	public static List<ClientDTO> convertClientListDate(List<Client> list) {
-		System.out.println("in metoda");
+	//	System.out.println("in metoda");
 		List<ClientDTO> dtoList = new ArrayList<ClientDTO>();
 		for (Client client : list)
 			dtoList.add(convertClientWithDate(client));
@@ -58,7 +58,7 @@ public class ConvertClient {
 		for (Command c : list) {
 			System.out.println(c.getOrderDate());
 			if (c.getOrderDate().compareTo(lastDate) > 0) {
-				System.out.println(c.getOrderDate());
+			//	System.out.println(c.getOrderDate());
 				lastDate = c.getOrderDate();
 			}
 		}
@@ -79,6 +79,5 @@ public class ConvertClient {
 		return dtoList;
 
 	}
-
 	
 }

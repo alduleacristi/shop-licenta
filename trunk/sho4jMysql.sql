@@ -227,6 +227,7 @@ create table command(
     id_adress bigint not null,
     id_client bigint not null,
     id_status bigint not null,
+	id_operator bigint not null,
     foreign key command_adress(id_adress)
     references adress(id)
     on update no action
@@ -239,8 +240,10 @@ create table command(
     references command_status(id)
     on update no action
     on delete no action,
-    return_date Date
-
+	foreign key command_operator(id_operator)
+	references user(id)
+	on update no action
+	on delete no action
 );
 
 drop table if exists client_product;

@@ -189,25 +189,19 @@
 					</p:dialog>
 					<br></br>
 					<br></br>
+					<br />
+					<h:selectManyCheckbox value="#{orders.reports}">
 
-					<h:commandButton value="PDF export" icon="pdf-icon">
-						<p:dataExporter type="pdf" target="display"
-							fileName="#{orders.filename}"></p:dataExporter>
-					</h:commandButton>
-					&nbsp;&nbsp;
-					<h:commandButton value="CSV export" icon="csv-icon">
-						<p:dataExporter type="csv" target="display"
-							fileName="#{orders.filename}"></p:dataExporter>
-					</h:commandButton>
-					&nbsp;&nbsp;
-					<h:commandButton value="XML export" icon="xml-icon">
-						<p:dataExporter type="xml" target="display"
-							fileName="#{orders.filename}"></p:dataExporter>
-					</h:commandButton>
-					&nbsp;&nbsp;
-					<h:commandButton value="JSON export"
-						actionListener="#{orders.generateJson}">
-					</h:commandButton>
+						<f:selectItem itemValue="1" itemLabel="PDF" />
+						<f:selectItem itemValue="2" itemLabel="XML" />
+						<f:selectItem itemValue="3" itemLabel="JSON" />
+						<f:selectItem itemValue="4" itemLabel="CSV" />
+					</h:selectManyCheckbox>
+
+					<p:commandButton value="Generate my reports, please"
+						styleClass="search-submitLong"
+						actionListener="#{orders.generateReports}" update=":form:error" />
+
 				</p:growl>
 			</h:form>
 		</ui:define>

@@ -21,6 +21,7 @@ import com.ocpsoft.pretty.faces.annotation.URLMappings;
 import com.siemens.ctbav.intership.shop.convert.client.ConvertProductColorSizeNumber;
 import com.siemens.ctbav.intership.shop.dto.client.ProductColorSizeNumberDTO;
 import com.siemens.ctbav.intership.shop.exception.client.ProductColorSizeDoesNotExistException;
+import com.siemens.ctbav.intership.shop.model.Adress;
 import com.siemens.ctbav.intership.shop.model.Client;
 import com.siemens.ctbav.intership.shop.model.ProductColorSize;
 import com.siemens.ctbav.intership.shop.service.client.ProductColorSizeService;
@@ -28,7 +29,9 @@ import com.siemens.ctbav.intership.shop.util.client.CookieEncryption;
 
 @ManagedBean(name = "cart")
 @SessionScoped
-@URLMappings(mappings = { @URLMapping(id = "cartClient", pattern = "/client/user/Cart", viewId = "/client/user/cart.xhtml"), })
+@URLMappings(mappings = {
+		@URLMapping(id = "cartClient", pattern = "/client/user/Cart", viewId = "/client/user/cart.xhtml"),
+		@URLMapping(id = "sendCommand", pattern = "/client/user/sendCommand", viewId = "/client/user/sendCommand.xhtml") })
 public class Cart {
 	private Map<ProductColorSize, Integer> cart;
 
@@ -39,6 +42,8 @@ public class Cart {
 	private List<ProductColorSizeNumberDTO> products;
 
 	private ProductColorSize selectedProductForDescription;
+	
+	private Adress accountAdress;
 
 	@EJB
 	ProductColorSizeService productColorSizeService;
@@ -104,6 +109,14 @@ public class Cart {
 		this.cart = cart;
 	}
 
+	public Adress getAccountAdress() {
+		return accountAdress;
+	}
+
+	public void setAccountAdress(Adress accountAdress) {
+		this.accountAdress = accountAdress;
+	}
+
 	public boolean isEmpty() {
 		if (cart.size() == 0)
 			return false;
@@ -111,7 +124,11 @@ public class Cart {
 		return true;
 	}
 
-	public void addProduct(ProductColorSize pcs, Integer nrOfProducts) {
+	private void addProductFromCookie(ProductColorSize pcs, Integer nrOfProducts) {
+		addProduct(pcs, nrOfProducts);
+	}
+
+	private void addProduct(ProductColorSize pcs, Integer nrOfProducts) {
 		if (pcs == null) {
 			FacesContext context = FacesContext.getCurrentInstance();
 			context.addMessage(null, new FacesMessage(
@@ -142,7 +159,8 @@ public class Cart {
 					+ nrOfProducts
 					* (pcs.getProductcolor().getProduct().getPrice() - pcs
 							.getProductcolor().getProduct().getPrice()
-					* pcs.getProductcolor().getProduct().getReduction() / 100));
+							* pcs.getProductcolor().getProduct().getReduction()
+							/ 100));
 		} else {
 			cart.put(pcs, nrOfProducts);
 			setNrOfProducts(getNrOfProducts() + 1);
@@ -150,13 +168,24 @@ public class Cart {
 					+ nrOfProducts
 					* (pcs.getProductcolor().getProduct().getPrice() - pcs
 							.getProductcolor().getProduct().getPrice()
-					* pcs.getProductcolor().getProduct().getReduction() / 100));
+							* pcs.getProductcolor().getProduct().getReduction()
+							/ 100));
 		}
 
 		setProducts();
-		FacesContext context = FacesContext.getCurrentInstance();
-		context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
-				"Succes", "Products added succesfully"));
+	}
+
+	public void addProductFromPage(ProductColorSize pcs, Integer nrOfProducts) {
+		addProduct(pcs, nrOfProducts);
+
+		FacesContext
+				.getCurrentInstance()
+				.getExternalContext()
+				.getSessionMap()
+				.put("addProductMessage",
+						"The product was added succesfully to cart.");
+
+		redirect("/Shop4j/client/user/recommandation");
 	}
 
 	public void removeProduct(ProductColorSizeNumberDTO productDTO) {
@@ -193,7 +222,7 @@ public class Cart {
 			try {
 				ProductColorSize product = productColorSizeService
 						.getProductColorSizeById(ob.getKey());
-				addProduct(product, ob.getValue());
+				addProductFromCookie(product, ob.getValue());
 			} catch (ProductColorSizeDoesNotExistException e) {
 				FacesContext context = FacesContext.getCurrentInstance();
 				context.addMessage(
@@ -313,5 +342,23 @@ public class Cart {
 			}
 		}
 
+	}
+
+	private void redirect(String url) {
+		FacesContext fc = FacesContext.getCurrentInstance();
+
+		try {
+			fc.getExternalContext().getFlash().setKeepMessages(true);
+			fc.getExternalContext().redirect(url);
+		} catch (IOException e) {
+			e.printStackTrace();
+			FacesContext ctx = FacesContext.getCurrentInstance();
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+					"Error", "Sorry.Description is not availabel."));
+		}
+	}
+
+	public void sendCommand() {
+		redirect("/Shop4j/client/user/sendCommand");
 	}
 }

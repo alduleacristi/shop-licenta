@@ -7,11 +7,9 @@
 	xmlns:p="http://primefaces.org/ui">
 <h:head>
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
-	<title>Personal data</title>
+	<title>Client</title>
 </h:head>
 <h:body>
-
-
 	<ui:composition template="/resources/template/template.xhtml">
 		<ui:define name="menu">
 			<ui:include src="/resources/template/client/user/menuBox.xhtml"></ui:include>
@@ -20,7 +18,6 @@
 		<ui:define name="cart">
 			<ui:include src="/resources/template/client/user/cartBox.xhtml"></ui:include>
 		</ui:define>
-
 
 		<ui:define name="search">
 			<ui:include src="/resources/template/client/searchBox.xhtml"></ui:include>
@@ -32,40 +29,7 @@
 		</ui:define>
 
 		<ui:define name="mainContent">
-			<h:form id="recommandForm">
-				<br />
-				<b><p:outputLabel style="color: #8b0000;size: 3px"
-						value="Products recommanded for you" /></b>
-				<br />
-				<br />
-				<p:carousel value="#{recommandationClient.recommandedProducts}"
-					var="p" itemStyle="width:237px"
-					styleClass="products-reduce-recommand"
-					rendered="#{recommandationClient.isEmpty()}">
-					<p:commandLink
-						actionListener="#{recommandationClient.chooseAProduct(p)}">
-						<center>
-							<p:graphicImage
-								url="http://localhost:8080/Shop4j/rest/products/id#{productColor.id}"
-								width="170" height="190" />
-							<div class="product-info">
-								<div class="reduction">
-									<p:outputLabel value="-#{p.reduction}%"
-										rendered="#{p.reduction != 0.0}"></p:outputLabel>
-								</div>
-								<h3>Product name</h3>
-								<p:outputLabel value="#{p.name}">
-								</p:outputLabel>
-								<br /> <br /> <strong class="price">Price</strong>
-								<p:outputLabel value="#{p.price}"></p:outputLabel>
-								<br /> <br />
-							</div>
-						</center>
-					</p:commandLink>
-				</p:carousel>
-				<p:outputLabel value="No records found"
-					rendered="#{recommandationClient.isEmpty() == false}"></p:outputLabel>
-				<p:growl showDetail="true" />
+			<h:form id="cartForm">
 			</h:form>
 		</ui:define>
 
@@ -77,6 +41,8 @@
 			<ui:include src="/resources/template/footer.xhtml"></ui:include>
 		</ui:define>
 	</ui:composition>
+
+
 
 </h:body>
 

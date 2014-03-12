@@ -20,21 +20,36 @@ import com.siemens.ctbav.intership.shop.service.client.RecommandService;
 
 @ManagedBean(name = "recommandationClient")
 @ViewScoped
-@URLMapping(id = "recommandationClient" , pattern = "/client/user/recommandation", viewId = "/client/user/recommandation.xhtml")
-public class RecommadationBean {	
+@URLMapping(id = "recommandationClient", pattern = "/client/user/recommandation", viewId = "/client/user/recommandation.xhtml")
+public class RecommadationBean {
 	@EJB
 	private RecommandService recommandService;
-	
+
 	@EJB
 	private ProductService productService;
 
 	private List<Product> recommandedProducts;
-	
+
+	private String message;
+
 	@PostConstruct
-	private void initialize(){
+	private void initialize() {
+		message = (String) FacesContext.getCurrentInstance()
+				.getExternalContext().getSessionMap().get("addProductMessage");
+
+		if (message != null) {
+			FacesContext.getCurrentInstance().getExternalContext()
+					.getSessionMap().remove("addProductMessage");
+
+			FacesContext ctx = FacesContext.getCurrentInstance();
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
+					"Succes", message));
+		}
+
 		recommandedProducts = new ArrayList<Product>();
-		
-		Client client = (Client) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("client");
+
+		Client client = (Client) FacesContext.getCurrentInstance()
+				.getExternalContext().getSessionMap().get("client");
 		populateRecomandedProducts(client.getId());
 	}
 
@@ -45,12 +60,23 @@ public class RecommadationBean {
 	public void setRecommandedProducts(List<Product> recommandedProducts) {
 		this.recommandedProducts = recommandedProducts;
 	}
-	
-	private void populateRecomandedProducts(Long id){
-		List<Long> recomandedProductsId = recommandService.getRecommandation(id);
+
+	public String getMessage() {
+		System.out.println("in get message: " + message);
+		return message;
+	}
+
+	public void setMessage(String message) {
+		System.out.println("in set message: " + message);
+		this.message = message;
+	}
+
+	private void populateRecomandedProducts(Long id) {
+		List<Long> recomandedProductsId = recommandService
+				.getRecommandation(id);
 		recommandedProducts.clear();
-		
-		for(Long idProduct:recomandedProductsId){
+
+		for (Long idProduct : recomandedProductsId) {
 			try {
 				Product p = productService.getProductById(idProduct);
 				recommandedProducts.add(p);
@@ -59,14 +85,14 @@ public class RecommadationBean {
 			}
 		}
 	}
-	
-	public boolean isEmpty(){
+
+	public boolean isEmpty() {
 		if (recommandedProducts.size() == 0)
 			return false;
 
 		return true;
 	}
-	
+
 	private void redirect(String url) {
 		FacesContext fc = FacesContext.getCurrentInstance();
 
@@ -80,7 +106,7 @@ public class RecommadationBean {
 					"Error", "Sorry.Description is not availabel."));
 		}
 	}
-	
+
 	public void chooseAProduct(Product product) {
 		redirect("/Shop4j/client/user/productRecommandedDescription/"
 				+ product.getId());

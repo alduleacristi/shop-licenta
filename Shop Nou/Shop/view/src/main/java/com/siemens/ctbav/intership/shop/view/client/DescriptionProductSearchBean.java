@@ -15,6 +15,7 @@ import com.siemens.ctbav.intership.shop.model.Product;
 import com.siemens.ctbav.intership.shop.model.ProductColor;
 import com.siemens.ctbav.intership.shop.model.ProductColorSize;
 import com.siemens.ctbav.intership.shop.service.client.ProductColorService;
+import com.siemens.ctbav.intership.shop.service.superadmin.PhotoService;
 
 @ManagedBean(name = "productDescriptionSearchClient")
 @ViewScoped
@@ -31,6 +32,9 @@ public class DescriptionProductSearchBean implements Serializable {
 
 	@EJB
 	private ProductColorService productColorService;
+	
+	@EJB
+	private PhotoService photoService;
 
 	private List<ProductColor> productsColor;
 
@@ -49,6 +53,8 @@ public class DescriptionProductSearchBean implements Serializable {
 	private Integer nrOfPieces;
 
 	private List<ProductColorSize> productsColorSize;
+	
+	private List<String> photos;
 
 	public long getId() {
 		return id;
@@ -141,11 +147,21 @@ public class DescriptionProductSearchBean implements Serializable {
 		this.productsColorSize = productsColorSize;
 	}
 
+	public List<String> getPhotos() {
+		return photos;
+	}
+
+	public void setPhotos(List<String> photos) {
+		this.photos = photos;
+	}
+
 	private void initialize() {
+		this.nrOfPieces = 1;
 		productsColor = productColorService.getColorsForProduct(id);
 
 		if (productsColor.size() > 0) {
 			selectedProduct = productsColor.get(0).getProduct();
+			displayPhotos(productsColor.get(0).getId());
 		}
 	}
 
@@ -154,6 +170,7 @@ public class DescriptionProductSearchBean implements Serializable {
 		for (ProductColor pc : productsColor) {
 			if (pc.getId() == idProductColor) {
 				productsColorSize = pc.getProductColorSize();
+				displayPhotos(productsColor.get(0).getId());
 				ok = true;
 			}
 		}
@@ -191,5 +208,16 @@ public class DescriptionProductSearchBean implements Serializable {
 		if (productsColor.size() > 0)
 			return productsColor.get(0).getId().toString();
 		return "-1";
+	}
+	
+	private void displayPhotos(Long idProductColor) {
+		System.out.println("display photos: "+idProductColor);
+		photos = new ArrayList<String>();
+		try {
+			photos = photoService.displayOfPhotos("id"
+					+ idProductColor);
+		} catch (Exception e) {
+			System.out.println(e);
+		}
 	}
 }

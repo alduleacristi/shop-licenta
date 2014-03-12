@@ -44,7 +44,6 @@ public class SearchBean implements Serializable {
 	}
 
 	public void setQuery(String query) {
-		System.out.println("in set query: " + query);
 		this.query = query;
 	}
 
@@ -112,9 +111,6 @@ public class SearchBean implements Serializable {
 			setNoProducts(false);
 		else
 			setNoProducts(true);
-
-//		for (Product p : products)
-//			System.out.println(p);
 
 		redirect("/Shop4j/client/user/Search");
 	}

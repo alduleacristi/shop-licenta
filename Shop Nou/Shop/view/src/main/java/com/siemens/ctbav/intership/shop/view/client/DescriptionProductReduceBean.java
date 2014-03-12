@@ -202,7 +202,6 @@ public class DescriptionProductReduceBean implements Serializable {
 	}
 
 	private void displayPhotos(Long idProductColor) {
-		System.out.println("display photos: "+idProductColor);
 		photos = new ArrayList<String>();
 		try {
 			photos = photoService.displayOfPhotos("id"

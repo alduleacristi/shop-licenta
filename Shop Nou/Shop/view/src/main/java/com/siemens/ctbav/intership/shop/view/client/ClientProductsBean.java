@@ -61,9 +61,8 @@ public class ClientProductsBean implements Serializable {
 
 	@PostConstruct
 	private void postConstruct() {
-		nrOfPieces = 1;
+		this.nrOfPieces = 1;
 		setIsAvailabel(false);
-		// System.out.println("postconstruct products isVisible="+isAvailabel);
 		productList = new ArrayList<ProductColor>();
 
 		if (selectedCategory == null) {

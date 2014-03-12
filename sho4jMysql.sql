@@ -99,8 +99,8 @@ create table product_color_size(
 id_pcs bigint not null primary key auto_increment,
 id_prod_col bigint not null,
 foreign key id_prod_col(id_prod_col) references product_color(id_prod_col)
-on update no action
-on delete no action,
+on update cascade
+on delete cascade,
 nr_pieces int not null,
 id_size bigint not null,
 foreign key id_size(id_size) references size(id_size)

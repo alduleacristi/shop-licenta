@@ -4,22 +4,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.annotation.Resource;
 import javax.ejb.Stateless;
-import javax.ejb.TransactionManagement;
-import javax.ejb.TransactionManagementType;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.transaction.HeuristicMixedException;
-import javax.transaction.HeuristicRollbackException;
-import javax.transaction.NotSupportedException;
-import javax.transaction.RollbackException;
-import javax.transaction.SystemException;
-import javax.transaction.UserTransaction;
-
-import com.siemens.ctbav.intership.shop.dto.operator.ClientProductDTO;
 import com.siemens.ctbav.intership.shop.dto.operator.CommandDTO;
-import com.siemens.ctbav.intership.shop.dto.operator.ProductColorSizeDTO;
 import com.siemens.ctbav.intership.shop.exception.operator.CommandNotFoundException;
 import com.siemens.ctbav.intership.shop.exception.operator.CommandStatusException;
 import com.siemens.ctbav.intership.shop.exception.operator.NotEnoughProductsException;
@@ -27,7 +15,6 @@ import com.siemens.ctbav.intership.shop.exception.operator.UserNotFoundException
 import com.siemens.ctbav.intership.shop.model.ClientProduct;
 import com.siemens.ctbav.intership.shop.model.Command;
 import com.siemens.ctbav.intership.shop.model.CommandStatus;
-import com.siemens.ctbav.intership.shop.model.ProductColorSize;
 import com.siemens.ctbav.intership.shop.model.User;
 
 @Stateless

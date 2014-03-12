@@ -9,6 +9,7 @@ import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 
 import com.siemens.ctbav.intership.shop.service.internationalization.InternationalizationService;
+import com.siemens.ctbav.intership.shop.view.internationalization.enums.ESize;
 
 @ManagedBean(name = "internationalizationSize")
 @RequestScoped
@@ -57,52 +58,55 @@ public class InternationalizationSize implements Serializable {
 	}
 
 	public String getMessage1() {
-		message1 = internationalizationService.getMessage("message1");
+		message1 = internationalizationService.getMessage(ESize.M1.getName());
 		return message1;
 	}
 
 	public String getMessage2() {
-		message2 = internationalizationService.getMessage("message2");
+		message2 = internationalizationService.getMessage(ESize.M2.getName());
 		return message2;
 	}
 
 	public String getMessage3() {
-		message3 = internationalizationService.getMessage("message3");
+		message3 = internationalizationService.getMessage(ESize.M3.getName());
 		return message3;
 	}
 
 	public String getMessage4() {
-		message4 = internationalizationService.getMessage("message4");
+		message4 = internationalizationService.getMessage(ESize.M4.getName());
 		return message4;
 	}
 
 	public String getCategory() {
-		category = internationalizationService.getMessage("category");
+		category = internationalizationService.getMessage(ESize.CATEGORY
+				.getName());
 		return category;
 	}
 
 	public String getSize() {
-		size = internationalizationService.getMessage("size");
+		size = internationalizationService.getMessage(ESize.SIZE.getName());
 		return size;
 	}
 
 	public String getTable1() {
-		table1 = internationalizationService.getMessage("table1");
+		table1 = internationalizationService.getMessage(ESize.T1.getName());
 		return table1;
 	}
 
 	public String getTable2() {
-		table2 = internationalizationService.getMessage("table2");
+		table2 = internationalizationService.getMessage(ESize.T2.getName());
 		return table2;
 	}
 
 	public String getSizeDetail() {
-		sizeDetail = internationalizationService.getMessage("sizeDetail");
+		sizeDetail = internationalizationService.getMessage(ESize.SIZE_DETAIL
+				.getName());
 		return sizeDetail;
 	}
 
 	public String getSizeName() {
-		sizeName = internationalizationService.getMessage("sizeName");
+		sizeName = internationalizationService.getMessage(ESize.SIZE_NAME
+				.getName());
 		return sizeName;
 	}
 }

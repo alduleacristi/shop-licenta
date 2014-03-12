@@ -14,6 +14,7 @@ import javax.faces.validator.ValidatorException;
 import com.siemens.ctbav.intership.shop.convert.superadmin.ConvertSize;
 import com.siemens.ctbav.intership.shop.dto.superadmin.SizeDTO;
 import com.siemens.ctbav.intership.shop.model.Size;
+import com.siemens.ctbav.intership.shop.view.internationalization.enums.ESize;
 
 @FacesValidator("validateUpdateSize")
 public class SizeUpdateNameValidate implements Validator {
@@ -27,14 +28,15 @@ public class SizeUpdateNameValidate implements Validator {
 			if (name.length() < 1 || name.length() > 5 || name.equals(null)) {
 				throw new ValidatorException(new FacesMessage(
 						FacesMessage.SEVERITY_ERROR,
-						messages.getString("error"),
-						messages.getString("length")));
+						messages.getString(ESize.ERROR.getName()),
+						messages.getString(ESize.LENGTH.getName())));
 			}
 			uniqueCheck(name, messages);
 		} else
 			throw new ValidatorException(new FacesMessage(
-					FacesMessage.SEVERITY_WARN, messages.getString("error"),
-					messages.getString("nameNotSet")));
+					FacesMessage.SEVERITY_WARN, messages.getString(ESize.ERROR
+							.getName()), messages.getString(ESize.NAME_NO_SET
+							.getName())));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -46,8 +48,9 @@ public class SizeUpdateNameValidate implements Validator {
 
 		if (selectedSize.getSize().equalsIgnoreCase(name))
 			throw new ValidatorException(new FacesMessage(
-					FacesMessage.SEVERITY_WARN, messages.getString("error"),
-					messages.getString("sizeExceptionTheSame")));
+					FacesMessage.SEVERITY_WARN, messages.getString(ESize.ERROR
+							.getName()), messages.getString(ESize.SIZE_EX_SAME
+							.getName())));
 
 		List<SizeDTO> allSizes = ConvertSize
 				.convertSizes((List<Size>) FacesContext.getCurrentInstance()
@@ -55,8 +58,9 @@ public class SizeUpdateNameValidate implements Validator {
 
 		if (allSizes.contains(search)) {
 			throw new ValidatorException(new FacesMessage(
-					FacesMessage.SEVERITY_ERROR, messages.getString("error"),
-					messages.getString("sizeExceptionUnique")));
+					FacesMessage.SEVERITY_ERROR, messages.getString(ESize.ERROR
+							.getName()),
+					messages.getString(ESize.SIZE_EX_UNIQUE.getName())));
 		}
 	}
 

@@ -13,11 +13,11 @@ public class ClientDTO {
 	// private String email;
 	private UserDTO user;
 	private Date lastOrderDate;
-	
-	
-	public ClientDTO(){
-		
+
+	public ClientDTO() {
+
 	}
+
 	public ClientDTO(String firstname, String lastname, String phoneNumber,
 			UserDTO user) {
 		this.firstName = firstname;
@@ -30,21 +30,17 @@ public class ClientDTO {
 		return firstName;
 	}
 
-
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
 	}
-
 
 	public String getLastName() {
 		return lastName;
 	}
 
-
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
-
 
 	public String getPhoneNumber() {
 		return phoneNumber;
@@ -64,8 +60,7 @@ public class ClientDTO {
 
 	@Override
 	public String toString() {
-		return "ClientDTO [firstname=" + firstName + ", lastname=" + lastName
-				+ ", phoneNumber=" + phoneNumber + ", user=" + user + "]";
+		return firstName + ";" + lastName + ";" + phoneNumber + ";" + user;
 	}
 
 	public Date getLastOrderDate() {

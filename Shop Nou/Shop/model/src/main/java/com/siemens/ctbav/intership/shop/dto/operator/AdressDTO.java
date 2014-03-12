@@ -27,6 +27,12 @@ public class AdressDTO {
 	}
 	public Long getFlat() {
 		return flat;
+	}
+	@Override
+	public String toString() {
+		return locality + ";" + staircase
+				+ "; " + number + "; " + block + ";" + flat;
 	} 	
+	
 	
 }

@@ -23,29 +23,32 @@
 
 			<h:form id="formCreate">
 				<p:growl id="messages2" showDetail="true" />
-				<h:commandButton id="createLink" value="Create a color"
-					type="button" onclick="create.show()" styleClass="search-submit"
+				<h:commandButton id="createLink"
+					value="#{internationalizationGeneric.create}" type="button"
+					onclick="create.show()" styleClass="search-submit"
 					style="width:34%" />
-				<p:dialog header="Create a new color" modal="true"
-					widgetVar="create" resizable="false">
+				<p:dialog header="#{internationalizationGeneric.create}"
+					modal="true" widgetVar="create" resizable="false">
 					<h:panelGrid columns="2" cellpadding="5">
-						<h:outputLabel for="name" value="Name:" />
+						<h:outputLabel for="name"
+							value="#{internationalizationGeneric.name}:" />
 						<p:inputText id="name" label="name" value="#{colorsBean.newName}"
 							required="true" />
-						<h:outputLabel for="description" value="Description:" />
+						<h:outputLabel for="description"
+							value="#{internationalizationColor.description}:" />
 						<p:inputText id="description" label="description"
 							value="#{colorsBean.newDescription}">
 						</p:inputText>
-						<h:outputText value="Chose the color:" />
+						<h:outputText value="#{internationalizationColor.chose}:" />
 						<p:colorPicker id="popupCP" value="#{colorsBean.color}"
 							mode="inline" />
 					</h:panelGrid>
-					<p:commandButton value="Create"
+					<p:commandButton value="#{internationalizationGeneric.create}"
 						actionListener="#{colorsBean.create}"
 						update="messages2, :form:colors"
 						oncomplete="handleCreateRequest(xhr, status, args)" />
-					<p:commandButton value="Cancel" onclick="create.hide();"
-						type="button" />
+					<p:commandButton value="#{internationalizationGeneric.cancel}"
+						onclick="create.hide();" type="button" />
 					<p:ajax event="close" listener="#{colorsBean.handleClose}" />
 				</p:dialog>
 				<script type="text/javascript">
@@ -68,7 +71,7 @@
 					paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink} {RowsPerPageDropdown}"
 					rowsPerPageTemplate="5,10,15" type="none" style="width:250px;"
 					paginatorPosition="bottom">
-					<p:column headerText="Colors">
+					<p:column headerText="#{internationalizationColor.colors}">
 						<p:commandButton icon="ui-icon-search" update=":form:colorDetail"
 							oncomplete="PF('colorDialog').show()" title="View Detail">
 							<f:setPropertyActionListener value="#{color}"
@@ -78,35 +81,40 @@
 							style="background-color:#{color.code}" />
 					</p:column>
 				</p:dataTable>
-				<p:dialog header="Color Detail" widgetVar="colorDialog" modal="true"
-					showEffect="fade">
+				<p:dialog header="#{internationalizationColor.colorDetail}"
+					widgetVar="colorDialog" modal="true" showEffect="fade">
 					<p:outputPanel id="colorDetail" style="text-align:center;"
 						layout="block">
 						<h:panelGrid columns="2" cellpadding="4"
 							rendered="#{colorsBean.selectedColor != null}">
-							<h:outputText value="Color's name: " />
+							<h:outputText value="#{internationalizationColor.colorName}: " />
 							<h:inputText value="#{colorsBean.selectedColor.name}"
 								required="true" />
-							<h:outputText value="Color's description: " />
+							<h:outputText
+								value="#{internationalizationColor.colorDescription}: " />
 							<h:inputText value="#{colorsBean.selectedColor.description}" />
-							<h:outputText value="Edit the color:" />
+							<h:outputText value="#{internationalizationColor.editTheColor}:" />
 							<p:colorPicker id="popupCP" value="#{colorsBean.color}"
 								mode="inline" />
 						</h:panelGrid>
-						<p:commandButton value="Update"
+						<p:commandButton value="#{internationalizationGeneric.update}"
 							actionListener="#{colorsBean.update}" update="messages, colors"
 							oncomplete="handleUpdateRequest(xhr, status, args)" />
-						<p:commandButton value="Delete" type="button" onclick="cd.show()"
-							id="b3" immediate="true" process="@this" />
+						<p:commandButton value="#{internationalizationGeneric.delete}"
+							type="button" onclick="cd.show()" id="b3" immediate="true"
+							process="@this" />
 					</p:outputPanel>
 					<p:ajax event="close" listener="#{colorsBean.handleClose}" />
 				</p:dialog>
-				<p:confirmDialog message="Are you sure?" header="Confirmation"
+				<p:confirmDialog
+					message="#{internationalizationGeneric.confirmMessage}"
+					header="#{internationalizationGeneric.confirmation}"
 					severity="alert" widgetVar="cd" resizable="false">
-					<p:commandButton value="Yes" actionListener="#{colorsBean.delete}"
-						update="messages, colors"
+					<p:commandButton value="#{internationalizationGeneric.yes}"
+						actionListener="#{colorsBean.delete}" update="messages, colors"
 						oncomplete="cd.hide(), colorDialog.hide()" immediate="true" />
-					<p:commandButton value="No" onclick="cd.hide();" type="button" />
+					<p:commandButton value="#{internationalizationgeneric.no}"
+						onclick="cd.hide();" type="button" />
 				</p:confirmDialog>
 				<script type="text/javascript">
 					function handleUpdateRequest(xhr, status, args) {

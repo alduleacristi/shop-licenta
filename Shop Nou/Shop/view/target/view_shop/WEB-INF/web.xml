@@ -87,6 +87,11 @@
 		<welcome-file>/WEB-INF/pages/index.xhtml</welcome-file>
 	</welcome-file-list>
 
+	<error-page>
+		<error-code>404</error-code>
+		<location>/error</location>
+	</error-page>
+
 	<login-config>
 		<auth-method>FORM</auth-method>
 		<realm-name>Shop4J</realm-name>

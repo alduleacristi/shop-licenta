@@ -25,7 +25,7 @@
             Expand rows to see detailed information  
         </f:facet>
 
-				<p:column style="width:2%"  exportable="false">
+				<p:column style="width:2%" exportable="false">
 					<p:rowToggler />
 				</p:column>
 
@@ -95,15 +95,20 @@
 
 			</p:dataTable>
 
+			<br />
+			<br />
+			<br />
 			<h:selectManyCheckbox value="#{clients.reports}">
-			
-			<f:selectItem itemValue="1" itemLabel="PDF"/>
-			<f:selectItem itemValue="2" itemLabel="XML"/>
-			<f:selectItem itemValue="3" itemLabel="JSON"/>
-			<f:selectItem itemValue="4" itemLabel="CSV"/>
+
+				<f:selectItem itemValue="1" itemLabel="PDF" />
+				<f:selectItem itemValue="2" itemLabel="XML" />
+				<f:selectItem itemValue="3" itemLabel="JSON" />
+				<f:selectItem itemValue="4" itemLabel="CSV" />
 			</h:selectManyCheckbox>
-			
-			<p:commandButton value="Generate my reports, please" styleClass="search-submitLong" actionListener="#{clients.generateReports}"/>
+
+			<p:commandButton value="Generate my reports, please"
+				styleClass="search-submitLong"
+				actionListener="#{clients.generateReports}" update=":form:error" />
 		</p:growl>
 
 	</h:form>

@@ -14,10 +14,11 @@
 		<div id="navigation">
 			<ul>
 				<h:form>
-					<li><a href="/Shop4j/superadmin/index.xhtml" class="active">Home</a></li>
+					<li><a href="/Shop4j/superadmin/index.xhtml" class="active">#{internationalizationBean.menuIndexHome}</a></li>
 					<li><p:commandLink rendered="#{!Login.logged}"
 							styleClass="active" action="#{Login.logout()}">
-							<h:outputText value="Logout" styleClass="active"></h:outputText>
+							<h:outputText value="#{internationalizationBean.menuIndexLogout}"
+								styleClass="active"></h:outputText>
 						</p:commandLink></li>
 				</h:form>
 			</ul>

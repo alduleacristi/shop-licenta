@@ -17,6 +17,64 @@
 				<p:graphicImage value="/resources/manageOperators.jpg" width="720"
 					height="100" />
 			</div>
+			<h:form id="addOperator">
+				<p:growl id="messages2" showDetail="true" />
+				<br />
+				<h:commandButton id="createLink" value="Create an operator"
+					type="button" onclick="create.show()" styleClass="search-submit"
+					style="width:25%" />
+				<p:dialog header="Create a new operator" modal="true"
+					widgetVar="create" resizable="false">
+					* The password mush contain between 6 and 12 characters
+					<br />
+					It must contain minimum a capital letter, a lowercase
+					<br />
+					letter and a digit. Characters must not repeat more than
+					<br />
+					two times. Otherwise, the password is invalid!
+					<h:panelGrid columns="2" cellpadding="5">
+						<h:outputLabel for="username" value="Username:" />
+						<p:inputText id="username" label="username"
+							value="#{manageOperatorsBean.username}" required="true"
+							requiredMessage="Username is required" />
+						<h:outputLabel for="email" value="Email:" />
+						<p:inputText id="email" label="email"
+							value="#{manageOperatorsBean.email}" required="true"
+							requiredMessage="Email is required">
+							<f:validator validatorId="emailValidate" />
+						</p:inputText>
+						<h:outputLabel for="password" value="Password:" />
+						<p:password id="password" label="password" type="password"
+							value="#{manageOperatorsBean.password}" required="true"
+							requiredMessage="Password is required">
+							<f:validator validatorId="passwordValidate" />
+							<f:attribute name="confirm" value="#{confirm}" />
+						</p:password>
+						<h:outputLabel for="confirm" value="Retype:" />
+						<p:password id="confirm" label="repassword" binding="#{confirm}"
+							value="#{manageOperatorsBean.repassword}" required="true"
+							requiredMessage="Confirmation of the password is required">
+						</p:password>
+					</h:panelGrid>
+					<p:commandButton value="Create"
+						actionListener="#{manageOperatorsBean.addOperator}"
+						oncomplete="handleCreateRequest(xhr, status, args)"
+						update="messages2,:manageOperators:operatorsTable" />
+					<p:commandButton value="Cancel" onclick="create.hide();"
+						type="button" />
+				</p:dialog>
+				<script type="text/javascript">
+					function handleCreateRequest(xhr, status, args) {
+						if (args.validationFailed || !args.create) {
+							PF('create').jq.effect("shake", {
+								times : 5
+							}, 100);
+						} else {
+							PF('create').hide();
+						}
+					}
+				</script>
+			</h:form>
 			<h:form id="manageOperators">
 				<p:dataTable var="operator"
 					value="#{manageOperatorsBean.allOperators}" rowKey="#{operator.id}"
@@ -31,9 +89,15 @@
 						List of operators
 					</f:facet>
 
-					<p:column headerText="Is banned">
-						<p:commandButton icon="ui-icon ui-icon-close"
-							rendered="#{operator.ban == 1}" />
+					<p:column>
+						<center>
+							<p:commandLink title="Unban operator"
+								rendered="#{operator.ban == 1}" immediate="true"
+								actionListener="#{manageOperatorsBean.unbanOperator(operator)}">
+								<h:outputText styleClass="ui-icon ui-icon-close"
+									style="margin:0 auto;" />
+							</p:commandLink>
+						</center>
 					</p:column>
 
 					<p:column headerText="Username" sortBy="username"
@@ -66,10 +130,12 @@
 						<h:outputText value="Not Banned"
 							rendered="#{manageOperatorsBean.selectedOperator.ban == 0}"
 							id="notBanned" />
-						<h:commandButton value="Ban him" id="banHim"
-							rendered="#{manageOperatorsBean.selectedOperator.ban == 0}" />
-						<h:commandButton value="Unban him" id="unbanhim"
-							rendered="#{manageOperatorsBean.selectedOperator.ban == 1}" />
+						<p:commandButton value="Ban him" id="banHim"
+							rendered="#{manageOperatorsBean.selectedOperator.ban == 0}"
+							actionListener="#{manageOperatorsBean.banOperator}" />
+						<p:commandButton value="Unban him" id="unbanhim"
+							rendered="#{manageOperatorsBean.selectedOperator.ban == 1}"
+							actionListener="#{manageOperatorsBean.unbanOperator}" />
 					</h:panelGrid>
 				</p:dialog>
 			</h:form>

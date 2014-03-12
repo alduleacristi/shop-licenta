@@ -22,7 +22,7 @@
 					height="100" />
 			</div>
 			<br />
-			Pentru adaugare, editare, stergere de produse, se va selecta o categorie
+			In order to add, edit or delete you have to pick a category
 			<br />
 			<br />
 
@@ -114,13 +114,24 @@
 						<p:panel header="#{product.name}" style="text-align:center">
 							<h:outputText value="Category: #{product.category.name}" />
 							<br />
-							<h:outputText value="Price: #{product.price}" />
-							<br />
+							<p:outputLabel value="Price:"
+								rendered="#{product.reduction == 0.0}" />
+							<strong class="price"> <p:outputLabel
+									value="$#{product.price}"
+									rendered="#{product.reduction == 0.0}"></p:outputLabel></strong>
+							<strike> <p:outputLabel value="$#{product.price}"
+									rendered="#{product.reduction != 0.0}"></p:outputLabel>
+							</strike>
+							<strong class="price"> <p:outputLabel
+									value="$#{product.price-product.price*product.reduction/100}"
+									rendered="#{product.reduction != 0.0}"></p:outputLabel></strong>
 							<h:outputText value="Description:" />
 							<br />
 							<p:inputTextarea cols="20" rows="11" maxlength="200"
 								value="#{product.description}" readonly="true">
 							</p:inputTextarea>
+							<br />
+							<h:outputText value="SALE: #{product.reduction}%" />
 							<br />
 							<p:commandLink update=":formProducts:productDetail"
 								oncomplete="productDialog.show()" title="View Detail">

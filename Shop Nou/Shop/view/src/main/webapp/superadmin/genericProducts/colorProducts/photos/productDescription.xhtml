@@ -32,7 +32,15 @@
 										<br /> Color:
 										#{colorProductSelectPhotoBean.selectedProduct.color.name}<br />
 									</p>
-									<strong class="price">$#{colorProductSelectPhotoBean.selectedProduct.product.price}</strong>
+									<strong class="price"> <p:outputLabel
+											value="$#{colorProductSelectPhotoBean.selectedProduct.product.price}"
+											rendered="#{colorProductSelectPhotoBean.selectedProduct.product.reduction == 0.0}"></p:outputLabel></strong>
+									<strike> <p:outputLabel
+											value="$#{colorProductSelectPhotoBean.selectedProduct.product.price}"
+											rendered="#{colorProductSelectPhotoBean.selectedProduct.product.reduction != 0.0}"></p:outputLabel>
+									</strike> <strong class="price"> <p:outputLabel
+											value="$#{colorProductSelectPhotoBean.selectedProduct.product.price-colorProductSelectPhotoBean.selectedProduct.product.price*colorProductSelectPhotoBean.selectedProduct.product.reduction/100}"
+											rendered="#{colorProductSelectPhotoBean.selectedProduct.product.reduction != 0.0}"></p:outputLabel></strong>
 								</div>
 							</div>
 						</li>
@@ -68,13 +76,11 @@
 							<div class="product-info2">
 
 								<h3>Description</h3>
-								<center>
-									<br></br>
-									<p:inputTextarea cols="21" rows="11" maxlength="200"
-										value="#{colorProductSelectPhotoBean.selectedProduct.product.description}"
-										readonly="true">
-									</p:inputTextarea>
-								</center>
+								<br></br>
+								<p:inputTextarea cols="20" rows="12" maxlength="200" style="25%"
+									value="#{colorProductSelectPhotoBean.selectedProduct.product.description}"
+									readonly="true">
+								</p:inputTextarea>
 							</div>
 						</li>
 					</ul>

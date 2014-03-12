@@ -19,9 +19,13 @@
 					height="100" />
 			</div>
 			<br />
-			Pentru editarea marimilor trebuie selectata o categorie. Pentru radacina ierarhiei si copiii acesteia nu se pot defini marimi.
+			#{internationalizationSize.message1}
 			<br />
-			Se pot modifica doar marimile de pe categoria curenta. Marimile sunt mostenite de la parinti si nu se pot duplica
+			#{internationalizationSize.message2}
+			<br />
+			#{internationalizationSize.message3}
+			<br />
+			#{internationalizationSize.message4}
 			<br />
 			<br />
 
@@ -46,19 +50,21 @@
 			<h:form id="formCreate">
 
 				<p:growl id="messages2" showDetail="true" />
-				<h:commandButton id="createLink" value="Create size" type="button"
+				<h:commandButton id="createLink"
+					value="#{internationalizationGeneric.create}" type="button"
 					onclick="create.show()" styleClass="search-submit"
-					rendered="#{sizeBean.addSize}" />
+					rendered="#{sizeBean.addSize}" style="width:25%" />
 
-				<p:dialog header="Create a new size" modal="true" widgetVar="create"
-					focus="name" resizable="false">
+				<p:dialog header="#{internationalizationGeneric.create}"
+					modal="true" widgetVar="create" focus="name" resizable="false">
 
 					<h:panelGrid columns="2" cellpadding="5">
-						<h:outputLabel for="name" value="Name:" />
+						<h:outputLabel for="name"
+							value="#{internationalizationGeneric.name}:" />
 						<p:inputText id="name" label="name" value="#{sizeBean.newName}">
 							<f:validator validatorId="validateSize" />
 						</p:inputText>
-						<p:commandButton value="Create"
+						<p:commandButton value="#{internationalizationGeneric.create}"
 							actionListener="#{sizeBean.create}"
 							update="messages2, :formDeleteUpdate:sizes"
 							oncomplete="handleCreateRequest(xhr, status, args)" />
@@ -94,40 +100,46 @@
 						<p:ajax event="rowSelect" update=":formSizes"
 							listener="#{sizeBean.onRowSelect}"
 							oncomplete="PF('editDialog').show()" /> 
-            		Select a row to edit the size  
+            		#{internationalizationSize.table1}  
         			</f:facet>
-					<p:column headerText="Category">
+					<p:column headerText="#{internationalizationSize.category}">
 						<h:outputText value="#{size.category.name}" />
 					</p:column>
-					<p:column headerText="Size">
+					<p:column headerText="#{internationalizationSize.size}">
 						<h:outputText value="#{size.size}" />
 					</p:column>
 				</p:dataTable>
 
-				<p:dialog id="dialog" header="Size Detail" widgetVar="editDialog"
-					resizable="false" showEffect="fade" hideEffect="explode"
-					modal="true">
+				<p:dialog id="dialog"
+					header="#{internationalizationSize.sizeDetail}"
+					widgetVar="editDialog" resizable="false" showEffect="fade"
+					hideEffect="explode" modal="true">
 
 					<h:panelGrid id="display" columns="2" cellpadding="4">
-						<h:outputText value="Size's new name:" />
+						<h:outputText value="#{internationalizationSize.sizeName}:" />
 						<p:inputText id="nName" label="name"
 							value="#{sizeBean.selectedSize.size}">
 							<f:validator validatorId="validateUpdateSize" />
 						</p:inputText>
-						<p:commandButton value="Update"
+						<p:commandButton value="#{internationalizationGeneric.update}"
 							actionListener="#{sizeBean.update}"
 							update="messages3, :formDeleteUpdate:sizes"
 							oncomplete="handleUpdateRequest(xhr, status, args)" />
-						<p:commandButton value="Delete" type="button" onclick="cd.show()"
-							immediate="true" process="@this" />
+						<p:commandButton value="#{internationalizationGeneric.delete}"
+							type="button" onclick="cd.show()" immediate="true"
+							process="@this" />
 
-						<p:dialog header="Confirmation" widgetVar="cd" resizable="false">
-							<h:outputText value="Are you sure?" />
+						<p:dialog header="#{internationalizationGeneric.confirmation}"
+							widgetVar="cd" resizable="false">
+							<h:outputText
+								value="#{internationalizationGeneric.confirmMessage}" />
 							<br />
-							<p:commandButton value="Yes" actionListener="#{sizeBean.delete}"
+							<p:commandButton value="#{internationalizationGeneric.yes}"
+								actionListener="#{sizeBean.delete}"
 								update="messages3,:formDeleteUpdate:sizes"
 								oncomplete="cd.hide(), editDialog.hide()" immediate="true" />
-							<p:commandButton value="No" onclick="cd.hide();" type="button" />
+							<p:commandButton value="#{internationalizationGeneric.no}"
+								onclick="cd.hide();" type="button" />
 						</p:dialog>
 
 					</h:panelGrid>
@@ -158,12 +170,12 @@
 					value="#{sizeBean.parentsSizes}" paginator="true" rows="10"
 					rendered="#{sizeBean.addSize}">
 					<f:facet name="header">  
-            		Inherited and no editable sizes
+            		#{internationalizationSize.table2}
         			</f:facet>
-					<p:column headerText="Category">
+					<p:column headerText="#{internationalizationSize.category}">
 						<h:outputText value="#{s.category.getIerarhie()}" />
 					</p:column>
-					<p:column headerText="Size">
+					<p:column headerText="#{internationalizationSize.size}">
 						<h:outputText value="#{s.size}" />
 					</p:column>
 				</p:dataTable>

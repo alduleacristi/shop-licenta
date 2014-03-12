@@ -538,7 +538,7 @@ a.bul {
 
 .products2 ul li {
 	position: relative;
-	padding: 3px;
+	padding: 0px;
 	border: solid 1px #dedede;
 	float: left;
 	width: 170px;
@@ -558,7 +558,34 @@ a.bul {
 	overflow: hidden;
 }
 
+.ui-inputfield, .ui-widget-content .ui-inputfield, .ui-widget-header .ui-inputfield {
+width: 160px;
+background: #ffffff;
+-moz-box-shadow: inset 0 2px 2px #8f8f8f;
+-webkit-box-shadow: inset 0 2px 2px #8f8f8f;
+box-shadow: inset 0 2px 2px #8f8f8f;
+color: #313131;
+}
+
+.products2descriptiondescription ul li {
+	position: relative;
+	padding: 3px;
+	border: solid 1px #dedede;
+	float: left;
+	width: 350px;
+	margin-right: 3px;
+	height: 270px;
+	overflow: hidden;
+}
+
 .product-info2 {
+	position: absolute;
+	width: 300px;
+	top: 10px;
+	left: 0;
+}
+
+.product-infoinfo2 {
 	position: absolute;
 	width: 300px;
 	top: 10px;

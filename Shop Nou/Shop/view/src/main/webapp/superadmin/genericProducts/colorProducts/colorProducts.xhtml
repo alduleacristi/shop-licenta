@@ -22,7 +22,7 @@
 					height="100" />
 			</div>
 			<br />
-			Pentru adaugare, editare, stergere se va selecta o categorie
+			In order to add, edit or delete you have to pick a category
 			<br />
 			<br />
 
@@ -60,7 +60,17 @@
 							<p:panel header="#{product.name}" style="text-align:center">
 								<h:outputText value="Category: #{product.category.name}" />
 								<br />
-								<h:outputText value="Price: #{product.price}" />
+								<p:outputLabel value="Price:"
+									rendered="#{product.reduction == 0.0}" />
+								<strong class="price"> <p:outputLabel
+										value="$#{product.price}"
+										rendered="#{product.reduction == 0.0}"></p:outputLabel></strong>
+								<strike> <p:outputLabel value="$#{product.price}"
+										rendered="#{product.reduction != 0.0}"></p:outputLabel>
+								</strike>
+								<strong class="price"> <p:outputLabel
+										value="$#{product.price-product.price*product.reduction/100}"
+										rendered="#{product.reduction != 0.0}"></p:outputLabel></strong>
 								<br />
 								<h:outputText
 									value="Colors: #{colorProductBean.displayColors(product)}" />
@@ -111,13 +121,18 @@
 							<p:selectOneMenu id="selectOneMenu"
 								value="#{colorProductBean.idSelectedProductColor}"
 								style="width:155px">
+								<!-- 								<f:selectItem itemLabel="Choose a color" /> -->
 								<f:selectItems
 									value="#{colorProductBean.selectedProduct.productColor}"
 									var="pcolor" itemLabel="#{pcolor.color.name}"
 									itemValue="#{pcolor.id}" />
-								<p:ajax event="valueChange" update="description" />
+								<p:ajax event="valueChange" update="description,color" />
 							</p:selectOneMenu>
 							<h:outputText value="Description: " />
+							<h:outputText value="" />
+							<h:outputText id="color"
+								value="#{colorProductBean.selectedProductColor.color.name}"
+								style="background-color:#{colorProductBean.selectedProductColor.color.code}" />
 							<p:inputTextarea id="description" cols="22" rows="5"
 								maxlength="100"
 								value="#{colorProductBean.selectedProductColor.color.description}"
@@ -142,9 +157,13 @@
 							value="#{colorProductBean.idSelectedColor}" style="width:155px">
 							<f:selectItems value="#{colorProductBean.allColors}" var="color"
 								itemLabel="#{color.name}" itemValue="#{color.id}" />
-							<p:ajax event="valueChange" update="descriptionCol" />
+							<p:ajax event="valueChange" update="descriptionCol,colorC" />
 						</p:selectOneMenu>
 						<h:outputText value="Description: " />
+						<h:outputText value="" />
+						<h:outputText id="colorC"
+							value="#{colorProductBean.selectedColor.name}"
+							style="background-color:#{colorProductBean.selectedColor.code}" />
 						<p:inputTextarea id="descriptionCol" cols="22" rows="5"
 							maxlength="100"
 							value="#{colorProductBean.selectedColor.description}"

@@ -21,18 +21,21 @@
 		<ui:define name="mainContent">
 			<h:form id="form">
 				<p:growl id="login" showDetail="true" sticky="true" />
-				<p:panel header="Login">
+				<p:panel header="#{internationalizationLoginBean.login}">
 					<h:panelGrid columns="1" cellpadding="5">
-						<p:outputLabel value="User Name:" />
+						<p:outputLabel value="#{internationalizationLoginBean.username}:" />
 						<p:inputText value="#{Login.user.userName}" id="username" />
 
-						<p:outputLabel value="Password:" />
+						<p:outputLabel value="#{internationalizationLoginBean.password}:" />
 						<p:password value="#{Login.user.password}" id="pass" />
 
-						<h:commandButton value="Login" actionListener="#{Login.login()}"
-							ajax="false" update="register" styleClass="search-submit" action="#{cart.readCookie()}"/>
+						<h:commandButton value="#{internationalizationLoginBean.login}"
+							actionListener="#{Login.login()}" ajax="false" update="register"
+							styleClass="search-submit" action="#{cart.readCookie()}"
+							style="width:75%" />
 						<h:commandLink styleClass="active" action="forgotPassword.xhtml">
-							<h:outputText value="I forgot my password" styleClass="active"></h:outputText>
+							<h:outputText value="#{internationalizationLoginBean.forgot}"
+								styleClass="active"></h:outputText>
 						</h:commandLink>
 					</h:panelGrid>
 

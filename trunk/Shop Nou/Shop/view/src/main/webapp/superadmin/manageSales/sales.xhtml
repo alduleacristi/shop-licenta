@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Categories</title>
+</h:head>
+<h:body>
+	<ui:composition template="/superadmin/index.xhtml">
+		<br />
+		<ui:define name="menu">
+			<ui:include src="/resources/template/superadmin/menuProducts.xhtml"></ui:include>
+		</ui:define>
+		<ui:define name="mainContent">
+			<div class="box">
+				<p:graphicImage value="/resources/sales.jpg" width="720"
+					height="100" />
+			</div>
+			<br />
+			In order to edit the sales you have to select a category
+			<br />
+			<br />
+			<h:form id="formTree">
+
+				<p:growl id="messages" showDetail="true" />
+
+				<p:tree value="#{categoryBean.root}" var="node" dynamic="true"
+					cache="false" selectionMode="single" animate="true"
+					orientation="horizontal" selection="#{categoryBean.selectedNode}"
+					id="tree">
+					<p:ajax event="select" listener="#{manageSalesBean.onNodeSelect}"
+						update=":formProducts" />
+					<p:treeNode>
+						<h:outputText value="#{node}" />
+					</p:treeNode>
+				</p:tree>
+
+			</h:form>
+
+			<h:form id="formProducts">
+
+				<p:growl id="messages1" showDetail="true" />
+
+				<p:dataGrid id="dataGrid" var="product"
+					value="#{manageSalesBean.productList}" columns="3" rows="12"
+					paginator="true"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					rowsPerPageTemplate="3,6,9,12,15"
+					rendered="#{manageSalesBean.selectedCategory}">
+					<p:column>
+
+						<p:panel header="#{product.name}" style="text-align:center">
+							<h:outputText value="Category: #{product.category.name}" />
+							<br />
+							<p:outputLabel value="Price:"
+								rendered="#{product.reduction == 0.0}" />
+							<strong class="price"> <p:outputLabel
+									value="$#{product.price}"
+									rendered="#{product.reduction == 0.0}"></p:outputLabel></strong>
+							<strike> <p:outputLabel value="$#{product.price}"
+									rendered="#{product.reduction != 0.0}"></p:outputLabel>
+							</strike>
+							<strong class="price"> <p:outputLabel
+									value="$#{product.price-product.price*product.reduction/100}"
+									rendered="#{product.reduction != 0.0}"></p:outputLabel></strong>
+							<h:outputText value="Description:" />
+							<br />
+							<p:inputTextarea cols="20" rows="11" maxlength="200"
+								value="#{product.description}" readonly="true">
+							</p:inputTextarea>
+							<br />
+							<h:outputText value="SALE: #{product.reduction}%" />
+							<br />
+							<p:commandLink update=":formProducts:productDetail"
+								oncomplete="productDialog.show()" title="Edit sale">
+								<h:outputText styleClass="ui-icon ui-icon-search"
+									style="margin:0 auto;" />
+								<f:setPropertyActionListener value="#{product}"
+									target="#{manageSalesBean.selectedProduct}" />
+							</p:commandLink>
+						</p:panel>
+					</p:column>
+				</p:dataGrid>
+
+				<p:dialog header="Product Detail" widgetVar="productDialog"
+					modal="true">
+					<p:outputPanel id="productDetail" style="text-align:center;">
+
+						<h:panelGrid columns="2" cellpadding="4"
+							rendered="#{manageSalesBean.selectedProduct != null}">
+							<h:outputText value="Product's sale: " />
+							<p:inputText value="#{manageSalesBean.selectedProduct.reduction}"
+								required="true" requiredMessage="Sale is required">
+							</p:inputText>
+							<p:commandButton value="Update"
+								actionListener="#{manageSalesBean.update}"
+								update="messages1, :formProducts:dataGrid"
+								oncomplete="handleUpdateRequest(xhr, status, args)" />
+						</h:panelGrid>
+					</p:outputPanel>
+				</p:dialog>
+				<script type="text/javascript">
+					function handleUpdateRequest(xhr, status, args) {
+						if (args.validationFailed || !args.update) {
+							PF('productDialog').jq.effect("shake", {
+								times : 5
+							}, 100);
+						} else {
+							PF('productDialog').hide();
+						}
+					}
+				</script>
+			</h:form>
+
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

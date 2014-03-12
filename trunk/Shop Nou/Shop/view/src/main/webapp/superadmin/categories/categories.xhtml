@@ -18,10 +18,10 @@
 				<p:graphicImage value="/resources/categories.jpg" width="720"
 					height="100" />
 			</div>
-			<br />		
-			Pentru update si delete trebuie selectata categoria pe care se vor opera modificarile.
+			<br />	
+			#{internationalizationCategory.template1}	
 			<br />
-			Pentru a crea o noua categorie trebuie selectat parintele, in cazul in care exista.
+			#{categoryBeaninternationalizationCategory.template2}
 			<br />
 			<br />
 			<h:form id="formTree">
@@ -44,23 +44,24 @@
 			<h:form id="formCreate">
 
 				<p:growl id="messages2" showDetail="true" />
-				<h:commandButton id="createLink" value="Create" type="button"
+				<h:commandButton id="createLink"
+					value="#{internationalizationGeneric.create}" type="button"
 					onclick="create.show()" styleClass="search-submit"
 					rendered="#{categoryBean.selected}" />
 
-				<p:dialog header="Create a new category" modal="true"
-					widgetVar="create" focus="name" resizable="false">
+				<p:dialog header="#{internationalizationCategory.createM}"
+					modal="true" widgetVar="create" focus="name" resizable="false">
 					<h:panelGrid columns="2" cellpadding="5">
-						<h:outputLabel for="name" value="Name:" />
+						<h:outputLabel for="name" value="#{internationalizationGeneric.name}:" />
 						<p:inputText id="name" label="name"
 							value="#{categoryBean.newName}">
 							<f:validator validatorId="validateCategory" />
 						</p:inputText>
-						<p:commandButton value="Create"
+						<p:commandButton value="#{internationalizationGeneric.create}"
 							actionListener="#{categoryBean.create}" update="messages2"
 							oncomplete="handleCreateRequest(xhr, status, args)" />
-						<p:commandButton value="Cancel" onclick="create.hide();"
-							type="button" />
+						<p:commandButton value="#{internationalizationGeneric.cancel}"
+							onclick="create.hide();" type="button" />
 					</h:panelGrid>
 				</p:dialog>
 
@@ -82,17 +83,17 @@
 			<h:form id="formUpdate">
 
 				<p:growl id="messages3" showDetail="true" />
-				<h:commandButton value="Update" type="button"
+				<h:commandButton value="#{internationalizationGeneric.update}" type="button"
 					onclick="update.show()" styleClass="search-submit"
 					rendered="#{categoryBean.selected}" id="b2" immediate="true"
 					process="@this" />
 
-				<p:dialog header="Update the selected category" modal="true"
-					widgetVar="update" focus="nName" resizable="false">
+				<p:dialog header="#{internationalizationCategory.updateM}"
+					modal="true" widgetVar="update" focus="nName" resizable="false">
 
 					<h:panelGrid columns="2" cellpadding="5">
 						<h:outputLabel for="tree"
-							value="Select a new parent for the category" />
+							value="#{internationalizationCategory.selectParent}" />
 
 						<p:tree value="#{categoryBean.rootUpdate}" var="node"
 							dynamic="true" cache="false" selectionMode="single"
@@ -104,16 +105,16 @@
 							</p:treeNode>
 						</p:tree>
 
-						<h:outputLabel for="nName" value="Name:" />
+						<h:outputLabel for="nName" value="#{internationalizationGeneric.name}:" />
 						<p:inputText id="nName" label="nName"
 							value="#{categoryBean.newName}">
 							<f:validator validatorId="validateUpdateCategory" />
 						</p:inputText>
-						<p:commandButton value="Update"
+						<p:commandButton value="#{internationalizationGeneric.update}"
 							actionListener="#{categoryBean.update}" update="messages3"
 							oncomplete="handleUpdateRequest(xhr, status, args)" />
-						<p:commandButton value="Cancel" onclick="update.hide();"
-							type="button" />
+						<p:commandButton value="#{internationalizationGeneric.cancel}"
+							onclick="update.hide();" type="button" />
 
 					</h:panelGrid>
 				</p:dialog>
@@ -135,16 +136,20 @@
 
 			<h:form id="formDelete">
 				<p:growl id="messages4" showDetail="true" />
-				<h:commandButton value="Delete" type="button" onclick="cd.show()"
-					styleClass="search-submit" rendered="#{categoryBean.selected}"
-					id="b3" immediate="true" process="@this" />
+				<h:commandButton value="#{internationalizationGeneric.delete}"
+					type="button" onclick="cd.show()" styleClass="search-submit"
+					rendered="#{categoryBean.selected}" id="b3" immediate="true"
+					process="@this" />
 
-				<p:confirmDialog message="Are you sure?" header="Confirmation"
+				<p:confirmDialog
+					message="#{internationalizationGeneric.confirmMessage}"
+					header="#{internationalizationGeneric.confirmation}"
 					severity="alert" widgetVar="cd" resizable="false">
-					<p:commandButton value="Yes"
+					<p:commandButton value="#{internationalizationGeneric.yes}"
 						actionListener="#{categoryBean.delete}" update="messages4"
 						oncomplete="cd.hide()" immediate="true" />
-					<p:commandButton value="No" onclick="cd.hide();" type="button" />
+					<p:commandButton value="#{internationalizationGeneric.no}"
+						onclick="cd.hide();" type="button" />
 				</p:confirmDialog>
 			</h:form>
 

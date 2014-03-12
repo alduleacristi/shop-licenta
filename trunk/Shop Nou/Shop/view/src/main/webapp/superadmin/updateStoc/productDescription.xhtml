@@ -12,6 +12,10 @@
 <h:body>
 	<ui:composition template="/superadmin/index.xhtml">
 		<br />
+		<ui:define name="menu">
+			<ui:include src="/resources/template/superadmin/menuProducts.xhtml"></ui:include>
+		</ui:define>
+
 		<ui:define name="mainContent">
 			<h:form id="mainForm">
 				<p:growl id="messages" showDetail="true" />
@@ -28,7 +32,15 @@
 										<br /> Color:
 										#{colorProductSizeSelectBean.selectedProduct.color.name}<br />
 									</p>
-									<strong class="price">$#{colorProductSizeSelectBean.selectedProduct.product.price}</strong>
+									<strong class="price"> <p:outputLabel
+											value="$#{colorProductSizeSelectBean.selectedProduct.product.price}"
+											rendered="#{colorProductSizeSelectBean.selectedProduct.product.reduction == 0.0}"></p:outputLabel></strong>
+									<strike> <p:outputLabel
+											value="$#{colorProductSizeSelectBean.selectedProduct.product.price}"
+											rendered="#{colorProductSizeSelectBean.selectedProduct.product.reduction != 0.0}"></p:outputLabel>
+									</strike> <strong class="price"> <p:outputLabel
+											value="$#{colorProductSizeSelectBean.selectedProduct.product.price-colorProductSizeSelectBean.selectedProduct.product.price*colorProductSizeSelectBean.selectedProduct.product.reduction/100}"
+											rendered="#{colorProductSizeSelectBean.selectedProduct.product.reduction != 0.0}"></p:outputLabel></strong>
 									<br />
 									<h:outputText id="outputPieces"
 										value="Available pieces: #{colorProductSizeSelectBean.getAvailablePieces()}" />
@@ -56,13 +68,11 @@
 							<div class="product-info2">
 
 								<h3>Description</h3>
-								<center>
-									<br></br>
-									<p:inputTextarea cols="21" rows="11" maxlength="200"
-										value="#{colorProductSizeSelectBean.selectedProduct.product.description}"
-										readonly="true">
-									</p:inputTextarea>
-								</center>
+								<br></br>
+								<p:inputTextarea cols="20" rows="12" maxlength="200"
+									value="#{colorProductSizeSelectBean.selectedProduct.product.description}"
+									readonly="true">
+								</p:inputTextarea>
 							</div>
 						</li>
 					</ul>

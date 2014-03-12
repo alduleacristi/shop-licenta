@@ -14,21 +14,22 @@
 		<h:form>
 			<div id="navigation">
 				<ul>
-					<li><a href="/Shop4j/superadmin/index.xhtml" class="active">Home</a></li>
+					<li><a href="/Shop4j/superadmin/index.xhtml" class="active">#{internationalizationBean.menuIndexHome}</a></li>
 					<li><a href="/Shop4j/superadmin/genericProducts"
-						class="active">Manage generic products</a></li>
+						class="active">#{internationalizationProductMenuBean.manageGeneric}</a></li>
 					<li><a href="/Shop4j/superadmin/genericProducts/colorProducts"
-						class="active">Manage colors</a></li>
+						class="active">#{internationalizationProductMenuBean.manageColors}</a></li>
 					<li><a
 						href="/Shop4j/superadmin/genericProducts/colorProducts/photos"
-						class="active">Manage photos</a></li>
+						class="active">#{internationalizationProductMenuBean.managePhotos}</a></li>
 					<li><a
 						href="/Shop4j//superadmin/genericProducts/colorProducts/sizes"
-						class="active">Manage sizes</a></li>
+						class="active">#{internationalizationProductMenuBean.manageSizes}</a></li>
 
 					<li><p:commandLink styleClass="active"
 							actionListener="#{Login.logout()}">
-							<h:outputText value="Logout" styleClass="active"></h:outputText>
+							<h:outputText value="#{internationalizationBean.menuIndexLogout}"
+								styleClass="active"></h:outputText>
 						</p:commandLink></li>
 
 				</ul>

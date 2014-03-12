@@ -38,6 +38,13 @@
 					<div class="box">
 						<p:graphicImage value="/resources/n5.jpg" width="720" height="200" />
 					</div>
+					<h:form>
+						<div align="right">
+							<p:commandLink value="#{internationalizationBean.changeLanguage}"
+								actionListener="#{internationalizationBean.change}"
+								oncomplete="window.location.reload()" styleClass="active" />
+						</div>
+					</h:form>
 					<ui:insert name="mainContent">
 
 					</ui:insert>

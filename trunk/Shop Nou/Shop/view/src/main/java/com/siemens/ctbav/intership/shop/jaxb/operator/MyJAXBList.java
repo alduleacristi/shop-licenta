@@ -3,9 +3,12 @@ package com.siemens.ctbav.intership.shop.jaxb.operator;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSeeAlso;
 
 @XmlRootElement(name="list")
+@XmlSeeAlso(ClientJAXB.class)
 public class MyJAXBList {
 
 	
@@ -15,10 +18,16 @@ public class MyJAXBList {
 		return list;
 	}
 
-	@XmlElement
-	public void setList(List<? extends Object> list) {
-		this.list = list;
+	@XmlElementWrapper
+	public void setList(List<? extends Object> list){
+		this.list=list;
+	}
+	public MyJAXBList(List<? extends Object> list){
+		this.list=list;
 	}
 	
+	public MyJAXBList(){
+		
+	}
 	
 }

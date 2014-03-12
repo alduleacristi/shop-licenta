@@ -3,6 +3,7 @@ package com.siemens.ctbav.intership.shop.view.operator;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -45,15 +46,24 @@ public class ClientBean {
 	private UserService userService;
 	private List<ClientDTO> allClients;
 
-	private List<Integer> reports;
-	
+	private String[] reports;
+
+	public String[] getReports() {
+		return reports;
+	}
+
+	public void setReports(String[] reports) {
+		this.reports = reports;
+	}
+
+	private GenerateReport generate;
+
 	public String getFilename() {
 		java.sql.Date currDate = new Date(Calendar.getInstance()
 				.getTimeInMillis());
-		return "clients" + currDate;
+		return "d:\\Reports\\clients" + currDate;
 	}
 
-	
 	@PostConstruct
 	public void initClientList() {
 		setAllClients(ConvertClient.convertClientListDate(clientService
@@ -102,21 +112,57 @@ public class ClientBean {
 		}
 	}
 
-	
-	public void generateReports(){
-		for(int i=0; i<reports.size(); i++)
-			System.out.println(reports.get(i));
+	private boolean contains(int val) {
+		for (int i = 0; i < reports.length; i++) {
+			int value = Integer.parseInt(reports[i]);
+			if (value == val)
+				return true;
+		}
+		return false;
 	}
 
+	public void generateReports() {
+	//	for (int i = 0; i < reports.length; i++)
+		//	System.out.println(reports[i]);
+		try {
+			if (contains(Reports.PDF.getValue())) {
+				generate = new GeneratePDF(allClients, new FileWriter(
+						getFilename() + ".pdf"));
+				generate.generate();
+			}
 
-	public List<Integer> getReports() {
-		return reports;
+			if (contains(Reports.XML.getValue())) {
+
+				generate = new GenerateXML(allClients, new FileWriter(
+						getFilename() + ".xml"));
+			//	System.out.println(getFilename() + ".xml");
+				generate.generate();
+			}
+			if (contains(Reports.JSON.getValue())) {
+				generate = new GenerateJson(allClients, new FileWriter(
+						getFilename() + ".json"));
+				generate.generate();
+			}
+			if (contains(Reports.CSV.getValue())) {
+				generate = new GenerateCSV(allClients, new FileWriter(
+						getFilename() + ".csv"));
+				generate.generate();
+			}
+			FacesContext
+					.getCurrentInstance()
+					.addMessage(
+							null,
+							new FacesMessage(
+									FacesMessage.SEVERITY_INFO,
+									"The reports have been generated in folder Reports",
+									""));
+		} catch (Exception e) {
+			 System.out.println("exceptie " + e.getMessage());
+			FacesContext.getCurrentInstance().addMessage(
+					null,
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, e
+							.getMessage(), e.getMessage()));
+		}
 	}
-
-
-	public void setReports(List<Integer> reports) {
-		this.reports = reports;
-	}
-
 
 }

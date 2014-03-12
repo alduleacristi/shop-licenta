@@ -1,5 +1,7 @@
 package com.siemens.ctbav.intership.shop.service.superadmin;
 
+import java.util.List;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -81,6 +83,13 @@ public class ColorSizeProductService {
 
 	public ProductColorSize getProductById(Long idProductColorSize) {
 		return em.find(ProductColorSize.class, idProductColorSize);
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<ProductColorSize> getAllProductsColorSize() {
+		return em
+				.createNamedQuery(ProductColorSize.GET_ALL_PRODUCTS_COLOR_SIZE)
+				.getResultList();
 	}
 
 }

@@ -17,6 +17,7 @@ import org.primefaces.event.FileUploadEvent;
 
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
+import com.siemens.ctbav.intership.shop.conf.ConfigurationService;
 import com.siemens.ctbav.intership.shop.model.ProductColor;
 import com.siemens.ctbav.intership.shop.service.superadmin.ColorProductService;
 import com.siemens.ctbav.intership.shop.service.superadmin.PhotoService;
@@ -34,12 +35,16 @@ public class ColorProductSelectPhotoBean implements Serializable {
 
 	@EJB
 	private PhotoService photoService;
+	
+	@EJB
+	private ConfigurationService confService;
 
 	@ManagedProperty(value = "#{id}")
 	private long id;
 
 	private ProductColor selectedProduct;
 	private List<String> photos;
+	private String host;
 
 	public long getId() {
 		return id;
@@ -53,6 +58,14 @@ public class ColorProductSelectPhotoBean implements Serializable {
 					.getSessionMap().put("selectedProduct", selectedProduct);
 			displayPhotos();
 		}
+	}
+
+	public String getHost() {
+		return host;
+	}
+
+	public void setHost(String host) {
+		this.host = host;
 	}
 
 	public ProductColor getSelectedProduct() {

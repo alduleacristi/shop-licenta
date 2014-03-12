@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -11,6 +12,7 @@ import javax.faces.bean.ViewScoped;
 
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
+import com.siemens.ctbav.intership.shop.conf.ConfigurationService;
 import com.siemens.ctbav.intership.shop.model.Product;
 import com.siemens.ctbav.intership.shop.model.ProductColor;
 import com.siemens.ctbav.intership.shop.model.ProductColorSize;
@@ -34,6 +36,9 @@ public class DescriptionProductReduceBean implements Serializable {
 
 	@EJB
 	private PhotoService photoService;
+	
+	@EJB
+	private ConfigurationService confService;
 
 	private List<ProductColor> productsColor;
 
@@ -49,11 +54,16 @@ public class DescriptionProductReduceBean implements Serializable {
 
 	private boolean isAvailabel;
 
-	private String availabel;
+	private String availabel,host;
 
 	private Integer nrOfPieces;
 
 	private List<String> photos;
+	
+	@PostConstruct
+	private void postConstruct(){
+		this.host = confService.getHost();
+	}
 
 	public List<ProductColor> getProductsColor() {
 		return productsColor;
@@ -144,6 +154,14 @@ public class DescriptionProductReduceBean implements Serializable {
 
 	public void setPhotos(List<String> photos) {
 		this.photos = photos;
+	}
+
+	public String getHost() {
+		return host;
+	}
+
+	public void setHost(String host) {
+		this.host = host;
 	}
 
 	private void initialize() {

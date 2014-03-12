@@ -34,7 +34,7 @@
 					sticky="true" />
 				<center>
 					<p:graphicImage
-						url="http://localhost:8080/Shop4j/rest/products/id#{DescriptionRecommandedProductBean.getProductColorId(DescriptionRecommandedProductBean.selectedProduct)}"
+						url="#{DescriptionRecommandedProductBean.host}/Shop4j/rest/products/id#{DescriptionRecommandedProductBean.getProductColorId(DescriptionRecommandedProductBean.selectedProduct)}"
 						width="170" height="190" id="image" cache="false"
 						rendered="#{DescriptionRecommandedProductBean.selectedProduct != null}" />
 				</center>
@@ -137,7 +137,7 @@
 									<p:commandButton value="Add to cart" id="addButton"
 										styleClass="update-submit"
 										disabled="#{!DescriptionRecommandedProductBean.isAvailabel}"
-										actionListener="#{cart.addProduct(DescriptionRecommandedProductBean.productColorSize,DescriptionRecommandedProductBean.nrOfPieces)}"
+										actionListener="#{cart.addProductFromPage(DescriptionRecommandedProductBean.productColorSize,DescriptionRecommandedProductBean.nrOfPieces)}"
 										update="selectProductColorSize,:cartLink:nrProducts,:cartLink:totalPrice,:cartLink:dialog"
 										style="width:173px" />
 								</div>

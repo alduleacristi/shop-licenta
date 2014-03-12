@@ -18,6 +18,7 @@ import org.primefaces.model.TreeNode;
 
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
+import com.siemens.ctbav.intership.shop.conf.ConfigurationService;
 import com.siemens.ctbav.intership.shop.exception.superadmin.ColorSizeProductException;
 import com.siemens.ctbav.intership.shop.model.Category;
 import com.siemens.ctbav.intership.shop.model.ProductColor;
@@ -45,6 +46,9 @@ public class ColorProductSizeSelectBean implements Serializable {
 
 	@EJB
 	private ColorSizeProductService colorSizeProductService;
+	
+	@EJB
+	private ConfigurationService confService;
 
 	@ManagedProperty(value = "#{id}")
 	private long id;
@@ -53,12 +57,14 @@ public class ColorProductSizeSelectBean implements Serializable {
 	private ProductColorSize pcs;
 	private Long idSelectedProductColorSize;
 	private Long idSelectedSize;
-	private String nrPieces;
+	private String nrPieces,host;
 	private List<Size> allSizes;
 	private boolean selectedSize;
 
 	@PostConstruct
 	void initialization() {
+		this.host = confService.getHost();
+		
 		initSizes();
 	}
 
@@ -159,6 +165,14 @@ public class ColorProductSizeSelectBean implements Serializable {
 
 	public void setSelectedSize(boolean selectedSize) {
 		this.selectedSize = selectedSize;
+	}
+
+	public String getHost() {
+		return host;
+	}
+
+	public void setHost(String host) {
+		this.host = host;
 	}
 
 	public void add(ActionEvent actionEvent) {

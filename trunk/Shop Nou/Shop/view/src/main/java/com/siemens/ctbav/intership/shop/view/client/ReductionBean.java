@@ -12,6 +12,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
+import com.siemens.ctbav.intership.shop.conf.ConfigurationService;
 import com.siemens.ctbav.intership.shop.exception.client.ProductDoesNotExistException;
 import com.siemens.ctbav.intership.shop.model.Product;
 import com.siemens.ctbav.intership.shop.model.ProductColor;
@@ -33,10 +34,16 @@ public class ReductionBean implements Serializable {
 	@EJB
 	private ProductColorService productColorService;
 
+	@EJB
+	private ConfigurationService confService;
+
 	private List<Product> products;
+	private String host;
 
 	@PostConstruct
 	private void initialize() {
+		this.host = confService.getHost();
+		
 		products = new ArrayList<Product>();
 		try {
 			products = productService.getReducedProducts();
@@ -66,6 +73,14 @@ public class ReductionBean implements Serializable {
 
 	public void setProducts(List<Product> products) {
 		this.products = products;
+	}
+
+	public String getHost() {
+		return host;
+	}
+
+	public void setHost(String host) {
+		this.host = host;
 	}
 
 	private void redirect(String url) {

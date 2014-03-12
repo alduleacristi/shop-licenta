@@ -15,6 +15,7 @@ import javax.faces.context.FacesContext;
 
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
+import com.siemens.ctbav.intership.shop.conf.ConfigurationService;
 import com.siemens.ctbav.intership.shop.exception.client.ProductColorSizeDoesNotExistException;
 import com.siemens.ctbav.intership.shop.exception.client.ProductDoesNotExistException;
 import com.siemens.ctbav.intership.shop.model.Category;
@@ -47,20 +48,24 @@ public class ClientProductsBean implements Serializable {
 
 	@EJB
 	private PhotoService photoService;
+	
+	@EJB
+	private ConfigurationService confService;
 
 	private ProductColor selectedProduct;
 	private Category selectedCategory;
 	private List<ProductColor> productList;
-	private String availabel;
+	private String availabel,host;
 	private boolean isAvailabel;
 	private ProductColorSize productColorSize;
 	private Long idProductColorSize;
 	private List<String> photos;
-
 	private Integer nrOfPieces;
 
 	@PostConstruct
 	private void postConstruct() {
+		this.host = confService.getHost();
+		
 		this.nrOfPieces = 1;
 		setIsAvailabel(false);
 		productList = new ArrayList<ProductColor>();
@@ -174,6 +179,14 @@ public class ClientProductsBean implements Serializable {
 
 	public void setPhotos(List<String> photos) {
 		this.photos = photos;
+	}
+	
+	public String getHost() {
+		return host;
+	}
+
+	public void setHost(String host) {
+		this.host = host;
 	}
 
 	private void redirect(String url) {

@@ -27,5 +27,4 @@ public enum ECategory {
 	public String toString() {
 		return this.name;
 	}
-
 }

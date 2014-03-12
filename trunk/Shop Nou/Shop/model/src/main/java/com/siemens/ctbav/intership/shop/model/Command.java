@@ -17,25 +17,26 @@ import com.siemens.ctbav.intership.shop.util.Enum.CommandStatusEnum;
 		@NamedQuery(name = Command.GET_COMMANDS, query = "SELECT c FROM Command c order by c.orderDate"),
 		@NamedQuery(name = Command.GET_ORDERS_IN_PROGRESS, query = "SELECT c FROM Command c where c.command_status.status='In progress'"),
 		@NamedQuery(name = Command.GET_ORDERS_FOR_OPERATOR, query = "SELECT c FROM Command c where c.command_status.status='In progress' and c.user.id=:id order by c.orderDate"),
-		@NamedQuery(name =Command.GET_RANDOM_ORDERS, query="select c from Command c where c.user.id is null order by rand()"),
-		@NamedQuery(name=Command.GET_ORDER, query="select c from Command c where c.user.id is null and c.command_status.status='In Progress'"),
-		@NamedQuery(name=Command.GET_CLIENTS_ORDERS, query="select c from Command c where  c.command_status.status='In Progress' and c.client.id=:id"),
-		@NamedQuery(name=Command.GET_ORDERS_BETWEEN_DATES, query="select c from Command c where c.orderDate between  :date1 and  :date2 "),
-		@NamedQuery(name=Command.GET_RETURNED_ORDERS, query ="select c from Command c where c.returnDate is not null")
- })
+		@NamedQuery(name = Command.GET_RANDOM_ORDERS, query = "select c from Command c where c.user.id is null order by rand()"),
+		@NamedQuery(name = Command.GET_ORDER, query = "select c from Command c where c.user.id is null and c.command_status.status='In Progress'"),
+		@NamedQuery(name = Command.GET_CLIENTS_ORDERS, query = "select c from Command c where  c.command_status.status='In Progress' and c.client.id=:id"),
+		@NamedQuery(name = Command.GET_ORDERS_BETWEEN_DATES, query = "select c from Command c where c.orderDate between  :date1 and  :date2 "),
+		@NamedQuery(name = Command.GET_RETURNED_ORDERS, query = "select c from Command c where c.returnDate is not null"),
+		@NamedQuery(name = Command.GET_CLIENTS_DELIVERED_ORDERS, query = "select c from Command c where c.command_status.status='delivered' and c.client.id=:id") })
 public class Command implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	public static final String GET_COMMANDS = "getCommands";
 	public static final String GET_ORDERS_IN_PROGRESS = "getOrdersInProgress";
-	public static final String GET_ORDERS_FOR_OPERATOR="get orders for operator";
-	public static final String GET_RANDOM_ORDERS="get random orders";
-	public static final String GET_ORDER="get order for operator";
-	public static final String GET_CLIENTS_ORDERS="getClientsOrders";
-	public static final String GET_ORDERS_BETWEEN_DATES="getOrdersBetweenDates";
-	public static final String GET_RETURNED_ORDERS="getReturnedOrders";
-	
+	public static final String GET_ORDERS_FOR_OPERATOR = "get orders for operator";
+	public static final String GET_RANDOM_ORDERS = "get random orders";
+	public static final String GET_ORDER = "get order for operator";
+	public static final String GET_CLIENTS_ORDERS = "getClientsOrders";
+	public static final String GET_ORDERS_BETWEEN_DATES = "getOrdersBetweenDates";
+	public static final String GET_RETURNED_ORDERS = "getReturnedOrders";
+	public final static String GET_CLIENTS_DELIVERED_ORDERS = "getClientDeliveredOrders";
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -63,13 +64,12 @@ public class Command implements Serializable {
 	private Client client;
 
 	@ManyToOne
-	@JoinColumn(name="id_operator")
+	@JoinColumn(name = "id_operator")
 	private User user;
-	
-	@Column(name="return_date")
+
+	@Column(name = "return_date")
 	private Date returnDate;
-	
-	
+
 	public Command() {
 	}
 
@@ -139,7 +139,7 @@ public class Command implements Serializable {
 	public void setClient(Client client) {
 		this.client = client;
 	}
-	
+
 	public Long getId() {
 		return id;
 	}

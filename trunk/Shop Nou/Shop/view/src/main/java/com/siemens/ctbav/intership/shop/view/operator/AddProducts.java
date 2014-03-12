@@ -12,10 +12,8 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 
-import com.siemens.ctbav.intership.shop.dto.operator.ClientProductDTO;
 import com.siemens.ctbav.intership.shop.dto.operator.MissingProduct;
-import com.siemens.ctbav.intership.shop.dto.operator.ProductColorSizeDTO;
-import com.siemens.ctbav.intership.shop.exception.superadmin.ProductException;
+import com.siemens.ctbav.intership.shop.exception.operator.ProductException;
 import com.siemens.ctbav.intership.shop.service.operator.ProductService;
 
 @ManagedBean(name = "addProducts")
@@ -23,20 +21,30 @@ import com.siemens.ctbav.intership.shop.service.operator.ProductService;
 public class AddProducts {
 
 	private Set<MissingProduct> productSet;
-	
+	private List<MissingProduct> productList;
+
 	@EJB
 	private ProductService prodService;
-	
+
 	@PostConstruct
 	public void postConstruct() {
 		productSet = new TreeSet<MissingProduct>();
-		//in productService calculez pt fiecare produs diferenta dintre cate sunt pe stoc si cate s-au cerut in comenzi
-	
+		productList = new ArrayList<MissingProduct>();
+		// in productService calculez pt fiecare produs diferenta dintre cate
+		// sunt pe stoc si cate s-au cerut in comenzi
+		try {
+			productSet = prodService.getMissingProducts();
+			productList.addAll(productSet);
+		} catch (ProductException e) {
+			FacesContext.getCurrentInstance().addMessage(
+					null,
+					new FacesMessage(FacesMessage.SEVERITY_INFO,
+							e.getMessage(), e.getMessage()));
+		}
 	}
 
-
-	public Set<MissingProduct> getProductSet() {
-		return productSet;
+	public List<MissingProduct> getProductList() {
+		return productList;
 	}
 
 	public void add(MissingProduct product) {
@@ -47,16 +55,18 @@ public class AddProducts {
 							"The number of pieces must be greater than 0", ""));
 			return;
 		}
-		
-	//	product.getProduct().setNrPieces(product.getNrPieces() + product.getPiecesAdded());
-//		try {
-//			prodService.addProducts(product.getProduct());
-//		} catch (ProductException e) {
-//			FacesContext.getCurrentInstance().addMessage(
-//					null,
-//					new FacesMessage(FacesMessage.SEVERITY_ERROR,
-//							e.getMessage(), ""));
-//		}
+		try {
+			prodService.addProducts(product);
+			FacesContext.getCurrentInstance().addMessage(
+					null,
+					new FacesMessage(FacesMessage.SEVERITY_INFO,
+							product.getPiecesAdded()+" products were successfully added!", ""));
+		} catch (ProductException e) {
+			FacesContext.getCurrentInstance().addMessage(
+					null,
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, e
+							.getMessage(), ""));
+		}
 	}
 
 }

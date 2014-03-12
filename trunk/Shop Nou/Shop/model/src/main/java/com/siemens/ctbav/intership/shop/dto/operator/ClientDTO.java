@@ -15,6 +15,9 @@ public class ClientDTO {
 	private Date lastOrderDate;
 	
 	
+	public ClientDTO(){
+		
+	}
 	public ClientDTO(String firstname, String lastname, String phoneNumber,
 			UserDTO user) {
 		this.firstName = firstname;

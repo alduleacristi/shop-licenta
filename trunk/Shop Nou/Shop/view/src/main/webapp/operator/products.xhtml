@@ -15,72 +15,67 @@
 	<ui:composition template="/resources/template/operator/index.xhtml">
 		<ui:define name="mainContent">
 			<h:form id="form">
+				<p:growl id="error">
+					<p:dataTable id="productsTable" var="product"
+						value="#{addProducts.productList}" paginator="true" rows="20"
+						paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+						rowsPerPageTemplate="5,10,15">
 
-				<p:dataTable id="productsTable" var="product"
-					value="#{addProducts.productSet}" paginator="true" rows="20"
-					paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
-					rowsPerPageTemplate="5,10,15">
+						<p:column style="width:7%">
 
-					<p:column style="width:7%">
-
-						<f:facet name="header">  
+							<f:facet name="header">  
                    Name 
          		   </f:facet>
-						<h:outputText value="#{product.product.prodColor.product.name}" />
-					</p:column>
-					<p:column style="width:10%">
-						<f:facet name="header">  
+							<h:outputText value="#{product.product.prodColor.product.name}" />
+						</p:column>
+						<p:column style="width:10%">
+							<f:facet name="header">  
                   Description
             </f:facet>
-						<h:outputText
-							value="#{product.product.prodColor.product.description}" />
-					</p:column>
-					<p:column style="width:20%">
-						<f:facet name="header">  
+							<h:outputText
+								value="#{product.product.prodColor.product.description}" />
+						</p:column>
+						<p:column style="width:20%">
+							<f:facet name="header">  
                   Color
             </f:facet>
-						<h:outputText value="#{product.product.prodColor.color.name}" />
-					</p:column>
-					<p:column style="width:10%">
-						<f:facet name="header">  
+							<h:outputText value="#{product.product.prodColor.color.name}" />
+						</p:column>
+						<p:column style="width:10%">
+							<f:facet name="header">  
                   Size
             </f:facet>
-						<h:outputText value="#{product.product.size.name}" />
-					</p:column>
-					<p:column style="width:5%">
-						<f:facet name="header">  
+							<h:outputText value="#{product.product.size.name}" />
+						</p:column>
+						<p:column style="width:5%">
+							<f:facet name="header">  
                Category
             </f:facet>
-						<h:outputText
-							value="#{product.product.prodColor.product.category.name}" />
-					</p:column>
-					<p:column style="width:10%">
-						<f:facet name="header">  
-               Photo
-            </f:facet>
-						<h:outputText value="#" />
-					</p:column>
-					<p:column style="width:30%">
-						<f:facet name="header">  
+							<h:outputText
+								value="#{product.product.prodColor.product.category.name}" />
+						</p:column>
+						<p:column style="width:10%">
+
+							<f:facet name="header">  
                Missing pieces
             </f:facet>
-						<h:outputText value="#{product.nrPieces}" />
-					</p:column>
+							<h:outputText value="#{product.nrPieces}" />
+						</p:column>
 
-					<p:column style="width:10%">
-						<f:facet name="header">  
+						<p:column style="width:10%">
+							<f:facet name="header">  
                Pieces I want to add
             </f:facet>
-						<h:inputText value="#{product.piecesAdded}" />
-					</p:column>
-					<p:column style="width:10%">
+							<h:inputText value="#{product.piecesAdded}" />
+						</p:column>
+						<p:column style="width:10%">
 
-						<p:commandButton value="Add products"
-							actionListener="#{addProducts.add(product)}"
-							styleClass="ui-priority-primary" update=":form:productsTable" />
-					</p:column>
-				</p:dataTable>
-
+							<p:commandButton value="Add products"
+								actionListener="#{addProducts.add(product)}"
+								styleClass="ui-priority-primary" update=":form:error" />
+						</p:column>
+					</p:dataTable>
+				</p:growl>
 			</h:form>
 		</ui:define>
 		<ui:define name="footer">

@@ -12,17 +12,15 @@
 <h:body>
 
 
-	<ui:composition template="/resources/template/operator/index.xhtml">
-		<ui:define name="mainContent">
-			<h:form id="form">
-				<p:galleria id="iamges" value = "#{opImages.images}" var ="image" effect="slide" effectSpeed="2000" panelWidth="723" panelHeigth="100" showCaption="true">
-					<p:graphicImage value="#{image}" title="Shop4J products" width="723" height="400"/>
-				</p:galleria>
-			</h:form>
+	<ui:composition template="/resources/template/template.xhtml">
+		<ui:define name="menu">
+			<ui:include src="/resources/template/operator/menu.xhtml"></ui:include>
 		</ui:define>
-		<ui:define name="footer">
-			<ui:include src="/resources/template/operator/footer.xhtml"></ui:include>
+
+		<ui:define name="menuAdmin">
+			<ui:include src="/resources/template/operator/menuLeft.xhtml"></ui:include>
 		</ui:define>
+
 	</ui:composition>
 
 </h:body>

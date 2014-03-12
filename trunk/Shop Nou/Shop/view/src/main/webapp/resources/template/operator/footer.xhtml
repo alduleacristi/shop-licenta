@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+<title></title>
+</head>
+<h:body>
+	<ui:composition>
+		<div id="footer">
+			<p class="left">
+				<a href="clients.xhtml">Clients</a> <span>|</span> <a
+					href="orders.xhtml">Orders</a>
+					<span>|</span> <a
+					href="returnedOrders.xhtml">Returned Orders</a> <span>|</span> <a
+					href="products.xhtml">Products</a> <span>|</span><a
+					href="mailValidity.xhtml">Mail validity</a><span>|</span><a
+					href="changeAccount.xhtml">Change account</a><span>|</span>
+				<p:commandLink rendered="#{Login.logged}" styleClass="active"
+					actionListener="#{Login.logout()}">
+					<h:outputText value="Logout" styleClass="active"></h:outputText>
+				</p:commandLink>
+			</p>
+			<p class="right">
+				&copy; 2010 Shop Around. Design by <a
+					href="http://chocotemplates.com">Chocotemplates.com</a>
+			</p>
+		</div>
+	</ui:composition>
+</h:body>
+</html>

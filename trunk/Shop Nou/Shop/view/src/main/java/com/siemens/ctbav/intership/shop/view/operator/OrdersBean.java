@@ -1,7 +1,9 @@
 package com.siemens.ctbav.intership.shop.view.operator;
 
-import java.sql.Date;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -14,8 +16,12 @@ import javax.faces.context.FacesContext;
 import com.siemens.ctbav.intership.shop.convert.operator.ConvertCommand;
 import com.siemens.ctbav.intership.shop.dto.operator.ClientProductDTO;
 import com.siemens.ctbav.intership.shop.dto.operator.CommandDTO;
+import com.siemens.ctbav.intership.shop.exception.operator.CommandNotFoundException;
+import com.siemens.ctbav.intership.shop.exception.operator.IncorrectInputException;
 import com.siemens.ctbav.intership.shop.exception.operator.NotEnoughProductsException;
 import com.siemens.ctbav.intership.shop.model.User;
+import com.siemens.ctbav.intership.shop.report.operator.GenerateJson;
+import com.siemens.ctbav.intership.shop.report.operator.GenerateReport;
 import com.siemens.ctbav.intership.shop.service.operator.CommandService;
 import com.siemens.ctbav.intership.shop.util.operator.AES;
 import com.siemens.ctbav.intership.shop.util.operator.MailService;
@@ -33,7 +39,16 @@ public class OrdersBean {
 	@EJB
 	private CommandService commService;
 
-	private List<CommandDTO> allOrders;
+	private Date from, to;
+	private Double minValue, maxValue;
+
+	
+	public String getFilename() {
+		java.sql.Date currDate = new java.sql.Date(Calendar.getInstance().getTimeInMillis());
+		return selectedOrder.getClient().getFirstName()+" "+selectedOrder.getClient().getLastName()+currDate;
+	}
+
+	// private List<CommandDTO> allOrders;
 	public List<CommandDTO> getOrderList() {
 		return orderList;
 	}
@@ -56,9 +71,41 @@ public class OrdersBean {
 		return transport;
 	}
 
+	public Date getFrom() {
+		return from;
+	}
+
+	public void setFrom(Date from) {
+		this.from = from;
+	}
+
+	public Date getTo() {
+		return to;
+	}
+
+	public void setTo(Date to) {
+		this.to = to;
+	}
+
+	public Double getMinValue() {
+		return minValue;
+	}
+
+	public void setMinValue(Double minValue) {
+		this.minValue = minValue;
+	}
+
+	public Double getMaxValue() {
+		return maxValue;
+	}
+
+	public void setMaxValue(Double maxValue) {
+		this.maxValue = maxValue;
+	}
+
 	@PostConstruct
 	private void postConstruct() {
-		allOrders = ConvertCommand.convertListOfOrders(commService.ordersInProgress());
+		// setAllOrders(ConvertCommand.convertListOfOrders(commService.ordersInProgress()));
 		User user = (User) FacesContext.getCurrentInstance()
 				.getExternalContext().getSessionMap().get("user");
 		if (user == null)
@@ -79,7 +126,6 @@ public class OrdersBean {
 		}
 
 	}
-
 
 	public void deliveredOrder(CommandDTO order) {
 		System.out.println("in deliver");
@@ -107,11 +153,11 @@ public class OrdersBean {
 					new FacesMessage(FacesMessage.SEVERITY_INFO,
 							"A mail will be sent to the client",
 							"A mail will be sent to the client"));
-//			System.out
-//					.println("trimitem mail pentru explicare + pun pe sesiune lista de produse");
-//
-//			 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("productList",
-//			 e.getProductsNotFound());
+			// System.out
+			// .println("trimitem mail pentru explicare + pun pe sesiune lista de produse");
+			//
+			// FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("productList",
+			// e.getProductsNotFound());
 
 			sendExplicationMail(order);
 
@@ -138,7 +184,7 @@ public class OrdersBean {
 		System.out.println(email);
 		try {
 			// incerc sa trimit mail clientului
-			 MailService.sendLink(email, "Delayed order", page, true);
+			MailService.sendLink(email, "Delayed order", page, true);
 		} catch (Exception e) {
 			// daca nu se trimite, operatorul primeste mesaj
 			FacesContext
@@ -202,5 +248,93 @@ public class OrdersBean {
 							.getMessage(), e.getMessage()));
 		}
 	}
+
+	public void results() {
+		List<CommandDTO> orders;
+		try {
+			testAnythingSelected();
+			testCorrectDates();
+			testTotalLimits();
+			if (minValue == null && maxValue == null && minValue!= 0.0 && maxValue!= 0.0) {
+				// inseamna ca il intereseza doar data
+				orders = ConvertCommand.convertListOfOrders(commService
+						.getOrdersBetweenDates(from, to));
+				orderList = orders;
+				return;
+			}
+
+			// inseamna ca il intereseaza doar totalul
+			if (from == null && to == null) {
+				orders = ConvertCommand.convertListOfOrders(commService
+						.getOrdersBetweenTotal(minValue, maxValue));
+				orderList = orders;
+				return;
+			}
+
+			// se face filtrare dupa ambele campuri
+
+			orders = ConvertCommand.convertListOfOrders(commService.getOrdersBetweenDateAndTotals(from, to, minValue, maxValue));
+			
+		} catch (IncorrectInputException e) {
+			FacesContext.getCurrentInstance().addMessage(
+					null,
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, e
+							.getMessage(), e.getMessage()));
+		} catch (CommandNotFoundException e) {
+			FacesContext.getCurrentInstance().addMessage(
+					null,
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, e
+							.getMessage(), e.getMessage()));
+		}
+	}
+
+	private void testTotalLimits() throws IncorrectInputException {
+		if ((minValue != null && maxValue == null)
+				|| (minValue == null && maxValue != null)) {
+			minValue = maxValue = null;
+			throw new IncorrectInputException("Please insert both limits");
+
+		}
+
+		if (minValue!= maxValue && maxValue!=0.0 && minValue >= maxValue) {
+			throw new IncorrectInputException(
+					"Max value must be greater than min value");
+		}
+	}
+
+	private void testCorrectDates() throws IncorrectInputException {
+		
+		
+		if ((from != null && to == null) || (from == null && to != null)) {
+			to = from = null;
+			throw new IncorrectInputException("Please insert both dates");
+		}
+
+		if (from != null && to != null && to.compareTo(from) < 0) {
+			to = from = null;
+			throw new IncorrectInputException("To date must be after from date");
+
+		}
+	}
+
+	private void testAnythingSelected() throws IncorrectInputException {
+		if (to == null && from == null && minValue == null) {
+			throw new IncorrectInputException("Please insert a filter");
+
+		}
+
+	}
+	
+//	public void generateJson(){
+//		GenerateReport rep = new GenerateJson();
+//		try {
+//			rep.generate(orderList, new FileWriter("d:\\Delia\\fileOrders.json"));
+//		} catch (IOException e) {
+//			FacesContext.getCurrentInstance().addMessage(
+//					null,
+//					new FacesMessage(FacesMessage.SEVERITY_ERROR, e
+//							.getMessage(), e.getMessage()));
+//		}
+//	}
 
 }

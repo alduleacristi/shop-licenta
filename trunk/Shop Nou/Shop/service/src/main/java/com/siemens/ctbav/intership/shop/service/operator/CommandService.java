@@ -1,6 +1,7 @@
 package com.siemens.ctbav.intership.shop.service.operator;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -48,6 +49,13 @@ public class CommandService {
 
 	}
 
+	public List<Command> getReturnedOrders() throws CommandNotFoundException{
+		List<Command> list = em.createNamedQuery(Command.GET_RETURNED_ORDERS).getResultList();
+		if(list == null || list.size() == 0)
+			throw new CommandNotFoundException("There are no returned orders");
+		return list;
+	}
+	
 	@SuppressWarnings("unchecked")
 	public void setDeliveredCommand(CommandDTO command)
 			throws CommandNotFoundException, CommandStatusException,
@@ -175,6 +183,51 @@ public class CommandService {
 		return list;
 	}
 
+	
+	@SuppressWarnings("unchecked")
+	public List<Command> getOrdersBetweenDates(Date from , Date to) throws CommandNotFoundException{
+		List<Command> orders = em.createNamedQuery(Command.GET_ORDERS_BETWEEN_DATES).setParameter("date1", new java.sql.Date(from.getTime())).setParameter("date2", new java.sql.Date(to.getTime())).getResultList();
+		if(orders == null || orders.size() ==0){
+			throw new CommandNotFoundException("There are not orders between this dates");
+		}
+		return orders;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Command> getOrdersBetweenTotal(Double total1, Double total2) throws CommandNotFoundException{
+		List<Command> list = em.createNamedQuery(Command.GET_ORDERS_IN_PROGRESS).getResultList();
+		if(list == null || list.size() ==0) throw new CommandNotFoundException("There aren't orders in progress");
+		List<Command> filteredList  = new ArrayList<Command>();
+		
+		for(Command c :list){
+			Double total = getTotalForOrder(c);
+			if(total >=total1 && total <=total2)
+				filteredList.add(c);
+		}
+		
+		return filteredList;
+	}
+
+	private Double getTotalForOrder(Command c) {
+		Double total = (double) 0;
+		for(ClientProduct cp :  c.getClientProducts())
+			total += cp.getPrice();
+		
+		return total;
+	}
+	
+	public List<Command> getOrdersBetweenDateAndTotals(Date from, Date to , Double minValue, double maxValue) throws CommandNotFoundException{
+		List<Command> orders = getOrdersBetweenDates(from, to);
+		for (int i=0; i<orders.size(); i++){
+			Double total =getTotalForOrder(orders.get(i));
+			if(total < minValue ||  total >maxValue)
+				orders.remove(i);
+		}
+		
+		return orders;
+	}
+	
+	
 }
 
 

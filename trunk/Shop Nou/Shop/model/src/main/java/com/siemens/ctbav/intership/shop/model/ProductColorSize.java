@@ -17,12 +17,14 @@ import com.siemens.ctbav.intership.shop.model.Size;
 
 @Entity(name = "product_color_size")
 @NamedQueries({
-//		@NamedQuery(name = ProductColorSize.GET_PRODUCT_COLOR_SIZE_BY_ID, query = "SELECT p FROM product_color_size p where p.id = :id and c.command.command_status.status='In progress'"),
 		@NamedQuery(name = ProductColorSize.GET_ALL_PRODUCTS_COLOR_SIZE, query = "SELECT p FROM product_color_size p ") })
+		@NamedQuery(name = ProductColorSize.GET_ALL_PRODUCTS_COLOR_SIZE, query = "SELECT p FROM product_color_size p ") ,
+		@NamedQuery(name=ProductColorSize.GET_PRODUCT_COLOR_SIZE, query="select p from product_color_size p where p.size.size=:size and p.productcolor.color.name=:color and p.productcolor.product.name=:name")
+})
 public class ProductColorSize implements Serializable {
 
 
-	public final static String getProductColorSize = "getProductbyColor,size,name";
+	public final static String GET_PRODUCT_COLOR_SIZE = "getProductbyColor,size,name";
 
 	public final static String GET_ALL_PRODUCTS_COLOR_SIZE = "getAllProductsColorSize";
 	private static final long serialVersionUID = -8254096206057865195L;
@@ -47,7 +49,7 @@ public class ProductColorSize implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "id_size")
 	private Size size;
-
+	
 	public ProductColorSize() {
 	}
 

@@ -1,26 +1,22 @@
 package com.siemens.ctbav.intership.shop.dto.operator;
 
-
-
-
+import com.siemens.ctbav.intership.shop.enums.operator.PasswordStatus;
 
 public class UserDTO {
 
 	private String username, email, password, rolename;
-	//private PasswordStatus passwordStatus;
+	private PasswordStatus passwordStatus;
 
-	
-	
-
+	public UserDTO(){
+		
+	}
 	public UserDTO(String username, String email, String password,
-			String rolename
-		//	,PasswordStatus passwordStatus
-			) {
+			String rolename, PasswordStatus passwordStatus) {
 		this.username = username;
 		this.email = email;
 		this.password = password;
 		this.rolename = rolename;
-		//this.setPasswordStatus(passwordStatus);
+		this.passwordStatus = passwordStatus;
 	}
 
 	public String getUsername() {
@@ -31,13 +27,16 @@ public class UserDTO {
 		this.username = username;
 	}
 
-	
-
-	
-
 	public String getEmail() {
-	//	System.out.println("get email " + email);
 		return email;
+	}
+
+	public PasswordStatus getPasswordStatus() {
+		return passwordStatus;
+	}
+
+	public void setPasswordStatus(PasswordStatus passwordStatus) {
+		this.passwordStatus = passwordStatus;
 	}
 
 	public void setEmail(String email) {
@@ -52,8 +51,6 @@ public class UserDTO {
 		this.password = password;
 	}
 
-	
-
 	public String getRolename() {
 		return rolename;
 	}
@@ -62,6 +59,11 @@ public class UserDTO {
 		this.rolename = rolename;
 	}
 
+	@Override
+	public String toString() {
+		return username + "," + email
+				+ "," + password + "," + rolename
+				+ "," + passwordStatus;
+	}
 
-	
 }

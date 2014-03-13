@@ -8,6 +8,7 @@ import javax.ejb.Singleton;
 
 @Singleton
 public class ConfigurationService {
+	
 	private Properties properties;
 	private String host;
 

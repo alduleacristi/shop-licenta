@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -19,9 +20,11 @@ import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
 import com.siemens.ctbav.intership.shop.conf.ConfigurationService;
 import com.siemens.ctbav.intership.shop.model.ProductColor;
+import com.siemens.ctbav.intership.shop.service.internationalization.InternationalizationService;
 import com.siemens.ctbav.intership.shop.service.superadmin.ColorProductService;
 import com.siemens.ctbav.intership.shop.service.superadmin.PhotoService;
 import com.siemens.ctbav.intership.shop.util.superadmin.NavigationUtils;
+import com.siemens.ctbav.intership.shop.view.internationalization.enums.EPhotoProduct;
 
 @URLMappings(mappings = { @URLMapping(id = "colorProductSelectPhoto", pattern = "/superadmin/genericProducts/colorProducts/photos/#{colorProductSelectPhotoBean.id}", viewId = "productDescription.xhtml") })
 @ManagedBean(name = "colorProductSelectPhotoBean")
@@ -35,9 +38,12 @@ public class ColorProductSelectPhotoBean implements Serializable {
 
 	@EJB
 	private PhotoService photoService;
-	
+
 	@EJB
 	private ConfigurationService confService;
+
+	@EJB
+	private InternationalizationService internationalizationService;
 
 	@ManagedProperty(value = "#{id}")
 	private long id;
@@ -45,6 +51,34 @@ public class ColorProductSelectPhotoBean implements Serializable {
 	private ProductColor selectedProduct;
 	private List<String> photos;
 	private String host;
+
+	@PostConstruct
+	private void init() {
+		internationalizationInit();
+	}
+
+	private void internationalizationInit() {
+		boolean isEnglishSelected;
+		Boolean b = (Boolean) FacesContext.getCurrentInstance()
+				.getExternalContext().getSessionMap().get("isEnglishSelected");
+		if (b == null)
+			isEnglishSelected = true;
+		else
+			isEnglishSelected = b;
+		if (isEnglishSelected) {
+			String language = new String("en");
+			String country = new String("US");
+			internationalizationService
+					.setCurrentLocale(language, country,
+							"internationalization/superadmin/messages/photoProducts/PhotoProducts");
+		} else {
+			String language = new String("ro");
+			String country = new String("RO");
+			internationalizationService
+					.setCurrentLocale(language, country,
+							"internationalization/superadmin/messages/photoProducts/PhotoProducts");
+		}
+	}
 
 	public long getId() {
 		return id;
@@ -106,14 +140,19 @@ public class ColorProductSelectPhotoBean implements Serializable {
 		try {
 			photoService.addPhoto(event, "id" + selectedProduct.getId());
 			displayPhotos();
-			message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Success",
-					"Photo successfully uploaded");
+			message = new FacesMessage(FacesMessage.SEVERITY_INFO,
+					internationalizationService
+							.getMessage(EPhotoProduct.SUCCESS.getName()),
+					internationalizationService
+							.getMessage(EPhotoProduct.PHOTO_UPLOADED.getName()));
 		} catch (RepositoryException e) {
-			message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
-					e.getMessage());
+			message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+					internationalizationService.getMessage(EPhotoProduct.ERROR
+							.getName()), e.getMessage());
 		} catch (IOException e) {
-			message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
-					e.getMessage());
+			message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+					internationalizationService.getMessage(EPhotoProduct.ERROR
+							.getName()), e.getMessage());
 		} finally {
 			NavigationUtils.addMessage(message);
 		}
@@ -124,7 +163,10 @@ public class ColorProductSelectPhotoBean implements Serializable {
 			photoService.removePhotos("id" + selectedProduct.getId());
 			displayPhotos();
 			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO,
-					"Success", "Photos successfully deleted");
+					internationalizationService
+							.getMessage(EPhotoProduct.SUCCESS.getName()),
+					internationalizationService
+							.getMessage(EPhotoProduct.PHOTO_DELETED.getName()));
 			NavigationUtils.addMessage(message);
 		} catch (RepositoryException e) {
 			System.out.println(e);

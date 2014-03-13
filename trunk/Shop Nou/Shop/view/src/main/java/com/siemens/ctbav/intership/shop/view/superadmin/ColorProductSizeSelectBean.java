@@ -24,10 +24,12 @@ import com.siemens.ctbav.intership.shop.model.Category;
 import com.siemens.ctbav.intership.shop.model.ProductColor;
 import com.siemens.ctbav.intership.shop.model.ProductColorSize;
 import com.siemens.ctbav.intership.shop.model.Size;
+import com.siemens.ctbav.intership.shop.service.internationalization.InternationalizationService;
 import com.siemens.ctbav.intership.shop.service.superadmin.ColorProductService;
 import com.siemens.ctbav.intership.shop.service.superadmin.ColorSizeProductService;
 import com.siemens.ctbav.intership.shop.service.superadmin.SizeService;
 import com.siemens.ctbav.intership.shop.util.superadmin.NavigationUtils;
+import com.siemens.ctbav.intership.shop.view.internationalization.enums.EColorSizeProducts;
 
 @URLMappings(mappings = {
 		@URLMapping(id = "colorProductSizeSelect", pattern = "/superadmin/genericProducts/colorProducts/sizes/#{colorProductSizeSelectBean.id}", viewId = "productDescription.xhtml"),
@@ -46,9 +48,12 @@ public class ColorProductSizeSelectBean implements Serializable {
 
 	@EJB
 	private ColorSizeProductService colorSizeProductService;
-	
+
 	@EJB
 	private ConfigurationService confService;
+
+	@EJB
+	private InternationalizationService internationalizationService;
 
 	@ManagedProperty(value = "#{id}")
 	private long id;
@@ -57,15 +62,15 @@ public class ColorProductSizeSelectBean implements Serializable {
 	private ProductColorSize pcs;
 	private Long idSelectedProductColorSize;
 	private Long idSelectedSize;
-	private String nrPieces,host;
+	private String nrPieces, host;
 	private List<Size> allSizes;
 	private boolean selectedSize;
 
 	@PostConstruct
 	void initialization() {
 		this.host = confService.getHost();
-		
 		initSizes();
+		internationalizationInit();
 	}
 
 	void initSizes() {
@@ -84,6 +89,29 @@ public class ColorProductSizeSelectBean implements Serializable {
 				allSizes.addAll(currentSizes);
 				allSizes.addAll(parentsSizes);
 			}
+		}
+	}
+
+	private void internationalizationInit() {
+		boolean isEnglishSelected;
+		Boolean b = (Boolean) FacesContext.getCurrentInstance()
+				.getExternalContext().getSessionMap().get("isEnglishSelected");
+		if (b == null)
+			isEnglishSelected = true;
+		else
+			isEnglishSelected = b;
+		if (isEnglishSelected) {
+			String language = new String("en");
+			String country = new String("US");
+			internationalizationService
+					.setCurrentLocale(language, country,
+							"internationalization/superadmin/messages/colorSizeProducts/ColorSizeProducts");
+		} else {
+			String language = new String("ro");
+			String country = new String("RO");
+			internationalizationService
+					.setCurrentLocale(language, country,
+							"internationalization/superadmin/messages/colorSizeProducts/ColorSizeProducts");
 		}
 	}
 
@@ -187,19 +215,31 @@ public class ColorProductSizeSelectBean implements Serializable {
 			if (idProductColorSize > 0) {
 				colorSizeProductService.addPieces(idProductColorSize, nr);
 				create = true;
-				msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Succes",
-						"Pieces of the selected size added!");
+				msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
+						internationalizationService
+								.getMessage(EColorSizeProducts.SUCCESS
+										.getName()),
+						internationalizationService
+								.getMessage(EColorSizeProducts.PIECES_ADDED
+										.getName()));
 			} else {
 				colorSizeProductService.addProductColorSize(
 						selectedProduct.getId(), nr, idSelectedSize);
 				selectedProduct = colorProductService
 						.getProductById(selectedProduct.getId());
 				create = true;
-				msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Succes",
-						"New size added!");
+				msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
+						internationalizationService
+								.getMessage(EColorSizeProducts.SUCCESS
+										.getName()),
+						internationalizationService
+								.getMessage(EColorSizeProducts.SIZE_ADDED
+										.getName()));
 			}
 		} catch (Exception e) {
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+					internationalizationService
+							.getMessage(EColorSizeProducts.ERROR.getName()),
 					e.getMessage());
 			create = false;
 		} finally {
@@ -223,14 +263,22 @@ public class ColorProductSizeSelectBean implements Serializable {
 		try {
 			if (idSelectedProductColorSize == -1) {
 				throw new ColorSizeProductException(
-						"You have to select a size to delete!");
+						internationalizationService
+								.getMessage(EColorSizeProducts.SELECT_SIZE_ERR
+										.getName()));
 			}
 			colorSizeProductService
 					.removeProductColorSize(idSelectedProductColorSize);
-			msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Succes",
-					"Size deleted!");
+			msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
+					internationalizationService
+							.getMessage(EColorSizeProducts.SUCCESS.getName()),
+					internationalizationService
+							.getMessage(EColorSizeProducts.SIZE_DELETED
+									.getName()));
 		} catch (ColorSizeProductException e) {
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+					internationalizationService
+							.getMessage(EColorSizeProducts.ERROR.getName()),
 					e.getMessage());
 		} finally {
 			NavigationUtils.addMessage(msg);
@@ -268,15 +316,26 @@ public class ColorProductSizeSelectBean implements Serializable {
 		Long nr = pcs.getNrOfPieces();
 		try {
 			if (nr <= 0)
-				throw new Exception("Invalid number");
+				throw new Exception(
+						internationalizationService
+								.getMessage(EColorSizeProducts.INVALID
+										.getName()));
 			colorSizeProductService.editPieces(pcs.getId(), nr);
 			edit = true;
-			msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Succes",
-					"Pieces of the selected size edited!");
+			msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
+					internationalizationService
+							.getMessage(EColorSizeProducts.SUCCESS.getName()),
+					internationalizationService
+							.getMessage(EColorSizeProducts.PIECES_EDITED
+									.getName()));
 		} catch (Exception e) {
 			edit = false;
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
-					"Error editing selected size");
+			msg = new FacesMessage(
+					FacesMessage.SEVERITY_ERROR,
+					internationalizationService
+							.getMessage(EColorSizeProducts.ERROR.getName()),
+					internationalizationService
+							.getMessage(EColorSizeProducts.ERROR_EDIT.getName()));
 			edit = false;
 		} finally {
 			NavigationUtils.addMessage(msg);
@@ -296,14 +355,23 @@ public class ColorProductSizeSelectBean implements Serializable {
 				colorSizeProductService.addPieces(idSelectedProductColorSize,
 						nr);
 				add = true;
-				msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Succes",
-						"Pieces of the selected size added!");
+				msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
+						internationalizationService
+								.getMessage(EColorSizeProducts.SUCCESS
+										.getName()),
+						internationalizationService
+								.getMessage(EColorSizeProducts.PIECES_ADDED
+										.getName()));
 			} else {
 				throw new ColorSizeProductException(
-						"You haven't selected a size");
+						internationalizationService
+								.getMessage(EColorSizeProducts.SELECT_SIZE_ERR
+										.getName()));
 			}
 		} catch (Exception e) {
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+					internationalizationService
+							.getMessage(EColorSizeProducts.ERROR.getName()),
 					e.getMessage());
 			add = false;
 		} finally {

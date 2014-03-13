@@ -12,7 +12,7 @@ public enum EGenericProduct {
 			"categoryChanged"), NO_PARENT_SEL("noParentSelected"), NO_PROD_IN_DB(
 			"noProductInTheDB"), NAME_IS_REQUIRED("nameIsRequired"), PRICE_IS_REQUIRED(
 			"priceIsRequired"), LENGHT("length"), PRICE_RESTRICTION(
-			"priceRestriction");
+			"priceRestriction"), SALE_REQUIRED("saleRequired");
 
 	private final String name;
 

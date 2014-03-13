@@ -31,17 +31,31 @@ public class ColorProductsSizeBean implements Serializable {
 
 	@EJB
 	ColorProductService colorProductService;
-	
+
 	@EJB
 	private ConfigurationService confService;
 
 	private boolean selectedCategory;
 	private List<ProductColor> productList;
 	private String host;
-	
+	private String photo;
+
 	@PostConstruct
-	private void postConstruct(){
+	private void postConstruct() {
 		this.host = confService.getHost();
+
+		boolean isEnglishSelected;
+		Boolean b = (Boolean) FacesContext.getCurrentInstance()
+				.getExternalContext().getSessionMap().get("isEnglishSelected");
+		if (b == null)
+			isEnglishSelected = true;
+		else
+			isEnglishSelected = b;
+		if (isEnglishSelected) {
+			photo = "/resources/sproducts.jpg";
+		} else {
+			photo = "/resources/sproductsR.jpg";
+		}
 	}
 
 	public boolean isSelectedCategory() {
@@ -66,6 +80,10 @@ public class ColorProductsSizeBean implements Serializable {
 
 	public void setHost(String host) {
 		this.host = host;
+	}
+
+	public String getPhoto() {
+		return photo;
 	}
 
 	public void onNodeSelect(NodeSelectEvent event) {

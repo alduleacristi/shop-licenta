@@ -46,6 +46,7 @@ public class CategoryBean implements Serializable {
 	private TreeNode selectedParent;
 	private boolean selected;
 	private String newName;
+	private String photo;
 
 	@PostConstruct
 	private void init() {
@@ -71,12 +72,14 @@ public class CategoryBean implements Serializable {
 		else
 			isEnglishSelected = b;
 		if (isEnglishSelected) {
+			photo = "/resources/categories.jpg";
 			String language = new String("en");
 			String country = new String("US");
 			internationalizationService
 					.setCurrentLocale(language, country,
 							"internationalization/superadmin/messages/categories/Categories");
 		} else {
+			photo = "/resources/categoriesR.jpg";
 			String language = new String("ro");
 			String country = new String("RO");
 			internationalizationService
@@ -131,6 +134,10 @@ public class CategoryBean implements Serializable {
 
 	public void setNewName(String newName) {
 		this.newName = newName;
+	}
+
+	public String getPhoto() {
+		return photo;
 	}
 
 	public void onNodeSelect(NodeSelectEvent event) {

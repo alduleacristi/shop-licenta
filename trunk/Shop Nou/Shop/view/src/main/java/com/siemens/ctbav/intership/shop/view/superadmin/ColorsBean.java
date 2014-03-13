@@ -41,6 +41,7 @@ public class ColorsBean implements Serializable {
 	private Color selectedColor;
 	private String newName;
 	private String newDescription;
+	private String photo;
 
 	@PostConstruct
 	void initialization() {
@@ -57,11 +58,13 @@ public class ColorsBean implements Serializable {
 		else
 			isEnglishSelected = b;
 		if (isEnglishSelected) {
+			photo = "/resources/colors.jpg";
 			String language = new String("en");
 			String country = new String("US");
 			internationalizationService.setCurrentLocale(language, country,
 					"internationalization/superadmin/messages/colors/Colors");
 		} else {
+			photo = "/resources/colorsR.jpg";
 			String language = new String("ro");
 			String country = new String("RO");
 			internationalizationService.setCurrentLocale(language, country,
@@ -111,6 +114,10 @@ public class ColorsBean implements Serializable {
 
 	public void handleClose(CloseEvent event) {
 		setColor("");
+	}
+
+	public String getPhoto() {
+		return photo;
 	}
 
 	public void update(ActionEvent actionEvent) {

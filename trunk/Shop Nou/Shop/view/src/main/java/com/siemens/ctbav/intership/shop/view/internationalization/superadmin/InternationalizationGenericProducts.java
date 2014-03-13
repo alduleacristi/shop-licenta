@@ -33,6 +33,7 @@ public class InternationalizationGenericProducts implements Serializable {
 	private String productDescription;
 	private String nameIsRequired;
 	private String priceIsRequired;
+	private String saleIsRequired;
 
 	@PostConstruct
 	private void init() {
@@ -138,5 +139,11 @@ public class InternationalizationGenericProducts implements Serializable {
 		priceIsRequired = internationalizationService
 				.getMessage(EGenericProduct.PRICE_IS_REQUIRED.getName());
 		return priceIsRequired;
+	}
+
+	public String getSaleIsRequired() {
+		saleIsRequired = internationalizationService
+				.getMessage(EGenericProduct.SALE_REQUIRED.getName());
+		return saleIsRequired;
 	}
 }

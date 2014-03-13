@@ -12,7 +12,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "user")
+@Table
 @NamedQueries({
 		@NamedQuery(name = User.GET_ALL_USERS, query = "SELECT u FROM User u"),
 		@NamedQuery(name = User.GET_ALL_ADMINS, query = "SELECT u FROM User u where u.rolename = 'admin'"),

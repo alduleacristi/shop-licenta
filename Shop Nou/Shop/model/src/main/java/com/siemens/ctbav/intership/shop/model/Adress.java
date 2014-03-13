@@ -11,13 +11,16 @@ import javax.persistence.*;
  * 
  */
 @Entity
-@NamedQueries({ @NamedQuery(name = Adress.GET_ADRESS_BY_ID, query = "SELECT a FROM Adress a where a.id = :idAdress"),	
-				@NamedQuery(name=Adress.GET_ALL_ADRESS,query="select a from Adress a")})
+@NamedQueries({
+		@NamedQuery(name = Adress.GET_ADRESS_BY_ID, query = "SELECT a FROM Adress a where a.id = :idAdress"),
+		@NamedQuery(name = Adress.GET_ALL_ADRESS, query = "select a from Adress a"),
+		@NamedQuery(name = Adress.GET_CLIENT_ADRESS, query = "select a from Adress a where a.client.id = :idClient") })
 public class Adress implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
+
 	public static final String GET_ADRESS_BY_ID = "getAdressByID";
 	public static final String GET_ALL_ADRESS = "getAllAdress";
+	public static final String GET_CLIENT_ADRESS = "getClientAdress";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,11 +35,11 @@ public class Adress implements Serializable {
 	private String staircase;
 
 	private String street;
-	
+
 	@OneToOne
 	@JoinColumn(name = "id_locality")
 	private Locality locality;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "id_client")
 	private Client client;
@@ -110,5 +113,5 @@ public class Adress implements Serializable {
 				+ ", number=" + number + ", staircase=" + staircase
 				+ ", street=" + street + ", locality=" + locality + "]";
 	}
-	
+
 }

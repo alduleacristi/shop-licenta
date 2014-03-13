@@ -8,6 +8,7 @@ import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
 import org.primefaces.context.RequestContext;
@@ -16,8 +17,10 @@ import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
 import com.siemens.ctbav.intership.shop.exception.superadmin.UserException;
 import com.siemens.ctbav.intership.shop.model.User;
+import com.siemens.ctbav.intership.shop.service.internationalization.InternationalizationService;
 import com.siemens.ctbav.intership.shop.service.superadmin.OperatorsService;
 import com.siemens.ctbav.intership.shop.util.superadmin.NavigationUtils;
+import com.siemens.ctbav.intership.shop.view.internationalization.enums.EManageUsers;
 
 @ManagedBean(name = "manageOperatorsBean")
 @ViewScoped
@@ -29,6 +32,9 @@ public class ManageOperatorsBean implements Serializable {
 	@EJB
 	private OperatorsService operatorsService;
 
+	@EJB
+	private InternationalizationService internationalizationService;
+
 	private User selectedOperator;
 	private List<User> allOperators;
 	private List<User> filteredOperators;
@@ -36,10 +42,37 @@ public class ManageOperatorsBean implements Serializable {
 	private String password;
 	private String email;
 	private String repassword;
+	private String photo;
 
 	@PostConstruct
 	void initialization() {
 		allOperators = operatorsService.getAllOperators();
+		internationalizationInit();
+	}
+
+	private void internationalizationInit() {
+		boolean isEnglishSelected;
+		Boolean b = (Boolean) FacesContext.getCurrentInstance()
+				.getExternalContext().getSessionMap().get("isEnglishSelected");
+		if (b == null)
+			isEnglishSelected = true;
+		else
+			isEnglishSelected = b;
+		if (isEnglishSelected) {
+			photo = "/resources/manageOperators.jpg";
+			String language = new String("en");
+			String country = new String("US");
+			internationalizationService
+					.setCurrentLocale(language, country,
+							"internationalization/superadmin/messages/manageUsers/ManageUsers");
+		} else {
+			photo = "/resources/manageOperatorsR.jpg";
+			String language = new String("ro");
+			String country = new String("RO");
+			internationalizationService
+					.setCurrentLocale(language, country,
+							"internationalization/superadmin/messages/manageUsers/ManageUsers");
+		}
 	}
 
 	public User getSelectedOperator() {
@@ -98,18 +131,29 @@ public class ManageOperatorsBean implements Serializable {
 		this.repassword = repassword;
 	}
 
+	public String getPhoto() {
+		return photo;
+	}
+
 	public void banOperator(ActionEvent actionEvent) {
 		FacesMessage msg = null;
 		if (selectedOperator == null) {
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
-					"No user was selected");
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+					internationalizationService.getMessage(EManageUsers.ERROR
+							.getName()),
+					internationalizationService.getMessage(EManageUsers.NOT_SEL
+							.getName()));
 		} else {
 			try {
 				operatorsService.banOperator(selectedOperator.getId());
-				msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Success",
+				msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
+						internationalizationService
+								.getMessage(EManageUsers.SUCCESS.getName()),
 						selectedOperator.getUsername() + " banned");
 			} catch (UserException e) {
-				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
+				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+						internationalizationService
+								.getMessage(EManageUsers.ERROR.getName()),
 						e.getMessage());
 			}
 		}
@@ -120,15 +164,22 @@ public class ManageOperatorsBean implements Serializable {
 	public void unbanOperator(ActionEvent actionEvent) {
 		FacesMessage msg = null;
 		if (selectedOperator == null) {
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
-					"No user was selected");
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+					internationalizationService.getMessage(EManageUsers.ERROR
+							.getName()),
+					internationalizationService.getMessage(EManageUsers.NOT_SEL
+							.getName()));
 		} else {
 			try {
 				operatorsService.unbanOperator(selectedOperator.getId());
-				msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Success",
+				msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
+						internationalizationService
+								.getMessage(EManageUsers.SUCCESS.getName()),
 						selectedOperator.getUsername() + " unbanned");
 			} catch (UserException e) {
-				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
+				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+						internationalizationService
+								.getMessage(EManageUsers.ERROR.getName()),
 						e.getMessage());
 			}
 		}
@@ -140,15 +191,22 @@ public class ManageOperatorsBean implements Serializable {
 		setSelectedOperator(operator);
 		FacesMessage msg = null;
 		if (selectedOperator == null) {
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
-					"No user was selected");
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+					internationalizationService.getMessage(EManageUsers.ERROR
+							.getName()),
+					internationalizationService.getMessage(EManageUsers.NOT_SEL
+							.getName()));
 		} else {
 			try {
 				operatorsService.unbanOperator(selectedOperator.getId());
-				msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Success",
+				msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
+						internationalizationService
+								.getMessage(EManageUsers.SUCCESS.getName()),
 						selectedOperator.getUsername() + " unbanned");
 			} catch (UserException e) {
-				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
+				msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+						internationalizationService
+								.getMessage(EManageUsers.ERROR.getName()),
 						e.getMessage());
 			}
 		}
@@ -163,13 +221,17 @@ public class ManageOperatorsBean implements Serializable {
 		boolean create = false;
 		try {
 			operatorsService.addOperator(operator);
-			msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Success",
-					"New operator added!");
+			msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
+					internationalizationService.getMessage(EManageUsers.SUCCESS
+							.getName()),
+					internationalizationService
+							.getMessage(EManageUsers.USER_ADDED.getName()));
 			create = true;
 			allOperators = operatorsService.getAllOperators();
 		} catch (UserException e) {
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
-					e.getMessage());
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+					internationalizationService.getMessage(EManageUsers.ERROR
+							.getName()), e.getMessage());
 			create = false;
 		} finally {
 			NavigationUtils.addMessage(msg);

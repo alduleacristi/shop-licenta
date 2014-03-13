@@ -45,6 +45,7 @@ public class ProductsBean implements Serializable {
 	private List<Product> productList;
 	private Product selectedProduct;
 	private ProductDTO newProduct;
+	private String photo;
 
 	@PostConstruct
 	void init() {
@@ -61,12 +62,14 @@ public class ProductsBean implements Serializable {
 		else
 			isEnglishSelected = b;
 		if (isEnglishSelected) {
+			photo = "/resources/gproducts.jpg";
 			String language = new String("en");
 			String country = new String("US");
 			internationalizationService
 					.setCurrentLocale(language, country,
 							"internationalization/superadmin/messages/genericProducts/GenericProducts");
 		} else {
+			photo = "/resources/gproductsR.jpg";
 			String language = new String("ro");
 			String country = new String("RO");
 			internationalizationService
@@ -105,6 +108,10 @@ public class ProductsBean implements Serializable {
 
 	public void setNewProduct(ProductDTO newProduct) {
 		this.newProduct = newProduct;
+	}
+
+	public String getPhoto() {
+		return photo;
 	}
 
 	public void onNodeSelect(NodeSelectEvent event) {

@@ -35,10 +35,24 @@ public class ColorProductsPhotosBean implements Serializable {
 	private boolean selectedCategory;
 	private List<ProductColor> productList;
 	private String host;
+	private String photo;
 
 	@PostConstruct
 	private void postConstruct() {
 		this.host = confService.getHost();
+
+		boolean isEnglishSelected;
+		Boolean b = (Boolean) FacesContext.getCurrentInstance()
+				.getExternalContext().getSessionMap().get("isEnglishSelected");
+		if (b == null)
+			isEnglishSelected = true;
+		else
+			isEnglishSelected = b;
+		if (isEnglishSelected) {
+			photo = "/resources/pproducts.jpg";
+		} else {
+			photo = "/resources/pproductsR.jpg";
+		}
 	}
 
 	public boolean isSelectedCategory() {
@@ -63,6 +77,10 @@ public class ColorProductsPhotosBean implements Serializable {
 
 	public void setHost(String host) {
 		this.host = host;
+	}
+
+	public String getPhoto() {
+		return photo;
 	}
 
 	public void onNodeSelect(NodeSelectEvent event) {

@@ -46,6 +46,7 @@ public class SizeBean implements Serializable {
 	private List<Size> parentsSizes;
 	private Size selectedSize;
 	private SelectableSize sizes;
+	private String photo;
 
 	@PostConstruct
 	void init() {
@@ -61,11 +62,13 @@ public class SizeBean implements Serializable {
 		else
 			isEnglishSelected = b;
 		if (isEnglishSelected) {
+			photo = "/resources/sizes.jpg";
 			String language = new String("en");
 			String country = new String("US");
 			internationalizationService.setCurrentLocale(language, country,
 					"internationalization/superadmin/messages/sizes/Sizes");
 		} else {
+			photo = "/resources/sizesR.jpg";
 			String language = new String("ro");
 			String country = new String("RO");
 			internationalizationService.setCurrentLocale(language, country,
@@ -120,6 +123,10 @@ public class SizeBean implements Serializable {
 
 	public void setSizes(SelectableSize sizes) {
 		this.sizes = sizes;
+	}
+
+	public String getPhoto() {
+		return photo;
 	}
 
 	public void onNodeSelect(NodeSelectEvent event) {

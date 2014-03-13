@@ -56,6 +56,7 @@ public class ColorProductsBean implements Serializable {
 	private List<Color> allColors;
 	private Long idSelectedColor;
 	private Color selectedColor;
+	private String photo;
 
 	@PostConstruct
 	void init() {
@@ -72,12 +73,14 @@ public class ColorProductsBean implements Serializable {
 		else
 			isEnglishSelected = b;
 		if (isEnglishSelected) {
+			photo = "/resources/cproducts.jpg";
 			String language = new String("en");
 			String country = new String("US");
 			internationalizationService
 					.setCurrentLocale(language, country,
 							"internationalization/superadmin/messages/colorProducts/ColorProducts");
 		} else {
+			photo = "/resources/cproductsR.jpg";
 			String language = new String("ro");
 			String country = new String("RO");
 			internationalizationService
@@ -151,6 +154,10 @@ public class ColorProductsBean implements Serializable {
 
 	public void setSelectedColor(Color selectedColor) {
 		this.selectedColor = selectedColor;
+	}
+
+	public String getPhoto() {
+		return photo;
 	}
 
 	public void onNodeSelect(NodeSelectEvent event) {

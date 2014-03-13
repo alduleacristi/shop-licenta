@@ -30,6 +30,17 @@
 
 		<ui:define name="mainContent">
 			<h:form id="cartForm">
+				<p:selectBooleanCheckbox
+					value="#{SendCommandBean.useExistingAdress}" id="userExistAdress">
+					<f:ajax listener="#{SendCommandBean.changeUseExistingAdress}"
+						event="change" render="@form" />
+				</p:selectBooleanCheckbox>
+				<b><p:outputLabel style="color: #8b0000;size: 3px"
+						value=" Choose an existing adress" /></b>
+				<br />
+				<p:outputLabel
+					rendered="#{SendCommandBean.useExistingAdress == true}"
+					value="#{SendCommandBean.messageUserAdress}" id="userAdressMessage" />
 			</h:form>
 		</ui:define>
 

@@ -13,6 +13,7 @@ import javax.faces.context.FacesContext;
 
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.siemens.ctbav.intership.shop.conf.ConfigurationService;
+import com.siemens.ctbav.intership.shop.exception.client.NullRecommander;
 import com.siemens.ctbav.intership.shop.exception.client.ProductDoesNotExistException;
 import com.siemens.ctbav.intership.shop.model.Client;
 import com.siemens.ctbav.intership.shop.model.Product;
@@ -28,18 +29,18 @@ public class RecommadationBean {
 
 	@EJB
 	private ProductService productService;
-	
+
 	@EJB
 	private ConfigurationService confService;
 
 	private List<Product> recommandedProducts;
 
-	private String message,host;
+	private String message, host;
 
 	@PostConstruct
 	private void initialize() {
 		this.host = confService.getHost();
-		
+
 		message = (String) FacesContext.getCurrentInstance()
 				.getExternalContext().getSessionMap().get("addProductMessage");
 
@@ -86,18 +87,24 @@ public class RecommadationBean {
 	}
 
 	private void populateRecomandedProducts(Long id) {
-		List<Long> recomandedProductsId = recommandService
-				.getRecommandation(id);
-		recommandedProducts.clear();
+		List<Long> recomandedProductsId;
+		try {
+			recomandedProductsId = recommandService.getRecommandation(id);
 
-		for (Long idProduct : recomandedProductsId) {
-			try {
-				Product p = productService.getProductById(idProduct);
-				recommandedProducts.add(p);
-			} catch (ProductDoesNotExistException e) {
-				e.printStackTrace();
+			recommandedProducts.clear();
+
+			for (Long idProduct : recomandedProductsId) {
+				try {
+					Product p = productService.getProductById(idProduct);
+					recommandedProducts.add(p);
+				} catch (ProductDoesNotExistException e) {
+					e.printStackTrace();
+				}
 			}
+		} catch (NullRecommander e1) {
+			recommandedProducts.clear();
 		}
+
 	}
 
 	public boolean isEmpty() {

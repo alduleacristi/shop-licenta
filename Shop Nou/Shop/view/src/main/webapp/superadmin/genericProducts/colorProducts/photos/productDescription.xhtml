@@ -29,7 +29,7 @@
 									<h4>Category:
 										#{colorProductSelectPhotoBean.selectedProduct.product.category.name}'S</h4>
 									<p>
-										<br /> Color:
+										<br /> #{internationalizationPhotoProducts.color}:
 										#{colorProductSelectPhotoBean.selectedProduct.color.name}<br />
 									</p>
 									<strong class="price"> <p:outputLabel
@@ -52,18 +52,22 @@
 							<div class="products2description">
 								<div align="center">
 									<p:graphicImage id="firstImage"
-										url="#{colorProductSelectPhotoBean.host}/Shop4j/rest/products/id#{colorProductSelectPhotoBean.selectedProduct.id}"
+										url="#{colorProductPhotosBean.host}/Shop4j/rest/products/id#{colorProductSelectPhotoBean.selectedProduct.id}"
 										width="170" height="198" />
-									<h:commandButton value="Remove all the photos from product"
+									<h:commandButton
+										value="#{internationalizationPhotoProducts.remove}"
 										type="button" onclick="cd.show()" style="width: 100%"
 										styleClass="search-submit" />
-									<p:confirmDialog message="Are you sure?" header="Confirmation"
+									<p:confirmDialog
+										message="#{internationalizationGeneric.confirmMessage}"
+										header="#{internationalizationGeneric.confirmation}"
 										severity="alert" widgetVar="cd" resizable="false">
-										<p:commandButton value="Yes"
+										<p:commandButton value="#{internationalizationGeneric.yes}"
 											actionListener="#{colorProductSelectPhotoBean.deletePhotos}"
 											update="messages,:galleria:refreshMe,:mainForm:firstImage"
 											oncomplete="cd.hide()" immediate="true" />
-										<p:commandButton value="No" onclick="cd.hide();" type="button" />
+										<p:commandButton value="#{internationalizationGeneric.no}"
+											onclick="cd.hide();" type="button" />
 									</p:confirmDialog>
 								</div>
 							</div>
@@ -75,7 +79,7 @@
 						<li>
 							<div class="product-info2">
 
-								<h3>Description</h3>
+								<h3>#{internationalizationPhotoProducts.description}</h3>
 								<br></br>
 								<p:inputTextarea cols="20" rows="12" maxlength="200" style="25%"
 									value="#{colorProductSelectPhotoBean.selectedProduct.product.description}"

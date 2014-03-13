@@ -17,11 +17,11 @@
 		</ui:define>
 		<ui:define name="mainContent">
 			<div class="box">
-				<p:graphicImage value="/resources/sales.jpg" width="720"
+				<p:graphicImage value="#{manageSalesBean.photo}" width="720"
 					height="100" />
 			</div>
 			<br />
-			In order to edit the sales you have to select a category
+			#{internationalizationGenericProducts.message}
 			<br />
 			<br />
 			<h:form id="formTree">
@@ -54,9 +54,11 @@
 					<p:column>
 
 						<p:panel header="#{product.name}" style="text-align:center">
-							<h:outputText value="Category: #{product.category.name}" />
+							<h:outputText
+								value="#{internationalizationGenericProducts.category}: #{product.category.name}" />
 							<br />
-							<p:outputLabel value="Price:"
+							<p:outputLabel
+								value="#{internationalizationGenericProducts.price}:"
 								rendered="#{product.reduction == 0.0}" />
 							<strong class="price"> <p:outputLabel
 									value="$#{product.price}"
@@ -67,13 +69,15 @@
 							<strong class="price"> <p:outputLabel
 									value="$#{product.price-product.price*product.reduction/100}"
 									rendered="#{product.reduction != 0.0}"></p:outputLabel></strong>
-							<h:outputText value="Description:" />
+							<h:outputText
+								value="#{internationalizationGenericProducts.description}" />
 							<br />
 							<p:inputTextarea cols="20" rows="11" maxlength="200"
 								value="#{product.description}" readonly="true">
 							</p:inputTextarea>
 							<br />
-							<h:outputText value="SALE: #{product.reduction}%" />
+							<h:outputText
+								value="#{internationalizationGenericProducts.sale}: #{product.reduction}%" />
 							<br />
 							<p:commandLink update=":formProducts:productDetail"
 								oncomplete="productDialog.show()" title="Edit sale">
@@ -86,17 +90,20 @@
 					</p:column>
 				</p:dataGrid>
 
-				<p:dialog header="Product Detail" widgetVar="productDialog"
-					modal="true">
+				<p:dialog
+					header="#{internationalizationGenericProducts.productDetail}"
+					widgetVar="productDialog" modal="true">
 					<p:outputPanel id="productDetail" style="text-align:center;">
 
 						<h:panelGrid columns="2" cellpadding="4"
 							rendered="#{manageSalesBean.selectedProduct != null}">
-							<h:outputText value="Product's sale: " />
+							<h:outputText
+								value="#{internationalizationGenericProducts.sale}: " />
 							<p:inputText value="#{manageSalesBean.selectedProduct.reduction}"
-								required="true" requiredMessage="Sale is required">
+								required="true"
+								requiredMessage="#{internationalizationGenericProducts.saleIsRequired}">
 							</p:inputText>
-							<p:commandButton value="Update"
+							<p:commandButton value="#{internationalizationGeneric.update}"
 								actionListener="#{manageSalesBean.update}"
 								update="messages1, :formProducts:dataGrid"
 								oncomplete="handleUpdateRequest(xhr, status, args)" />

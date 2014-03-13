@@ -18,7 +18,7 @@
 
 		<ui:define name="mainContent">
 			<div class="box">
-				<p:graphicImage value="/resources/gproducts.jpg" width="720"
+				<p:graphicImage value="#{productBean.photo}" width="720"
 					height="100" />
 			</div>
 			<br />
@@ -218,7 +218,9 @@
 
 				</p:dialog>
 
-				<p:dialog header="#{internationalizationGenericProducts.changeParent}" widgetVar="categoryDialog">
+				<p:dialog
+					header="#{internationalizationGenericProducts.changeParent}"
+					widgetVar="categoryDialog">
 
 					<h:form id="formTreeUpdate">
 
@@ -237,7 +239,8 @@
 						<br />
 					</h:form>
 
-					<p:commandButton value="#{internationalizationGenericProducts.changeParent}"
+					<p:commandButton
+						value="#{internationalizationGenericProducts.changeParent}"
 						actionListener="#{productBean.changeCategory}"
 						update="messages1, :formProducts:dataGrid"
 						oncomplete="handleChangeCategoryRequest(xhr, status, args)" />

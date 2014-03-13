@@ -15,7 +15,7 @@
 
 		<ui:define name="mainContent">
 			<div class="box">
-				<p:graphicImage value="/resources/categories.jpg" width="720"
+				<p:graphicImage value="#{categoryBean.photo}" width="720"
 					height="100" />
 			</div>
 			<br />	
@@ -52,7 +52,8 @@
 				<p:dialog header="#{internationalizationCategory.createM}"
 					modal="true" widgetVar="create" focus="name" resizable="false">
 					<h:panelGrid columns="2" cellpadding="5">
-						<h:outputLabel for="name" value="#{internationalizationGeneric.name}:" />
+						<h:outputLabel for="name"
+							value="#{internationalizationGeneric.name}:" />
 						<p:inputText id="name" label="name"
 							value="#{categoryBean.newName}">
 							<f:validator validatorId="validateCategory" />
@@ -83,8 +84,8 @@
 			<h:form id="formUpdate">
 
 				<p:growl id="messages3" showDetail="true" />
-				<h:commandButton value="#{internationalizationGeneric.update}" type="button"
-					onclick="update.show()" styleClass="search-submit"
+				<h:commandButton value="#{internationalizationGeneric.update}"
+					type="button" onclick="update.show()" styleClass="search-submit"
 					rendered="#{categoryBean.selected}" id="b2" immediate="true"
 					process="@this" />
 
@@ -105,7 +106,8 @@
 							</p:treeNode>
 						</p:tree>
 
-						<h:outputLabel for="nName" value="#{internationalizationGeneric.name}:" />
+						<h:outputLabel for="nName"
+							value="#{internationalizationGeneric.name}:" />
 						<p:inputText id="nName" label="nName"
 							value="#{categoryBean.newName}">
 							<f:validator validatorId="validateUpdateCategory" />

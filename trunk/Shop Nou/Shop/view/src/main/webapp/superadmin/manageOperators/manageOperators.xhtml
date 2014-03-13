@@ -14,54 +14,58 @@
 		<br />
 		<ui:define name="mainContent">
 			<div class="box">
-				<p:graphicImage value="/resources/manageOperators.jpg" width="720"
+				<p:graphicImage value="#{manageOperatorsBean.photo}" width="720"
 					height="100" />
 			</div>
 			<h:form id="addOperator">
 				<p:growl id="messages2" showDetail="true" />
 				<br />
-				<h:commandButton id="createLink" value="Create an operator"
-					type="button" onclick="create.show()" styleClass="search-submit"
+				<h:commandButton id="createLink"
+					value="#{internationalizationGeneric.create}" type="button"
+					onclick="create.show()" styleClass="search-submit"
 					style="width:25%" />
-				<p:dialog header="Create a new operator" modal="true"
-					widgetVar="create" resizable="false">
-					* The password mush contain between 6 and 12 characters
+				<p:dialog header="#{internationalizationGeneric.create}"
+					modal="true" widgetVar="create" resizable="false">
+					#{internationalizationManageUsers.m1}
 					<br />
-					It must contain minimum a capital letter, a lowercase
+					#{internationalizationManageUsers.m2}
 					<br />
-					letter and a digit. Characters must not repeat more than
+					#{internationalizationManageUsers.m3}
 					<br />
-					two times. Otherwise, the password is invalid!
+					#{internationalizationManageUsers.m4}
 					<h:panelGrid columns="2" cellpadding="5">
-						<h:outputLabel for="username" value="Username:" />
+						<h:outputLabel for="username"
+							value="#{internationalizationManageUsers.username}:" />
 						<p:inputText id="username" label="username"
 							value="#{manageOperatorsBean.username}" required="true"
-							requiredMessage="Username is required" />
+							requiredMessage="#{internationalizationManageUsers.requiredUsername}" />
 						<h:outputLabel for="email" value="Email:" />
 						<p:inputText id="email" label="email"
 							value="#{manageOperatorsBean.email}" required="true"
-							requiredMessage="Email is required">
+							requiredMessage="#{internationalizationManageUsers.requiredEmail}">
 							<f:validator validatorId="emailValidate" />
 						</p:inputText>
-						<h:outputLabel for="password" value="Password:" />
+						<h:outputLabel for="password"
+							value="#{internationalizationManageUsers.password}:" />
 						<p:password id="password" label="password" type="password"
 							value="#{manageOperatorsBean.password}" required="true"
-							requiredMessage="Password is required">
+							requiredMessage="#{internationalizationManageUsers.requiredPassword}">
 							<f:validator validatorId="passwordValidate" />
 							<f:attribute name="confirm" value="#{confirm}" />
 						</p:password>
-						<h:outputLabel for="confirm" value="Retype:" />
+						<h:outputLabel for="confirm"
+							value="#{internationalizationManageUsers.retype}:" />
 						<p:password id="confirm" label="repassword" binding="#{confirm}"
 							value="#{manageOperatorsBean.repassword}" required="true"
-							requiredMessage="Confirmation of the password is required">
+							requiredMessage="#{internationalizationManageUsers.requiredPassword}">
 						</p:password>
 					</h:panelGrid>
-					<p:commandButton value="Create"
+					<p:commandButton value="#{internationalizationGeneric.create}"
 						actionListener="#{manageOperatorsBean.addOperator}"
 						oncomplete="handleCreateRequest(xhr, status, args)"
 						update="messages2,:manageOperators:operatorsTable" />
-					<p:commandButton value="Cancel" onclick="create.hide();"
-						type="button" />
+					<p:commandButton value="#{internationalizationGeneric.cancel}"
+						onclick="create.hide();" type="button" />
 				</p:dialog>
 				<script type="text/javascript">
 					function handleCreateRequest(xhr, status, args) {
@@ -86,7 +90,7 @@
 					<p:ajax event="rowSelect" update=":manageOperators:display"
 						oncomplete="dialog.show()" />
 					<f:facet name="header">
-						List of operators
+						#{internationalizationManageUsers.listO}
 					</f:facet>
 
 					<p:column>
@@ -100,8 +104,8 @@
 						</center>
 					</p:column>
 
-					<p:column headerText="Username" sortBy="username"
-						filterBy="username" id="username">
+					<p:column headerText="#{internationalizationManageUsers.username}"
+						sortBy="username" filterBy="username" id="username">
 						#{operator.username}
 					</p:column>
 
@@ -115,7 +119,7 @@
 					hideEffect="explode">
 
 					<h:panelGrid id="display" columns="2" cellpadding="4">
-						<h:outputText value="Username:" />
+						<h:outputText value="#{internationalizationManageUsers.username}:" />
 						<h:outputText
 							value="#{manageOperatorsBean.selectedOperator.username}"
 							id="username" />

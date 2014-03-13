@@ -18,11 +18,11 @@
 
 		<ui:define name="mainContent">
 			<div class="box">
-				<p:graphicImage value="/resources/pproducts.jpg" width="720"
+				<p:graphicImage value="#{colorProductPhotosBean.photo}" width="720"
 					height="100" />
 			</div>
 			<br />
-			In order to add, edit or delete you have to pick a category
+			#{internationalizationPhotoProducts.message}
 			<br />
 			<br />
 
@@ -66,13 +66,15 @@
 									<div class="product-desc">
 										<h4>#{product.product.category.name}'S</h4>
 										<p>
-											Color: #{product.color.name}<br />
+											#{internationalizationPhotoProducts.color}:
+											#{product.color.name}<br />
 										</p>
 									</div>
 									<div align="right">
 										<p:commandLink
 											actionListener="#{colorProductPhotosBean.showProduct(product)}">
-											<h:commandButton id="idVizualizare" value="Vizualizare"
+											<h:commandButton id="idVizualizare"
+												value="#{internationalizationPhotoProducts.view}"
 												type="button" styleClass="search-submit" style="width: 50%" />
 										</p:commandLink>
 									</div>

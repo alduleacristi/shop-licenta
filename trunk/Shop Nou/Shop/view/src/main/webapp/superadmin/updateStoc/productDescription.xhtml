@@ -26,10 +26,10 @@
 							<div class="product-info2">
 								<h3>#{colorProductSizeSelectBean.selectedProduct.product.name}</h3>
 								<div class="product-desc">
-									<h4>Category:
+									<h4>#{internationalizationColorSizeProducts.category}:
 										#{colorProductSizeSelectBean.selectedProduct.product.category.name}'S</h4>
 									<p>
-										<br /> Color:
+										<br /> #{internationalizationColorSizeProducts.color}:
 										#{colorProductSizeSelectBean.selectedProduct.color.name}<br />
 									</p>
 									<strong class="price"> <p:outputLabel
@@ -43,7 +43,7 @@
 											rendered="#{colorProductSizeSelectBean.selectedProduct.product.reduction != 0.0}"></p:outputLabel></strong>
 									<br />
 									<h:outputText id="outputPieces"
-										value="Available pieces: #{colorProductSizeSelectBean.getAvailablePieces()}" />
+										value="#{internationalizationColorSizeProducts.available}: #{colorProductSizeSelectBean.getAvailablePieces()}" />
 								</div>
 							</div>
 						</li>
@@ -67,7 +67,7 @@
 						<li>
 							<div class="product-info2">
 
-								<h3>Description</h3>
+								<h3>#{internationalizationColorSizeProducts.description}</h3>
 								<br></br>
 								<p:inputTextarea cols="20" rows="12" maxlength="200"
 									value="#{colorProductSizeSelectBean.selectedProduct.product.description}"
@@ -96,21 +96,25 @@
 
 			<h:form id="add">
 				<p:growl id="messages1" showDetail="true" />
-				<h:commandButton value="Add pieces for the selected size"
+				<h:commandButton
+					value="#{internationalizationColorSizeProducts.addPieces}"
 					type="button" styleClass="search-submit" onclick="addDialog.show()"
 					style="width: 25%" update="messages1" />
-				<p:dialog header="Chose a size" widgetVar="addDialog"
-					resizable="false" modal="true">
+				<p:dialog header="#{internationalizationColorSizeProducts.choose}"
+					widgetVar="addDialog" resizable="false" modal="true">
 					<h:panelGrid columns="2" cellpadding="4">
-						<h:outputText value="Number of pieces" />
+						<h:outputText
+							value="#{internationalizationColorSizeProducts.nrPieces}:" />
 						<p:inputText value="#{colorProductSizeSelectBean.nrPieces}">
 							<f:validator validatorId="validatePieces" />
 						</p:inputText>
-						<p:commandButton value="Add"
+						<p:commandButton
+							value="#{internationalizationColorSizeProducts.add}"
 							actionListener="#{colorProductSizeSelectBean.addPieces}"
 							oncomplete="handleAddRequest(xhr, status, args)"
 							update=":add:messages1,:menu:selectOneMenu" />
-						<p:commandButton value="Cancel" onclick="addDialog.hide()" />
+						<p:commandButton value="#{internationalizationGeneric.cancel}"
+							onclick="addDialog.hide()" />
 					</h:panelGrid>
 				</p:dialog>
 				<script type="text/javascript">
@@ -129,21 +133,25 @@
 
 			<h:form id="edit">
 				<p:growl id="messagesE" showDetail="true" />
-				<h:commandButton id="edit" value="Set number of pieces"
+				<h:commandButton id="edit"
+					value="#{internationalizationColorSizeProducts.setPieces}"
 					styleClass="search-submit" onclick="editDialog.show()"
 					style="width: 25%" update="messagesE" type="button" />
-				<p:dialog header="Edit the selectedSize" widgetVar="editDialog"
-					resizable="false" modal="true">
+				<p:dialog
+					header="#{internationalizationColorSizeProducts.setPieces}"
+					widgetVar="editDialog" resizable="false" modal="true">
 					<h:panelGrid columns="2" cellpadding="4">
-						<h:outputText value="Number of pieces" />
+						<h:outputText
+							value="#{internationalizationColorSizeProducts.nrPieces}" />
 						<p:inputText value="#{colorProductSizeSelectBean.pcs.nrOfPieces}">
 							<f:validator validatorId="validatePieces" />
 						</p:inputText>
-						<p:commandButton value="Edit"
+						<p:commandButton value="#{internationalizationGeneric.update}"
 							actionListener="#{colorProductSizeSelectBean.edit}"
 							oncomplete="handleEditRequest(xhr, status, args)"
 							update="messagesE,:menu:selectOneMenu" />
-						<p:commandButton value="Cancel" onclick="editDialog.hide()" />
+						<p:commandButton value="#{internationalizationGeneric.cancel}"
+							onclick="editDialog.hide()" />
 					</h:panelGrid>
 				</p:dialog>
 				<script type="text/javascript">

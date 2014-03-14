@@ -12,7 +12,7 @@ import javax.faces.validator.FacesValidator;
 import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
 
-import com.siemens.ctbav.intership.shop.view.internationalization.enums.EColorSizeProducts;
+import com.siemens.ctbav.intership.shop.view.internationalization.enums.superadmin.EColorSizeProducts;
 
 @FacesValidator("validatePieces")
 public class NrPiecesValidate implements Validator {

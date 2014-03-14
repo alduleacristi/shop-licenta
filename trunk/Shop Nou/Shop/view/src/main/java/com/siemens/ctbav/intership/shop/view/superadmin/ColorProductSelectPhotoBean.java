@@ -24,7 +24,7 @@ import com.siemens.ctbav.intership.shop.service.internationalization.Internation
 import com.siemens.ctbav.intership.shop.service.superadmin.ColorProductService;
 import com.siemens.ctbav.intership.shop.service.superadmin.PhotoService;
 import com.siemens.ctbav.intership.shop.util.superadmin.NavigationUtils;
-import com.siemens.ctbav.intership.shop.view.internationalization.enums.EPhotoProduct;
+import com.siemens.ctbav.intership.shop.view.internationalization.enums.superadmin.EPhotoProduct;
 
 @URLMappings(mappings = { @URLMapping(id = "colorProductSelectPhoto", pattern = "/superadmin/genericProducts/colorProducts/photos/#{colorProductSelectPhotoBean.id}", viewId = "productDescription.xhtml") })
 @ManagedBean(name = "colorProductSelectPhotoBean")

@@ -29,7 +29,7 @@ import com.siemens.ctbav.intership.shop.service.superadmin.ColorProductService;
 import com.siemens.ctbav.intership.shop.service.superadmin.ColorSizeProductService;
 import com.siemens.ctbav.intership.shop.service.superadmin.SizeService;
 import com.siemens.ctbav.intership.shop.util.superadmin.NavigationUtils;
-import com.siemens.ctbav.intership.shop.view.internationalization.enums.EColorSizeProducts;
+import com.siemens.ctbav.intership.shop.view.internationalization.enums.superadmin.EColorSizeProducts;
 
 @URLMappings(mappings = {
 		@URLMapping(id = "colorProductSizeSelect", pattern = "/superadmin/genericProducts/colorProducts/sizes/#{colorProductSizeSelectBean.id}", viewId = "productDescription.xhtml"),

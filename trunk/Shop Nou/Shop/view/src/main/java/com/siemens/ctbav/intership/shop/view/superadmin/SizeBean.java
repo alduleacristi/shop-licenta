@@ -26,7 +26,7 @@ import com.siemens.ctbav.intership.shop.service.internationalization.Internation
 import com.siemens.ctbav.intership.shop.service.superadmin.SizeService;
 import com.siemens.ctbav.intership.shop.util.superadmin.NavigationUtils;
 import com.siemens.ctbav.intership.shop.util.superadmin.selectable.SelectableSize;
-import com.siemens.ctbav.intership.shop.view.internationalization.enums.ESize;
+import com.siemens.ctbav.intership.shop.view.internationalization.enums.superadmin.ESize;
 
 @ManagedBean(name = "sizeBean")
 @ViewScoped

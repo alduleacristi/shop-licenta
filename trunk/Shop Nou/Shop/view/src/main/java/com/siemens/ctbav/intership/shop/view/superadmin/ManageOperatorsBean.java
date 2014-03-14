@@ -20,7 +20,7 @@ import com.siemens.ctbav.intership.shop.model.User;
 import com.siemens.ctbav.intership.shop.service.internationalization.InternationalizationService;
 import com.siemens.ctbav.intership.shop.service.superadmin.OperatorsService;
 import com.siemens.ctbav.intership.shop.util.superadmin.NavigationUtils;
-import com.siemens.ctbav.intership.shop.view.internationalization.enums.EManageUsers;
+import com.siemens.ctbav.intership.shop.view.internationalization.enums.superadmin.EManageUsers;
 
 @ManagedBean(name = "manageOperatorsBean")
 @ViewScoped

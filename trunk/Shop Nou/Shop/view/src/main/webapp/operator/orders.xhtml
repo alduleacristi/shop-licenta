@@ -35,7 +35,8 @@
 					<br />
 					<br />
 					<h:commandButton value="Show me the results"
-						action="#{orders.results}" update=":form:error" />
+						action="#{orders.results}" update=":form:error"
+						styleClass="search-submitLong" />
 					<br />
 					<br />
 					<p:dataTable id="ordersTable" var="order"
@@ -188,17 +189,20 @@
 
 					</p:dialog>
 					<br></br>
-					<br></br>
-					<br />
+					
 					<h:selectManyCheckbox value="#{orders.reports}">
 
 						<f:selectItem itemValue="1" itemLabel="PDF" />
+						<br />
 						<f:selectItem itemValue="2" itemLabel="XML" />
+						<br />
 						<f:selectItem itemValue="3" itemLabel="JSON" />
+						<br />
 						<f:selectItem itemValue="4" itemLabel="CSV" />
+						<br />
 					</h:selectManyCheckbox>
 
-					<p:commandButton value="Generate my reports, please"
+					<h:commandButton value="Generate my reports, please"
 						styleClass="search-submitLong"
 						actionListener="#{orders.generateReports}" update=":form:error" />
 

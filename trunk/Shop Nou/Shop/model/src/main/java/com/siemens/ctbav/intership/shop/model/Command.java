@@ -6,8 +6,6 @@ import java.util.List;
 
 import javax.persistence.*;
 
-import com.siemens.ctbav.intership.shop.util.Enum.CommandStatusEnum;
-
 /**
  * The persistent class for the Command database table.
  * 
@@ -21,7 +19,7 @@ import com.siemens.ctbav.intership.shop.util.Enum.CommandStatusEnum;
 		@NamedQuery(name = Command.GET_ORDER, query = "select c from Command c where c.user.id is null and c.command_status.status='In Progress'"),
 		@NamedQuery(name = Command.GET_CLIENTS_ORDERS, query = "select c from Command c where  c.command_status.status='In Progress' and c.client.id=:id"),
 		@NamedQuery(name = Command.GET_ORDERS_BETWEEN_DATES, query = "select c from Command c where c.orderDate between  :date1 and  :date2 "),
-		@NamedQuery(name = Command.GET_RETURNED_ORDERS, query = "select c from Command c where c.returnDate is not null"),
+	//	@NamedQuery(name = Command.GET_RETURNED_ORDERS, query = "select c from Command c where c.returnDate is not null"),
 		@NamedQuery(name = Command.GET_CLIENTS_DELIVERED_ORDERS, query = "select c from Command c where c.command_status.status='delivered' and c.client.id=:id") })
 public class Command implements Serializable {
 
@@ -66,10 +64,7 @@ public class Command implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "id_operator")
 	private User user;
-
-	@Column(name = "return_date")
-	private Date returnDate;
-
+	
 	public Command() {
 	}
 

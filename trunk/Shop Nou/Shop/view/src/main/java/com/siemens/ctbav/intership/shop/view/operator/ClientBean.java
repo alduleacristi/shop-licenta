@@ -1,10 +1,5 @@
 package com.siemens.ctbav.intership.shop.view.operator;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.sql.Date;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -13,8 +8,6 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
-import javax.xml.bind.JAXBException;
-
 import org.primefaces.event.ToggleEvent;
 
 import com.siemens.ctbav.intership.shop.convert.operator.ConvertClient;
@@ -58,12 +51,7 @@ public class ClientBean {
 
 	private GenerateReport generate;
 
-	public String getFilename() {
-		java.sql.Date currDate = new Date(Calendar.getInstance()
-				.getTimeInMillis());
-		return "d:\\Reports\\clients" + currDate;
-	}
-
+	
 	@PostConstruct
 	public void initClientList() {
 		setAllClients(ConvertClient.convertClientListDate(clientService
@@ -126,26 +114,22 @@ public class ClientBean {
 		//	System.out.println(reports[i]);
 		try {
 			if (contains(Reports.PDF.getValue())) {
-				generate = new GeneratePDF(allClients, new FileWriter(
-						getFilename() + ".pdf"));
+				generate = new GeneratePDF(allClients);
 				generate.generate();
 			}
 
 			if (contains(Reports.XML.getValue())) {
 
-				generate = new GenerateXML(allClients, new FileWriter(
-						getFilename() + ".xml"));
+				generate = new GenerateXML(allClients);
 			//	System.out.println(getFilename() + ".xml");
 				generate.generate();
 			}
 			if (contains(Reports.JSON.getValue())) {
-				generate = new GenerateJson(allClients, new FileWriter(
-						getFilename() + ".json"));
+				generate = new GenerateJson(allClients);
 				generate.generate();
 			}
 			if (contains(Reports.CSV.getValue())) {
-				generate = new GenerateCSV(allClients, new FileWriter(
-						getFilename() + ".csv"));
+				generate = new GenerateCSV(allClients);
 				generate.generate();
 			}
 			FacesContext

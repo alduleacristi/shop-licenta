@@ -50,6 +50,10 @@ public class ProductColorDTO {
 			return false;
 		return true;
 	}
+	@Override
+	public String toString() {
+		return "product=" + product + ", color=" + color;
+	}
 
 	
 	

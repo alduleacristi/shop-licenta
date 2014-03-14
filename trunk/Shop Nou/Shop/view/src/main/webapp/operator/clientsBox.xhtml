@@ -96,17 +96,19 @@
 			</p:dataTable>
 
 			<br />
-			<br />
-			<br />
 			<h:selectManyCheckbox value="#{clients.reports}">
 
 				<f:selectItem itemValue="1" itemLabel="PDF" />
+				<br />
 				<f:selectItem itemValue="2" itemLabel="XML" />
+				<br />
 				<f:selectItem itemValue="3" itemLabel="JSON" />
+				<br />
 				<f:selectItem itemValue="4" itemLabel="CSV" />
+				<br />
 			</h:selectManyCheckbox>
 
-			<p:commandButton value="Generate my reports, please"
+			<h:commandButton value="Generate my reports, please"
 				styleClass="search-submitLong"
 				actionListener="#{clients.generateReports}" update=":form:error" />
 		</p:growl>

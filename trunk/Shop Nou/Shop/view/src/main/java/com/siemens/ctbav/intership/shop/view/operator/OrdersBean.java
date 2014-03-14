@@ -1,6 +1,5 @@
 package com.siemens.ctbav.intership.shop.view.operator;
 
-import java.io.FileWriter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -46,12 +45,7 @@ public class OrdersBean {
 	private Double minValue, maxValue;
 
 	private GenerateReport generate;
-	public String getFilename() {
-		java.sql.Date currDate = new java.sql.Date(Calendar.getInstance()
-				.getTimeInMillis());
-		return "d:\\Reports\\orders" + currDate;
-	}
-
+	
 	// private List<CommandDTO> allOrders;
 	public List<CommandDTO> getOrderList() {
 		return orderList;
@@ -349,32 +343,40 @@ public class OrdersBean {
 	}
 
 	public void generateReports() {
-	//	for (int i = 0; i < reports.length; i++)
-		//	System.out.println(reports[i]);
+		boolean smthSelected = false;
 		try {
 			if (contains(Reports.PDF.getValue())) {
-				generate = new GeneratePDF(orderList, new FileWriter(
-						getFilename() + ".pdf"));
+				generate = new GeneratePDF(orderList);
+				smthSelected= true;
 				generate.generate();
 			}
 
 			if (contains(Reports.XML.getValue())) {
 
-				generate = new GenerateXML(orderList, new FileWriter(
-						getFilename() + ".xml"));
-			//	System.out.println(getFilename() + ".xml");
+				generate = new GenerateXML(orderList);
+				smthSelected=true;
 				generate.generate();
 			}
 			if (contains(Reports.JSON.getValue())) {
-				generate = new GenerateJson(orderList, new FileWriter(
-						getFilename() + ".json"));
+				generate = new GenerateJson(orderList);
+				smthSelected= true;
 				generate.generate();
 			}
 			if (contains(Reports.CSV.getValue())) {
-				generate = new GenerateCSV(orderList, new FileWriter(
-						getFilename() + ".csv"));
+				generate = new GenerateCSV(orderList);
+				smthSelected= true;
 				generate.generate();
 			}
+			if(smthSelected == false )
+				FacesContext
+				.getCurrentInstance()
+				.addMessage(
+						null,
+						new FacesMessage(
+								FacesMessage.SEVERITY_INFO,
+								"You must check at least one checkbox and then click on the button",
+								""));
+			else
 			FacesContext
 					.getCurrentInstance()
 					.addMessage(
@@ -383,7 +385,9 @@ public class OrdersBean {
 									FacesMessage.SEVERITY_INFO,
 									"The reports have been generated in folder Reports",
 									""));
+			
 		} catch (Exception e) {
+			System.out.println(e.getMessage());
 			FacesContext.getCurrentInstance().addMessage(
 					null,
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, e

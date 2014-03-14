@@ -68,4 +68,11 @@ public class ProductColorSizeDTO {
 		this.nrPieces = nrPieces;
 	}
 
+	@Override
+	public String toString() {
+		return "prodColor=" + prodColor + ", size=" + size
+				+ ", nrPieces=" + nrPieces;
+	}
+
+	
 }

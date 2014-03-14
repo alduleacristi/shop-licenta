@@ -33,28 +33,19 @@
 			<version>2.3.1.GA</version>
 			<scope>provided</scope> <!-- provided if youre deploying to jboss as 7.1 -->
 		</dependency>
-		
+
 		<dependency>
-		<groupId>org.apache.poi</groupId>
-		<artifactId>poi</artifactId>
-		<version>3.7</version>
-		<scope>provided</scope>
+			<groupId>com.itextpdf</groupId>
+			<artifactId>itextpdf</artifactId>
+			<version>5.4.3</version>
 		</dependency>
-		
+
 		<dependency>
-		<groupId>com.lowagie</groupId>
-		<artifactId>itext</artifactId>
-		<version>2.1.7</version>
-		<scope>provided</scope>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>1.7.1</version>
 		</dependency>
-		
-		
-		<dependency>
-		<groupId>com.google.code.gson</groupId>
-		<artifactId>gson</artifactId>
-		<version>1.7.1</version>
-		</dependency>
-		
+
 		<dependency>
 			<groupId>javax</groupId>
 			<artifactId>javaee-api</artifactId>

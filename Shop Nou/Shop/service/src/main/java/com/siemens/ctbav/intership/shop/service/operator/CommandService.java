@@ -36,6 +36,7 @@ public class CommandService {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<Command> getReturnedOrders() throws CommandNotFoundException{
 		List<Command> list = em.createNamedQuery(Command.GET_RETURNED_ORDERS).getResultList();
 		if(list == null || list.size() == 0)

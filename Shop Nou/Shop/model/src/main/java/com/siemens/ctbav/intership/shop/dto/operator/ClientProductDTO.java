@@ -2,6 +2,8 @@ package com.siemens.ctbav.intership.shop.dto.operator;
 
 public class ClientProductDTO {
 
+	
+
 	private Long nrPieces;
 	private Double percReduction;
 	private Double price;
@@ -51,5 +53,11 @@ public class ClientProductDTO {
 	
 	public Double totalPrice(){
 		return price * nrPieces;
+	}
+	
+	@Override
+	public String toString() {
+		return "nrPieces=" + nrPieces + ", percReduction="
+				+ percReduction + ", price=" + price + ", product=" + product;
 	}
 }

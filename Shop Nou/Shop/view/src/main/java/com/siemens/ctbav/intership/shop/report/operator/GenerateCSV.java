@@ -3,14 +3,18 @@ package com.siemens.ctbav.intership.shop.report.operator;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 
 import com.siemens.ctbav.intership.shop.dto.ClientDTO;
 
 public class GenerateCSV extends GenerateReport {
 
-	public GenerateCSV(List<? extends Object> list, FileWriter stream) {
-		super(list, stream);
+	public GenerateCSV(List<? extends Object> list) throws IOException {
+		super(list);
 	}
 
 	@Override
@@ -24,31 +28,39 @@ public class GenerateCSV extends GenerateReport {
 		// setez campurile ca fiind publice ca sa pot sa iau valorile
 		for (int i = 0; i < fields.length; i++)
 			fields[i].setAccessible(true);
+
+		FileWriter flux;
+		try {
+			flux = new FileWriter(getFilename());
+		} catch (ParseException e1) {
+			throw new IOException(e1.getMessage());
+		}
 		for (int i = 0; i < fields.length; i++)
-			System.out.println(fields[i].getName());
-		for (int i = 0; i < fields.length; i++)
-			stream.write(fields[i].getName() + ",");
-		stream.write('\n');
+			flux.write(fields[i].getName() + ",");
+		flux.write('\n');
 		for (int i = 0; i < list.size(); i++) {
 			Object obj = list.get(i);
 			for (int j = 0; j < fields.length; j++) {
 				try {
 					Object val = fields[j].get(obj);
 					if (val != null) {
-						System.out.println("val  " + val.toString());
-						stream.write(val.toString());
+						flux.write(val.toString());
 					} else
-						stream.write("null");
-					stream.write(',');
+						flux.write("null");
+					flux.write(',');
 				} catch (Exception e) {
 					throw new IOException(e);
 				}
 			}
-			stream.write('\n');
+			flux.write('\n');
 		}
-		stream.flush();
-		stream.close();
+		flux.flush();
+		flux.close();
 
 	}
-
+	
+	@Override
+	protected String getFilename() throws ParseException{
+		return super.getFilename() + ".csv";
+	}
 }

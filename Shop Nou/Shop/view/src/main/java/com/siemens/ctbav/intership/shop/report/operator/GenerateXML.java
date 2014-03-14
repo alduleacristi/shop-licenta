@@ -2,6 +2,7 @@ package com.siemens.ctbav.intership.shop.report.operator;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,15 +14,16 @@ import com.siemens.ctbav.intership.shop.dto.operator.ClientDTO;
 import com.siemens.ctbav.intership.shop.dto.operator.CommandDTO;
 import com.siemens.ctbav.intership.shop.jaxb.operator.ClientJAXB;
 import com.siemens.ctbav.intership.shop.jaxb.operator.MyJAXBList;
+import com.siemens.ctbav.intership.shop.jaxb.operator.OrderJAXB;
 
 public class GenerateXML extends GenerateReport {
 
 	JAXBContext context;
 	Marshaller marsh;
 
-	public GenerateXML(List<? extends Object> list, FileWriter stream)
-			throws JAXBException {
-		super(list, stream);
+	public GenerateXML(List<? extends Object> list)
+			throws JAXBException, IOException {
+		super(list);
 		context = JAXBContext.newInstance(MyJAXBList.class);
 		marsh = context.createMarshaller();
 		marsh.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
@@ -37,25 +39,43 @@ public class GenerateXML extends GenerateReport {
 		if (obj instanceof ClientDTO)
 			try {
 				generateForClients();
-			} catch (JAXBException e) {
+			} catch (Exception e) {
 				throw new IOException(e);
 			}
 		else if (obj instanceof CommandDTO)
-			generateForOrders();
+			try {
+				generateForOrders();
+			} catch (Exception e) {
+				throw new IOException(e);
+			}
 	}
 
-	private void generateForOrders() {
+	private void generateForOrders() throws JAXBException, IOException, ParseException {
 
 		System.out.println("vreau sa generez comenzile");
-	//	List<OrderJAXB> convertedList = 
+		List<OrderJAXB> convertedList = convertOrdersToJAXB();
+		MyJAXBList lista = new MyJAXBList(convertedList);
+		FileWriter flux = new FileWriter(getFilename());
+		marsh.marshal(lista, flux);
 	}
 
-	private void generateForClients() throws JAXBException {
+	private List<OrderJAXB> convertOrdersToJAXB() {
+		List<OrderJAXB> lista = new ArrayList<OrderJAXB>();
+		for(Object com : list){
+			CommandDTO c = (CommandDTO)com;
+			OrderJAXB order = new OrderJAXB(c);
+			lista.add(order);
+		}
+		return lista;
+	}
+
+	private void generateForClients() throws JAXBException, IOException, ParseException {
 
 		System.out.println("generate for clients");
 		List<ClientJAXB> convertedList = convertClientsToJAXB(); 
 		MyJAXBList lista = new MyJAXBList(convertedList);
-		marsh.marshal(lista, stream);
+		FileWriter flux = new FileWriter(getFilename());
+		marsh.marshal(lista, flux);
 	}
 
 	private List<ClientJAXB> convertClientsToJAXB() {
@@ -66,5 +86,10 @@ public class GenerateXML extends GenerateReport {
 			lista.add(c);
 		}
 		return lista;
+	}
+	
+	@Override
+	protected String getFilename() throws ParseException{
+		return super.getFilename() + ".xml";
 	}
 }

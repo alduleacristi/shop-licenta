@@ -43,6 +43,11 @@ public class SizeDTO {
 		return true;
 	}
 
+	@Override
+	public String toString() {
+		return "size=" + name;
+	}
+
 
 	
 }

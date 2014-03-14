@@ -22,7 +22,7 @@ import com.siemens.ctbav.intership.shop.service.superadmin.ColorSizeProductServi
 import com.siemens.ctbav.intership.shop.service.superadmin.exporter.ExportToCsv;
 import com.siemens.ctbav.intership.shop.service.superadmin.exporter.ExportToXml;
 import com.siemens.ctbav.intership.shop.service.superadmin.exporter.Exporter;
-import com.siemens.ctbav.intership.shop.view.internationalization.enums.EExport;
+import com.siemens.ctbav.intership.shop.view.internationalization.enums.superadmin.EExport;
 
 @ManagedBean(name = "exportBean")
 @RequestScoped

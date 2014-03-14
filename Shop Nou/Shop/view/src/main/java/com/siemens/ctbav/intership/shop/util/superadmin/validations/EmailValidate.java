@@ -10,7 +10,7 @@ import javax.faces.validator.FacesValidator;
 import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
 
-import com.siemens.ctbav.intership.shop.view.internationalization.enums.EManageUsers;
+import com.siemens.ctbav.intership.shop.view.internationalization.enums.superadmin.EManageUsers;
 
 @FacesValidator("emailValidate")
 public class EmailValidate implements Validator {

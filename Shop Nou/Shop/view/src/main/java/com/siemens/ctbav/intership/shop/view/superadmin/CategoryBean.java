@@ -25,7 +25,7 @@ import com.siemens.ctbav.intership.shop.service.internationalization.Internation
 import com.siemens.ctbav.intership.shop.service.superadmin.CategoryService;
 import com.siemens.ctbav.intership.shop.util.superadmin.NavigationUtils;
 import com.siemens.ctbav.intership.shop.util.superadmin.validations.CategoryUpdateNameValidate;
-import com.siemens.ctbav.intership.shop.view.internationalization.enums.ECategory;
+import com.siemens.ctbav.intership.shop.view.internationalization.enums.superadmin.ECategory;
 
 @URLMappings(mappings = { @URLMapping(id = "categories", pattern = "/superadmin/categories/", viewId = "categories.xhtml") })
 @ManagedBean(name = "categoryBean")

@@ -9,7 +9,7 @@ import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 
 import com.siemens.ctbav.intership.shop.service.internationalization.InternationalizationService;
-import com.siemens.ctbav.intership.shop.view.internationalization.enums.EColorSizeProducts;
+import com.siemens.ctbav.intership.shop.view.internationalization.enums.superadmin.EColorSizeProducts;
 
 @ManagedBean(name = "internationalizationColorSizeProducts")
 @RequestScoped

@@ -26,7 +26,7 @@ import com.siemens.ctbav.intership.shop.model.Category;
 import com.siemens.ctbav.intership.shop.service.internationalization.InternationalizationService;
 import com.siemens.ctbav.intership.shop.service.superadmin.ProductService;
 import com.siemens.ctbav.intership.shop.util.superadmin.NavigationUtils;
-import com.siemens.ctbav.intership.shop.view.internationalization.enums.EGenericProduct;
+import com.siemens.ctbav.intership.shop.view.internationalization.enums.superadmin.EGenericProduct;
 
 @URLMappings(mappings = { @URLMapping(id = "products", pattern = "/superadmin/genericProducts/", viewId = "products.xhtml") })
 @ManagedBean(name = "productBean")

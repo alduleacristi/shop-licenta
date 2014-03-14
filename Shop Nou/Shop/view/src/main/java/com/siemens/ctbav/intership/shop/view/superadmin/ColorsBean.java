@@ -21,7 +21,7 @@ import com.siemens.ctbav.intership.shop.model.Color;
 import com.siemens.ctbav.intership.shop.service.internationalization.InternationalizationService;
 import com.siemens.ctbav.intership.shop.service.superadmin.ColorService;
 import com.siemens.ctbav.intership.shop.util.superadmin.NavigationUtils;
-import com.siemens.ctbav.intership.shop.view.internationalization.enums.EColor;
+import com.siemens.ctbav.intership.shop.view.internationalization.enums.superadmin.EColor;
 
 @ManagedBean(name = "colorsBean")
 @ViewScoped

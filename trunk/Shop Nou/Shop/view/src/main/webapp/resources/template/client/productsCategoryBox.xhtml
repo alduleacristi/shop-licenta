@@ -15,12 +15,12 @@
 		<h:form>
 			<div class="box categories">
 				<h2>
-					Categories <span></span>
+					#{internationalizationSearchBox.categories} <span></span>
 				</h2>
 				<div class="box-content">
 					<p:tree id="treeSingle" var="node" value="#{treeBeanVisitor.root}"
-						selectionMode="single" selection="#{treeBeanVisitor.selectedCategory}"
-						styleClass="tree">
+						selectionMode="single"
+						selection="#{treeBeanVisitor.selectedCategory}" styleClass="tree">
 						<p:ajax event="select" listener="#{treeBeanVisitor.onNodeSelect}" />
 						<p:treeNode>
 							<h:outputText value="#{node}" />

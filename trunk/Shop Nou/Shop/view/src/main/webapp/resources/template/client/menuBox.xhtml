@@ -13,19 +13,22 @@
 	<ui:composition>
 		<div id="navigation">
 			<ul>
-				<li><a href="/Shop4J/client/MainPage" class="active">Home</a></li>
-				<li><a href="/Shop4J/client/CreateAccount" class="active">Create
-						Account</a></li>
-			    <li><a href="/Shop4J/client/Contact" class ="active">Contact</a></li>
-			    <li><a href="/Shop4J/client/About" class ="active">The store</a></li>
-<!-- 				<li><p:commandLink rendered="#{!AdminLogin.logged}" -->
-<!-- 						styleClass="active" action="#{AdminLogin.redirectToLogin()}"> -->
-<!-- 						<h:outputText value="Login" styleClass="active"></h:outputText> -->
-<!-- 					</p:commandLink></li> -->
-<!-- 				<li><p:commandLink rendered="#{AdminLogin.logged}" -->
-<!-- 						styleClass="active" action="#{AdminLogin.logout()}"> -->
-<!-- 						<h:outputText value="Logout" styleClass="active"></h:outputText> -->
-<!-- 					</p:commandLink></li> -->
+				<h:form id="menuBox">
+					<li><a href="/Shop4j/client/MainPage" class="active">#{internationalizationMenuBox.home}</a></li>
+					<li><a href="/Shop4j/client/CreateAccount" class="active">#{internationalizationMenuBox.create}</a></li>
+					<li><a href="/Shop4j/client/Contact" class="active">#{internationalizationMenuBox.contact}</a></li>
+					<li><a href="/Shop4j/client/About" class="active">#{internationalizationMenuBox.store}</a></li>
+					<li><p:commandLink rendered="#{!Login.logged}"
+							styleClass="active" action="#{Login.redirectToLogin()}">
+							<h:outputText value="#{internationalizationMenuBox.login}"
+								styleClass="active"></h:outputText>
+						</p:commandLink></li>
+					<li><p:commandLink rendered="#{Login.logged}"
+							styleClass="active" action="#{Login.logout()}">
+							<h:outputText value="#{internationalizationMenuBox.logout}"
+								styleClass="active"></h:outputText>
+						</p:commandLink></li>
+				</h:form>
 			</ul>
 		</div>
 	</ui:composition>

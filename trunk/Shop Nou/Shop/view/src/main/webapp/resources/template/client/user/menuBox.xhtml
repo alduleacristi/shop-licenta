@@ -14,17 +14,18 @@
 		<h:form>
 			<div id="navigation">
 				<ul>
-					<li><a href="/Shop4j/client/user/index" class="active">Home</a></li>
+					<li><a href="/Shop4j/client/user/index" class="active">#{internationalizationMenuBox.home}</a></li>
 					<li><a href="/Shop4j/client/user/Account/PersonalData"
-						class="active">Your Account</a></li>
-					<li><a href="/Shop4j/client/user/contact" class="active">Contact</a></li>
-					<li><a href="/Shop4j/client/about.xhtml" class="active">The
-							store</a></li>
+						class="active">#{internationalizationMenuBox.account}</a></li>
+					<li><a href="/Shop4j/client/user/contact" class="active">#{internationalizationMenuBox.contact}</a></li>
+					<li><a href="/Shop4j/client/about.xhtml" class="active">#{internationalizationMenuBox.store}</a></li>
 
 
 					<li><p:commandLink styleClass="active"
-							actionListener="#{cart.saveToCookie()}" action="#{Login.logout()}">
-							<h:outputText value="Logout" styleClass="active"></h:outputText>
+							actionListener="#{cart.saveToCookie()}"
+							action="#{Login.logout()}">
+							<h:outputText value="#{internationalizationMenuBox.logout}"
+								styleClass="active"></h:outputText>
 						</p:commandLink></li>
 
 					<li><h:outputLabel value="#{menuBean.name}" /></li>

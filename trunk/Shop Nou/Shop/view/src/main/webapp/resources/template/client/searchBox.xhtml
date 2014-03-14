@@ -10,11 +10,11 @@
 		<h:form id="searchFom">
 			<div class="box2 search2">
 				<h2>
-					Search by <span></span>
+					#{internationalizationSearchBox.search} <span></span>
 				</h2>
 				<div>
 
-					<br></br> <label>Keyword</label> <br />
+					<br></br> <label>#{internationalizationSearchBox.keyword}</label> <br />
 					<p:autoComplete id="acMinLength" minQueryLength="3"
 						value="#{searchClient.query}" effect="fade"
 						style="width:210px !important" size="10"
@@ -26,20 +26,20 @@
 						<br />
 						<h:panelGrid columns="1" style="margin-bottom:10px">
 							<h:outputText id="displayRange"
-								value="Price must be between #{searchClient.minPrice}$ and #{searchClient.maxPrice}$" />
+								value="#{internationalizationSearchBox.price} #{searchClient.minPrice}$ - #{searchClient.maxPrice}$" />
 							<p:slider for="txt6,txt7" display="displayRange"
 								style="width:210px" range="true"
-								displayTemplate="Price must be between {min}$ and {max}$"
+								displayTemplate="#{internationalizationSearchBox.price} {min}$ - {max}$"
 								minValue="0" maxValue="200" />
 						</h:panelGrid>
 						<h:inputHidden id="txt6" value="#{searchClient.minPrice}" />
 						<h:inputHidden id="txt7" value="#{searchClient.maxPrice}" />
-						<p:commandButton value="Search" styleClass="search-submit"
+						<p:commandButton value="#{internationalizationSearchBox.search}"
+							styleClass="search-submit"
 							action="#{searchClient.search(searchClient.query)}" />
 					</div>
 					<p>
-						<a href="/Shop4j/client/user/contact" class="bul">Contact
-							Customer Support</a>
+						<a href="/Shop4j/client/user/contact" class="bul">#{internationalizationSearchBox.support}</a>
 					</p>
 					<br />
 				</div>

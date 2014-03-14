@@ -13,26 +13,23 @@
 	<ui:composition>
 		<h:form id="cartLink" onmouseover="PF('dlg3').show();">
 			<div class="cart">
-				<a href="/Shop4j/client/user/Cart" class="cart-link">Your
-					Shopping Cart</a>
+				<a href="/Shop4j/client/user/Cart" class="cart-link">#{internationalizationCart.cart}</a>
 				<div class="cl">&nbsp;</div>
-				<span> Articles: <h:outputText value="#{cart.nrOfProducts}"
-						id="nrProducts"></h:outputText>
-				</span> &nbsp;&nbsp; <span> Cost: <h:outputText
+				<span> #{internationalizationCart.articles} <h:outputText
+						value="#{cart.nrOfProducts}" id="nrProducts"></h:outputText>
+				</span> &nbsp;&nbsp; <span> #{internationalizationCart.cost} <h:outputText
 						value="#{cart.totalPrice}" id="totalPrice"></h:outputText>
 				</span>
-				<p:growl id="cartMessage" showDetail="true" sticky="true"/>
-				<p:dialog header="Your product" widgetVar="dlg3"
-					showEffect="explode" position="1160,6" hideEffect="explode"
-					height="100" id="dialog">
+				<p:growl id="cartMessage" showDetail="true" sticky="true" />
+				<p:dialog header="#{internationalizationCart.products}"
+					widgetVar="dlg3" showEffect="explode" position="1160,6"
+					hideEffect="explode" height="100" id="dialog">
 					<p:dataList id="carousel" value="#{cart.products}" var="p">
 						<p:column style="width:75%;">
-							<div class="cart-dialog-item">
-								#{p.name} - #{p.nrOfPieces}
-							</div>
+							<div class="cart-dialog-item">#{p.name} - #{p.nrOfPieces}</div>
 							<p:commandLink actionListener="#{cart.removeProduct(p)}"
 								update=":cartLink,:cartLink:cartMessage">
-								<center> Remove </center>
+								<center> #{internationalizationCart.remove} </center>
 							</p:commandLink>
 						</p:column>
 					</p:dataList>

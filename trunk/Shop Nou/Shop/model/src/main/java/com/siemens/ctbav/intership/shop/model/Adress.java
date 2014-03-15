@@ -109,9 +109,26 @@ public class Adress implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Adress [id=" + id + ", block=" + block + ", flat=" + flat
-				+ ", number=" + number + ", staircase=" + staircase
-				+ ", street=" + street + ", locality=" + locality + "]";
-	}
+		StringBuilder sb = new StringBuilder();
+		sb.append("Street ").append(this.street).append(",")
+				.append(this.number);
 
+		if (this.block != null)
+			if (!this.block.equals(""))
+				sb.append(", block ").append(this.block);
+
+		if (this.staircase != null)
+			if (!this.staircase.equals(""))
+				sb.append(", staircase ").append(this.staircase);
+
+		if (this.flat != null)
+			if (!this.flat.equals(""))
+				sb.append(", flat ").append(this.flat);
+
+		sb.append(",").append(this.locality.getName()).append(",")
+				.append(this.locality.getCounty().getName()).append(",")
+				.append(this.locality.getCounty().getCountry().getName());
+
+		return sb.toString();
+	}
 }

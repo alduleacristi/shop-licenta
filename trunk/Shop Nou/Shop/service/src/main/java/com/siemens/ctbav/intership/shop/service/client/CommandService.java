@@ -24,4 +24,8 @@ public class CommandService {
 		
 		return commands;
 	}
+	
+	public void addCommand(Command command){
+		em.persist(command);
+	}
 }

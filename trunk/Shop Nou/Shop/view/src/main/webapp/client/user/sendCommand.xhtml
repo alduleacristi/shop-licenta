@@ -31,16 +31,88 @@
 		<ui:define name="mainContent">
 			<h:form id="cartForm">
 				<p:selectBooleanCheckbox
-					value="#{SendCommandBean.useExistingAdress}" id="userExistAdress">
+					value="#{SendCommandBean.useExistingAdress}" id="userExistAdress"
+					rendered="#{SendCommandBean.existProductInCart == true}">
 					<f:ajax listener="#{SendCommandBean.changeUseExistingAdress}"
 						event="change" render="@form" />
 				</p:selectBooleanCheckbox>
 				<b><p:outputLabel style="color: #8b0000;size: 3px"
-						value=" Choose an existing adress" /></b>
+						value=" Choose an existing adress"
+						rendered="#{SendCommandBean.existProductInCart == true}" /></b>
 				<br />
 				<p:outputLabel
-					rendered="#{SendCommandBean.useExistingAdress == true}"
+					rendered="#{SendCommandBean.useExistingAdress == true and SendCommandBean.existProductInCart == true}"
 					value="#{SendCommandBean.messageUserAdress}" id="userAdressMessage" />
+
+				&nbsp;
+				<p:commandLink style="color: #8b0000;size: 3px"
+					rendered="#{SendCommandBean.useExistingAdress == true and SendCommandBean.existProductInCart == true}">Choose another adress <br />
+				</p:commandLink>
+
+				<p:dialog id="chooseAnotherExistingAdress"></p:dialog>
+
+				<br />
+				<p:selectBooleanCheckbox value="#{SendCommandBean.addNewAdress}"
+					id="addNewAdress"
+					rendered="#{SendCommandBean.existProductInCart == true}">
+					<f:ajax event="change" render="@form"
+						listener="#{SendCommandBean.createNewAdress}" />
+				</p:selectBooleanCheckbox>
+				<b><p:outputLabel style="color: #8b0000;size: 3px"
+						value=" Add new adress"
+						rendered="#{SendCommandBean.existProductInCart == true}" /></b>
+
+				<br />
+				<h:outputLabel for="Country" value="Country: "
+					rendered="#{SendCommandBean.addNewAdress == true and SendCommandBean.existProductInCart == true}" />
+				<p:selectOneMenu
+					value="#{SendCommandBean.selectedCountryForNewAdress}"
+					filter="true" filterMatchMode="startsWith"
+					rendered="#{SendCommandBean.addNewAdress == true and SendCommandBean.existProductInCart == true}">
+					<f:selectItem itemLabel="Choose a country" />
+					<f:selectItems value="#{SendCommandBean.countrysForNewAdress}"
+						var="c" itemLabel="#{c.name}" itemValue="#{c.idCountry}" />
+					<p:ajax event="valueChange" update="County" />
+				</p:selectOneMenu>
+
+				<br />
+				<h:outputLabel for="County" value="County: "
+					rendered="#{SendCommandBean.addNewAdress == true and SendCommandBean.existProductInCart == true}" />
+				<p:selectOneMenu
+					value="#{SendCommandBean.selectedCountyForNewAdress}" id="County"
+					filter="true" filterMatchMode="startsWith"
+					rendered="#{SendCommandBean.addNewAdress == true and SendCommandBean.existProductInCart == true}">
+					<f:selectItem itemLabel="Choose a county" />
+					<f:selectItems value="#{SendCommandBean.countysForNewAdress}"
+						var="c" itemLabel="#{c.name}" itemValue="#{c.idCounty}" />
+					<p:ajax event="valueChange" update="Locality" />
+				</p:selectOneMenu>
+
+				<br />
+				<h:outputLabel for="Locality" value="Locality: "
+					rendered="#{SendCommandBean.addNewAdress == true and SendCommandBean.existProductInCart == true}" />
+				<p:selectOneMenu
+					value="#{SendCommandBean.selectedLocalityForNewAdress}"
+					id="Locality" filter="true" filterMatchMode="startsWith"
+					rendered="#{SendCommandBean.addNewAdress == true and SendCommandBean.existProductInCart == true}">
+					<f:selectItem itemLabel="Choose a locality" />
+					<f:selectItems value="#{SendCommandBean.localitysForNewAdress}"
+						var="l" itemLabel="#{l.name}" itemValue="#{l.idLocality}" />
+				</p:selectOneMenu>
+
+				<br />
+				<br />
+				<p:commandButton styleClass="update-submit" value="Finalize command"
+					action="#{SendCommandBean.finalizeCommand()}"
+					rendered="#{SendCommandBean.existProductInCart == true}"></p:commandButton>
+
+				<b><p:outputLabel style="color: #8b0000;size: 3px"
+						value=" Sorry we can not acces your data now.Probaly you got it from mistake. "
+						rendered="#{SendCommandBean.existProductInCart == false}" /></b>
+				<b><p:commandLink value="Please go home."
+						action="#{SendCommandBean.goHome}"
+						rendered="#{SendCommandBean.existProductInCart == false}" /> </b>
+				<p:growl showDetail="true" sticky="true" />
 			</h:form>
 		</ui:define>
 

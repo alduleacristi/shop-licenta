@@ -1,19 +1,28 @@
 package com.siemens.ctbav.intership.shop.view.client;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
 import com.siemens.ctbav.intership.shop.model.Adress;
 import com.siemens.ctbav.intership.shop.model.Client;
+import com.siemens.ctbav.intership.shop.model.Country;
+import com.siemens.ctbav.intership.shop.model.County;
+import com.siemens.ctbav.intership.shop.model.Locality;
 import com.siemens.ctbav.intership.shop.service.client.AdressService;
+import com.siemens.ctbav.intership.shop.service.client.CountryService;
+import com.siemens.ctbav.intership.shop.service.client.CountyService;
+import com.siemens.ctbav.intership.shop.service.client.LocalityService;
+import com.siemens.ctbav.intership.shop.service.client.ProductColorSizeService;
 
-@ViewScoped
+@SessionScoped
 @ManagedBean(name = "SendCommandBean")
 public class SendCommandBean implements Serializable {
 	private static final long serialVersionUID = -6618987358166404408L;
@@ -21,13 +30,32 @@ public class SendCommandBean implements Serializable {
 	@EJB
 	private AdressService adressService;
 
-	private boolean useExistingAdress;
+	@EJB
+	private CountryService countryService;
+
+	@EJB
+	private CountyService countyService;
+
+	@EJB
+	private LocalityService localityService;
+
+	@EJB
+	private ProductColorSizeService productColorSizeService;
+
+	private boolean useExistingAdress, addNewAdress, existProductInCart;
 	private List<Adress> userAdresses;
 	private String messageUserAdress;
+	private Adress selectedAdress;
+	private Long selectedCountryForNewAdress, selectedCountyForNewAdress,
+			selectedLocalityForNewAdress;
+	private List<Country> countrysForNewAdress;
+	private List<County> countysForNewAdress;
+	private List<Locality> localitysForNewAdress;
 
 	@PostConstruct
 	private void initialize() {
 		this.setUseExistingAdress(false);
+		existProductInCart = true;
 	}
 
 	public boolean getUseExistingAdress() {
@@ -54,8 +82,88 @@ public class SendCommandBean implements Serializable {
 		this.messageUserAdress = messageUserAdress;
 	}
 
+	public Adress getSelectedAdress() {
+		return selectedAdress;
+	}
+
+	public void setSelectedAdress(Adress selectedAdress) {
+		this.selectedAdress = selectedAdress;
+	}
+
+	public boolean getAddNewAdress() {
+		return addNewAdress;
+	}
+
+	public void setAddNewAdress(boolean addNewAdress) {
+		this.addNewAdress = addNewAdress;
+	}
+
+	public Long getSelectedCountryForNewAdress() {
+		return selectedCountryForNewAdress;
+	}
+
+	public void setSelectedCountryForNewAdress(Long selectedCountryForNewAdress) {
+		this.countysForNewAdress = countyService
+				.getCountyOfCountry(selectedCountryForNewAdress);
+		this.selectedCountryForNewAdress = selectedCountryForNewAdress;
+	}
+
+	public List<Country> getCountrysForNewAdress() {
+		return countrysForNewAdress;
+	}
+
+	public void setCountrysForNewAdress(List<Country> countrysForNewAdress) {
+		this.countrysForNewAdress = countrysForNewAdress;
+	}
+
+	public Long getSelectedCountyForNewAdress() {
+		return selectedCountyForNewAdress;
+	}
+
+	public void setSelectedCountyForNewAdress(Long selectedCountyForNewAdress) {
+		this.localitysForNewAdress = localityService
+				.getLocalityOfCounty(selectedCountyForNewAdress);
+
+		this.selectedCountyForNewAdress = selectedCountyForNewAdress;
+	}
+
+	public List<County> getCountysForNewAdress() {
+		return countysForNewAdress;
+	}
+
+	public void setCountysForNewAdress(List<County> countysForNewAdress) {
+		this.countysForNewAdress = countysForNewAdress;
+	}
+
+	public List<Locality> getLocalitysForNewAdress() {
+		return localitysForNewAdress;
+	}
+
+	public void setLocalitysForNewAdress(List<Locality> localitysForNewAdress) {
+		this.localitysForNewAdress = localitysForNewAdress;
+	}
+
+	public Long getSelectedLocalityForNewAdress() {
+		return selectedLocalityForNewAdress;
+	}
+
+	public void setSelectedLocalityForNewAdress(
+			Long selectedLocalityForNewAdress) {
+		this.selectedLocalityForNewAdress = selectedLocalityForNewAdress;
+	}
+
+	public boolean getExistProductInCart() {
+		return existProductInCart;
+	}
+
+	public void setExistProductInCart(boolean existProductInCart) {
+		this.existProductInCart = existProductInCart;
+	}
+
 	public void changeUseExistingAdress() {
 		if (this.useExistingAdress) {
+			this.addNewAdress = false;
+
 			Client client = (Client) FacesContext.getCurrentInstance()
 					.getExternalContext().getSessionMap().get("client");
 
@@ -64,12 +172,52 @@ public class SendCommandBean implements Serializable {
 
 			userAdresses = adressService.getClientAdress(client.getId());
 			this.setUseExistingAdress(true);
-			System.out.println(userAdresses.size());
-			if(userAdresses.size() == 0)
+
+			if (userAdresses.size() <= 0)
 				this.setMessageUserAdress("No records found");
-		}else{
+			else {
+				this.selectedAdress = userAdresses.get(0);
+				this.messageUserAdress = selectedAdress.toString();
+			}
+		} else {
 			this.setUseExistingAdress(false);
 		}
 	}
+	
+	public void chooseAnotherAdress(Adress adress){
+		this.selectedAdress = adress;
+		this.messageUserAdress = adress.toString();
+	}
 
+	public void finalizeCommand() {
+
+	}
+
+	public void createNewAdress() {
+		if (this.addNewAdress) {
+			this.useExistingAdress = false;
+
+			countrysForNewAdress = countryService.getCountrys();
+		} else {
+			this.addNewAdress = false;
+		}
+	}
+
+	private void redirect(String url) {
+		FacesContext fc = FacesContext.getCurrentInstance();
+
+		try {
+			fc.getExternalContext().getFlash().setKeepMessages(true);
+			fc.getExternalContext().redirect(url);
+		} catch (IOException e) {
+			e.printStackTrace();
+			FacesContext ctx = FacesContext.getCurrentInstance();
+			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+					"Error", "Sorry.Description is not availabel."));
+		}
+	}
+
+	public void goHome() {
+		redirect("/Shop4j/client/user/index");
+	}
 }

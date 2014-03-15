@@ -12,6 +12,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
@@ -32,8 +33,7 @@ import com.siemens.ctbav.intership.shop.util.UsersRole;
  */
 @ManagedBean(name = "Login")
 @ViewScoped
-@URLMappings(mappings = {
-		@URLMapping(id = "login2", pattern = "/Login", viewId = "/login.xhtml") })
+@URLMappings(mappings = { @URLMapping(id = "login2", pattern = "/Login", viewId = "/login.xhtml") })
 public class LoginBean implements Serializable {
 
 	/**
@@ -217,6 +217,10 @@ public class LoginBean implements Serializable {
 		this.logged = false;
 		try {
 			request.logout();
+
+			FacesContext.getCurrentInstance().getExternalContext()
+					.invalidateSession();
+
 			FacesContext.getCurrentInstance().getExternalContext()
 					.getSessionMap().remove("client");
 			FacesContext.getCurrentInstance().getExternalContext()
@@ -251,8 +255,7 @@ public class LoginBean implements Serializable {
 		} catch (IOException e) {
 			FacesContext context = FacesContext.getCurrentInstance();
 			context.addMessage(null, new FacesMessage(
-					FacesMessage.SEVERITY_ERROR, "OOps",
-					e.getMessage()));
+					FacesMessage.SEVERITY_ERROR, "OOps", e.getMessage()));
 		}
 	}
 }

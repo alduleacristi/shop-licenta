@@ -1,6 +1,7 @@
 package com.siemens.ctbav.intership.shop.view.client;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -11,6 +12,7 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.Cookie;
@@ -27,59 +29,39 @@ import com.siemens.ctbav.intership.shop.model.ProductColorSize;
 import com.siemens.ctbav.intership.shop.service.client.ProductColorSizeService;
 import com.siemens.ctbav.intership.shop.util.client.CookieEncryption;
 
-@ManagedBean(name = "cart")
 @SessionScoped
+@ManagedBean(name = "cart")
 @URLMappings(mappings = {
 		@URLMapping(id = "cartClient", pattern = "/client/user/Cart", viewId = "/client/user/cart.xhtml"),
 		@URLMapping(id = "sendCommand", pattern = "/client/user/sendCommand", viewId = "/client/user/sendCommand.xhtml") })
-public class Cart {
-	private Map<ProductColorSize, Integer> cart;
-
-	private Integer nrOfProducts;
-
-	private Double totalPrice;
-
-	private List<ProductColorSizeNumberDTO> products;
-
-	private ProductColorSize selectedProductForDescription;
-	
-	private Adress accountAdress;
+public class Cart implements Serializable {
+	private static final long serialVersionUID = -4660863521509380343L;
 
 	@EJB
 	ProductColorSizeService productColorSizeService;
 
+	@ManagedProperty(value = "#{SendCommandBean}")
+	private SendCommandBean sendCommand;
+
+	private Map<ProductColorSize, Long> cart;
+	private List<ProductColorSizeNumberDTO> products;
+	private ProductColorSizeNumberDTO selectedProductForDescription;
+	private Adress accountAdress;
+
 	@PostConstruct
 	private void initialize() {
-		cart = new HashMap<ProductColorSize, Integer>();
-		setNrOfProducts(0);
-		setTotalPrice(0.0);
+		cart = new HashMap<ProductColorSize, Long>();
 		products = new ArrayList<ProductColorSizeNumberDTO>();
-	}
-
-	public Integer getNrOfProducts() {
-		return nrOfProducts;
-	}
-
-	public void setNrOfProducts(Integer nrOfProducts) {
-		this.nrOfProducts = nrOfProducts;
-	}
-
-	public Double getTotalPrice() {
-		return totalPrice;
-	}
-
-	public void setTotalPrice(Double totalPrice) {
-		this.totalPrice = totalPrice;
 	}
 
 	public void setProducts() {
 		products.clear();
 
-		Iterator<Map.Entry<ProductColorSize, Integer>> it = cart.entrySet()
+		Iterator<Map.Entry<ProductColorSize, Long>> it = cart.entrySet()
 				.iterator();
 
 		while (it.hasNext()) {
-			Map.Entry<ProductColorSize, Integer> ob = it.next();
+			Map.Entry<ProductColorSize, Long> ob = it.next();
 
 			ProductColorSizeNumberDTO p = ConvertProductColorSizeNumber
 					.convertToProductColorSizeNumberDTO(ob.getKey(),
@@ -92,20 +74,20 @@ public class Cart {
 		return products;
 	}
 
-	public ProductColorSize getSelectedProductForDescription() {
+	public ProductColorSizeNumberDTO getSelectedProductForDescription() {
 		return selectedProductForDescription;
 	}
 
 	public void setSelectedProductForDescription(
-			ProductColorSize selectedProductForDescription) {
+			ProductColorSizeNumberDTO selectedProductForDescription) {
 		this.selectedProductForDescription = selectedProductForDescription;
 	}
 
-	public Map<ProductColorSize, Integer> getCart() {
+	public Map<ProductColorSize, Long> getCart() {
 		return cart;
 	}
 
-	public void setCart(Map<ProductColorSize, Integer> cart) {
+	public void setCart(Map<ProductColorSize, Long> cart) {
 		this.cart = cart;
 	}
 
@@ -117,6 +99,14 @@ public class Cart {
 		this.accountAdress = accountAdress;
 	}
 
+	public SendCommandBean getSendCommand() {
+		return sendCommand;
+	}
+
+	public void setSendCommand(SendCommandBean sendCommand) {
+		this.sendCommand = sendCommand;
+	}
+
 	public boolean isEmpty() {
 		if (cart.size() == 0)
 			return false;
@@ -124,11 +114,34 @@ public class Cart {
 		return true;
 	}
 
-	private void addProductFromCookie(ProductColorSize pcs, Integer nrOfProducts) {
+	public String getNrOfProducts() {
+		return String.valueOf(cart.size());
+	}
+
+	public String getTotalPrice() {
+		Double price = 0.0;
+		Iterator<Map.Entry<ProductColorSize, Long>> it = cart.entrySet()
+				.iterator();
+
+		while (it.hasNext()) {
+			Map.Entry<ProductColorSize, Long> ob = it.next();
+			ProductColorSize pcs = ob.getKey();
+
+			price += ob.getValue()
+					* (pcs.getProductcolor().getProduct().getPrice() - pcs
+							.getProductcolor().getProduct().getPrice()
+							* pcs.getProductcolor().getProduct().getReduction()
+							/ 100);
+		}
+
+		return String.valueOf(price);
+	}
+
+	private void addProductFromCookie(ProductColorSize pcs, Long nrOfProducts) {
 		addProduct(pcs, nrOfProducts);
 	}
 
-	private void addProduct(ProductColorSize pcs, Integer nrOfProducts) {
+	private void addProduct(ProductColorSize pcs, Long nrOfProducts) {
 		if (pcs == null) {
 			FacesContext context = FacesContext.getCurrentInstance();
 			context.addMessage(null, new FacesMessage(
@@ -153,29 +166,15 @@ public class Cart {
 		}
 
 		if (cart.containsKey(pcs)) {
-			// System.out.println("exista deja");
 			cart.put(pcs, cart.get(pcs) + nrOfProducts);
-			setTotalPrice(getTotalPrice()
-					+ nrOfProducts
-					* (pcs.getProductcolor().getProduct().getPrice() - pcs
-							.getProductcolor().getProduct().getPrice()
-							* pcs.getProductcolor().getProduct().getReduction()
-							/ 100));
 		} else {
 			cart.put(pcs, nrOfProducts);
-			setNrOfProducts(getNrOfProducts() + 1);
-			setTotalPrice(getTotalPrice()
-					+ nrOfProducts
-					* (pcs.getProductcolor().getProduct().getPrice() - pcs
-							.getProductcolor().getProduct().getPrice()
-							* pcs.getProductcolor().getProduct().getReduction()
-							/ 100));
 		}
 
 		setProducts();
 	}
 
-	public void addProductFromPage(ProductColorSize pcs, Integer nrOfProducts) {
+	public void addProductFromPage(ProductColorSize pcs, Long nrOfProducts) {
 		addProduct(pcs, nrOfProducts);
 
 		FacesContext
@@ -189,16 +188,11 @@ public class Cart {
 	}
 
 	public void removeProduct(ProductColorSizeNumberDTO productDTO) {
-		// System.out.println("sa apelat remove");
 		ProductColorSize product = ConvertProductColorSizeNumber
 				.convertToProductColorSize(productDTO);
 		if (cart.containsKey(product)) {
-			int nr = cart.get(product);
 			cart.remove(product);
 			setProducts();
-			setNrOfProducts(getNrOfProducts() - 1);
-			setTotalPrice(getTotalPrice()
-					- product.getProductcolor().getProduct().getPrice() * nr);
 			try {
 				FacesContext.getCurrentInstance().getExternalContext()
 						.redirect("/Shop4j/client/user/Cart");
@@ -208,17 +202,17 @@ public class Cart {
 		}
 	}
 
-	private void populateCartFromCookie(Map<Long, Integer> cookieProducts) {
+	private void populateCartFromCookie(Map<Long, Long> cookieProducts) {
 		if (cookieProducts == null)
 			return;
 
 		clearCart();
 
-		Iterator<Map.Entry<Long, Integer>> it = cookieProducts.entrySet()
+		Iterator<Map.Entry<Long, Long>> it = cookieProducts.entrySet()
 				.iterator();
 
 		while (it.hasNext()) {
-			Map.Entry<Long, Integer> ob = it.next();
+			Map.Entry<Long, Long> ob = it.next();
 			try {
 				ProductColorSize product = productColorSizeService
 						.getProductColorSizeById(ob.getKey());
@@ -253,21 +247,21 @@ public class Cart {
 		String valCookie = CookieEncryption.decrypt(cookie.getValue());
 
 		String[] elements = valCookie.split("/");
-		Map<Long, Integer> mapProducts = new HashMap<Long, Integer>();
+		Map<Long, Long> mapProducts = new HashMap<Long, Long>();
 
 		for (int i = 0; i < elements.length; i++) {
 			{
 				System.out.println("in for");
 				String[] pairs = elements[i].split(":");
 				Long idProduct = null;
-				Integer numberOfPcs = null;
+				Long numberOfPcs = null;
 
 				if (pairs.length == 2) {
 					try {
 
 						idProduct = Long.parseLong(pairs[0]);
-						System.out.println("idProduct: " + idProduct);
-						numberOfPcs = Integer.parseInt(pairs[1]);
+						// System.out.println("idProduct: " + idProduct);
+						numberOfPcs = Long.parseLong(pairs[1]);
 						mapProducts.put(idProduct, numberOfPcs);
 					} catch (NumberFormatException exc) {
 						exc.printStackTrace();
@@ -283,8 +277,6 @@ public class Cart {
 
 	private void clearCart() {
 		cart.clear();
-		setNrOfProducts(0);
-		setTotalPrice(0.0);
 		products.clear();
 	}
 
@@ -297,11 +289,11 @@ public class Cart {
 				.getExternalContext().getSessionMap().get("client");
 
 		StringBuilder sb = new StringBuilder();
-		Iterator<Map.Entry<ProductColorSize, Integer>> it = cart.entrySet()
+		Iterator<Map.Entry<ProductColorSize, Long>> it = cart.entrySet()
 				.iterator();
 
 		while (it.hasNext()) {
-			Map.Entry<ProductColorSize, Integer> ob = it.next();
+			Map.Entry<ProductColorSize, Long> ob = it.next();
 			sb.append(ob.getKey().getId().toString());
 			sb.append(":");
 			sb.append(ob.getValue());
@@ -332,12 +324,6 @@ public class Cart {
 						"Sorry we don't have enought products in stock."));
 				return;
 			} else {
-				setTotalPrice(getTotalPrice() - cart.get(product)
-						* product.getProductcolor().getProduct().getPrice());
-				setTotalPrice(getTotalPrice()
-						+ product.getProductcolor().getProduct().getPrice()
-						* productDTO.getNrOfPieces());
-
 				cart.put(product, productDTO.getNrOfPieces());
 			}
 		}
@@ -359,6 +345,10 @@ public class Cart {
 	}
 
 	public void sendCommand() {
-		redirect("/Shop4j/client/user/sendCommand");
+
+		System.out.println("in send command");
+
+		cart.clear();
+		setProducts();
 	}
 }

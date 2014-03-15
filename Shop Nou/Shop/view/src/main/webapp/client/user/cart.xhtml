@@ -32,8 +32,7 @@
 			<h:form id="cartForm">
 				<p:carousel id="carousel" value="#{cart.products}"
 					headerText="Products" itemStyle="width:237px"
-					styleClass="products-reduce"  var="p"
-					rendered="#{cart.isEmpty()}">
+					styleClass="products-cart" var="p" rendered="#{cart.isEmpty()}">
 					<center>
 						<p:graphicImage
 							url="http://localhost:8080/Shop4j/rest/products/id#{p.productColor.id}"
@@ -45,12 +44,8 @@
 							</div>
 							<h3>Product name</h3>
 							<p:outputLabel value="#{p.name}"></p:outputLabel>
-							<br /> <br /> <strong class="price">Price</strong>
+							<br /> <strong class="price">Price</strong>
 							<p:outputLabel value="#{p.price}$"></p:outputLabel>
-							<br /> <br /> <strong class="price">Color</strong>
-							<p:outputLabel value="#{p.name}"></p:outputLabel>
-							<br /> <br /> <strong class="price">Size</strong>
-							<p:outputLabel value="#{p.size}"></p:outputLabel>
 							<br /> <br />
 							<p:commandButton id="selectButton"
 								oncomplete="PF('descriptionDialog').show()"
@@ -59,12 +54,11 @@
 								<f:setPropertyActionListener value="#{p}"
 									target="#{cart.selectedProductForDescription}" />
 							</p:commandButton>
-							<br /> <br /> Change quantity: #{p.nrOfPieces}
-							items now.) <br /> 
+							<br /> <br /> Change quantity: #{p.nrOfPieces} items now.) <br />
 							<p:inputText value="#{p.nrOfPieces}">
 								<f:converter converterId="NrOfPiecesConverter"></f:converter>
 							</p:inputText>
-							<br /><br />
+							<br /> <br />
 							<p:commandButton value="Change" title="Change quantity"
 								styleClass="update-submit" update=":cartForm,:cartLink"
 								action="#{cart.changeQuantity(p)}"></p:commandButton>
@@ -82,19 +76,123 @@
 				<p:dialog header="Description" widgetVar="descriptionDialog"
 					id="descriptionDlg" showEffect="fade" hideEffect="explode"
 					modal="true">
+					<strong class="price">Color</strong>
+					<p:outputLabel value="#{cart.selectedProductForDescription.color}"></p:outputLabel>
+					<br />
+					<br />
+					<strong class="price">Size</strong>
+					<p:outputLabel value="#{cart.selectedProductForDescription.size}"></p:outputLabel>
+					<br />
+					<br />
 					<p:inputTextarea cols="55" rows="9" maxlength="200"
-						value="#{cart.selectedProductForDescription.productcolor.product.description}"
+						value="#{cart.selectedProductForDescription.productColor.product.description}"
 						readonly="true">
 					</p:inputTextarea>
 				</p:dialog>
+				<br />
+				<br />
+				<p:panel styleClass="sendCommand"
+					rendered="#{cart.isEmpty() == true}">
+					<p:selectBooleanCheckbox
+						value="#{cart.sendCommand.useExistingAdress}" id="userExistAdress"
+						rendered="#{cart.isEmpty() == true}">
+						<p:ajax listener="#{cart.sendCommand.changeUseExistingAdress}"
+							event="change" update="@form" />
+					</p:selectBooleanCheckbox>
+					<b><p:outputLabel style="color: #8b0000;size: 3px"
+							value=" Choose an existing adress"
+							rendered="#{cart.isEmpty() == true}" /></b>
+					<br />
+					<p:panel styleClass="sendCommandElement"
+						rendered="#{cart.sendCommand.useExistingAdress == true and cart.isEmpty() == true}">
+						<p:outputLabel value="#{cart.sendCommand.messageUserAdress}"
+							id="userAdressMessage" />
+					&nbsp;
+					<p:commandLink style="color: #8b0000;size: 3px"
+							rendered="#{cart.sendCommand.useExistingAdress == true and cart.isEmpty() == true}"
+							oncomplete="PF('chooseAdress').show()">Choose another adress <br />
+						</p:commandLink>
+					</p:panel>
+					<p:dialog id="chooseAnotherExistingAdress" widgetVar="chooseAdress"
+						header="Choose an adress" showEffect="fade" hideEffect="explode"
+						modal="true">
+						<p:dataList value="#{cart.sendCommand.userAdresses}" var="adress"
+							itemType="circle">
+							<b> <p:commandLink value="#{adress}"
+									action="#{cart.sendCommand.chooseAnotherAdress(adress)}"
+									update="@form">
+									<p:ajax oncomplete="chooseAdress.hide()" />
+								</p:commandLink>
+							</b>
+							<br />
+							<br />
+						</p:dataList>
+					</p:dialog>
+					<br />
+					<p:selectBooleanCheckbox value="#{cart.sendCommand.addNewAdress}"
+						id="addNewAdress" rendered="#{cart.isEmpty() == true}">
+						<p:ajax event="change" update="@form"
+							listener="#{cart.sendCommand.createNewAdress}" />
+					</p:selectBooleanCheckbox>
+					<b><p:outputLabel style="color: #8b0000;size: 3px"
+							value=" Add new adress" rendered="#{cart.isEmpty() == true}" /></b>
 
+					<br />
+					<p:panel styleClass="sendCommandElement"
+						rendered="#{cart.sendCommand.addNewAdress == true and cart.isEmpty() == true}">
+						<h:outputLabel for="Country" value="Country: "
+							rendered="#{cart.sendCommand.addNewAdress == true and cart.isEmpty() == true}" />
+						&nbsp;
+						<p:selectOneMenu
+							value="#{cart.sendCommand.selectedCountryForNewAdress}"
+							filter="true" filterMatchMode="startsWith"
+							rendered="#{cart.sendCommand.addNewAdress == true and cart.isEmpty() == true}"
+							style="width:200px">
+							<f:selectItem itemLabel="Choose a country" />
+							<f:selectItems value="#{cart.sendCommand.countrysForNewAdress}"
+								var="c" itemLabel="#{c.name}" itemValue="#{c.idCountry}" />
+							<p:ajax event="valueChange" update="County" />
+						</p:selectOneMenu>
+						<br />
+						<h:outputLabel for="County" value="County :"
+							rendered="#{cart.sendCommand.addNewAdress == true and cart.isEmpty() == true}" />
+						&nbsp;
+						<p:selectOneMenu
+							value="#{cart.sendCommand.selectedCountyForNewAdress}"
+							id="County" filter="true" filterMatchMode="startsWith"
+							rendered="#{cart.sendCommand.addNewAdress == true and cart.isEmpty() == true}"
+							style="width:200px">
+							<f:selectItem itemLabel="Choose a county" />
+							<f:selectItems value="#{cart.sendCommand.countysForNewAdress}"
+								var="c" itemLabel="#{c.name}" itemValue="#{c.idCounty}" />
+							<p:ajax event="valueChange" update="Locality" />
+						</p:selectOneMenu>
+						<br />
+						<h:outputLabel for="Locality" value="Locality: "
+							rendered="#{cart.sendCommand.addNewAdress == true and cart.isEmpty() == true}" />
+						&nbsp;
+						<p:selectOneMenu
+							value="#{cart.sendCommand.selectedLocalityForNewAdress}"
+							id="Locality" filter="true" filterMatchMode="startsWith"
+							rendered="#{cart.sendCommand.addNewAdress == true and cart.isEmpty() == true}"
+							style="width:200px">
+							<f:selectItem itemLabel="Choose a locality" />
+							<f:selectItems value="#{cart.sendCommand.localitysForNewAdress}"
+								var="l" itemLabel="#{l.name}" itemValue="#{l.idLocality}" />
+						</p:selectOneMenu>
+					</p:panel>
+				</p:panel>
+				<br />
+				<br />
+				<br />
 				<br />
 				<center>
-					<p:commandButton styleClass="update-submit" value="Send command"
-						rendered="#{cart.isEmpty()}" action="#{cart.sendCommand}"></p:commandButton>
+					<p:commandButton styleClass="update-submit"
+						value="Finalize command" action="#{cart.sendCommand}"
+						rendered="#{cart.isEmpty() == true}" update="@form :cartLink" />
 				</center>
-				<br />
-				<br />
+
+				<p:growl showDetail="true" sticky="true" />
 			</h:form>
 		</ui:define>
 

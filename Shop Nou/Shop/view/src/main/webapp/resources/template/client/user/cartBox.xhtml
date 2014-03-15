@@ -16,9 +16,10 @@
 				<a href="/Shop4j/client/user/Cart" class="cart-link">#{internationalizationCart.cart}</a>
 				<div class="cl">&nbsp;</div>
 				<span> #{internationalizationCart.articles} <h:outputText
-						value="#{cart.nrOfProducts}" id="nrProducts"></h:outputText>
+						value="#{cart.getNrOfProducts()}" id="nrProducts">
+					</h:outputText>
 				</span> &nbsp;&nbsp; <span> #{internationalizationCart.cost} <h:outputText
-						value="#{cart.totalPrice}" id="totalPrice"></h:outputText>
+						value="#{cart.getTotalPrice()}" id="totalPrice"></h:outputText>
 				</span>
 				<p:growl id="cartMessage" showDetail="true" sticky="true" />
 				<p:dialog header="#{internationalizationCart.products}"

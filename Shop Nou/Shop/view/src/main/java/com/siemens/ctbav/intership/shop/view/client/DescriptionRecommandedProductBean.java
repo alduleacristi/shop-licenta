@@ -52,7 +52,7 @@ public class DescriptionRecommandedProductBean implements Serializable {
 
 	private String availabel, host;
 
-	private Integer nrOfPieces;
+	private Long nrOfPieces;
 
 	@PostConstruct
 	private void postConstruct() {
@@ -134,11 +134,11 @@ public class DescriptionRecommandedProductBean implements Serializable {
 		this.availabel = availabel;
 	}
 
-	public Integer getNrOfPieces() {
+	public Long getNrOfPieces() {
 		return nrOfPieces;
 	}
 
-	public void setNrOfPieces(Integer nrOfPieces) {
+	public void setNrOfPieces(Long nrOfPieces) {
 		this.nrOfPieces = nrOfPieces;
 	}
 

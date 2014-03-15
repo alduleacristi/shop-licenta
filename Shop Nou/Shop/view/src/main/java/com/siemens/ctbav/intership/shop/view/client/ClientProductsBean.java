@@ -60,13 +60,13 @@ public class ClientProductsBean implements Serializable {
 	private ProductColorSize productColorSize;
 	private Long idProductColorSize;
 	private List<String> photos;
-	private Integer nrOfPieces;
+	private Long nrOfPieces;
 
 	@PostConstruct
 	private void postConstruct() {
 		this.host = confService.getHost();
 		
-		this.nrOfPieces = 1;
+		this.nrOfPieces = 1L;
 		setIsAvailabel(false);
 		productList = new ArrayList<ProductColor>();
 
@@ -165,11 +165,11 @@ public class ClientProductsBean implements Serializable {
 		this.productList = productList;
 	}
 
-	public Integer getNrOfPieces() {
+	public Long getNrOfPieces() {
 		return nrOfPieces;
 	}
 
-	public void setNrOfPieces(Integer nrOfPieces) {
+	public void setNrOfPieces(Long nrOfPieces) {
 		this.nrOfPieces = nrOfPieces;
 	}
 

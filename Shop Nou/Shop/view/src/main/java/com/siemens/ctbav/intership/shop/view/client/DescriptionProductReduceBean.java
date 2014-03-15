@@ -56,7 +56,7 @@ public class DescriptionProductReduceBean implements Serializable {
 
 	private String availabel,host;
 
-	private Integer nrOfPieces;
+	private Long nrOfPieces;
 
 	private List<String> photos;
 	
@@ -140,11 +140,11 @@ public class DescriptionProductReduceBean implements Serializable {
 		this.availabel = availabel;
 	}
 
-	public Integer getNrOfPieces() {
+	public Long getNrOfPieces() {
 		return nrOfPieces;
 	}
 
-	public void setNrOfPieces(Integer nrOfPieces) {
+	public void setNrOfPieces(Long nrOfPieces) {
 		this.nrOfPieces = nrOfPieces;
 	}
 
@@ -165,7 +165,7 @@ public class DescriptionProductReduceBean implements Serializable {
 	}
 
 	private void initialize() {
-		nrOfPieces = 1;
+		nrOfPieces = 1L;
 		productsColor = productColorService.getColorsForProduct(id);
 
 		if (productsColor.size() > 0) {

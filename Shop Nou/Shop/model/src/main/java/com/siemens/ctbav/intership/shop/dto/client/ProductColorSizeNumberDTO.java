@@ -13,7 +13,7 @@ public class ProductColorSizeNumberDTO {
 	private String name,color,size;
 	private Double price,reduction;
 	private Long nrOfPiecesInStock,id;
-	private Integer nrOfPieces;
+	private Long nrOfPieces;
 	private ProductColor productColor;
 	
 	
@@ -41,10 +41,10 @@ public class ProductColorSizeNumberDTO {
 	public void setPrice(Double price) {
 		this.price = price;
 	}
-	public Integer getNrOfPieces() {
+	public Long getNrOfPieces() {
 		return nrOfPieces;
 	}
-	public void setNrOfPieces(Integer nrOfPieces) {
+	public void setNrOfPieces(Long nrOfPieces) {
 		this.nrOfPieces = nrOfPieces;
 	}
 	public Double getReduction() {

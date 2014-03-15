@@ -91,4 +91,8 @@ public class ClientProduct implements Serializable {
 	public void setProduct(ProductColorSize product) {
 		this.product = product;
 	}
+
+	public void setCommand(Command command) {
+		this.command = command;
+	}
 }

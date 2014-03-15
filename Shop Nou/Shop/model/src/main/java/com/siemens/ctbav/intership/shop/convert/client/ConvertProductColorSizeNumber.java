@@ -12,7 +12,7 @@ import com.siemens.ctbav.intership.shop.model.ProductColorSize;
  * 
  */
 public class ConvertProductColorSizeNumber {
-	public static ProductColorSizeNumberDTO convertToProductColorSizeNumberDTO(ProductColorSize productColorSize,Integer nrOfPieces){
+	public static ProductColorSizeNumberDTO convertToProductColorSizeNumberDTO(ProductColorSize productColorSize,Long nrOfPieces){
 		ProductColorSizeNumberDTO product = new ProductColorSizeNumberDTO();
 		
 		product.setColor(productColorSize.getProductcolor().getColor().getName());

@@ -151,7 +151,7 @@
 						<h:outputLabel for="Country" value="#{internationalizationAddress.country}: " />
 						&nbsp;
 						<p:selectOneMenu
-							value="#{cart.sendCommand.selectedCountryForNewAdress}"
+							value="#{cart.sendCommand.selectedCountryForNewAdress}" id="Country"
 							filter="true" filterMatchMode="startsWith" style="width:200px">
 							<f:selectItem itemLabel="#{internationalizationAddress.chooseCountry}" />
 							<f:selectItems value="#{cart.sendCommand.countrysForNewAdress}"

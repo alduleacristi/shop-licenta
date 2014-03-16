@@ -87,10 +87,6 @@ public class Adress implements Serializable {
 		return this.number;
 	}
 
-	public void setNumber(long number) {
-		this.number = number;
-	}
-
 	public String getStaircase() {
 		return this.staircase;
 	}

@@ -140,46 +140,70 @@
 					<br />
 					<p:panel styleClass="sendCommandElement"
 						rendered="#{cart.sendCommand.addNewAdress == true and cart.isEmpty() == true}">
-						<h:outputLabel for="Country" value="Country: "
-							rendered="#{cart.sendCommand.addNewAdress == true and cart.isEmpty() == true}" />
+						<h:outputLabel for="Country" value="Country: " />
 						&nbsp;
 						<p:selectOneMenu
 							value="#{cart.sendCommand.selectedCountryForNewAdress}"
-							filter="true" filterMatchMode="startsWith"
-							rendered="#{cart.sendCommand.addNewAdress == true and cart.isEmpty() == true}"
-							style="width:200px">
+							filter="true" filterMatchMode="startsWith" style="width:200px">
 							<f:selectItem itemLabel="Choose a country" />
 							<f:selectItems value="#{cart.sendCommand.countrysForNewAdress}"
 								var="c" itemLabel="#{c.name}" itemValue="#{c.idCountry}" />
 							<p:ajax event="valueChange" update="County" />
-						</p:selectOneMenu>
+						</p:selectOneMenu>*
 						<br />
-						<h:outputLabel for="County" value="County :"
-							rendered="#{cart.sendCommand.addNewAdress == true and cart.isEmpty() == true}" />
+						<h:outputLabel for="County" value="County :" />
 						&nbsp;
 						<p:selectOneMenu
 							value="#{cart.sendCommand.selectedCountyForNewAdress}"
 							id="County" filter="true" filterMatchMode="startsWith"
-							rendered="#{cart.sendCommand.addNewAdress == true and cart.isEmpty() == true}"
 							style="width:200px">
 							<f:selectItem itemLabel="Choose a county" />
 							<f:selectItems value="#{cart.sendCommand.countysForNewAdress}"
 								var="c" itemLabel="#{c.name}" itemValue="#{c.idCounty}" />
 							<p:ajax event="valueChange" update="Locality" />
-						</p:selectOneMenu>
+						</p:selectOneMenu>*
 						<br />
-						<h:outputLabel for="Locality" value="Locality: "
-							rendered="#{cart.sendCommand.addNewAdress == true and cart.isEmpty() == true}" />
+						<h:outputLabel for="Locality" value="Locality: " />
 						&nbsp;
 						<p:selectOneMenu
 							value="#{cart.sendCommand.selectedLocalityForNewAdress}"
 							id="Locality" filter="true" filterMatchMode="startsWith"
-							rendered="#{cart.sendCommand.addNewAdress == true and cart.isEmpty() == true}"
 							style="width:200px">
 							<f:selectItem itemLabel="Choose a locality" />
 							<f:selectItems value="#{cart.sendCommand.localitysForNewAdress}"
 								var="l" itemLabel="#{l.name}" itemValue="#{l.idLocality}" />
-						</p:selectOneMenu>
+						</p:selectOneMenu>*
+						<br />
+						<br />
+						<p:panel styleClass="sendCommandElement">
+							&nbsp;&nbsp;&nbsp;
+							<h:outputLabel value="Street:" for="street" />
+							<p:inputText value="#{cart.sendCommand.street}" id="street" />*
+							<br />
+							&nbsp;
+							<h:outputLabel value="Number:" for="number" />
+							<p:inputText id="number" value="#{cart.sendCommand.number}"
+								required="true">
+								<f:convertNumber minIntegerDigits="1" />
+							</p:inputText>*
+							<br />
+							&nbsp;&nbsp;&nbsp;&nbsp;
+							<h:outputLabel value="Block:" for="block" />
+							<p:inputText id="block" value="#{cart.sendCommand.block}">
+								<f:convertNumber />
+							</p:inputText>
+							<br />
+							<h:outputLabel value="Staircase:" for="staircase" />
+							<p:inputText id="staircase" value="#{cart.sendCommand.staircase}" />
+							<br />
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							<h:outputLabel value="Flat:" for="flat" />
+							<p:inputText id="flat" value="#{cart.sendCommand.flat}">
+								<f:convertNumber />
+							</p:inputText>
+						</p:panel>
+						<br />
+					The field mark with * are mandatory
 					</p:panel>
 				</p:panel>
 				<br />

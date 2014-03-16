@@ -17,6 +17,8 @@ import javax.persistence.NamedQuery;
 @Entity(name = "command_status")
 public class CommandStatus implements Serializable{
 	
+	private static final long serialVersionUID = 4522342203260520022L;
+
 	public final static String GET_STATUS_BY_NAME="get status by name";
 	
 	@Id

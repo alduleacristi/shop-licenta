@@ -95,4 +95,13 @@ public class ClientProduct implements Serializable {
 	public void setCommand(Command command) {
 		this.command = command;
 	}
+
+	@Override
+	public String toString() {
+		return "ClientProduct [nrPieces=" + nrPieces + ", percRedution="
+				+ percRedution + ", price=" + price + ", product=" + product
+				+ ", command=" + command + "]";
+	}
+	
+	
 }

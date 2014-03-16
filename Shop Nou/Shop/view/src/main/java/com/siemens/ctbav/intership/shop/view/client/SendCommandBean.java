@@ -10,6 +10,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.validation.constraints.Size;
 
 import com.siemens.ctbav.intership.shop.model.Adress;
 import com.siemens.ctbav.intership.shop.model.Client;
@@ -51,6 +52,13 @@ public class SendCommandBean implements Serializable {
 	private List<Country> countrysForNewAdress;
 	private List<County> countysForNewAdress;
 	private List<Locality> localitysForNewAdress;
+
+	@Size(min = 1, message = "The street name must have at least on character")
+	private String street;
+	
+	private String staircase;
+
+	private Long number,block,flat;
 
 	@PostConstruct
 	private void initialize() {
@@ -160,6 +168,46 @@ public class SendCommandBean implements Serializable {
 		this.existProductInCart = existProductInCart;
 	}
 
+	public String getStreet() {
+		return street;
+	}
+
+	public void setStreet(String street) {
+		this.street = street;
+	}
+
+	public Long getNumber() {
+		return number;
+	}
+
+	public void setNumber(Long number) {
+		this.number = number;
+	}
+
+	public String getStaircase() {
+		return staircase;
+	}
+
+	public void setStaircase(String staircase) {
+		this.staircase = staircase;
+	}
+
+	public Long getBlock() {
+		return block;
+	}
+
+	public void setBlock(Long block) {
+		this.block = block;
+	}
+
+	public Long getFlat() {
+		return flat;
+	}
+
+	public void setFlat(Long flat) {
+		this.flat = flat;
+	}
+
 	public void changeUseExistingAdress() {
 		if (this.useExistingAdress) {
 			this.addNewAdress = false;
@@ -183,8 +231,8 @@ public class SendCommandBean implements Serializable {
 			this.setUseExistingAdress(false);
 		}
 	}
-	
-	public void chooseAnotherAdress(Adress adress){
+
+	public void chooseAnotherAdress(Adress adress) {
 		this.selectedAdress = adress;
 		this.messageUserAdress = adress.toString();
 	}

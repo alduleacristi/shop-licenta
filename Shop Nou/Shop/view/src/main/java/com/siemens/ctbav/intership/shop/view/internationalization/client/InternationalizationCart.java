@@ -25,6 +25,8 @@ public class InternationalizationCart implements Serializable {
 	private String cost;
 	private String remove;
 	private String products;
+	private String noRecords;
+	private String sendCommand;
 
 	@PostConstruct
 	private void init() {
@@ -77,5 +79,17 @@ public class InternationalizationCart implements Serializable {
 		products = internationalizationService.getMessage(ECart.PRODUCTS
 				.getName());
 		return products;
+	}
+
+	public String getNoRecords() {
+		noRecords = internationalizationService.getMessage(ECart.NO_RECORDS
+				.getName());
+		return noRecords;
+	}
+
+	public String getSendCommand() {
+		sendCommand = internationalizationService.getMessage(ECart.SEND_COMMAND
+				.getName());
+		return sendCommand;
 	}
 }

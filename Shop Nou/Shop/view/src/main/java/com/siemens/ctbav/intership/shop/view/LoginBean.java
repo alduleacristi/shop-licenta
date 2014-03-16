@@ -8,7 +8,7 @@ import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
+import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -32,7 +32,7 @@ import com.siemens.ctbav.intership.shop.util.UsersRole;
  * 
  */
 @ManagedBean(name = "Login")
-@ViewScoped
+@SessionScoped
 @URLMappings(mappings = { @URLMapping(id = "login2", pattern = "/Login", viewId = "/login.xhtml") })
 public class LoginBean implements Serializable {
 
@@ -148,7 +148,7 @@ public class LoginBean implements Serializable {
 			// String hashPass2 = DigestUtils.md5Hex(this.password);
 			request.login(this.user.getUserName(), this.user.getPassword());
 			this.logged = true;
-
+			System.out.println("s-a facut true");
 			if (request.isUserInRole(UsersRole.SUPER_ADMINISTRATOR.toString())) {
 				FacesContext.getCurrentInstance().getExternalContext()
 						.getSessionMap().put("user", user);

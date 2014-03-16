@@ -227,7 +227,7 @@ create table command(
     id_adress bigint not null,
     id_client bigint not null,
     id_status bigint not null,
-	id_operator bigint not null,
+	id_operator bigint,
     foreign key command_adress(id_adress)
     references adress(id)
     on update no action

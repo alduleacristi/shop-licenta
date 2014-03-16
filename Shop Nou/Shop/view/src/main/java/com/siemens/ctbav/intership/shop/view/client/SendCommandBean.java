@@ -55,10 +55,10 @@ public class SendCommandBean implements Serializable {
 
 	@Size(min = 1, message = "The street name must have at least on character")
 	private String street;
-	
+
 	private String staircase;
 
-	private Long number,block,flat;
+	private Long number, block, flat;
 
 	@PostConstruct
 	private void initialize() {
@@ -113,7 +113,11 @@ public class SendCommandBean implements Serializable {
 	public void setSelectedCountryForNewAdress(Long selectedCountryForNewAdress) {
 		this.countysForNewAdress = countyService
 				.getCountyOfCountry(selectedCountryForNewAdress);
-		this.selectedCountryForNewAdress = selectedCountryForNewAdress;
+
+		if (selectedCountryForNewAdress == 0)
+			this.selectedCountryForNewAdress = null;
+		else
+			this.selectedCountryForNewAdress = selectedCountryForNewAdress;
 	}
 
 	public List<Country> getCountrysForNewAdress() {
@@ -132,7 +136,10 @@ public class SendCommandBean implements Serializable {
 		this.localitysForNewAdress = localityService
 				.getLocalityOfCounty(selectedCountyForNewAdress);
 
-		this.selectedCountyForNewAdress = selectedCountyForNewAdress;
+		if (selectedCountyForNewAdress == 0)
+			this.selectedCountyForNewAdress = null;
+		else
+			this.selectedCountyForNewAdress = selectedCountyForNewAdress;
 	}
 
 	public List<County> getCountysForNewAdress() {
@@ -157,7 +164,11 @@ public class SendCommandBean implements Serializable {
 
 	public void setSelectedLocalityForNewAdress(
 			Long selectedLocalityForNewAdress) {
-		this.selectedLocalityForNewAdress = selectedLocalityForNewAdress;
+
+		if (selectedLocalityForNewAdress == 0)
+			this.selectedLocalityForNewAdress = null;
+		else
+			this.selectedLocalityForNewAdress = selectedLocalityForNewAdress;
 	}
 
 	public boolean getExistProductInCart() {
@@ -189,7 +200,10 @@ public class SendCommandBean implements Serializable {
 	}
 
 	public void setStaircase(String staircase) {
-		this.staircase = staircase;
+		if(staircase.equals(""))
+			this.staircase = null;
+		else
+			this.staircase = staircase;
 	}
 
 	public Long getBlock() {
@@ -197,7 +211,10 @@ public class SendCommandBean implements Serializable {
 	}
 
 	public void setBlock(Long block) {
-		this.block = block;
+		if (block == 0)
+			this.block = null;
+		else
+			this.block = block;
 	}
 
 	public Long getFlat() {
@@ -205,7 +222,10 @@ public class SendCommandBean implements Serializable {
 	}
 
 	public void setFlat(Long flat) {
-		this.flat = flat;
+		if (flat == 0)
+			this.flat = null;
+		else
+			this.flat = flat;
 	}
 
 	public void changeUseExistingAdress() {

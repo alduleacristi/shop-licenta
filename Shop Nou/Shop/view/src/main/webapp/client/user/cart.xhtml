@@ -82,11 +82,11 @@
 				<p:dialog header="#{internationalizationProduct.description}"
 					widgetVar="descriptionDialog" id="descriptionDlg" showEffect="fade"
 					hideEffect="explode" modal="true">
-					<strong class="price">Color</strong>
+					<strong class="price">#{internationalizationProduct.color}</strong>
 					<p:outputLabel value="#{cart.selectedProductForDescription.color}"></p:outputLabel>
 					<br />
 					<br />
-					<strong class="price">Size</strong>
+					<strong class="price">#{internationalizationProduct.size}</strong>
 					<p:outputLabel value="#{cart.selectedProductForDescription.size}"></p:outputLabel>
 					<br />
 					<br />
@@ -106,7 +106,7 @@
 							event="change" update="@form" />
 					</p:selectBooleanCheckbox>
 					<b><p:outputLabel style="color: #8b0000;size: 3px"
-							value=" Choose an existing adress"
+							value="#{internationalizationCart.existAddress}"
 							rendered="#{cart.isEmpty() == true}" /></b>
 					<br />
 					<p:panel styleClass="sendCommandElement"
@@ -116,14 +116,15 @@
 					&nbsp;
 					<p:commandLink style="color: #8b0000;size: 3px"
 							rendered="#{cart.sendCommand.useExistingAdress == true and cart.isEmpty() == true}"
-							oncomplete="PF('chooseAdress').show()">Choose another adress <br />
+							oncomplete="PF('chooseAdress').show()">#{internationalizationCart.anotherAddress}<br />
 						</p:commandLink>
 					</p:panel>
 					<p:dialog id="chooseAnotherExistingAdress" widgetVar="chooseAdress"
 						header="Choose an adress" showEffect="fade" hideEffect="explode"
 						modal="true">
 						<p:dataList value="#{cart.sendCommand.userAdresses}" var="adress"
-							itemType="circle">
+							itemType="circle"
+							emptyMessage="#{internationalizationCart.noRecords}">
 							<b> <p:commandLink value="#{adress}"
 									action="#{cart.sendCommand.chooseAnotherAdress(adress)}"
 									update="@form">
@@ -141,7 +142,8 @@
 							listener="#{cart.sendCommand.createNewAdress}" />
 					</p:selectBooleanCheckbox>
 					<b><p:outputLabel style="color: #8b0000;size: 3px"
-							value=" Add new adress" rendered="#{cart.isEmpty() == true}" /></b>
+							value="#{internationalizationCart.newAddress}"
+							rendered="#{cart.isEmpty() == true}" /></b>
 
 					<br />
 					<p:panel styleClass="sendCommandElement"
@@ -218,8 +220,9 @@
 				<br />
 				<center>
 					<p:commandButton styleClass="update-submit"
-						value="#{internationalizationCart.sendCommand}" action="#{cart.sendCommand}"
-						rendered="#{cart.isEmpty() == true}" update="@form :cartLink" />
+						value="#{internationalizationCart.sendCommand}"
+						action="#{cart.sendCommand}" rendered="#{cart.isEmpty() == true}"
+						update="@form :cartLink" />
 				</center>
 
 				<p:growl showDetail="true" sticky="true" />

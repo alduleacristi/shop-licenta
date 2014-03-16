@@ -103,6 +103,14 @@ public class Adress implements Serializable {
 		this.street = street;
 	}
 
+	public Client getClient() {
+		return client;
+	}
+
+	public void setClient(Client client) {
+		this.client = client;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();

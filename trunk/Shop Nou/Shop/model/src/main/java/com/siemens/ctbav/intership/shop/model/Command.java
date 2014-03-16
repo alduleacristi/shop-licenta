@@ -147,4 +147,13 @@ public class Command implements Serializable {
 		this.user = user;
 	}
 
+	@Override
+	public String toString() {
+		return "Command [command_status=" + command_status + ", orderDate="
+				+ orderDate + ", adress=" + adress + ", client=" + client
+				+ ", user=" + user + "]";
+	}
+	
+	
+
 }

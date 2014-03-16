@@ -49,7 +49,7 @@
 					<ul>
 						<li>
 							<div class="product-info2">
-								<h3>Product info</h3>
+								<h3>#{internationalizationProduct.productInfo}</h3>
 								<div class="reduction">
 									<p:outputLabel
 										value="-#{DescriptionRecommandedProductBean.selectedProduct.reduction}%"
@@ -58,11 +58,11 @@
 								</div>
 								<div class="product-desc">
 									<center>
-										<strong class="price">Name</strong>
+										<strong class="price">#{internationalizationProduct.name}</strong>
 										#{DescriptionRecommandedProductBean.selectedProduct.name}<br />
-										<br /> <strong class="price">Category</strong>
+										<br /> <strong class="price">#{internationalizationProduct.category}</strong>
 										#{DescriptionRecommandedProductBean.selectedProduct.category.name}<br />
-										<br /> <strong class="price">Price</strong>
+										<br /> <strong class="price">#{internationalizationProduct.price}</strong>
 										<p:outputLabel
 											value="#{DescriptionRecommandedProductBean.selectedProduct.price}$"
 											rendered="#{DescriptionRecommandedProductBean.selectedProduct.reduction == 0.0 and DescriptionRecommandedProductBean.selectedProduct != null}"></p:outputLabel>
@@ -85,7 +85,7 @@
 						<li>
 							<div class="product-info2description">
 								<center>
-									<h3>Description</h3>
+									<h3>#{internationalizationProduct.description}</h3>
 									<br></br>
 									<p:inputTextarea cols="55" rows="12" maxlength="200"
 										value="#{DescriptionRecommandedProductBean.selectedProduct.description}"
@@ -100,13 +100,14 @@
 					<ul>
 						<li>
 							<div class="product-info2">
-								<h3>Choose the color</h3>
+								<h3>#{internationalizationProduct.chooseColor}</h3>
 								<div style="width: 100%">
 									<br></br>
 									<p:selectOneMenu
 										value="#{DescriptionRecommandedProductBean.idProductColor}"
 										style="width:175px">
-										<f:selectItem itemLabel="Choose a color"></f:selectItem>
+										<f:selectItem
+											itemLabel="#{internationalizationProduct.chooseColor}"></f:selectItem>
 										<f:selectItems id="selectColor"
 											value="#{DescriptionRecommandedProductBean.productsColor}"
 											var="p" itemLabel="#{p.color.name}" itemValue="#{p.id}" />
@@ -118,7 +119,8 @@
 									<p:selectOneMenu id="selectProductColorSize"
 										value="#{DescriptionRecommandedProductBean.idProductColorSize}"
 										style="width:175px">
-										<f:selectItem itemLabel="Choose a size"></f:selectItem>
+										<f:selectItem
+											itemLabel="#{internationalizationProduct.chooseSize}"></f:selectItem>
 										<f:selectItems id="selectSize"
 											value="#{DescriptionRecommandedProductBean.productsColorSize}"
 											var="pcs" itemLabel="#{pcs.size.size}" itemValue="#{pcs.id}" />
@@ -127,14 +129,14 @@
 											update="ava,addButton" />
 									</p:selectOneMenu>
 									<br /> <br /> <strong class="price"><p:outputLabel
-											value="#{DescriptionRecommandedProductBean.availabel}" id="ava"></p:outputLabel></strong>
-									<strong class="price">Number of pieces</strong>
+											value="#{DescriptionRecommandedProductBean.availabel}"
+											id="ava"></p:outputLabel></strong> <strong class="price">#{internationalizationProduct.nrPieces}</strong>
 									<p:inputText style="width:165px"
 										value="#{DescriptionRecommandedProductBean.nrOfPieces}">
 										<f:converter converterId="NrOfPiecesConverter"></f:converter>
 									</p:inputText>
 									<br /> <br />
-									<p:commandButton value="Add to cart" id="addButton"
+									<p:commandButton value="#{internationalizationProduct.add}" id="addButton"
 										styleClass="update-submit"
 										disabled="#{!DescriptionRecommandedProductBean.isAvailabel}"
 										actionListener="#{cart.addProductFromPage(DescriptionRecommandedProductBean.productColorSize,DescriptionRecommandedProductBean.nrOfPieces)}"

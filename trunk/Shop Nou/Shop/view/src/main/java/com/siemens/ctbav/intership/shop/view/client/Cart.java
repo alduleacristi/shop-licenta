@@ -3,6 +3,7 @@ package com.siemens.ctbav.intership.shop.view.client;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -22,11 +23,21 @@ import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
 import com.siemens.ctbav.intership.shop.convert.client.ConvertProductColorSizeNumber;
 import com.siemens.ctbav.intership.shop.dto.client.ProductColorSizeNumberDTO;
+import com.siemens.ctbav.intership.shop.exception.client.AdressDoesNotExistException;
+import com.siemens.ctbav.intership.shop.exception.client.CommmandStatusDoesNotExistException;
+import com.siemens.ctbav.intership.shop.exception.client.NotEnoughProductsInStockException;
 import com.siemens.ctbav.intership.shop.exception.client.ProductColorSizeDoesNotExistException;
 import com.siemens.ctbav.intership.shop.model.Adress;
 import com.siemens.ctbav.intership.shop.model.Client;
+import com.siemens.ctbav.intership.shop.model.ClientProduct;
+import com.siemens.ctbav.intership.shop.model.Command;
+import com.siemens.ctbav.intership.shop.model.CommandStatus;
+import com.siemens.ctbav.intership.shop.model.Locality;
 import com.siemens.ctbav.intership.shop.model.ProductColorSize;
+import com.siemens.ctbav.intership.shop.service.client.ClientProductService;
+import com.siemens.ctbav.intership.shop.service.client.CommandStatusService;
 import com.siemens.ctbav.intership.shop.service.client.ProductColorSizeService;
+import com.siemens.ctbav.intership.shop.util.Enum.CommandStatusEnum;
 import com.siemens.ctbav.intership.shop.util.client.CookieEncryption;
 
 @SessionScoped
@@ -38,7 +49,13 @@ public class Cart implements Serializable {
 	private static final long serialVersionUID = -4660863521509380343L;
 
 	@EJB
-	ProductColorSizeService productColorSizeService;
+	private ProductColorSizeService productColorSizeService;
+
+	@EJB
+	private CommandStatusService commandStatusService;
+	
+	@EJB
+	private ClientProductService clientProductService;
 
 	@ManagedProperty(value = "#{SendCommandBean}")
 	private SendCommandBean sendCommand;
@@ -344,9 +361,192 @@ public class Cart implements Serializable {
 		}
 	}
 
-	public void sendCommand() {
+	/**
+	 * Verify if all the products from cart are in stock
+	 * 
+	 * @throws NotEnoughProductsInStockException
+	 *             When are products in cart that are not in stock
+	 */
+	private void verifStock() throws NotEnoughProductsInStockException {
+		NotEnoughProductsInStockException exception = new NotEnoughProductsInStockException();
 
-		System.out.println("in send command");
+		Iterator<Map.Entry<ProductColorSize, Long>> it = cart.entrySet()
+				.iterator();
+
+		while (it.hasNext()) {
+			Map.Entry<ProductColorSize, Long> ob = it.next();
+
+			ProductColorSize pcs = ob.getKey();
+
+			try {
+				ProductColorSize pcsFromService = productColorSizeService
+						.getProductColorSizeById(pcs.getId());
+
+				if (pcsFromService.getNrOfPieces() == 0)
+					throw new ProductColorSizeDoesNotExistException();
+
+				if (pcsFromService.getNrOfPieces() < pcs.getNrOfPieces()) {
+					cart.put(pcs, pcsFromService.getNrOfPieces());
+					exception
+							.addMessage("We have only: "
+									+ pcsFromService.getNrOfPieces()
+									+ " pieces of "
+									+ pcs.getProductcolor().getProduct()
+											.getName()
+									+ " so we modify the quantity of product from your cart.");
+				}
+			} catch (ProductColorSizeDoesNotExistException e) {
+				exception
+						.addMessage("Product: "
+								+ pcs.getProductcolor().getProduct().getName()
+								+ " is not in stock for now so it was removed from your cart.");
+				cart.remove(pcs);
+			}
+		}
+
+		setProducts();
+
+		if (exception.getMessages().size() > 0)
+			throw exception;
+	}
+
+	private Adress buildAdress() throws AdressDoesNotExistException {
+		Adress adress = null;
+
+		if (sendCommand.getUseExistingAdress()) {
+			if (sendCommand.getSelectedAdress() == null) {
+				throw new AdressDoesNotExistException(
+						"You must choose an adress or create a new one.");
+			}
+			adress = sendCommand.getSelectedAdress();
+		}
+
+		if (sendCommand.getAddNewAdress()) {
+			if (sendCommand.getSelectedCountryForNewAdress() == null)
+				throw new AdressDoesNotExistException(
+						"You must choose a country.");
+
+			if (sendCommand.getSelectedCountyForNewAdress() == null)
+				throw new AdressDoesNotExistException(
+						"You must choose a county.");
+
+			if (sendCommand.getSelectedLocalityForNewAdress() == null)
+				throw new AdressDoesNotExistException(
+						"You must choose a locality.");
+
+			adress = new Adress();
+			adress.setBlock(sendCommand.getBlock());
+			adress.setFlat(sendCommand.getFlat());
+			adress.setNumber(sendCommand.getNumber());
+			adress.setStaircase(sendCommand.getStaircase());
+			adress.setStreet(sendCommand.getStreet());
+			
+			Client client = (Client) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("client");
+			adress.setClient(client);
+
+			boolean ok = false;
+			for (Locality l : sendCommand.getLocalitysForNewAdress()) {
+				if (l.getIdLocality() == sendCommand
+						.getSelectedLocalityForNewAdress()) {
+					ok = true;
+					adress.setLocality(l);
+					break;
+				}
+			}
+
+			if (!ok)
+				throw new AdressDoesNotExistException(
+						"Your adress is incorrect. Please try again");
+		}
+
+		if (adress == null)
+			throw new AdressDoesNotExistException(
+					"You must choose an adress or create a new one.");
+
+		return adress;
+	}
+
+	private Command buildCommand(Adress adress)
+			throws CommmandStatusDoesNotExistException {
+		Command command = new Command();
+
+		command.setAdress(adress);
+
+		CommandStatus commandStatus = commandStatusService
+				.getCommandStatusByName(CommandStatusEnum.IN_PROGRESS.toString());
+		command.setCommand_status(commandStatus);
+		
+		command.setOrderDate(new Date());
+		
+		Client client = (Client) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("client");
+		command.setClient(client);
+
+		return command;
+	}
+	
+	private List<ClientProduct> buildClientProducts(Command command){
+		List<ClientProduct> clientProducts = new ArrayList<ClientProduct>();
+		
+		Iterator<Map.Entry<ProductColorSize, Long>> it = cart.entrySet()
+				.iterator();
+
+		while (it.hasNext()) {
+			Map.Entry<ProductColorSize, Long> ob = it.next();
+
+			ProductColorSize pcs = ob.getKey();
+
+			ClientProduct clientProduct = new ClientProduct();
+			clientProduct.setCommand(command);
+			clientProduct.setNrPieces(ob.getValue());
+			clientProduct.setPercRedution(pcs.getProductcolor().getProduct().getReduction());
+			clientProduct.setPrice(pcs.getProductcolor().getProduct().getPrice());
+			clientProduct.setProduct(pcs);
+			
+			clientProducts.add(clientProduct);
+		}
+		
+		return clientProducts;
+	}
+
+	public void sendCommand() {
+		try {
+			verifStock();
+
+			Adress adress = buildAdress();
+
+			Command command = buildCommand(adress);
+			
+			List<ClientProduct> clientProducts = buildClientProducts(command);
+			
+			clientProductService.persistClientProducts(clientProducts);
+//			for(ClientProduct cp:clientProducts)
+//				System.out.println(cp);
+
+		} catch (NotEnoughProductsInStockException e) {
+			for (int i = 0; i < e.getMessages().size(); i++) {
+				FacesContext.getCurrentInstance().addMessage(
+						null,
+						new FacesMessage(FacesMessage.SEVERITY_WARN, "Sorry", e
+								.getMessages().get(i)));
+			}
+			return;
+		} catch (AdressDoesNotExistException e) {
+			FacesContext.getCurrentInstance().addMessage(
+					null,
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", e
+							.getMessage()));
+			return;
+		} catch (CommmandStatusDoesNotExistException e) {
+			FacesContext
+					.getCurrentInstance()
+					.addMessage(
+							null,
+							new FacesMessage(FacesMessage.SEVERITY_ERROR,
+									"Error",
+									"For the moment we have a problem. Please try again later"));
+			e.printStackTrace();
+			return;
+		}
 
 		cart.clear();
 		setProducts();

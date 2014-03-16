@@ -54,11 +54,10 @@
 													<p:outputLabel value="-#{productColor.product.reduction}%"
 														rendered="#{productColor.product.reduction != 0.0}"></p:outputLabel>
 												</div>
-												<h3>Product name</h3>
-												#{productColor.product.name} <br /> <strong class="price">Category
-													name</strong>#{productColor.product.category.name} <br /> <br /> <strong
-													class="price">Price</strong>#{productColor.product.price}$
-												<br /> <br /> <strong class="price">Color</strong>#{productColor.color.name}
+												<h3>#{internationalizationProduct.productName}</h3>
+												#{productColor.product.name} <br /> <strong class="price">#{internationalizationProduct.category}</strong>#{productColor.product.category.name}
+												<br /> <br /> <strong class="price">#{internationalizationProduct.price}</strong>#{productColor.product.price}$
+												<br /> <br /> <strong class="price">#{internationalizationProduct.color}</strong>#{productColor.color.name}
 											</div>
 										</center>
 									</li>

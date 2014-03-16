@@ -33,8 +33,7 @@
 				<p:carousel value="#{searchClient.products}" var="p"
 					itemStyle="width:237px" styleClass="products-reduce-index"
 					rendered="#{searchClient.noProducts}">
-					<p:commandLink
-						actionListener="#{searchClient.chooseAProduct(p)}">
+					<p:commandLink actionListener="#{searchClient.chooseAProduct(p)}">
 						<center>
 							<p:graphicImage
 								url="#{searchClient.host}/Shop4j/rest/products/id#{searchClient.getProductColorId(p)}"
@@ -44,9 +43,9 @@
 									<p:outputLabel value="-#{p.reduction}%"
 										rendered="#{p.reduction != 0.0}"></p:outputLabel>
 								</div>
-								<h3>Product name</h3>
+								<h3>#{internationalizationProduct.productName}</h3>
 								<p:outputLabel value="#{p.name}"></p:outputLabel>
-								<br /> <br /> <strong class="price">Price</strong>
+								<br /> <br /> <strong class="price">#{internationalizationProduct.price}</strong>
 								<p:outputLabel value="#{p.price}$"
 									rendered="#{p.reduction == 0.0}"></p:outputLabel>
 								<p:outputLabel value="#{p.price}$"
@@ -59,7 +58,7 @@
 						</center>
 					</p:commandLink>
 				</p:carousel>
-				<p:outputLabel value="No records found"
+				<p:outputLabel value="#{internationalizationCart.noRecords}"
 					rendered="#{!searchClient.noProducts}"></p:outputLabel>
 			</h:form>
 		</ui:define>

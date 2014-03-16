@@ -50,9 +50,8 @@
 				<p:dialog header="Gallery" widgetVar="galleryDialog"
 					id="descriptionDlg" showEffect="fade" hideEffect="explode"
 					modal="true">
-					<p:galleria id="refreshMe"
-						value="#{clientProducts.photos}" var="image"
-						panelWidth="500" panelHeight="250" showCaption="false"
+					<p:galleria id="refreshMe" value="#{clientProducts.photos}"
+						var="image" panelWidth="500" panelHeight="250" showCaption="false"
 						rendered="#{clientProducts.selectedProduct != null}">
 						<p:graphicImage url="#{image}" height="250"
 							rendered="#{clientProducts.selectedProduct != null}">>
@@ -66,7 +65,7 @@
 					<ul>
 						<li>
 							<div class="product-info2">
-								<h3>Product info</h3>
+								<h3>#{internationalizationProduct.productInfo}</h3>
 								<div class="reduction">
 									<p:outputLabel
 										value="-#{clientProducts.selectedProduct.product.reduction}%"
@@ -75,13 +74,13 @@
 								</div>
 								<div class="product-desc">
 									<center>
-										<strong class="price">Name</strong>
+										<strong class="price">#{internationalizationProduct.name}</strong>
 										#{clientProducts.selectedProduct.product.name}<br /> <br />
-										<strong class="price">Category</strong>
+										<strong class="price">#{internationalizationProduct.category}</strong>
 										#{clientProducts.selectedProduct.product.category.name}<br />
-										<br /> <strong class="price">Color</strong>
+										<br /> <strong class="price">#{internationalizationProduct.color}</strong>
 										#{clientProducts.selectedProduct.color.name}<br /> <br /> <strong
-											class="price">Price</strong>
+											class="price">#{internationalizationProduct.price}</strong>
 										#{clientProducts.selectedProduct.product.price}$
 									</center>
 								</div>
@@ -94,7 +93,7 @@
 						<li>
 							<div class="product-info2description">
 								<center>
-									<h3>Description</h3>
+									<h3>#{internationalizationProduct.description}</h3>
 									<br></br>
 									<p:inputTextarea cols="55" rows="12" maxlength="200"
 										value="#{clientProducts.selectedProduct.product.description}"
@@ -110,14 +109,15 @@
 					<ul>
 						<li>
 							<div class="product-info2">
-								<h3>Choose the size</h3>
+								<h3>#{internationalizationProduct.chooseSize}</h3>
 								<div style="width: 100%">
 									<br></br>
 									<p:selectOneMenu value="#{clientProducts.idProductColorSize}"
 										style="width:175px" id="selectOneSize">
 
 
-										<f:selectItem itemLabel="Choose a size"></f:selectItem>
+										<f:selectItem
+											itemLabel="#{internationalizationProduct.chooseSize}"></f:selectItem>
 
 										<f:selectItems id="selectSize"
 											value="#{clientProducts.selectedProduct.productColorSize}"
@@ -128,13 +128,13 @@
 
 									<br /> <br /> <strong class="price"><p:outputLabel
 											value="#{clientProducts.availabel}" id="ava"></p:outputLabel></strong>
-									<br /> <strong class="price">Number of pieces</strong>
+									<br /> <strong class="price">#{internationalizationProduct.nrPieces}</strong>
 									<p:inputText style="width:165px"
 										value="#{clientProducts.nrOfPieces}">
 										<f:converter converterId="NrOfPiecesConverter"></f:converter>
 									</p:inputText>
 									<br /> <br />
-									<p:commandButton value="Add to cart" id="addButton"
+									<p:commandButton value="#{internationalizationProduct.add}" id="addButton"
 										styleClass="update-submit"
 										actionListener="#{cart.addProductFromPage(clientProducts.productColorSize,clientProducts.nrOfPieces)}"
 										disabled="#{clientProducts.isAvailabel}"

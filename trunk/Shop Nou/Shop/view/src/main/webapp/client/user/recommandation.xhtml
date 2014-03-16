@@ -53,17 +53,17 @@
 									<p:outputLabel value="-#{p.reduction}%"
 										rendered="#{p.reduction != 0.0}"></p:outputLabel>
 								</div>
-								<h3>Product name</h3>
+								<h3>#{internationalizationProduct.productName}</h3>
 								<p:outputLabel value="#{p.name}">
 								</p:outputLabel>
-								<br /> <br /> <strong class="price">Price</strong>
+								<br /> <br /> <strong class="price">#{internationalizationProduct.price}</strong>
 								<p:outputLabel value="#{p.price}"></p:outputLabel>
 								<br /> <br />
 							</div>
 						</center>
 					</p:commandLink>
 				</p:carousel>
-				<p:outputLabel value="No records found"
+				<p:outputLabel value="#{internationalizationCart.noRecords}"
 					rendered="#{recommandationClient.isEmpty() == false}"></p:outputLabel>
 				<p:growl showDetail="true" />
 			</h:form>

@@ -69,7 +69,7 @@
 					<ul>
 						<li>
 							<div class="product-info2">
-								<h3>Product info</h3>
+								<h3>#{internationalizationProduct.productInfo}</h3>
 								<div class="reduction">
 									<p:outputLabel
 										value="-#{productDescriptionSearchClient.selectedProduct.reduction}%"
@@ -78,11 +78,11 @@
 								</div>
 								<div class="product-desc">
 									<center>
-										<strong class="price">Name</strong>
+										<strong class="price">#{internationalizationProduct.name}</strong>
 										#{productDescriptionSearchClient.selectedProduct.name}<br />
-										<br /> <strong class="price">Category</strong>
+										<br /> <strong class="price">#{internationalizationProduct.category}</strong>
 										#{productDescriptionSearchClient.selectedProduct.category.name}<br />
-										<br /> <strong class="price">Price</strong>
+										<br /> <strong class="price">#{internationalizationProduct.price}</strong>
 										<p:outputLabel
 											value="#{productDescriptionSearchClient.selectedProduct.price}$"
 											rendered="#{productDescriptionSearchClient.selectedProduct.reduction == 0.0 and productDescriptionSearchClient.selectedProduct != null}"></p:outputLabel>
@@ -105,7 +105,7 @@
 						<li>
 							<div class="product-info2description">
 								<center>
-									<h3>Description</h3>
+									<h3>#{internationalizationProduct.description}</h3>
 									<br></br>
 									<p:inputTextarea cols="55" rows="9" maxlength="200"
 										value="#{productDescriptionSearchClient.selectedProduct.description}"
@@ -121,14 +121,15 @@
 					<ul>
 						<li>
 							<div class="product-info2">
-								<h3>Choose the color</h3>
+								<h3>#{internationalizationProduct.chooseColor}</h3>
 
 								<div style="width: 100%">
 									<br></br>
 									<p:selectOneMenu
 										value="#{productDescriptionSearchClient.idProductColor}"
 										style="width:175px">
-										<f:selectItem itemLabel="Choose a color"></f:selectItem>
+										<f:selectItem
+											itemLabel="#{internationalizationProduct.chooseColor}"></f:selectItem>
 										<f:selectItems id="selectColor"
 											value="#{productDescriptionSearchClient.productsColor}"
 											var="p" itemLabel="#{p.color.name}" itemValue="#{p.id}" />
@@ -140,7 +141,8 @@
 									<p:selectOneMenu id="selectProductColorSize"
 										value="#{productDescriptionSearchClient.idProductColorSize}"
 										style="width:175px">
-										<f:selectItem itemLabel="Choose a size"></f:selectItem>
+										<f:selectItem
+											itemLabel="#{internationalizationProduct.chooseSize}"></f:selectItem>
 										<f:selectItems id="selectSize"
 											value="#{productDescriptionSearchClient.productsColorSize}"
 											var="pcs" itemLabel="#{pcs.size.size}" itemValue="#{pcs.id}" />
@@ -150,14 +152,14 @@
 									</p:selectOneMenu>
 									<br /> <br /> <strong class="price"><p:outputLabel
 											value="#{productDescriptionSearchClient.availabel}" id="ava"></p:outputLabel></strong>
-									<strong class="price">Number of pieces</strong>
+									<strong class="price">#{internationalizationProduct.nrPieces}</strong>
 									<p:inputText style="width:165px"
 										value="#{productDescriptionSearchClient.nrOfPieces}">
 										<f:converter converterId="NrOfPiecesConverter"></f:converter>
 									</p:inputText>
 									<br /> <br />
-									<p:commandButton value="Add to cart" id="addButton"
-										styleClass="update-submit"
+									<p:commandButton value="#{internationalizationProduct.add}"
+										id="addButton" styleClass="update-submit"
 										disabled="#{!productDescriptionSearchClient.isAvailabel}"
 										actionListener="#{cart.addProductFromPage(productDescriptionSearchClient.productColorSize,productDescriptionSearchClient.nrOfPieces)}"
 										update="selectProductColorSize,:cartLink:nrProducts,:cartLink:totalPrice,:cartLink:dialog"

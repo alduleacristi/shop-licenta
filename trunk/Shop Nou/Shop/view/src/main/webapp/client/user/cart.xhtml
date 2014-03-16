@@ -31,8 +31,8 @@
 		<ui:define name="mainContent">
 			<h:form id="cartForm">
 				<p:carousel id="carousel" value="#{cart.products}"
-					headerText="Products" itemStyle="width:237px"
-					styleClass="products-cart" var="p" rendered="#{cart.isEmpty()}">
+					itemStyle="width:237px" styleClass="products-reduce" var="p"
+					rendered="#{cart.isEmpty()}">
 					<center>
 						<p:graphicImage
 							url="http://localhost:8080/Shop4j/rest/products/id#{p.productColor.id}"
@@ -42,10 +42,14 @@
 								<p:outputLabel value="-#{p.reduction}%"
 									rendered="#{p.reduction != 0.0}"></p:outputLabel>
 							</div>
-							<h3>Product name</h3>
+							<h3>#{internationalizationProduct.productName}</h3>
 							<p:outputLabel value="#{p.name}"></p:outputLabel>
-							<br /> <strong class="price">Price</strong>
+							<br /> <br /> <strong class="price">#{internationalizationProduct.price}</strong>
 							<p:outputLabel value="#{p.price}$"></p:outputLabel>
+							<br /> <br /> <strong class="price">#{internationalizationProduct.color}</strong>
+							<p:outputLabel value="#{p.name}"></p:outputLabel>
+							<br /> <br /> <strong class="price">#{internationalizationProduct.size}</strong>
+							<p:outputLabel value="#{p.size}"></p:outputLabel>
 							<br /> <br />
 							<p:commandButton id="selectButton"
 								oncomplete="PF('descriptionDialog').show()"
@@ -54,28 +58,30 @@
 								<f:setPropertyActionListener value="#{p}"
 									target="#{cart.selectedProductForDescription}" />
 							</p:commandButton>
-							<br /> <br /> Change quantity: #{p.nrOfPieces} items now.) <br />
+							<br /> <br /> #{internationalizationProduct.changeQty}
+							#{p.nrOfPieces} #{internationalizationProduct.itemsNow} <br />
 							<p:inputText value="#{p.nrOfPieces}">
 								<f:converter converterId="NrOfPiecesConverter"></f:converter>
 							</p:inputText>
 							<br /> <br />
-							<p:commandButton value="Change" title="Change quantity"
+							<p:commandButton value="#{internationalizationProduct.changeQty}"
+								title="#{internationalizationProduct.changeQty}"
 								styleClass="update-submit" update=":cartForm,:cartLink"
 								action="#{cart.changeQuantity(p)}"></p:commandButton>
 							<br /> <br />
-							<p:commandLink value="Remove product"
+							<p:commandLink value="#{internationalizationCart.remove}"
 								styleClass="remove-form-cart"
 								actionListener="#{cart.removeProduct(p)}"
 								update=":cartForm:descriptionDlg" process="@this"></p:commandLink>
 						</div>
 					</center>
 				</p:carousel>
-				<p:outputLabel value="No records found"
+				<p:outputLabel value="#{internationalizationCart.noRecords}"
 					rendered="#{cart.isEmpty() == false}"></p:outputLabel>
 
-				<p:dialog header="Description" widgetVar="descriptionDialog"
-					id="descriptionDlg" showEffect="fade" hideEffect="explode"
-					modal="true">
+				<p:dialog header="#{internationalizationProduct.description}"
+					widgetVar="descriptionDialog" id="descriptionDlg" showEffect="fade"
+					hideEffect="explode" modal="true">
 					<strong class="price">Color</strong>
 					<p:outputLabel value="#{cart.selectedProductForDescription.color}"></p:outputLabel>
 					<br />
@@ -212,7 +218,7 @@
 				<br />
 				<center>
 					<p:commandButton styleClass="update-submit"
-						value="Finalize command" action="#{cart.sendCommand}"
+						value="#{internationalizationCart.sendCommand}" action="#{cart.sendCommand}"
 						rendered="#{cart.isEmpty() == true}" update="@form :cartLink" />
 				</center>
 

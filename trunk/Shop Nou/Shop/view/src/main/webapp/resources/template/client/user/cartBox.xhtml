@@ -25,7 +25,8 @@
 				<p:dialog header="#{internationalizationCart.products}"
 					widgetVar="dlg3" showEffect="explode" position="1160,6"
 					hideEffect="explode" height="100" id="dialog">
-					<p:dataList id="carousel" value="#{cart.products}" var="p">
+					<p:dataList id="carousel" value="#{cart.products}" var="p"
+						emptyMessage="#{internationalizationCart.noRecords}">
 						<p:column style="width:75%;">
 							<div class="cart-dialog-item">#{p.name} - #{p.nrOfPieces}</div>
 							<p:commandLink actionListener="#{cart.removeProduct(p)}"

@@ -175,7 +175,7 @@ drop table if exists adress;
 create table adress(
     id bigint not null auto_increment primary key,
     id_locality bigint not null,
-    street varchar(20) not null,
+    street varchar(200) not null,
     number bigint not null,
     staircase varchar(3),
     block bigint,

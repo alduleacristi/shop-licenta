@@ -109,7 +109,7 @@
 							value="#{internationalizationCart.existAddress}"
 							rendered="#{cart.isEmpty() == true}" /></b>
 					<br />
-					<p:panel styleClass="sendCommandElement"
+					<p:panelGrid styleClass="sendCommandElement"
 						rendered="#{cart.sendCommand.useExistingAdress == true and cart.isEmpty() == true}">
 						<p:outputLabel value="#{cart.sendCommand.messageUserAdress}"
 							id="userAdressMessage" />
@@ -118,7 +118,7 @@
 							rendered="#{cart.sendCommand.useExistingAdress == true and cart.isEmpty() == true}"
 							oncomplete="PF('chooseAdress').show()">#{internationalizationCart.anotherAddress}<br />
 						</p:commandLink>
-					</p:panel>
+					</p:panelGrid>
 					<p:dialog id="chooseAnotherExistingAdress" widgetVar="chooseAdress"
 						header="Choose an adress" showEffect="fade" hideEffect="explode"
 						modal="true">
@@ -146,73 +146,87 @@
 							rendered="#{cart.isEmpty() == true}" /></b>
 
 					<br />
-					<p:panel styleClass="sendCommandElement"
-						rendered="#{cart.sendCommand.addNewAdress == true and cart.isEmpty() == true}" columns="2" cellpadding="5">
-						<h:outputLabel for="Country" value="#{internationalizationAddress.country}: " />
-						&nbsp;
+					<h:panelGrid styleClass="sendCommandElement"
+						rendered="#{cart.sendCommand.addNewAdress == true and cart.isEmpty() == true}"
+						columns="3">
+						<h:outputLabel for="Country"
+							value="#{internationalizationAddress.country}: " />
 						<p:selectOneMenu
-							value="#{cart.sendCommand.selectedCountryForNewAdress}" id="Country"
-							filter="true" filterMatchMode="startsWith" style="width:200px">
-							<f:selectItem itemLabel="#{internationalizationAddress.chooseCountry}" />
+							value="#{cart.sendCommand.selectedCountryForNewAdress}"
+							id="Country" filter="true" filterMatchMode="startsWith"
+							style="width:200px">
+							<f:selectItem
+								itemLabel="#{internationalizationAddress.chooseCountry}" />
 							<f:selectItems value="#{cart.sendCommand.countrysForNewAdress}"
 								var="c" itemLabel="#{c.name}" itemValue="#{c.idCountry}" />
 							<p:ajax event="valueChange" update="County" />
-						</p:selectOneMenu>*
-						<br />
-						<h:outputLabel for="County" value="#{internationalizationAddress.county} :" />
-						&nbsp;
+						</p:selectOneMenu>
+						<h:outputText value="*" />
+
+						<h:outputLabel for="County"
+							value="#{internationalizationAddress.county} :" />
 						<p:selectOneMenu
 							value="#{cart.sendCommand.selectedCountyForNewAdress}"
 							id="County" filter="true" filterMatchMode="startsWith"
 							style="width:200px">
-							<f:selectItem itemLabel="#{internationalizationAddress.chooseCounty}" />
+							<f:selectItem
+								itemLabel="#{internationalizationAddress.chooseCounty}" />
 							<f:selectItems value="#{cart.sendCommand.countysForNewAdress}"
 								var="c" itemLabel="#{c.name}" itemValue="#{c.idCounty}" />
 							<p:ajax event="valueChange" update="Locality" />
-						</p:selectOneMenu>*
-						<br />
-						<h:outputLabel for="Locality" value="#{internationalizationAddress.locality}: " />
-						&nbsp;
+						</p:selectOneMenu>
+						<h:outputText value="*" />
+
+						<h:outputLabel for="Locality"
+							value="#{internationalizationAddress.locality}: " />
 						<p:selectOneMenu
 							value="#{cart.sendCommand.selectedLocalityForNewAdress}"
 							id="Locality" filter="true" filterMatchMode="startsWith"
 							style="width:200px">
-							<f:selectItem itemLabel="#{internationalizationAddress.chooseLocality}" />
+							<f:selectItem
+								itemLabel="#{internationalizationAddress.chooseLocality}" />
 							<f:selectItems value="#{cart.sendCommand.localitysForNewAdress}"
 								var="l" itemLabel="#{l.name}" itemValue="#{l.idLocality}" />
-						</p:selectOneMenu>*
-						<br />
-						<br />
-						<p:panel styleClass="sendCommandElement" columns="2" cellpadding="5">
-							&nbsp;&nbsp;&nbsp;
-							<h:outputLabel value="#{internationalizationAddress.street}:" for="street" />
-							<p:inputText value="#{cart.sendCommand.street}" id="street" />*
-							<br />
-							&nbsp;
-							<h:outputLabel value="#{internationalizationAddress.number}:" for="number" />
-							<p:inputText id="number" value="#{cart.sendCommand.number}"
-								required="true">
-								<f:convertNumber minIntegerDigits="1" />
-							</p:inputText>*
-							<br />
-							&nbsp;&nbsp;&nbsp;&nbsp;
-							<h:outputLabel value="Block:" for="block" />
-							<p:inputText id="block" value="#{cart.sendCommand.block}">
-								<f:convertNumber />
-							</p:inputText>
-							<br />
-							<h:outputLabel value="#{internationalizationAddress.staircase}:" for="staircase" />
-							<p:inputText id="staircase" value="#{cart.sendCommand.staircase}" />
-							<br />
-							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-							<h:outputLabel value="#{internationalizationAddress.flat}:" for="flat" />
-							<p:inputText id="flat" value="#{cart.sendCommand.flat}">
-								<f:convertNumber />
-							</p:inputText>
-						</p:panel>
-						<br />
-					#{internationalizationAddress.message}
-					</p:panel>
+						</p:selectOneMenu>
+						<h:outputText value="*" />
+					</h:panelGrid>
+					<br />
+					<h:panelGrid styleClass="sendCommandElement" columns="3"
+						rendered="#{cart.sendCommand.addNewAdress == true and cart.isEmpty() == true}">
+						<h:outputLabel value="#{internationalizationAddress.street}:"
+							for="street" />
+						<p:inputText value="#{cart.sendCommand.street}" id="street" />
+						<h:outputText value="*" />
+						<h:outputLabel value="#{internationalizationAddress.number}:"
+							for="number" />
+
+						<p:inputText id="number" value="#{cart.sendCommand.number}"
+							required="true">
+							<f:convertNumber minIntegerDigits="1" />
+						</p:inputText>
+						<h:outputText value="*" />
+
+						<h:outputLabel value="Block:" for="block" />
+						<p:inputText id="block" value="#{cart.sendCommand.block}">
+							<f:convertNumber />
+						</p:inputText>
+						<h:outputText value="" />
+
+						<h:outputLabel value="#{internationalizationAddress.staircase}:"
+							for="staircase" />
+						<p:inputText id="staircase" value="#{cart.sendCommand.staircase}" />
+						<h:outputText value="" />
+
+						<h:outputLabel value="#{internationalizationAddress.flat}:"
+							for="flat" />
+						<p:inputText id="flat" value="#{cart.sendCommand.flat}">
+							<f:convertNumber />
+						</p:inputText>
+						<h:outputText value="" />
+					</h:panelGrid>
+					<h:outputText id="infoMessage" value="#{internationalizationAddress.message}"
+						rendered="#{cart.sendCommand.addNewAdress == true and cart.isEmpty() == true}" />
+
 				</p:panel>
 				<br />
 				<br />

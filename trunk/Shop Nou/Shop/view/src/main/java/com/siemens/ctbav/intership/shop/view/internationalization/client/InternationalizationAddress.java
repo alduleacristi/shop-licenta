@@ -111,14 +111,20 @@ public class InternationalizationAddress implements Serializable {
 	}
 
 	public String getChooseCountry() {
+		chooseCountry = internationalizationService
+				.getMessage(EAdress.CHOOSE_COUNTRY.getName());
 		return chooseCountry;
 	}
 
 	public String getChooseCounty() {
+		chooseCounty = internationalizationService
+				.getMessage(EAdress.CHOOSE_COUNTY.getName());
 		return chooseCounty;
 	}
 
 	public String getChooseLocality() {
+		chooseLocality = internationalizationService
+				.getMessage(EAdress.CHOOSE_LOCALITY.getName());
 		return chooseLocality;
 	}
 }

@@ -9,6 +9,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -32,7 +33,7 @@ import com.siemens.ctbav.intership.shop.util.UsersRole;
  * 
  */
 @ManagedBean(name = "Login")
-@SessionScoped
+@ViewScoped
 @URLMappings(mappings = { @URLMapping(id = "login2", pattern = "/Login", viewId = "/login.xhtml") })
 public class LoginBean implements Serializable {
 

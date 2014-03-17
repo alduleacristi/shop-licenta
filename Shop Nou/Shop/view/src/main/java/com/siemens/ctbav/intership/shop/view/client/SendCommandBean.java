@@ -241,11 +241,14 @@ public class SendCommandBean implements Serializable {
 			userAdresses = adressService.getClientAdress(client.getId());
 			this.setUseExistingAdress(true);
 
-			if (userAdresses.size() <= 0)
+			if (userAdresses.size() <= 0){
 				this.setMessageUserAdress("No records found");
+				//System.out.println(messageUserAdress);
+			}
 			else {
 				this.selectedAdress = userAdresses.get(0);
 				this.messageUserAdress = selectedAdress.toString();
+				System.out.println(messageUserAdress+" "+useExistingAdress);
 			}
 		} else {
 			this.setUseExistingAdress(false);

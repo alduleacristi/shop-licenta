@@ -109,7 +109,7 @@
 							value="#{internationalizationCart.existAddress}"
 							rendered="#{cart.isEmpty() == true}" /></b>
 					<br />
-					<p:panelGrid styleClass="sendCommandElement"
+					<p:panel styleClass="sendCommandElement"
 						rendered="#{cart.sendCommand.useExistingAdress == true and cart.isEmpty() == true}">
 						<p:outputLabel value="#{cart.sendCommand.messageUserAdress}"
 							id="userAdressMessage" />
@@ -118,7 +118,7 @@
 							rendered="#{cart.sendCommand.useExistingAdress == true and cart.isEmpty() == true}"
 							oncomplete="PF('chooseAdress').show()">#{internationalizationCart.anotherAddress}<br />
 						</p:commandLink>
-					</p:panelGrid>
+					</p:panel>
 					<p:dialog id="chooseAnotherExistingAdress" widgetVar="chooseAdress"
 						header="Choose an adress" showEffect="fade" hideEffect="explode"
 						modal="true">
@@ -224,7 +224,8 @@
 						</p:inputText>
 						<h:outputText value="" />
 					</h:panelGrid>
-					<h:outputText id="infoMessage" value="#{internationalizationAddress.message}"
+					<h:outputText id="infoMessage"
+						value="#{internationalizationAddress.message}"
 						rendered="#{cart.sendCommand.addNewAdress == true and cart.isEmpty() == true}" />
 
 				</p:panel>

@@ -24,6 +24,7 @@ import com.ocpsoft.pretty.faces.annotation.URLMappings;
 import com.siemens.ctbav.intership.shop.convert.client.ConvertProductColorSizeNumber;
 import com.siemens.ctbav.intership.shop.dto.client.ProductColorSizeNumberDTO;
 import com.siemens.ctbav.intership.shop.exception.client.AdressDoesNotExistException;
+import com.siemens.ctbav.intership.shop.exception.client.CommandCouldNotPersistException;
 import com.siemens.ctbav.intership.shop.exception.client.CommmandStatusDoesNotExistException;
 import com.siemens.ctbav.intership.shop.exception.client.NotEnoughProductsInStockException;
 import com.siemens.ctbav.intership.shop.exception.client.ProductColorSizeDoesNotExistException;
@@ -53,7 +54,7 @@ public class Cart implements Serializable {
 
 	@EJB
 	private CommandStatusService commandStatusService;
-	
+
 	@EJB
 	private ClientProductService clientProductService;
 
@@ -440,8 +441,9 @@ public class Cart implements Serializable {
 			adress.setNumber(sendCommand.getNumber());
 			adress.setStaircase(sendCommand.getStaircase());
 			adress.setStreet(sendCommand.getStreet());
-			
-			Client client = (Client) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("client");
+
+			Client client = (Client) FacesContext.getCurrentInstance()
+					.getExternalContext().getSessionMap().get("client");
 			adress.setClient(client);
 
 			boolean ok = false;
@@ -473,20 +475,22 @@ public class Cart implements Serializable {
 		command.setAdress(adress);
 
 		CommandStatus commandStatus = commandStatusService
-				.getCommandStatusByName(CommandStatusEnum.IN_PROGRESS.toString());
+				.getCommandStatusByName(CommandStatusEnum.IN_PROGRESS
+						.toString());
 		command.setCommand_status(commandStatus);
-		
+
 		command.setOrderDate(new Date());
-		
-		Client client = (Client) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("client");
+
+		Client client = (Client) FacesContext.getCurrentInstance()
+				.getExternalContext().getSessionMap().get("client");
 		command.setClient(client);
 
 		return command;
 	}
-	
-	private List<ClientProduct> buildClientProducts(Command command){
+
+	private List<ClientProduct> buildClientProducts(Command command) {
 		List<ClientProduct> clientProducts = new ArrayList<ClientProduct>();
-		
+
 		Iterator<Map.Entry<ProductColorSize, Long>> it = cart.entrySet()
 				.iterator();
 
@@ -498,13 +502,15 @@ public class Cart implements Serializable {
 			ClientProduct clientProduct = new ClientProduct();
 			clientProduct.setCommand(command);
 			clientProduct.setNrPieces(ob.getValue());
-			clientProduct.setPercRedution(pcs.getProductcolor().getProduct().getReduction());
-			clientProduct.setPrice(pcs.getProductcolor().getProduct().getPrice());
+			clientProduct.setPercRedution(pcs.getProductcolor().getProduct()
+					.getReduction());
+			clientProduct.setPrice(pcs.getProductcolor().getProduct()
+					.getPrice());
 			clientProduct.setProduct(pcs);
-			
+
 			clientProducts.add(clientProduct);
 		}
-		
+
 		return clientProducts;
 	}
 
@@ -515,12 +521,10 @@ public class Cart implements Serializable {
 			Adress adress = buildAdress();
 
 			Command command = buildCommand(adress);
-			
+
 			List<ClientProduct> clientProducts = buildClientProducts(command);
-			
+
 			clientProductService.persistClientProducts(clientProducts);
-//			for(ClientProduct cp:clientProducts)
-//				System.out.println(cp);
 
 		} catch (NotEnoughProductsInStockException e) {
 			for (int i = 0; i < e.getMessages().size(); i++) {
@@ -544,6 +548,17 @@ public class Cart implements Serializable {
 							new FacesMessage(FacesMessage.SEVERITY_ERROR,
 									"Error",
 									"For the moment we have a problem. Please try again later"));
+			e.printStackTrace();
+			return;
+		} catch (CommandCouldNotPersistException e) {
+			FacesContext
+					.getCurrentInstance()
+					.addMessage(
+							null,
+							new FacesMessage(
+									FacesMessage.SEVERITY_ERROR,
+									"Error",
+									"For the moment we have a problem an we can't take your command. Please try again later"));
 			e.printStackTrace();
 			return;
 		}

@@ -2,13 +2,14 @@ package com.siemens.ctbav.intership.shop.service.operator;
 
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
+import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.HeuristicMixedException;
@@ -24,6 +25,7 @@ import com.siemens.ctbav.intership.shop.exception.UserException;
 import com.siemens.ctbav.intership.shop.exception.operator.DuplicateFieldException;
 import com.siemens.ctbav.intership.shop.exception.operator.UserNotFoundException;
 import com.siemens.ctbav.intership.shop.model.User;
+import com.siemens.ctbav.intership.shop.service.internationalization.InternationalizationService;
 
 @Stateless
 @TransactionManagement(value = TransactionManagementType.BEAN)
@@ -35,6 +37,35 @@ public class UserService {
 	@Resource
 	private UserTransaction userTransaction;
 
+	@EJB
+	private InternationalizationService internationalizationService;
+
+	@PostConstruct
+	private void init() {
+		internationalizationInit();
+	}
+
+	private void internationalizationInit() {
+		boolean isEnglishSelected;
+		Boolean b = (Boolean) FacesContext.getCurrentInstance()
+				.getExternalContext().getSessionMap().get("isEnglishSelected");
+		if (b == null)
+			isEnglishSelected = true;
+		else
+			isEnglishSelected = b;
+		if (isEnglishSelected) {
+			String language = new String("en");
+			String country = new String("US");
+			internationalizationService.setCurrentLocale(language, country,
+					"internationalization/forgotPassword/ForgotPassword");
+		} else {
+			String language = new String("ro");
+			String country = new String("RO");
+			internationalizationService.setCurrentLocale(language, country,
+					"internationalization/forgotPassword/ForgotPassword");
+		}
+	}
+
 	@SuppressWarnings("unchecked")
 	public List<User> getClientUsers() {
 		return em.createNamedQuery(User.GET_CLIENT_USERS).getResultList();
@@ -43,7 +74,7 @@ public class UserService {
 	public void deleteUser(Long id) throws UserException {
 		User u = em.find(User.class, id);
 		if (u == null)
-			throw new UserException("I can't find a user with id : " + id);
+			throw new UserException(internationalizationService.getMessage("userNotFound") + id);
 		em.remove(u);
 	}
 
@@ -81,12 +112,14 @@ public class UserService {
 		List<Long> idList = em.createNamedQuery(User.GET_USER_ID)
 				.setParameter("user", username).getResultList();
 		if (idList.size() > 1)
-			throw new UserException("More users found with username "
-					+ username);
+			throw new UserException(
+					internationalizationService.getMessage("moreUsername")
+							+ username);
 
 		if (idList.size() == 0)
-			throw new UserNotFoundException("No user found with username "
-					+ username);
+			throw new UserNotFoundException(
+					internationalizationService.getMessage("usernameNotFound")
+							+ username);
 		return idList.get(0);
 	}
 
@@ -96,10 +129,11 @@ public class UserService {
 		List<User> usersList = em.createNamedQuery(User.GET_USER_BY_EMAIL)
 				.setParameter("email", email).getResultList();
 		if (usersList.size() == 0)
-			throw new UserNotFoundException("Email not found");
+			throw new UserNotFoundException(
+					internationalizationService.getMessage("emailNotFound"));
 		if (usersList.size() > 1)
 			throw new UserException(
-					"I found more than one user with this email");
+					internationalizationService.getMessage("moreEmail"));
 		return usersList.get(0);
 	}
 
@@ -182,7 +216,7 @@ public class UserService {
 					System.out
 							.println("Username or email already exists in the database");
 					throw new DuplicateFieldException(
-							"Username or email already exists in the database");
+							internationalizationService.getMessage("alreadyExists"));
 				}
 			} catch (UserException e) {
 				userTransaction.rollback();
@@ -208,7 +242,7 @@ public class UserService {
 			Long id = getUserId(user.getUsername());
 			User u = new User(id, user.getUsername(), user.getPassword(),
 					user.getRolename(), user.getEmail());
-		//	u.setPasswordStatus(user.getPasswordStatus());
+			// u.setPasswordStatus(user.getPasswordStatus());
 			System.out.println("VReau sa  setez parola pentru  " + u);
 			em.merge(u);
 		} catch (UserException exc) {
@@ -235,21 +269,22 @@ public class UserService {
 				.setParameter("password", password).getResultList();
 		if (list == null || list.size() == 0)
 			throw new UserNotFoundException(
-					"Sorry! the password does not appear in the database");
+					internationalizationService.getMessage("passwordNotFound"));
 		return list.get(0);
 
 	}
 
-	public void changePassword(String generatedPassword, String newPassword) throws UserNotFoundException   {
+	public void changePassword(String generatedPassword, String newPassword)
+			throws UserNotFoundException {
 		try {
 			userTransaction.begin();
 
 			System.out.println("vreau sa modific");
 			System.out.println(generatedPassword + " " + newPassword);
 			User user = getUserByPassword(generatedPassword);
-//			if (user == null)
-//				throw new UserNotFoundException(
-//						"the password does not exists in the database");
+			// if (user == null)
+			// throw new UserNotFoundException(
+			// "the password does not exists in the database");
 			user.setPasswordStatus(2);
 			user.setUserPassword(newPassword);
 			em.merge(user);
@@ -257,7 +292,8 @@ public class UserService {
 			userTransaction.commit();
 
 		} catch (Exception exc) {
-			if(exc instanceof UserNotFoundException) throw new UserNotFoundException(exc.getMessage());
+			if (exc instanceof UserNotFoundException)
+				throw new UserNotFoundException(exc.getMessage());
 			throw new EJBException(exc);
 		}
 	}

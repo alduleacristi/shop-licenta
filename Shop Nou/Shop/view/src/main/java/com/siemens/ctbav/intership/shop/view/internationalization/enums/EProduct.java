@@ -5,7 +5,8 @@ public enum EProduct {
 			"inStock"), PROD_INFO("productInfo"), NAME("name"), CATEGORY(
 			"category"), DESCRIPTION("description"), COLOR("color"), CHOOSE_COLOR(
 			"chooseColor"), CHOOSE_SIZE("chooseSize"), NR_PIECES("nrPieces"), ADD(
-			"add"), CHANGE_QTY("changeQty"), ITEMS_NOW("itemsNow"), SIZE("size");
+			"add"), CHANGE_QTY("changeQty"), ITEMS_NOW("itemsNow"), SIZE("size"), RECOMMAND(
+			"recommad");
 
 	private final String name;
 

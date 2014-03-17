@@ -53,8 +53,10 @@
 							<br /> <br />
 							<p:commandButton id="selectButton"
 								oncomplete="PF('descriptionDialog').show()"
-								icon="ui-icon-search" value="Description" title="Description"
-								styleClass="update-submit" update=":cartForm:descriptionDlg">
+								icon="ui-icon-search"
+								value="#{internationalizationProduct.description}"
+								title="Description" styleClass="update-submit"
+								update=":cartForm:descriptionDlg">
 								<f:setPropertyActionListener value="#{p}"
 									target="#{cart.selectedProductForDescription}" />
 							</p:commandButton>
@@ -120,7 +122,7 @@
 						</p:commandLink>
 					</p:panel>
 					<p:dialog id="chooseAnotherExistingAdress" widgetVar="chooseAdress"
-						header="Choose an adress" showEffect="fade" hideEffect="explode"
+						header="#{internationalizationCart.anotherAddress}" showEffect="fade" hideEffect="explode"
 						modal="true">
 						<p:dataList value="#{cart.sendCommand.userAdresses}" var="adress"
 							itemType="circle"
@@ -201,7 +203,7 @@
 							for="number" />
 
 						<p:inputText id="number" value="#{cart.sendCommand.number}"
-							required="true">
+							required="true" requiredMessage="#{internationalizationAddress.numberRequired}">
 							<f:convertNumber minIntegerDigits="1" />
 						</p:inputText>
 						<h:outputText value="*" />

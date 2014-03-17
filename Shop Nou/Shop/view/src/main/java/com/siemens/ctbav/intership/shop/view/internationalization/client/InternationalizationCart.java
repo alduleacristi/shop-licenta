@@ -30,6 +30,7 @@ public class InternationalizationCart implements Serializable {
 	private String existAddress;
 	private String newAddress;
 	private String anotherAddress;
+	private String returnCommand;
 
 	@PostConstruct
 	private void init() {
@@ -112,5 +113,11 @@ public class InternationalizationCart implements Serializable {
 		anotherAddress = internationalizationService
 				.getMessage(ECart.ANOTHER_ADDRESS.getName());
 		return anotherAddress;
+	}
+
+	public String getReturnCommand() {
+		returnCommand = internationalizationService
+				.getMessage(ECart.RETURN_COMMAND.getName());
+		return returnCommand;
 	}
 }

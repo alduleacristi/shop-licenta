@@ -20,7 +20,7 @@
 		<ui:define name="cart">
 			<ui:include src="/resources/template/client/user/cartBox.xhtml"></ui:include>
 		</ui:define>
-		
+
 		<ui:define name="search">
 			<ui:include src="/resources/template/client/searchBox.xhtml"></ui:include>
 		</ui:define>
@@ -32,19 +32,22 @@
 		<ui:define name="mainContent">
 			<h:form id="updatePersonalData">
 				<p:growl id="personalData" showDetail="true" sticky="true" />
-				<p:panel header="Update account">
+				<p:panel header="#{internationalizationGeneric.update}">
 					<h:panelGrid columns="1" cellpadding="1">
-						<h:outputLabel for="firstName" value="First name: " />
+						<h:outputLabel for="firstName"
+							value="#{internationalizationPersonalData.firstName}: " />
 						<p:inputText id="firstName"
 							value="#{updateClientData.client.firstName}" label="First Name" />
 						<p:message for="firstName" />
 
-						<h:outputLabel for="lastName" value="Last name: " />
+						<h:outputLabel for="lastName"
+							value="#{internationalizationPersonalData.lastName}: " />
 						<p:inputText id="lastName"
 							value="#{updateClientData.client.lastName}" label="First Name" />
 						<p:message for="lastName" />
 
-						<h:outputLabel for="phone" value="Phone: " />
+						<h:outputLabel for="phone"
+							value="#{internationalizationPersonalData.phone}: " />
 						<p:inputText id="phone" value="#{updateClientData.client.phone}"
 							label="phone" />
 						<p:message for="phone" />
@@ -52,8 +55,9 @@
 
 
 					</h:panelGrid>
-					<h:commandButton value="Update Account" ajax="false"
-						action="#{updateClientData.update()}" styleClass="update-submit" />
+					<h:commandButton value="#{internationalizationGeneric.update}"
+						ajax="false" action="#{updateClientData.update()}"
+						styleClass="update-submit" />
 				</p:panel>
 			</h:form>
 		</ui:define>

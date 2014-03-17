@@ -38,8 +38,10 @@ import com.siemens.ctbav.intership.shop.model.ProductColorSize;
 import com.siemens.ctbav.intership.shop.service.client.ClientProductService;
 import com.siemens.ctbav.intership.shop.service.client.CommandStatusService;
 import com.siemens.ctbav.intership.shop.service.client.ProductColorSizeService;
+import com.siemens.ctbav.intership.shop.service.internationalization.InternationalizationService;
 import com.siemens.ctbav.intership.shop.util.Enum.CommandStatusEnum;
 import com.siemens.ctbav.intership.shop.util.client.CookieEncryption;
+import com.siemens.ctbav.intership.shop.view.internationalization.enums.client.ECart;
 
 @SessionScoped
 @ManagedBean(name = "cart")
@@ -58,6 +60,9 @@ public class Cart implements Serializable {
 	@EJB
 	private ClientProductService clientProductService;
 
+	@EJB
+	private InternationalizationService internationalizationService;
+
 	@ManagedProperty(value = "#{SendCommandBean}")
 	private SendCommandBean sendCommand;
 
@@ -70,6 +75,28 @@ public class Cart implements Serializable {
 	private void initialize() {
 		cart = new HashMap<ProductColorSize, Long>();
 		products = new ArrayList<ProductColorSizeNumberDTO>();
+		internationalizationInit();
+	}
+
+	private void internationalizationInit() {
+		boolean isEnglishSelected;
+		Boolean b = (Boolean) FacesContext.getCurrentInstance()
+				.getExternalContext().getSessionMap().get("isEnglishSelected");
+		if (b == null)
+			isEnglishSelected = true;
+		else
+			isEnglishSelected = b;
+		if (isEnglishSelected) {
+			String language = new String("en");
+			String country = new String("US");
+			internationalizationService.setCurrentLocale(language, country,
+					"internationalization/client/cart/Cart");
+		} else {
+			String language = new String("ro");
+			String country = new String("RO");
+			internationalizationService.setCurrentLocale(language, country,
+					"internationalization/client/cart/Cart");
+		}
 	}
 
 	public void setProducts() {
@@ -160,26 +187,34 @@ public class Cart implements Serializable {
 	}
 
 	private void addProduct(ProductColorSize pcs, Long nrOfProducts) {
+		internationalizationInit();
 		if (pcs == null) {
 			FacesContext context = FacesContext.getCurrentInstance();
-			context.addMessage(null, new FacesMessage(
-					FacesMessage.SEVERITY_WARN, "Warn",
-					"You must choose a size"));
+			context.addMessage(
+					null,
+					new FacesMessage(FacesMessage.SEVERITY_WARN, "Info",
+							internationalizationService
+									.getMessage(ECart.CHOOSE_SIZE.getName())));
 			return;
 		}
 		if (nrOfProducts == null) {
 			FacesContext context = FacesContext.getCurrentInstance();
-			context.addMessage(null, new FacesMessage(
-					FacesMessage.SEVERITY_WARN, "Warn",
-					"You must enter the number of products"));
+			context.addMessage(
+					null,
+					new FacesMessage(FacesMessage.SEVERITY_WARN, "Info",
+							internationalizationService
+									.getMessage(ECart.NR_PRODUCTS.getName())));
 			return;
 		}
 
 		if (nrOfProducts > pcs.getNrOfPieces()) {
 			FacesContext context = FacesContext.getCurrentInstance();
-			context.addMessage(null, new FacesMessage(
-					FacesMessage.SEVERITY_WARN, "Warn",
-					"We dont't have enough product in stock"));
+			context.addMessage(
+					null,
+					new FacesMessage(FacesMessage.SEVERITY_WARN, "Warn",
+							internationalizationService
+									.getMessage(ECart.NOT_ENOUGH_PRODUCTS
+											.getName())));
 			return;
 		}
 
@@ -193,6 +228,8 @@ public class Cart implements Serializable {
 	}
 
 	public void addProductFromPage(ProductColorSize pcs, Long nrOfProducts) {
+		internationalizationInit();
+
 		addProduct(pcs, nrOfProducts);
 
 		FacesContext
@@ -200,12 +237,15 @@ public class Cart implements Serializable {
 				.getExternalContext()
 				.getSessionMap()
 				.put("addProductMessage",
-						"The product was added succesfully to cart.");
+						internationalizationService
+								.getMessage(ECart.SUCCESS_MESSAGE.getName()));
 
 		redirect("/Shop4j/client/user/recommandation");
 	}
 
 	public void removeProduct(ProductColorSizeNumberDTO productDTO) {
+		internationalizationInit();
+
 		ProductColorSize product = ConvertProductColorSizeNumber
 				.convertToProductColorSize(productDTO);
 		if (cart.containsKey(product)) {
@@ -221,6 +261,8 @@ public class Cart implements Serializable {
 	}
 
 	private void populateCartFromCookie(Map<Long, Long> cookieProducts) {
+		internationalizationInit();
+
 		if (cookieProducts == null)
 			return;
 
@@ -240,13 +282,17 @@ public class Cart implements Serializable {
 				context.addMessage(
 						null,
 						new FacesMessage(FacesMessage.SEVERITY_WARN, "Info",
-								"Some products was removed from stock,so it was removed from your cart."));
+								internationalizationService
+										.getMessage(ECart.REMOVED_FROM_STOCK
+												.getName())));
 			}
 
 		}
 	}
 
 	public String readCookie() {
+		internationalizationInit();
+
 		Client client = (Client) FacesContext.getCurrentInstance()
 				.getExternalContext().getSessionMap().get("client");
 
@@ -269,7 +315,6 @@ public class Cart implements Serializable {
 
 		for (int i = 0; i < elements.length; i++) {
 			{
-				System.out.println("in for");
 				String[] pairs = elements[i].split(":");
 				Long idProduct = null;
 				Long numberOfPcs = null;
@@ -294,11 +339,15 @@ public class Cart implements Serializable {
 	}
 
 	private void clearCart() {
+		internationalizationInit();
+
 		cart.clear();
 		products.clear();
 	}
 
 	public void saveToCookie() {
+		internationalizationInit();
+
 		FacesContext facesContext = FacesContext.getCurrentInstance();
 		HttpServletResponse response = (HttpServletResponse) facesContext
 				.getExternalContext().getResponse();
@@ -329,6 +378,8 @@ public class Cart implements Serializable {
 	}
 
 	public void changeQuantity(ProductColorSizeNumberDTO productDTO) {
+		internationalizationInit();
+
 		ProductColorSize product = ConvertProductColorSizeNumber
 				.convertToProductColorSize(productDTO);
 
@@ -337,9 +388,12 @@ public class Cart implements Serializable {
 				productDTO.setNrOfPieces(cart.get(product));
 
 				FacesContext context = FacesContext.getCurrentInstance();
-				context.addMessage(null, new FacesMessage(
-						FacesMessage.SEVERITY_WARN, "Info",
-						"Sorry we don't have enought products in stock."));
+				context.addMessage(
+						null,
+						new FacesMessage(FacesMessage.SEVERITY_WARN, "Info",
+								internationalizationService
+										.getMessage(ECart.NOT_ENOUGH_PRODUCTS
+												.getName())));
 				return;
 			} else {
 				cart.put(product, productDTO.getNrOfPieces());
@@ -349,6 +403,8 @@ public class Cart implements Serializable {
 	}
 
 	private void redirect(String url) {
+		internationalizationInit();
+
 		FacesContext fc = FacesContext.getCurrentInstance();
 
 		try {
@@ -357,8 +413,13 @@ public class Cart implements Serializable {
 		} catch (IOException e) {
 			e.printStackTrace();
 			FacesContext ctx = FacesContext.getCurrentInstance();
-			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
-					"Error", "Sorry.Description is not availabel."));
+			ctx.addMessage(
+					null,
+					new FacesMessage(FacesMessage.SEVERITY_ERROR,
+							internationalizationService.getMessage(ECart.ERROR
+									.getName()), internationalizationService
+									.getMessage(ECart.DESCRIPTION_UNAVAILABLE
+											.getName())));
 		}
 	}
 
@@ -369,6 +430,8 @@ public class Cart implements Serializable {
 	 *             When are products in cart that are not in stock
 	 */
 	private void verifStock() throws NotEnoughProductsInStockException {
+		internationalizationInit();
+
 		NotEnoughProductsInStockException exception = new NotEnoughProductsInStockException();
 
 		Iterator<Map.Entry<ProductColorSize, Long>> it = cart.entrySet()
@@ -388,19 +451,21 @@ public class Cart implements Serializable {
 
 				if (pcsFromService.getNrOfPieces() < pcs.getNrOfPieces()) {
 					cart.put(pcs, pcsFromService.getNrOfPieces());
-					exception
-							.addMessage("We have only: "
-									+ pcsFromService.getNrOfPieces()
-									+ " pieces of "
-									+ pcs.getProductcolor().getProduct()
-											.getName()
-									+ " so we modify the quantity of product from your cart.");
+					exception.addMessage(internationalizationService
+							.getMessage(ECart.ONLY.getName())
+							+ pcsFromService.getNrOfPieces()
+							+ internationalizationService
+									.getMessage(ECart.PIECES.getName())
+							+ pcs.getProductcolor().getProduct().getName()
+							+ internationalizationService
+									.getMessage(ECart.MODIFY.getName()));
 				}
 			} catch (ProductColorSizeDoesNotExistException e) {
-				exception
-						.addMessage("Product: "
-								+ pcs.getProductcolor().getProduct().getName()
-								+ " is not in stock for now so it was removed from your cart.");
+				exception.addMessage(internationalizationService
+						.getMessage(ECart.PRODUCT.getName())
+						+ pcs.getProductcolor().getProduct().getName()
+						+ internationalizationService
+								.getMessage(ECart.IS_IN_STOCK.getName()));
 				cart.remove(pcs);
 			}
 		}
@@ -412,12 +477,15 @@ public class Cart implements Serializable {
 	}
 
 	private Adress buildAdress() throws AdressDoesNotExistException {
+		internationalizationInit();
+
 		Adress adress = null;
 
 		if (sendCommand.getUseExistingAdress()) {
 			if (sendCommand.getSelectedAdress() == null) {
 				throw new AdressDoesNotExistException(
-						"You must choose an adress or create a new one.");
+						internationalizationService
+								.getMessage(ECart.ADDRESS_ERROR.getName()));
 			}
 			adress = sendCommand.getSelectedAdress();
 		}
@@ -425,15 +493,18 @@ public class Cart implements Serializable {
 		if (sendCommand.getAddNewAdress()) {
 			if (sendCommand.getSelectedCountryForNewAdress() == null)
 				throw new AdressDoesNotExistException(
-						"You must choose a country.");
+						internationalizationService
+								.getMessage(ECart.CHOOSE_COUNTRY.getName()));
 
 			if (sendCommand.getSelectedCountyForNewAdress() == null)
 				throw new AdressDoesNotExistException(
-						"You must choose a county.");
+						internationalizationService
+								.getMessage(ECart.CHOOSE_COUNTY.getName()));
 
 			if (sendCommand.getSelectedLocalityForNewAdress() == null)
 				throw new AdressDoesNotExistException(
-						"You must choose a locality.");
+						internationalizationService
+								.getMessage(ECart.CHOOSE_LOCALITY.getName()));
 
 			adress = new Adress();
 			adress.setBlock(sendCommand.getBlock());
@@ -458,18 +529,22 @@ public class Cart implements Serializable {
 
 			if (!ok)
 				throw new AdressDoesNotExistException(
-						"Your adress is incorrect. Please try again");
+						internationalizationService
+								.getMessage(ECart.INCORRECT_ADDRESS.getName()));
 		}
 
 		if (adress == null)
 			throw new AdressDoesNotExistException(
-					"You must choose an adress or create a new one.");
+					internationalizationService.getMessage(ECart.ADDRESS_ERROR
+							.getName()));
 
 		return adress;
 	}
 
 	private Command buildCommand(Adress adress)
 			throws CommmandStatusDoesNotExistException {
+		internationalizationInit();
+
 		Command command = new Command();
 
 		command.setAdress(adress);
@@ -489,6 +564,8 @@ public class Cart implements Serializable {
 	}
 
 	private List<ClientProduct> buildClientProducts(Command command) {
+		internationalizationInit();
+
 		List<ClientProduct> clientProducts = new ArrayList<ClientProduct>();
 
 		Iterator<Map.Entry<ProductColorSize, Long>> it = cart.entrySet()
@@ -515,6 +592,8 @@ public class Cart implements Serializable {
 	}
 
 	public void sendCommand() {
+		internationalizationInit();
+
 		try {
 			verifStock();
 
@@ -530,35 +609,43 @@ public class Cart implements Serializable {
 			for (int i = 0; i < e.getMessages().size(); i++) {
 				FacesContext.getCurrentInstance().addMessage(
 						null,
-						new FacesMessage(FacesMessage.SEVERITY_WARN, "Sorry", e
-								.getMessages().get(i)));
+						new FacesMessage(FacesMessage.SEVERITY_WARN, "Info",
+								internationalizationService
+										.getMessage(ECart.NOT_ENOUGH_PRODUCTS
+												.getName())));
 			}
 			return;
 		} catch (AdressDoesNotExistException e) {
 			FacesContext.getCurrentInstance().addMessage(
 					null,
-					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", e
-							.getMessage()));
+					new FacesMessage(FacesMessage.SEVERITY_ERROR,
+							internationalizationService.getMessage(ECart.ERROR
+									.getName()), internationalizationService
+									.getMessage(ECart.INCORRECT_ADDRESS
+											.getName())));
 			return;
 		} catch (CommmandStatusDoesNotExistException e) {
-			FacesContext
-					.getCurrentInstance()
+			FacesContext.getCurrentInstance()
 					.addMessage(
 							null,
 							new FacesMessage(FacesMessage.SEVERITY_ERROR,
-									"Error",
-									"For the moment we have a problem. Please try again later"));
+									internationalizationService
+											.getMessage(ECart.ERROR.getName()),
+									internationalizationService
+											.getMessage(ECart.COMMAND_PROBLEM
+													.getName())));
 			e.printStackTrace();
 			return;
 		} catch (CommandCouldNotPersistException e) {
-			FacesContext
-					.getCurrentInstance()
+			FacesContext.getCurrentInstance()
 					.addMessage(
 							null,
-							new FacesMessage(
-									FacesMessage.SEVERITY_ERROR,
-									"Error",
-									"For the moment we have a problem an we can't take your command. Please try again later"));
+							new FacesMessage(FacesMessage.SEVERITY_ERROR,
+									internationalizationService
+											.getMessage(ECart.ERROR.getName()),
+									internationalizationService
+											.getMessage(ECart.COMMAND_PROBLEM
+													.getName())));
 			e.printStackTrace();
 			return;
 		}

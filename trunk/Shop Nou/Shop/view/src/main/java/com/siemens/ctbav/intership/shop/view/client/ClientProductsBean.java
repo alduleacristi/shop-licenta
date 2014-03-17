@@ -48,14 +48,14 @@ public class ClientProductsBean implements Serializable {
 
 	@EJB
 	private PhotoService photoService;
-	
+
 	@EJB
 	private ConfigurationService confService;
 
 	private ProductColor selectedProduct;
 	private Category selectedCategory;
 	private List<ProductColor> productList;
-	private String availabel,host;
+	private String availabel, host;
 	private boolean isAvailabel;
 	private ProductColorSize productColorSize;
 	private Long idProductColorSize;
@@ -65,9 +65,9 @@ public class ClientProductsBean implements Serializable {
 	@PostConstruct
 	private void postConstruct() {
 		this.host = confService.getHost();
-		
+
 		this.nrOfPieces = 1L;
-		setIsAvailabel(false);
+		setIsAvailabel(true);
 		productList = new ArrayList<ProductColor>();
 
 		if (selectedCategory == null) {
@@ -88,11 +88,12 @@ public class ClientProductsBean implements Serializable {
 	}
 
 	public void setId(long id) {
+		System.out.println("in setId clientProducts: " + id);
 		this.id = id;
 		if (id != 0) {
 			try {
 				selectedProduct = productColorService.getProductById(id);
-				this.isAvailabel = false;
+				// this.isAvailabel = false;
 				FacesContext.getCurrentInstance().getExternalContext()
 						.getSessionMap()
 						.put("selectedProduct", selectedProduct);
@@ -180,7 +181,7 @@ public class ClientProductsBean implements Serializable {
 	public void setPhotos(List<String> photos) {
 		this.photos = photos;
 	}
-	
+
 	public String getHost() {
 		return host;
 	}
@@ -209,7 +210,8 @@ public class ClientProductsBean implements Serializable {
 	}
 
 	public void changeSize() {
-		// System.out.println("change size "+idProductColorSize);
+		System.out.println("change size " + idProductColorSize + " "
+				+ isAvailabel);
 		try {
 			// idProductColorSize = (Long) event.getNewValue();
 			if (idProductColorSize == 0) {

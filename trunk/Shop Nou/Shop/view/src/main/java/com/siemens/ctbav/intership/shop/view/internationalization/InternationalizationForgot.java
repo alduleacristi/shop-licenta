@@ -26,6 +26,7 @@ public class InternationalizationForgot implements Serializable {
 	private String changePassword;
 	private String password;
 	private String retype;
+	private String requiredEmail;
 
 	@PostConstruct
 	private void init() {
@@ -86,5 +87,11 @@ public class InternationalizationForgot implements Serializable {
 		retype = internationalizationService.getMessage(EForgot.RETYPE
 				.getName());
 		return retype;
+	}
+
+	public String getRequiredEmail() {
+		requiredEmail = internationalizationService
+				.getMessage(EForgot.REQUIRED_EMAIL.getName());
+		return requiredEmail;
 	}
 }

@@ -42,7 +42,8 @@
 					</center>
 					<br />
 					<p:carousel value="#{c.getClientProducts()}" var="p"
-						itemStyle="width:237px" styleClass="products-reduce-commandHistory">
+						itemStyle="width:237px"
+						styleClass="products-reduce-commandHistory">
 						<center>
 							<p:graphicImage
 								url="http://localhost:8080/Shop4j/rest/products/id#{p.product.id}"
@@ -52,9 +53,9 @@
 									<p:outputLabel value="-#{p.percRedution}%"
 										rendered="#{p.percRedution != 0.0}"></p:outputLabel>
 								</div>
-								<h3>Product name</h3>
+								<h3>#{internationalizationProduct.productName}</h3>
 								<p:outputLabel value="#{p.product.productcolor.product.name}"></p:outputLabel>
-								<br /> <br /> <strong class="price">Price</strong>
+								<br /> <br /> <strong class="price">#{internationalizationProduct.price}</strong>
 								<p:outputLabel value="#{p.price}$"
 									rendered="#{p.percRedution == 0.0}"></p:outputLabel>
 								<p:outputLabel value="#{p.price}$"
@@ -64,18 +65,21 @@
 								<p:outputLabel
 									value="#{p.price - p.price * p.percRedution / 100}$"
 									rendered="#{p.percRedution != 0.0}"></p:outputLabel>
-								<strong class="price">Number of Items</strong> #{p.nrPieces}
+								<strong class="price">#{internationalizationProduct.nrPieces}</strong>
+								#{p.nrPieces}
 							</div>
 						</center>
 					</p:carousel>
-					<br /><br />
+					<br />
+					<br />
 					<center>
 						<p:commandButton rendered="#{CommandBean.canBeReturned(c)}"
-							value="Return command" style="background: #8b0000;color: #fff;"></p:commandButton>
+							value="#{internationalizationCart.returnCommand}"
+							style="background: #8b0000;color: #fff;"></p:commandButton>
 					</center>
 					<br />
 				</p:carousel>
-				<p:outputLabel value="No commands found"
+				<p:outputLabel value="#{internationalizationCart.noRecords}"
 					rendered="#{!CommandBean.existCommands}"></p:outputLabel>
 				<br />
 				<br />

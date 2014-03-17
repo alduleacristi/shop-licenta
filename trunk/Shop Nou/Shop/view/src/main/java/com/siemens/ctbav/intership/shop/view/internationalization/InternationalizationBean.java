@@ -2,8 +2,8 @@ package com.siemens.ctbav.intership.shop.view.internationalization;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
@@ -11,7 +11,7 @@ import com.siemens.ctbav.intership.shop.service.internationalization.Internation
 import com.siemens.ctbav.intership.shop.view.internationalization.enums.superadmin.EMenuIndex;
 
 @ManagedBean(name = "internationalizationBean")
-@ApplicationScoped
+@SessionScoped
 public class InternationalizationBean {
 
 	@EJB

@@ -31,6 +31,7 @@ public class InternationalizationAddress implements Serializable {
 	private String chooseCountry;
 	private String chooseCounty;
 	private String chooseLocality;
+	private String numberRequired;
 
 	@PostConstruct
 	private void init() {
@@ -126,5 +127,11 @@ public class InternationalizationAddress implements Serializable {
 		chooseLocality = internationalizationService
 				.getMessage(EAdress.CHOOSE_LOCALITY.getName());
 		return chooseLocality;
+	}
+
+	public String getNumberRequired() {
+		numberRequired = internationalizationService
+				.getMessage(EAdress.NUMBER_REQUIRED.getName());
+		return numberRequired;
 	}
 }

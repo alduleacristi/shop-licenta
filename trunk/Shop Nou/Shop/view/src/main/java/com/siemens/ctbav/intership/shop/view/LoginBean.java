@@ -9,11 +9,9 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
-import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
@@ -33,7 +31,7 @@ import com.siemens.ctbav.intership.shop.util.UsersRole;
  * 
  */
 @ManagedBean(name = "Login")
-@ViewScoped
+@SessionScoped
 @URLMappings(mappings = { @URLMapping(id = "login2", pattern = "/Login", viewId = "/login.xhtml") })
 public class LoginBean implements Serializable {
 
@@ -214,10 +212,15 @@ public class LoginBean implements Serializable {
 	public void logout() {
 		HttpServletRequest request = (HttpServletRequest) FacesContext
 				.getCurrentInstance().getExternalContext().getRequest();
-
+		boolean isEnglishSelected = (Boolean) FacesContext.getCurrentInstance()
+				.getExternalContext().getSessionMap().get("isEnglishSelected");
 		this.logged = false;
 		try {
 			request.logout();
+
+			FacesContext.getCurrentInstance().getExternalContext()
+					.getSessionMap()
+					.put("isEnglishSelected", isEnglishSelected);
 
 			FacesContext.getCurrentInstance().getExternalContext()
 					.invalidateSession();

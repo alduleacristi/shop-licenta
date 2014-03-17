@@ -4,7 +4,8 @@ public enum EAdress {
 	COUNTRY("country"), COUNTY("county"), LOCALITY("locality"), STREET("street"), NUMBER(
 			"number"), BLOCK("block"), STAIRCASE("staircase"), FLAT("flat"), MESSAGES(
 			"message"), CHOOSE_COUNTRY("chooseCountry"), CHOOSE_COUNTY(
-			"chooseCounty"), CHOOSE_LOCALITY("chooseLocality");
+			"chooseCounty"), CHOOSE_LOCALITY("chooseLocality"), NUMBER_REQUIRED(
+			"numberRequired");
 
 	private final String name;
 

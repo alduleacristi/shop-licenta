@@ -16,11 +16,11 @@
 		<ui:define name="menu">
 			<ui:include src="/resources/template/client/user/menuBox.xhtml"></ui:include>
 		</ui:define>
-		
+
 		<ui:define name="cart">
 			<ui:include src="/resources/template/client/user/cartBox.xhtml"></ui:include>
 		</ui:define>
-		
+
 
 		<ui:define name="search">
 			<ui:include src="/resources/template/client/searchBox.xhtml"></ui:include>
@@ -33,13 +33,17 @@
 		<ui:define name="mainContent">
 			<h:form>
 				<p:growl id="securityData" showDetail="true" sticky="true" />
-				<p:panel header="Update account">
+				<p:panel header="#{internationalizationGeneric.update}">
 					<h:panelGrid columns="1" cellpadding="1">
 
-						<h:outputLabel for="oldPassword" value="Old password: " />
-						<p:password id="oldPassword" value="#{updateClientSecurityData.oldPassword}" label="Old password"/>
+						<h:outputLabel for="oldPassword"
+							value="#{internationalizationSecurityData.oldPass}: " />
+						<p:password id="oldPassword"
+							value="#{updateClientSecurityData.oldPassword}"
+							label="Old password" />
 
-						<h:outputLabel for="password" value="Password: " />
+						<h:outputLabel for="password"
+							value="#{internationalizationSecurityData.pass}: " />
 						<p:password id="password"
 							value="#{updateClientSecurityData.client.password}"
 							label="Password">
@@ -47,14 +51,15 @@
 							<f:attribute name="confirm" value="#{confirm}" />
 						</p:password>
 
-						<h:outputLabel for="confirm" value="Retype password: " />
+						<h:outputLabel for="confirm"
+							value="#{internationalizationSecurityData.retype}: " />
 						<p:password id="confirm"
 							value="#{updateClientSecurityData.client.retypedPassword}"
 							label="Retyped password" binding="#{confirm}" />
 
 					</h:panelGrid>
-					<h:commandButton value="Update Account" ajax="false"
-						action="#{updateClientSecurityData.update()}"
+					<h:commandButton value="#{internationalizationGeneric.update}"
+						ajax="false" action="#{updateClientSecurityData.update()}"
 						styleClass="update-submit" />
 				</p:panel>
 			</h:form>

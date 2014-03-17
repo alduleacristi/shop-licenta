@@ -16,6 +16,8 @@ import com.siemens.ctbav.intership.shop.exception.client.NullUserException;
 import com.siemens.ctbav.intership.shop.model.Client;
 import com.siemens.ctbav.intership.shop.model.User;
 import com.siemens.ctbav.intership.shop.service.client.UserService;
+import com.siemens.ctbav.intership.shop.service.internationalization.InternationalizationService;
+import com.siemens.ctbav.intership.shop.view.internationalization.enums.client.ESecurityData;
 
 @ViewScoped
 @ManagedBean(name = "updateClientSecurityData")
@@ -32,6 +34,9 @@ public class EditSecurityDataBean implements Serializable {
 	@EJB
 	UserService userService;
 
+	@EJB
+	private InternationalizationService internationalizationService;
+
 	private Client oldClient;
 
 	private String oldPassword;
@@ -42,6 +47,28 @@ public class EditSecurityDataBean implements Serializable {
 				.getExternalContext().getSessionMap().get("client");
 
 		client.setPassword(oldClient.getUser().getUserPassword());
+		internationalizationInit();
+	}
+
+	private void internationalizationInit() {
+		boolean isEnglishSelected;
+		Boolean b = (Boolean) FacesContext.getCurrentInstance()
+				.getExternalContext().getSessionMap().get("isEnglishSelected");
+		if (b == null)
+			isEnglishSelected = true;
+		else
+			isEnglishSelected = b;
+		if (isEnglishSelected) {
+			String language = new String("en");
+			String country = new String("US");
+			internationalizationService.setCurrentLocale(language, country,
+					"internationalization/client/securityData/SecurityData");
+		} else {
+			String language = new String("ro");
+			String country = new String("RO");
+			internationalizationService.setCurrentLocale(language, country,
+					"internationalization/client/securityData/SecurityData");
+		}
 	}
 
 	public ClientBean getClient() {
@@ -63,9 +90,15 @@ public class EditSecurityDataBean implements Serializable {
 	public String update() {
 		if (!oldClient.getUser().getUserPassword().equals(oldPassword)) {
 			FacesContext context = FacesContext.getCurrentInstance();
-			context.addMessage(null, new FacesMessage(
-					FacesMessage.SEVERITY_ERROR, "Error",
-					"The old password is incorect."));
+			context.addMessage(
+					null,
+					new FacesMessage(
+							FacesMessage.SEVERITY_ERROR,
+							internationalizationService
+									.getMessage(ESecurityData.ERROR.getName()),
+							internationalizationService
+									.getMessage(ESecurityData.OLD_PASS_INCORRECT
+											.getName())));
 			return "";
 		}
 
@@ -75,17 +108,27 @@ public class EditSecurityDataBean implements Serializable {
 		try {
 			userService.update(user);
 			FacesContext context = FacesContext.getCurrentInstance();
-			context.addMessage(null, new FacesMessage(
-					FacesMessage.SEVERITY_INFO, "Succesful",
-					"Your password was succesfully changed."));
+			context.addMessage(
+					null,
+					new FacesMessage(
+							FacesMessage.SEVERITY_INFO,
+							internationalizationService
+									.getMessage(ESecurityData.SUCCESS.getName()),
+							internationalizationService
+									.getMessage(ESecurityData.SUCCESS_MESSAGE
+											.getName())));
 		} catch (NullUserException e) {
 			FacesContext context = FacesContext.getCurrentInstance();
 			context.addMessage(
 					null,
-					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error ",
-							"Sorry. You can not make modification now. Please try again later"));
+					new FacesMessage(FacesMessage.SEVERITY_ERROR,
+							internationalizationService
+									.getMessage(ESecurityData.ERROR.getName()),
+							internationalizationService
+									.getMessage(ESecurityData.INDISPONIBILITY
+											.getName())));
 		}
-		
+
 		return "";
 	}
 }

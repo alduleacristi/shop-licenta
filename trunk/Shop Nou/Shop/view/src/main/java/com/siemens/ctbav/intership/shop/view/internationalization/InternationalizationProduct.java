@@ -35,6 +35,7 @@ public class InternationalizationProduct implements Serializable {
 	private String changeQty;
 	private String itemsNow;
 	private String size;
+	private String recommand;
 
 	@PostConstruct
 	private void init() {
@@ -153,5 +154,11 @@ public class InternationalizationProduct implements Serializable {
 	public String getSize() {
 		size = internationalizationService.getMessage(EProduct.SIZE.getName());
 		return size;
+	}
+
+	public String getRecommand() {
+		recommand = internationalizationService.getMessage(EProduct.RECOMMAND
+				.getName());
+		return recommand;
 	}
 }

@@ -22,6 +22,8 @@ import com.siemens.ctbav.intership.shop.service.client.CountryService;
 import com.siemens.ctbav.intership.shop.service.client.CountyService;
 import com.siemens.ctbav.intership.shop.service.client.LocalityService;
 import com.siemens.ctbav.intership.shop.service.client.ProductColorSizeService;
+import com.siemens.ctbav.intership.shop.service.internationalization.InternationalizationService;
+import com.siemens.ctbav.intership.shop.view.internationalization.enums.client.ECart;
 
 @SessionScoped
 @ManagedBean(name = "SendCommandBean")
@@ -42,6 +44,9 @@ public class SendCommandBean implements Serializable {
 
 	@EJB
 	private ProductColorSizeService productColorSizeService;
+
+	@EJB
+	private InternationalizationService internationalizationService;
 
 	private boolean useExistingAdress, addNewAdress, existProductInCart;
 	private List<Adress> userAdresses;
@@ -64,6 +69,28 @@ public class SendCommandBean implements Serializable {
 	private void initialize() {
 		this.setUseExistingAdress(false);
 		existProductInCart = true;
+		internationalizationInit();
+	}
+
+	private void internationalizationInit() {
+		boolean isEnglishSelected;
+		Boolean b = (Boolean) FacesContext.getCurrentInstance()
+				.getExternalContext().getSessionMap().get("isEnglishSelected");
+		if (b == null)
+			isEnglishSelected = true;
+		else
+			isEnglishSelected = b;
+		if (isEnglishSelected) {
+			String language = new String("en");
+			String country = new String("US");
+			internationalizationService.setCurrentLocale(language, country,
+					"internationalization/client/cart/Cart");
+		} else {
+			String language = new String("ro");
+			String country = new String("RO");
+			internationalizationService.setCurrentLocale(language, country,
+					"internationalization/client/cart/Cart");
+		}
 	}
 
 	public boolean getUseExistingAdress() {
@@ -200,7 +227,7 @@ public class SendCommandBean implements Serializable {
 	}
 
 	public void setStaircase(String staircase) {
-		if(staircase.equals(""))
+		if (staircase.equals(""))
 			this.staircase = null;
 		else
 			this.staircase = staircase;
@@ -241,14 +268,15 @@ public class SendCommandBean implements Serializable {
 			userAdresses = adressService.getClientAdress(client.getId());
 			this.setUseExistingAdress(true);
 
-			if (userAdresses.size() <= 0){
-				this.setMessageUserAdress("No records found");
-				//System.out.println(messageUserAdress);
-			}
-			else {
+			if (userAdresses.size() <= 0) {
+				internationalizationInit();
+				this.setMessageUserAdress(internationalizationService
+						.getMessage(ECart.NO_RECORDS.getName()));
+				// System.out.println(messageUserAdress);
+			} else {
 				this.selectedAdress = userAdresses.get(0);
 				this.messageUserAdress = selectedAdress.toString();
-				System.out.println(messageUserAdress+" "+useExistingAdress);
+				System.out.println(messageUserAdress + " " + useExistingAdress);
 			}
 		} else {
 			this.setUseExistingAdress(false);
@@ -283,8 +311,13 @@ public class SendCommandBean implements Serializable {
 		} catch (IOException e) {
 			e.printStackTrace();
 			FacesContext ctx = FacesContext.getCurrentInstance();
-			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
-					"Error", "Sorry.Description is not availabel."));
+			ctx.addMessage(
+					null,
+					new FacesMessage(FacesMessage.SEVERITY_ERROR,
+							internationalizationService.getMessage(ECart.ERROR
+									.getName()), internationalizationService
+									.getMessage(ECart.DESCRIPTION_UNAVAILABLE
+											.getName())));
 		}
 	}
 

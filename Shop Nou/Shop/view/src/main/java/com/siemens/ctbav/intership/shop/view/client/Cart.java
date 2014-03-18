@@ -603,7 +603,12 @@ public class Cart implements Serializable {
 
 			List<ClientProduct> clientProducts = buildClientProducts(command);
 
-			clientProductService.persistClientProducts(clientProducts);
+			if (this.sendCommand.getUseExistingAdress()) {
+				clientProductService
+						.persistClientProductsWithoutAdress(clientProducts);
+			} else {
+				clientProductService.persistClientProducts(clientProducts);
+			}
 
 		} catch (NotEnoughProductsInStockException e) {
 			for (int i = 0; i < e.getMessages().size(); i++) {
@@ -652,5 +657,13 @@ public class Cart implements Serializable {
 
 		cart.clear();
 		setProducts();
+
+		FacesContext
+				.getCurrentInstance()
+				.getExternalContext()
+				.getSessionMap()
+				.put("commandSent",
+						"Command was sent succesfully. You can see the status of your command in command history.");
+		redirect("/Shop4j/client/user/index");
 	}
 }

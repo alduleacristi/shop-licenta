@@ -34,6 +34,8 @@ public class InternationalizationManageUsers implements Serializable {
 	private String requiredUsername;
 	private String requiredEmail;
 	private String requiredPassword;
+	private String success;
+	private String successAdd;
 
 	@PostConstruct
 	private void init() {
@@ -141,5 +143,17 @@ public class InternationalizationManageUsers implements Serializable {
 		requiredPassword = internationalizationService
 				.getMessage(EManageUsers.REQUIRED_PASSWORD.getName());
 		return requiredPassword;
+	}
+
+	public String getSuccess() {
+		success = internationalizationService.getMessage(EManageUsers.SUCCESS
+				.getName());
+		return success;
+	}
+
+	public String getSuccessAdd() {
+		successAdd = internationalizationService
+				.getMessage(EManageUsers.USER_ADDED.getName());
+		return successAdd;
 	}
 }

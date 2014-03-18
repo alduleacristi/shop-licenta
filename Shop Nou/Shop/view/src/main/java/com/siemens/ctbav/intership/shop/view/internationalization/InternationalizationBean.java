@@ -23,6 +23,7 @@ public class InternationalizationBean {
 	private String language;
 	private String country;
 	private String changeLanguage;
+	private String flag;
 
 	@PostConstruct
 	private void init() {
@@ -34,6 +35,7 @@ public class InternationalizationBean {
 		FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
 				.put("isEnglishSelected", isEnglishSelected);
 		changeLanguage = "Romana";
+		flag = "/resources/romanian_flag.jpg";
 	}
 
 	public String getMenuIndexHome() {
@@ -60,10 +62,12 @@ public class InternationalizationBean {
 			language = new String("en");
 			country = new String("US");
 			changeLanguage = "Romana";
+			flag = "/resources/romanian_flag.jpg";
 		} else {
 			language = new String("ro");
 			country = new String("RO");
 			changeLanguage = "English";
+			flag = "/resources/us-flag.png";
 		}
 		internationalizationService.setCurrentLocale(language, country,
 				"internationalization/superadmin/menu/menuIndex/MenuIndex");
@@ -77,11 +81,21 @@ public class InternationalizationBean {
 		this.changeLanguage = changeLanguage;
 	}
 
+	public String getFlag() {
+		return flag;
+	}
+
+	public void setFlag(String flag) {
+		this.flag = flag;
+	}
+
 	public void change(ActionEvent actionEvent) {
 		if (changeLanguage.equals("Romana")) {
 			setEnglishSelected(false);
+			flag = "/resources/us-flag.png";
 			changeLanguage = "English";
 		} else {
+			flag = "/resources/romanian_flag.jpg";
 			changeLanguage = "Romana";
 			setEnglishSelected(true);
 		}

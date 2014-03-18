@@ -8,6 +8,7 @@ import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
 
 import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.model.TreeNode;
@@ -19,6 +20,7 @@ import com.siemens.ctbav.intership.shop.model.Category;
 import com.siemens.ctbav.intership.shop.model.ProductColor;
 import com.siemens.ctbav.intership.shop.model.ProductColorSize;
 import com.siemens.ctbav.intership.shop.service.superadmin.ColorProductService;
+import com.siemens.ctbav.intership.shop.util.UsersRole;
 import com.siemens.ctbav.intership.shop.util.superadmin.NavigationUtils;
 
 @URLMappings(mappings = {
@@ -114,17 +116,43 @@ public class ColorProductsSizeBean implements Serializable {
 	}
 
 	public void showProduct(ProductColor product) {
+		HttpServletRequest request = (HttpServletRequest) FacesContext
+				.getCurrentInstance().getExternalContext().getRequest();
+
 		FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
 				.put("selectedProductSize", product);
-		NavigationUtils
-				.redirect("/Shop4j/superadmin/genericProducts/colorProducts/sizes/"
-						+ product.getId());
+
+		if (FacesContext.getCurrentInstance().getExternalContext()
+				.getSessionMap().get("user") != null) {
+			if (request.isUserInRole(UsersRole.ADMINISTRATOR.toString())) {
+				NavigationUtils
+						.redirect("/Shop4j/admin/genericProducts/colorProducts/sizes/"
+								+ product.getId());
+			}
+			if (request.isUserInRole(UsersRole.SUPER_ADMINISTRATOR.toString())) {
+				NavigationUtils
+						.redirect("/Shop4j/superadmin/genericProducts/colorProducts/sizes/"
+								+ product.getId());
+			}
+		}
 	}
 
 	public void showUpdateProduct(ProductColor product) {
+		HttpServletRequest request = (HttpServletRequest) FacesContext
+				.getCurrentInstance().getExternalContext().getRequest();
+
 		FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
 				.put("selectedProductSize", product);
-		NavigationUtils.redirect("/Shop4j/superadmin/updateStoc/"
-				+ product.getId());
+		if (FacesContext.getCurrentInstance().getExternalContext()
+				.getSessionMap().get("user") != null) {
+			if (request.isUserInRole(UsersRole.ADMINISTRATOR.toString())) {
+				NavigationUtils.redirect("/Shop4j/admin/updateStoc/"
+						+ product.getId());
+			}
+			if (request.isUserInRole(UsersRole.SUPER_ADMINISTRATOR.toString())) {
+				NavigationUtils.redirect("/Shop4j/superadmin/updateStoc/"
+						+ product.getId());
+			}
+		}
 	}
 }

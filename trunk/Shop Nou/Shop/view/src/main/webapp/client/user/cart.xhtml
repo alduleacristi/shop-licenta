@@ -74,12 +74,23 @@
 							<p:commandLink value="#{internationalizationCart.remove}"
 								styleClass="remove-form-cart"
 								actionListener="#{cart.removeProduct(p)}"
-								update=":cartForm:descriptionDlg" process="@this"></p:commandLink>
+								update=":cartForm:descriptionDlg" process="@this">
+								<p:confirm header="Confirmation" message="Are you sure?"
+									icon="ui-icon-alert" />
+							</p:commandLink>
 						</div>
 					</center>
 				</p:carousel>
 				<p:outputLabel value="#{internationalizationCart.noRecords}"
 					rendered="#{cart.isEmpty() == false}"></p:outputLabel>
+
+				<p:confirmDialog global="true" showEffect="fade"
+					hideEffect="explode">
+					<p:commandButton value="Yes" type="button"
+						styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+					<p:commandButton value="No" type="button"
+						styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+				</p:confirmDialog>
 
 				<p:dialog header="#{internationalizationProduct.description}"
 					widgetVar="descriptionDialog" id="descriptionDlg" showEffect="fade"
@@ -122,8 +133,8 @@
 						</p:commandLink>
 					</p:panel>
 					<p:dialog id="chooseAnotherExistingAdress" widgetVar="chooseAdress"
-						header="#{internationalizationCart.anotherAddress}" showEffect="fade" hideEffect="explode"
-						modal="true">
+						header="#{internationalizationCart.anotherAddress}"
+						showEffect="fade" hideEffect="explode" modal="true">
 						<p:dataList value="#{cart.sendCommand.userAdresses}" var="adress"
 							itemType="circle"
 							emptyMessage="#{internationalizationCart.noRecords}">
@@ -203,7 +214,8 @@
 							for="number" />
 
 						<p:inputText id="number" value="#{cart.sendCommand.number}"
-							required="true" requiredMessage="#{internationalizationAddress.numberRequired}">
+							required="true"
+							requiredMessage="#{internationalizationAddress.numberRequired}">
 							<f:convertNumber minIntegerDigits="1" />
 						</p:inputText>
 						<h:outputText value="*" />

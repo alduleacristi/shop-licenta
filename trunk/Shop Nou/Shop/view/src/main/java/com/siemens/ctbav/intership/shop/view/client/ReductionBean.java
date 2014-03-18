@@ -42,8 +42,15 @@ public class ReductionBean implements Serializable {
 
 	@PostConstruct
 	private void initialize() {
+		String msg = (String) FacesContext.getCurrentInstance()
+				.getExternalContext().getSessionMap().get("commandSent");
+		if (msg != null) {
+			FacesContext.getCurrentInstance().addMessage(null,
+					new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", msg));
+		}
+
 		this.host = confService.getHost();
-		
+
 		products = new ArrayList<Product>();
 		try {
 			products = productService.getReducedProducts();

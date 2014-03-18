@@ -41,9 +41,9 @@
 
 					</center>
 					<br />
-					<p:carousel value="#{c.getClientProducts()}" var="p"
-						itemStyle="width:237px"
-						styleClass="products-reduce-commandHistory">
+					<p:carousel value="#{CommandBean.getClientProductsForCommand(c)}"
+						var="p" itemStyle="width:237px"
+						styleClass="products-reduce-commandHistory" numVisible="1">
 						<center>
 							<p:graphicImage
 								url="http://localhost:8080/Shop4j/rest/products/id#{p.product.id}"

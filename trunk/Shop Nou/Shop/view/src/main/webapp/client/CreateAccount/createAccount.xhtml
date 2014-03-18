@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<title>Personal data</title>
+</h:head>
+<h:body>
+
+
+	<ui:composition template="/resources/template/template.xhtml">
+		<ui:define name="menu">
+			<ui:include src="/resources/template/client/menuBox.xhtml"></ui:include>
+		</ui:define>
+
+		<ui:define name="search">
+			<ui:include src="/resources/template/client/searchBox.xhtml"></ui:include>
+		</ui:define>
+
+		<ui:define name="categories">
+			<ui:include
+				src="/resources/template/client/productsCategoryBox.xhtml"></ui:include>
+		</ui:define>
+
+		<ui:define name="mainContent">
+			<h:form id="formCategories">
+				<p:growl id="messages" showDetail="true" />
+				<br />
+				<h:outputText id="success"
+					value="#{internationalizationManageUsers.success}"
+					rendered="#{createAccountBean.created}" />
+				<br />
+
+				<p:commandButton value="Login" id="login"
+					actionListener="#{createAccountBean.redirectLogin}"
+					rendered="#{createAccountBean.created}" />
+				<h:panelGrid rendered="#{createAccountBean.created == false}">
+					#{internationalizationManageUsers.m1}
+					<br />
+					#{internationalizationManageUsers.m2}
+					<br />
+					#{internationalizationManageUsers.m3}
+					<br />
+					#{internationalizationManageUsers.m4}
+					<h:panelGrid columns="2" cellpadding="5">
+						<h:outputLabel for="username"
+							value="#{internationalizationManageUsers.username}:" />
+						<p:inputText id="username" label="username"
+							value="#{createAccountBean.username}" required="true"
+							requiredMessage="#{internationalizationManageUsers.requiredUsername}" />
+						<h:outputLabel for="email" value="Email:" />
+						<p:inputText id="email" label="email"
+							value="#{createAccountBean.email}" required="true"
+							requiredMessage="#{internationalizationManageUsers.requiredEmail}">
+							<f:validator validatorId="emailValidate" />
+						</p:inputText>
+						<h:outputLabel for="password"
+							value="#{internationalizationManageUsers.password}:" />
+						<p:password id="password" label="password" type="password"
+							value="#{createAccountBean.password}" required="true"
+							requiredMessage="#{internationalizationManageUsers.requiredPassword}">
+							<f:validator validatorId="passwordValidate" />
+							<f:attribute name="confirm" value="#{confirm}" />
+						</p:password>
+						<h:outputLabel for="confirm"
+							value="#{internationalizationManageUsers.retype}:" />
+						<p:password id="confirm" label="repassword" binding="#{confirm}"
+							value="#{createAccountBean.repassword}" required="true"
+							requiredMessage="#{internationalizationManageUsers.requiredPassword}">
+						</p:password>
+					</h:panelGrid>
+					<p:commandButton value="#{internationalizationGeneric.create}"
+						actionListener="#{createAccountBean.addUser}"
+						oncomplete="handleCreateRequest(xhr, status, args)"
+						update="login,messages" />
+				</h:panelGrid>
+
+				<script type="text/javascript">
+					function handleCreateRequest(xhr, status, args) {
+						if (args.validationFailed || !args.create) {
+						} else {
+							location.reload();
+						}
+					}
+				</script>
+			</h:form>
+
+		</ui:define>
+
+		<ui:define name="advertise">
+			<ui:include src="/resources/template/advertise.xhtml"></ui:include>
+		</ui:define>
+
+		<ui:define name="footer">
+			<ui:include src="/resources/template/footer.xhtml"></ui:include>
+		</ui:define>
+	</ui:composition>
+
+</h:body>
+
+</html>

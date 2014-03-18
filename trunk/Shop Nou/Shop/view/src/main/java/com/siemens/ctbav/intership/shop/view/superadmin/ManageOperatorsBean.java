@@ -19,13 +19,15 @@ import com.siemens.ctbav.intership.shop.exception.superadmin.UserException;
 import com.siemens.ctbav.intership.shop.model.User;
 import com.siemens.ctbav.intership.shop.service.internationalization.InternationalizationService;
 import com.siemens.ctbav.intership.shop.service.superadmin.OperatorsService;
+import com.siemens.ctbav.intership.shop.util.UsersRole;
 import com.siemens.ctbav.intership.shop.util.superadmin.NavigationUtils;
 import com.siemens.ctbav.intership.shop.view.internationalization.enums.superadmin.EManageUsers;
 
 @ManagedBean(name = "manageOperatorsBean")
 @ViewScoped
-@URLMappings(mappings = { @URLMapping(id = "manageOperators", pattern = "/superadmin/manageOperators/", viewId = "manageOperators.xhtml"),
-		@URLMapping(id = "manageOperatorsAdmin", pattern = "/admin/manageOperators/", viewId = "manageOperators.xhtml")})
+@URLMappings(mappings = {
+		@URLMapping(id = "manageOperators", pattern = "/superadmin/manageOperators/", viewId = "manageOperators.xhtml"),
+		@URLMapping(id = "manageOperatorsAdmin", pattern = "/admin/manageOperators/", viewId = "manageOperators.xhtml") })
 public class ManageOperatorsBean implements Serializable {
 
 	private static final long serialVersionUID = 6307678468022334876L;
@@ -216,7 +218,8 @@ public class ManageOperatorsBean implements Serializable {
 	}
 
 	public void addOperator(ActionEvent actionEvent) {
-		User operator = new User(username, password, "operator", email);
+		User operator = new User(username, password,
+				UsersRole.OPERATOR.toString(), email);
 		FacesMessage msg = null;
 		RequestContext context = RequestContext.getCurrentInstance();
 		boolean create = false;

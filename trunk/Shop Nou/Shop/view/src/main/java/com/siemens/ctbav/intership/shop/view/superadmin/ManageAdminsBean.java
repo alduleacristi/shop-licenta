@@ -19,6 +19,7 @@ import com.siemens.ctbav.intership.shop.exception.superadmin.UserException;
 import com.siemens.ctbav.intership.shop.model.User;
 import com.siemens.ctbav.intership.shop.service.internationalization.InternationalizationService;
 import com.siemens.ctbav.intership.shop.service.superadmin.AdminsService;
+import com.siemens.ctbav.intership.shop.util.UsersRole;
 import com.siemens.ctbav.intership.shop.util.superadmin.NavigationUtils;
 import com.siemens.ctbav.intership.shop.view.internationalization.enums.superadmin.EManageUsers;
 
@@ -213,7 +214,8 @@ public class ManageAdminsBean implements Serializable {
 	}
 
 	public void addAdmin(ActionEvent actionEvent) {
-		User admin = new User(username, password, "admin", email);
+		User admin = new User(username, password,
+				UsersRole.ADMINISTRATOR.toString(), email);
 		FacesMessage msg = null;
 		RequestContext context = RequestContext.getCurrentInstance();
 		boolean create = false;

@@ -8,6 +8,7 @@ import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
 
 import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.model.TreeNode;
@@ -18,6 +19,7 @@ import com.siemens.ctbav.intership.shop.conf.ConfigurationService;
 import com.siemens.ctbav.intership.shop.model.Category;
 import com.siemens.ctbav.intership.shop.model.ProductColor;
 import com.siemens.ctbav.intership.shop.service.superadmin.ColorProductService;
+import com.siemens.ctbav.intership.shop.util.UsersRole;
 import com.siemens.ctbav.intership.shop.util.superadmin.NavigationUtils;
 
 @URLMappings(mappings = {
@@ -102,10 +104,25 @@ public class ColorProductsPhotosBean implements Serializable {
 	}
 
 	public void showProduct(ProductColor product) {
+		HttpServletRequest request = (HttpServletRequest) FacesContext
+				.getCurrentInstance().getExternalContext().getRequest();
+
 		FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
 				.put("selectedProduct", product);
-		NavigationUtils
-				.redirect("/Shop4j/superadmin/genericProducts/colorProducts/photos/"
-						+ product.getId());
+
+		if (FacesContext.getCurrentInstance().getExternalContext()
+				.getSessionMap().get("user") != null) {
+
+			if (request.isUserInRole(UsersRole.ADMINISTRATOR.toString())) {
+				NavigationUtils
+						.redirect("/Shop4j/admin/genericProducts/colorProducts/photos/"
+								+ product.getId());
+			}
+			if (request.isUserInRole(UsersRole.SUPER_ADMINISTRATOR.toString())) {
+				NavigationUtils
+						.redirect("/Shop4j/superadmin/genericProducts/colorProducts/photos/"
+								+ product.getId());
+			}
+		}
 	}
 }

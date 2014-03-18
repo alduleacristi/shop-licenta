@@ -33,26 +33,29 @@
 
 		<ui:define name="mainContent">
 			<h:form id="contact">
-				<p:panel header="Send a message">
-					<p:outputLabel
-						value="Type a subject and a message.Then an operator will give you an respone on the email in a short time." />
-					<br />
-					<br />
+				<p:panel header="#{internationalizationContact.send}">
 					<p:panelGrid columns="2" style="width: 500px">
-						<h:outputLabel for="subject" value="Subject"></h:outputLabel>
+						<h:outputLabel for="subject"
+							value="#{internationalizationContact.subject}"></h:outputLabel>
 						<p:inputText id="subject" size="70" style="width: 320px"
 							value="#{messageBeanClient.subject}" label="Subject"
-							required="true" />
-						<h:outputLabel for="message" value="Message"></h:outputLabel>
+							required="true"
+							requiredMessage="#{internationalizationContact.requiredSubject}" />
+						<h:outputLabel for="message"
+							value="#{internationalizationContact.message}"></h:outputLabel>
 						<p:inputTextarea cols="70" rows="19" maxlength="900"
 							value="#{messageBeanClient.message}" style="width: 320px"
-							required="true"></p:inputTextarea>
-						<p:commandButton value="Send message" ajax="false"
-							update=":contact:contact2"
+							required="true"
+							requiredMessage="#{internationalizationContact.requiredMessage}"></p:inputTextarea>
+						<p:commandButton value="#{internationalizationContact.send}"
+							ajax="false" update=":contact:contact2"
 							action="#{messageBeanClient.sendMessage()}"
 							style="background: #8b0000;color: #fff" />
 						<p:growl id="contact2" />
 					</p:panelGrid>
+					<br />
+					<p:outputLabel value="#{internationalizationContact.info}" />
+					<br />
 				</p:panel>
 			</h:form>
 		</ui:define>

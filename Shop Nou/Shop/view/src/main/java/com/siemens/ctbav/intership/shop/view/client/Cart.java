@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -23,6 +24,7 @@ import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
 import com.siemens.ctbav.intership.shop.convert.client.ConvertProductColorSizeNumber;
 import com.siemens.ctbav.intership.shop.dto.client.ProductColorSizeNumberDTO;
+import com.siemens.ctbav.intership.shop.exception.client.AddToCartFailedException;
 import com.siemens.ctbav.intership.shop.exception.client.AdressDoesNotExistException;
 import com.siemens.ctbav.intership.shop.exception.client.CommandCouldNotPersistException;
 import com.siemens.ctbav.intership.shop.exception.client.CommmandStatusDoesNotExistException;
@@ -50,6 +52,8 @@ import com.siemens.ctbav.intership.shop.view.internationalization.enums.client.E
 		@URLMapping(id = "sendCommand", pattern = "/client/user/sendCommand", viewId = "/client/user/sendCommand.xhtml") })
 public class Cart implements Serializable {
 	private static final long serialVersionUID = -4660863521509380343L;
+	
+	private static final Logger logger = Logger.getLogger("com.siemens.ctbav.intership.shop.view.client");
 
 	@EJB
 	private ProductColorSizeService productColorSizeService;
@@ -183,10 +187,15 @@ public class Cart implements Serializable {
 	}
 
 	private void addProductFromCookie(ProductColorSize pcs, Long nrOfProducts) {
-		addProduct(pcs, nrOfProducts);
+		try {
+			addProduct(pcs, nrOfProducts);
+		} catch (AddToCartFailedException e) {
+			logger.warning(e.getMessage());
+		}
 	}
 
-	private void addProduct(ProductColorSize pcs, Long nrOfProducts) {
+	private void addProduct(ProductColorSize pcs, Long nrOfProducts)
+			throws AddToCartFailedException {
 		internationalizationInit();
 		if (pcs == null) {
 			FacesContext context = FacesContext.getCurrentInstance();
@@ -195,7 +204,8 @@ public class Cart implements Serializable {
 					new FacesMessage(FacesMessage.SEVERITY_WARN, "Info",
 							internationalizationService
 									.getMessage(ECart.CHOOSE_SIZE.getName())));
-			return;
+			throw new AddToCartFailedException(
+					"ProductColorSize is null in add to cart");
 		}
 		if (nrOfProducts == null) {
 			FacesContext context = FacesContext.getCurrentInstance();
@@ -204,7 +214,8 @@ public class Cart implements Serializable {
 					new FacesMessage(FacesMessage.SEVERITY_WARN, "Info",
 							internationalizationService
 									.getMessage(ECart.NR_PRODUCTS.getName())));
-			return;
+			throw new AddToCartFailedException(
+					"Number of ProdoctColorSize is null in add to cart");
 		}
 
 		if (nrOfProducts > pcs.getNrOfPieces()) {
@@ -215,7 +226,8 @@ public class Cart implements Serializable {
 							internationalizationService
 									.getMessage(ECart.NOT_ENOUGH_PRODUCTS
 											.getName())));
-			return;
+			throw new AddToCartFailedException(
+					"Not enough product in stock in add to cart");
 		}
 
 		if (cart.containsKey(pcs)) {
@@ -230,17 +242,22 @@ public class Cart implements Serializable {
 	public void addProductFromPage(ProductColorSize pcs, Long nrOfProducts) {
 		internationalizationInit();
 
-		addProduct(pcs, nrOfProducts);
+		try {
+			addProduct(pcs, nrOfProducts);
 
-		FacesContext
-				.getCurrentInstance()
-				.getExternalContext()
-				.getSessionMap()
-				.put("addProductMessage",
-						internationalizationService
-								.getMessage(ECart.SUCCESS_MESSAGE.getName()));
+			FacesContext
+					.getCurrentInstance()
+					.getExternalContext()
+					.getSessionMap()
+					.put("addProductMessage",
+							internationalizationService
+									.getMessage(ECart.SUCCESS_MESSAGE.getName()));
 
-		redirect("/Shop4j/client/user/recommandation");
+			redirect("/Shop4j/client/user/recommandation");
+		} catch (AddToCartFailedException e) {
+			logger.warning(e.getMessage());
+		}
+
 	}
 
 	public void removeProduct(ProductColorSizeNumberDTO productDTO) {

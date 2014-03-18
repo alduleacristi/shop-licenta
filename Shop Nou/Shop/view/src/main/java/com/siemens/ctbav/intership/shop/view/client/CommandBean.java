@@ -16,6 +16,7 @@ import com.siemens.ctbav.intership.shop.model.Client;
 import com.siemens.ctbav.intership.shop.model.ClientProduct;
 import com.siemens.ctbav.intership.shop.model.Command;
 import com.siemens.ctbav.intership.shop.service.client.CommandService;
+import com.siemens.ctbav.intership.shop.util.Enum.CommandStatusEnum;
 
 /**
  * Is used as bean for CommndHistory page
@@ -49,13 +50,7 @@ public class CommandBean implements Serializable {
 			if (client == null)
 				throw new ClientDoesNotExistException("Client does not exist");
 
-			commands = commandService.getDeliveredCommandToClient(client
-					.getId());
-
-//			for (Command c : commands) {
-//				for (ClientProduct cp : c.getClientProducts())
-//					System.out.println(cp.getIdProductClient());
-//			}
+			commands = commandService.getClientOrders(client.getId());
 
 			boolean ok = false;
 			for (int i = 0; i < commands.size(); i++) {
@@ -107,12 +102,13 @@ public class CommandBean implements Serializable {
 	}
 
 	public boolean canBeReturned(Command command) {
-
-		return true;
+		if (command.getCommand_status().getStatus()
+				.equals(CommandStatusEnum.DELIVERED.toString()))
+			return true;
+		return false;
 	}
-	
-	public List<ClientProduct> getClientProductsForCommand(Command command){
-		System.out.println("size:"+command.getClientProducts().size());
+
+	public List<ClientProduct> getClientProductsForCommand(Command command) {
 		return command.getClientProducts();
 	}
 

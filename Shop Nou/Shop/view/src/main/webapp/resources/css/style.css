@@ -553,7 +553,7 @@ a.bul {
 	overflow: hidden;
 }
 
-.sendCommandElement{
+.sendCommandElement {
 	margin-left: 20px;
 }
 
@@ -1098,15 +1098,18 @@ h3.ico4 {
 	overflow: hidden;
 }
 
-.products-reduce-commandHistory ul li {
+.products-reduce-commandHistory {
 	position: relative;
 	padding: 0px;
 	border: solid 1px #dedede;
 	float: left;
-	width: 231px;
 	margin-right: 0px;
-	height: 360px;
+	height: 630px;
 	overflow: hidden;
+}
+
+.products-reduce-commandHistory-element {
+	
 }
 
 .products-reduce-recommand ul li {

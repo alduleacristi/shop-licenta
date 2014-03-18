@@ -10,19 +10,19 @@
 	<title>Categories</title>
 </h:head>
 <h:body>
-	<ui:composition template="/superadmin/index.xhtml">
+	<ui:composition template="/admin/index.xhtml">
 		<br />
 		<ui:define name="menu">
-			<ui:include src="/resources/template/superadmin/menuProducts.xhtml"></ui:include>
+			<ui:include src="/resources/template/admin/menuProducts.xhtml"></ui:include>
 		</ui:define>
 
 		<ui:define name="mainContent">
 			<div class="box">
-				<p:graphicImage value="#{updateStockBean.photo}" width="720"
+				<p:graphicImage value="#{colorProductPhotosBean.photo}" width="720"
 					height="100" />
 			</div>
 			<br />
-			#{internationalizationColorSizeProducts.message}
+			#{internationalizationPhotoProducts.message}
 			<br />
 			<br />
 
@@ -35,7 +35,7 @@
 					orientation="horizontal" selection="#{categoryBean.selectedNode}"
 					id="tree">
 					<p:ajax event="select"
-						listener="#{colorProductsSizeBean.onNodeSelect}"
+						listener="#{colorProductPhotosBean.onNodeSelect}"
 						update=":formProducts" />
 					<p:treeNode>
 						<h:outputText value="#{node}" />
@@ -50,34 +50,31 @@
 			<h:form id="formProducts">
 				<p:growl id="messages1" showDetail="true" />
 				<p:dataGrid id="dataGrid" var="product"
-					value="#{colorProductsSizeBean.productList}" columns="3" rows="12"
+					value="#{colorProductPhotosBean.productList}" columns="3" rows="12"
 					paginator="true"
 					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 					paginatorPosition="bottom" rowsPerPageTemplate="3,6,9,12,15"
-					rendered="#{colorProductsSizeBean.selectedCategory}">
+					rendered="#{colorProductPhotosBean.selectedCategory}">
 					<div class="productsA">
 						<div class="cl">&nbsp;</div>
 						<ul>
 							<li><p:graphicImage
-									url="#{colorProductsSizeBean.host}/Shop4j/rest/products/id#{product.id}"
+									url="#{colorProductPhotosBean.host}/Shop4j/rest/products/id#{product.id}"
 									width="170" height="198" />
 								<div class="product-infoA">
 									<h3>#{product.product.name}</h3>
 									<div class="product-desc">
 										<h4>#{product.product.category.name}'S</h4>
 										<p>
-											#{internationalizationColorSizeProducts.color}:
+											#{internationalizationPhotoProducts.color}:
 											#{product.color.name}<br />
 										</p>
 									</div>
-									<h:outputText
-										value="#{internationalizationColorSizeProducts.sizes}: #{colorProductsSizeBean.displaySizes(product)}" />
-									<br />
 									<div align="right">
 										<p:commandLink
-											actionListener="#{colorProductsSizeBean.showUpdateProduct(product)}">
+											actionListener="#{colorProductPhotosBean.showProduct(product)}">
 											<h:commandButton id="idVizualizare"
-												value="#{internationalizationColorSizeProducts.view}"
+												value="#{internationalizationPhotoProducts.view}"
 												type="button" styleClass="search-submit" style="width: 50%" />
 										</p:commandLink>
 									</div>

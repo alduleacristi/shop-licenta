@@ -28,7 +28,9 @@ import com.siemens.ctbav.intership.shop.service.superadmin.ProductService;
 import com.siemens.ctbav.intership.shop.util.superadmin.NavigationUtils;
 import com.siemens.ctbav.intership.shop.view.internationalization.enums.superadmin.EGenericProduct;
 
-@URLMappings(mappings = { @URLMapping(id = "products", pattern = "/superadmin/genericProducts/", viewId = "products.xhtml") })
+@URLMappings(mappings = {
+		@URLMapping(id = "products", pattern = "/superadmin/genericProducts/", viewId = "products.xhtml"),
+		@URLMapping(id = "productsAdmin", pattern = "/admin/genericProducts/", viewId = "products.xhtml") })
 @ManagedBean(name = "productBean")
 @ViewScoped
 public class ProductsBean implements Serializable {

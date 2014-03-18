@@ -23,7 +23,9 @@ import com.siemens.ctbav.intership.shop.util.superadmin.NavigationUtils;
 
 @URLMappings(mappings = {
 		@URLMapping(id = "colorProductsSize", pattern = "/superadmin/genericProducts/colorProducts/sizes/", viewId = "colorProductsSizes.xhtml"),
-		@URLMapping(id = "colorProductsSizeUpdate", pattern = "/superadmin/updateStoc/", viewId = "products.xhtml") })
+		@URLMapping(id = "colorProductsSizeUpdate", pattern = "/superadmin/updateStoc/", viewId = "products.xhtml"),
+		@URLMapping(id = "colorProductsSizeAdmin", pattern = "/admin/genericProducts/colorProducts/sizes/", viewId = "colorProductsSizes.xhtml"),
+		@URLMapping(id = "colorProductsSizeUpdateAdmin", pattern = "/admin/updateStoc/", viewId = "products.xhtml") })
 @ManagedBean(name = "colorProductsSizeBean")
 @ViewScoped
 public class ColorProductsSizeBean implements Serializable {

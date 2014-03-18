@@ -10,12 +10,12 @@
 	<title>Categories</title>
 </h:head>
 <h:body>
-	<ui:composition template="/superadmin/index.xhtml">
+	<ui:composition template="/admin/index.xhtml">
 		<br />
 
 		<ui:define name="mainContent">
 			<div class="box">
-				<p:graphicImage value="/resources/importProducts.jpg" width="720"
+				<p:graphicImage value="/resources/newsLetters.jpg" width="720"
 					height="100" />
 			</div>
 			#{internationalizationUnimplemented.sorry}
@@ -23,12 +23,6 @@
 			#{internationalizationUnimplemented.message}
 			<br />
 			<br />
-			<h:form id="mainForm">
-				<p:commandButton value="Import to xml" id="importToXml"
-					icon="ui-icon-arrowrefresh-1-w" />
-				<p:commandButton value="Import to csv" id="importToCsv"
-					icon="ui-icon-arrowrefresh-1-w" />
-			</h:form>
 		</ui:define>
 	</ui:composition>
 </h:body>

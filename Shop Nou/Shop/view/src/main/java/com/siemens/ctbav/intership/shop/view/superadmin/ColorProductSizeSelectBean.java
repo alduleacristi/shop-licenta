@@ -33,7 +33,9 @@ import com.siemens.ctbav.intership.shop.view.internationalization.enums.superadm
 
 @URLMappings(mappings = {
 		@URLMapping(id = "colorProductSizeSelect", pattern = "/superadmin/genericProducts/colorProducts/sizes/#{colorProductSizeSelectBean.id}", viewId = "productDescription.xhtml"),
-		@URLMapping(id = "colorProductSizeSelectUpdate", pattern = "/superadmin/updateStoc/#{colorProductSizeSelectBean.id}", viewId = "productDescription.xhtml") })
+		@URLMapping(id = "colorProductSizeSelectUpdate", pattern = "/superadmin/updateStoc/#{colorProductSizeSelectBean.id}", viewId = "productDescription.xhtml"),
+		@URLMapping(id = "colorProductSizeSelectAdmin", pattern = "/admin/genericProducts/colorProducts/sizes/#{colorProductSizeSelectBean.id}", viewId = "productDescription.xhtml"),
+		@URLMapping(id = "colorProductSizeSelectUpdateAdmin", pattern = "/admin/updateStoc/#{colorProductSizeSelectBean.id}", viewId = "productDescription.xhtml") })
 @ManagedBean(name = "colorProductSizeSelectBean")
 @ViewScoped
 public class ColorProductSizeSelectBean implements Serializable {

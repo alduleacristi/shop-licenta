@@ -10,10 +10,10 @@
 	<title>Categories</title>
 </h:head>
 <h:body>
-	<ui:composition template="/superadmin/index.xhtml">
+	<ui:composition template="/admin/index.xhtml">
 		<br />
 		<ui:define name="menu">
-			<ui:include src="/resources/template/superadmin/menuProducts.xhtml"></ui:include>
+			<ui:include src="/resources/template/admin/menuProducts.xhtml"></ui:include>
 		</ui:define>
 
 		<ui:define name="mainContent">
@@ -52,8 +52,7 @@
 					value="#{colorProductBean.productList}" columns="3" rows="12"
 					paginator="true"
 					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-					rowsPerPageTemplate="3,6,9,12,15"
-					paginatorPosition="bottom"
+					paginatorPosition="bottom" rowsPerPageTemplate="3,6,9,12,15"
 					rendered="#{colorProductBean.selectedCategory}">
 					<p:column>
 						<div class="productsA">

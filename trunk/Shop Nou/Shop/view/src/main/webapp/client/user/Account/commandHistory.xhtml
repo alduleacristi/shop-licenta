@@ -32,24 +32,30 @@
 
 		<ui:define name="mainContent">
 			<h:form id="commandHistory">
-				<p:carousel value="#{CommandBean.commands}" vertical="true" var="c"
-					rendered="#{CommandBean.existCommands}" numVisible="1">
-					<center>
-						<strong class="price">Number of Items:</strong>
-						#{c.getClientProducts().size()} <br /> <strong class="price">Total
-							price:</strong> #{CommandBean.getTotalPrice(c)}$
-
-					</center>
-					<br />
-					<p:carousel value="#{CommandBean.getClientProductsForCommand(c)}"
-						var="p" itemStyle="width:237px"
-						styleClass="products-reduce-commandHistory" numVisible="1">
+				<center>
+					<p:carousel value="#{CommandBean.commands}" vertical="true" var="c"
+						rendered="#{CommandBean.existCommands}" numVisible="1"
+						styleClass="products-reduce-commandHistory"
+						headerText="List of commands" itemStyle="width:723px">
 						<center>
-							<p:graphicImage
-								url="http://localhost:8080/Shop4j/rest/products/id#{p.product.id}"
-								width="170" height="190" />
-							<div class="product-info">
-								<div class="reduction">
+							<strong class="price">Number of Items:</strong>
+							#{c.getClientProducts().size()} <br /> <strong class="price">Total
+								price:</strong> #{CommandBean.getTotalPrice(c)}$
+
+						</center>
+						<strong class="price">Status</strong>
+							#{c.command_status.status}
+						<br />
+						<strong class="price">List of products</strong>
+						<p:dataGrid var="p"
+							value="#{CommandBean.getClientProductsForCommand(c)}" columns="3"
+							rows="3" paginator="true" paginatorPosition="bottom">
+							<center>
+								<p:graphicImage
+									url="http://localhost:8080/Shop4j/rest/products/id#{p.product.id}"
+									width="170" height="190" />
+								<br />
+								<div class="price">
 									<p:outputLabel value="-#{p.percRedution}%"
 										rendered="#{p.percRedution != 0.0}"></p:outputLabel>
 								</div>
@@ -67,18 +73,18 @@
 									rendered="#{p.percRedution != 0.0}"></p:outputLabel>
 								<strong class="price">#{internationalizationProduct.nrPieces}</strong>
 								#{p.nrPieces}
-							</div>
+							</center>
+						</p:dataGrid>
+						<br />
+						<center>
+							<p:commandButton disabled="#{CommandBean.canBeReturned(c) == false}"
+								value="#{internationalizationCart.returnCommand}"
+								style="background: #8b0000;color: #fff;"></p:commandButton>
 						</center>
+						<br />
 					</p:carousel>
 					<br />
-					<br />
-					<center>
-						<p:commandButton rendered="#{CommandBean.canBeReturned(c)}"
-							value="#{internationalizationCart.returnCommand}"
-							style="background: #8b0000;color: #fff;"></p:commandButton>
-					</center>
-					<br />
-				</p:carousel>
+				</center>
 				<p:outputLabel value="#{internationalizationCart.noRecords}"
 					rendered="#{!CommandBean.existCommands}"></p:outputLabel>
 				<br />

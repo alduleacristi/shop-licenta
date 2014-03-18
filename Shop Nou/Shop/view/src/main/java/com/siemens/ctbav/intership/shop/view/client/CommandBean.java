@@ -43,12 +43,19 @@ public class CommandBean implements Serializable {
 	@PostConstruct
 	private void initialize() {
 		try {
-			Client client = (Client) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("client");
-			
-			if(client == null)
+			Client client = (Client) FacesContext.getCurrentInstance()
+					.getExternalContext().getSessionMap().get("client");
+
+			if (client == null)
 				throw new ClientDoesNotExistException("Client does not exist");
-			
-			commands = commandService.getDeliveredCommandToClient(client.getId());
+
+			commands = commandService.getDeliveredCommandToClient(client
+					.getId());
+
+//			for (Command c : commands) {
+//				for (ClientProduct cp : c.getClientProducts())
+//					System.out.println(cp.getIdProductClient());
+//			}
 
 			boolean ok = false;
 			for (int i = 0; i < commands.size(); i++) {
@@ -102,6 +109,11 @@ public class CommandBean implements Serializable {
 	public boolean canBeReturned(Command command) {
 
 		return true;
+	}
+	
+	public List<ClientProduct> getClientProductsForCommand(Command command){
+		System.out.println("size:"+command.getClientProducts().size());
+		return command.getClientProducts();
 	}
 
 }

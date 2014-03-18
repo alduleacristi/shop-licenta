@@ -13,11 +13,20 @@
 
 
 	<ui:composition template="/resources/template/template.xhtml">
-
+		<ui:define name="menu">
+			<ui:include src="/resources/template/client/menuBox.xhtml"></ui:include>
+		</ui:define>
 
 		<ui:define name="search">
-			<!-- 			<ui:include src="/resources/template/searchBox.xhtml"></ui:include> -->
+			<ui:include src="/resources/template/client/searchBox.xhtml"></ui:include>
 		</ui:define>
+
+		<ui:define name="categories">
+			<ui:include
+				src="/resources/template/client/productsCategoryBox.xhtml"></ui:include>
+		</ui:define>
+
+
 		<ui:define name="mainContent">
 			<h:form id="form">
 				<p:growl id="login" showDetail="true" sticky="true" />
@@ -45,6 +54,14 @@
 
 		</ui:define>
 	</ui:composition>
+
+	<ui:define name="advertise">
+		<ui:include src="/resources/template/advertise.xhtml"></ui:include>
+	</ui:define>
+
+	<ui:define name="footer">
+		<ui:include src="/resources/template/footer.xhtml"></ui:include>
+	</ui:define>
 
 </h:body>
 

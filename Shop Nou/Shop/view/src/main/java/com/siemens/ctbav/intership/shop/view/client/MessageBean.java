@@ -66,7 +66,7 @@ public class MessageBean implements Serializable {
 			FacesContext context = FacesContext.getCurrentInstance();
 			context.addMessage(null, new FacesMessage(
 					FacesMessage.SEVERITY_INFO, "Succesful",
-					"Your password was succesfully send."));
+					"Your message was succesfully send."));
 
 		} catch (NullMessageException e) {
 			FacesContext context = FacesContext.getCurrentInstance();

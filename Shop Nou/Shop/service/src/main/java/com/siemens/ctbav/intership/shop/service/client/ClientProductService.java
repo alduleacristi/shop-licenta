@@ -24,6 +24,33 @@ public class ClientProductService {
 	@Resource
 	private UserTransaction userTransaction;
 
+	public void persistClientProductsWithoutAdress(
+			List<ClientProduct> clientProducts)
+			throws CommandCouldNotPersistException {
+		try {
+			userTransaction.begin();
+
+			Command cmd = clientProducts.get(0).getCommand();
+			try {
+				em.persist(cmd);
+
+				for (ClientProduct cp : clientProducts)
+					em.persist(cp);
+			} catch (Exception e) {
+				e.printStackTrace();
+				userTransaction.rollback();
+				throw new CommandCouldNotPersistException(
+						"For the moment we have a problem so we can't take your command. Please try again later.");
+			}
+
+			userTransaction.commit();
+		} catch (CommandCouldNotPersistException exc) {
+			throw exc;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	public void persistClientProducts(List<ClientProduct> clientProducts)
 			throws CommandCouldNotPersistException {
 		try {

@@ -82,7 +82,9 @@
 			<h:form id="manageOperators">
 				<p:dataTable var="operator"
 					value="#{manageOperatorsBean.allOperators}" rowKey="#{operator.id}"
-					paginator="true" rows="10"
+					paginator="true"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					rowsPerPageTemplate="3,6,9,12,15" paginatorPosition="bottom"
 					selection="#{manageOperatorsBean.selectedOperator}"
 					selectionMode="single"
 					filteredValue="#{manageOperatorsBean.filteredOperators}"

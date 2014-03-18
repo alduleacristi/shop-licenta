@@ -10,16 +10,14 @@
 	<title>Categories</title>
 </h:head>
 <h:body>
-	<ui:composition template="/superadmin/index.xhtml">
+	<ui:composition template="/admin/index.xhtml">
 		<br />
-
 		<ui:define name="mainContent">
 			<div class="box">
-				<p:graphicImage value="#{manageAdminsBean.photo}" width="720"
+				<p:graphicImage value="#{manageOperatorsBean.photo}" width="720"
 					height="100" />
 			</div>
-			<h:form id="addAdmin">
-
+			<h:form id="addOperator">
 				<p:growl id="messages2" showDetail="true" />
 				<br />
 				<h:commandButton id="createLink"
@@ -39,18 +37,18 @@
 						<h:outputLabel for="username"
 							value="#{internationalizationManageUsers.username}:" />
 						<p:inputText id="username" label="username"
-							value="#{manageAdminsBean.username}" required="true"
-							requiredMessage="{#internationalizationManageUsers.requiredUsername}" />
+							value="#{manageOperatorsBean.username}" required="true"
+							requiredMessage="#{internationalizationManageUsers.requiredUsername}" />
 						<h:outputLabel for="email" value="Email:" />
 						<p:inputText id="email" label="email"
-							value="#{manageAdminsBean.email}" required="true"
+							value="#{manageOperatorsBean.email}" required="true"
 							requiredMessage="#{internationalizationManageUsers.requiredEmail}">
 							<f:validator validatorId="emailValidate" />
 						</p:inputText>
 						<h:outputLabel for="password"
 							value="#{internationalizationManageUsers.password}:" />
 						<p:password id="password" label="password" type="password"
-							value="#{manageAdminsBean.password}" required="true"
+							value="#{manageOperatorsBean.password}" required="true"
 							requiredMessage="#{internationalizationManageUsers.requiredPassword}">
 							<f:validator validatorId="passwordValidate" />
 							<f:attribute name="confirm" value="#{confirm}" />
@@ -58,16 +56,16 @@
 						<h:outputLabel for="confirm"
 							value="#{internationalizationManageUsers.retype}:" />
 						<p:password id="confirm" label="repassword" binding="#{confirm}"
-							value="#{manageAdminsBean.repassword}" required="true"
+							value="#{manageOperatorsBean.repassword}" required="true"
 							requiredMessage="#{internationalizationManageUsers.requiredPassword}">
 						</p:password>
 					</h:panelGrid>
 					<p:commandButton value="#{internationalizationGeneric.create}"
-						actionListener="#{manageAdminsBean.addAdmin}"
+						actionListener="#{manageOperatorsBean.addOperator}"
 						oncomplete="handleCreateRequest(xhr, status, args)"
-						update="messages2,:manageAdmins:adminsTable" />
-					<p:commandButton value="Cancel" onclick="create.hide();"
-						type="button" />
+						update="messages2,:manageOperators:operatorsTable" />
+					<p:commandButton value="#{internationalizationGeneric.cancel}"
+						onclick="create.hide();" type="button" />
 				</p:dialog>
 				<script type="text/javascript">
 					function handleCreateRequest(xhr, status, args) {
@@ -80,27 +78,28 @@
 						}
 					}
 				</script>
-
 			</h:form>
-			<h:form id="manageAdmins">
-				<p:dataTable var="admin" value="#{manageAdminsBean.allAdmins}"
-					rowKey="#{admin.id}" paginator="true"
+			<h:form id="manageOperators">
+				<p:dataTable var="operator"
+					value="#{manageOperatorsBean.allOperators}" rowKey="#{operator.id}"
+					paginator="true" rows="10"
 					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-					rowsPerPageTemplate="3,6,9,12,15" paginatorPosition="bottom"
-					selection="#{manageAdminsBean.selectedAdmin}"
+					paginatorPosition="bottom" rowsPerPageTemplate="3,6,9,12,15"
+					selection="#{manageOperatorsBean.selectedOperator}"
 					selectionMode="single"
-					filteredValue="#{manageAdminsBean.filteredAdmins}" id="adminsTable">
-					<p:ajax event="rowSelect" update=":manageAdmins:display"
+					filteredValue="#{manageOperatorsBean.filteredOperators}"
+					id="operatorsTable">
+					<p:ajax event="rowSelect" update=":manageOperators:display"
 						oncomplete="dialog.show()" />
 					<f:facet name="header">
-						#{internationalizationManageUsers.listA}
+						#{internationalizationManageUsers.listO}
 					</f:facet>
 
 					<p:column>
 						<center>
-							<p:commandLink title="Unban admin" rendered="#{admin.ban == 1}"
-								immediate="true"
-								actionListener="#{manageAdminsBean.unbanAdmin(admin)}">
+							<p:commandLink title="Unban operator"
+								rendered="#{operator.ban == 1}" immediate="true"
+								actionListener="#{manageOperatorsBean.unbanOperator(operator)}">
 								<h:outputText styleClass="ui-icon ui-icon-close"
 									style="margin:0 auto;" />
 							</p:commandLink>
@@ -109,41 +108,40 @@
 
 					<p:column headerText="#{internationalizationManageUsers.username}"
 						sortBy="username" filterBy="username" id="username">
-						#{admin.username}
+						#{operator.username}
 					</p:column>
 
 					<p:column headerText="Email" sortBy="email" filterBy="email"
 						id="email">
-						#{admin.email}
+						#{operator.email}
 					</p:column>
 				</p:dataTable>
-				<p:dialog header="#{internationalizationManageUsers.detailA}"
-					widgetVar="dialog" resizable="false" width="300"
-					showEffect="explode" hideEffect="explode">
+				<p:dialog header="Operator Detail" widgetVar="dialog"
+					resizable="false" width="300" showEffect="explode"
+					hideEffect="explode">
 
 					<h:panelGrid id="display" columns="2" cellpadding="4">
+						<h:outputText value="#{internationalizationManageUsers.username}:" />
 						<h:outputText
-							value="#{internationalizationManageUsers.username}: " />
-						<h:outputText value="#{manageAdminsBean.selectedAdmin.username}"
+							value="#{manageOperatorsBean.selectedOperator.username}"
 							id="username" />
 
-						<h:outputText value="Email: " />
-						<h:outputText value="#{manageAdminsBean.selectedAdmin.email}"
-							id="email" />
+						<h:outputText value="Email:" />
+						<h:outputText
+							value="#{manageOperatorsBean.selectedOperator.email}" id="email" />
 						<h:outputText value="Status: " id="status" />
 						<h:outputText value="Banned"
-							rendered="#{manageAdminsBean.selectedAdmin.ban == 1}" id="banned" />
+							rendered="#{manageOperatorsBean.selectedOperator.ban == 1}"
+							id="banned" />
 						<h:outputText value="Not Banned"
-							rendered="#{manageAdminsBean.selectedAdmin.ban == 0}"
+							rendered="#{manageOperatorsBean.selectedOperator.ban == 0}"
 							id="notBanned" />
-
 						<p:commandButton value="Ban him" id="banHim"
-							rendered="#{manageAdminsBean.selectedAdmin.ban == 0}"
-							actionListener="#{manageAdminsBean.banAdmin}" />
+							rendered="#{manageOperatorsBean.selectedOperator.ban == 0}"
+							actionListener="#{manageOperatorsBean.banOperator}" />
 						<p:commandButton value="Unban him" id="unbanhim"
-							rendered="#{manageAdminsBean.selectedAdmin.ban == 1}"
-							actionListener="#{manageAdminsBean.unbanAdmin}" />
-
+							rendered="#{manageOperatorsBean.selectedOperator.ban == 1}"
+							actionListener="#{manageOperatorsBean.unbanOperator}" />
 					</h:panelGrid>
 				</p:dialog>
 			</h:form>

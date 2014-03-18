@@ -13,9 +13,21 @@
 
 
 	<ui:composition template="/resources/template/template.xhtml">
+
 		<ui:define name="mainContent">
-<!--         	<p:commandButton value="Command Button"></p:commandButton> -->
-    	</ui:define>
+			<div class="box">
+				<p:graphicImage value="/resources/clothing.jpg" width="720"
+					height="600" />
+			</div>
+		</ui:define>
+
+		<ui:define name="menu">
+			<ui:include src="/resources/template/admin/menuIndex.xhtml"></ui:include>
+		</ui:define>
+
+		<ui:define name="menuAdmin">
+			<ui:include src="/resources/template/admin/menuLeft.xhtml"></ui:include>
+		</ui:define>
 	</ui:composition>
 
 </h:body>

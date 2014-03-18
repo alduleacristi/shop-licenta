@@ -26,7 +26,8 @@ import com.siemens.ctbav.intership.shop.view.internationalization.enums.superadm
 
 @ManagedBean(name = "exportBean")
 @RequestScoped
-@URLMappings(mappings = { @URLMapping(id = "exportBean", pattern = "/superadmin/exportProducts/", viewId = "exportProducts.xhtml") })
+@URLMappings(mappings = { @URLMapping(id = "exportBean", pattern = "/superadmin/exportProducts/", viewId = "exportProducts.xhtml"),
+		@URLMapping(id = "exportBeanAdmin", pattern = "/admin/exportProducts/", viewId = "exportProducts.xhtml")})
 public class ExportBean {
 
 	@EJB

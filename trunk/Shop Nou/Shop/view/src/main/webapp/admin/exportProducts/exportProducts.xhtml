@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Categories</title>
+</h:head>
+<h:body>
+	<ui:composition template="/admin/index.xhtml">
+		<br />
+
+		<ui:define name="mainContent">
+			<div class="box">
+				<p:graphicImage value="#{exportBean.photo}" width="720" height="100" />
+			</div>
+			<br />
+			<h:form id="xml">
+				<p:growl id="messages2" showDetail="true" />
+				<p:commandButton value="#{internationalizationExport.xml}"
+					id="exportToXml" icon="ui-icon-disk" onclick="expToXml.show()" />
+				<p:dialog header="#{internationalizationExport.export}" modal="true"
+					widgetVar="expToXml" focus="filename" resizable="false">
+					<h:panelGrid columns="2" cellpadding="5">
+						<h:outputLabel for="filename"
+							value="#{internationalizationExport.filename}:" />
+						<p:inputText id="filename" label="filename"
+							value="#{exportBean.fileName}" required="true"
+							requiredMessage="#{internationalizationExport.required}">
+						</p:inputText>
+						<p:commandButton value="#{internationalizationExport.export}"
+							actionListener="#{exportBean.exportToXml}" update="messages2"
+							oncomplete="handleUpdateRequest(xhr, status, args)" />
+						<p:commandButton value="#{internationalizationGeneric.cancel}"
+							onclick="expToXml.hide();" type="button" />
+					</h:panelGrid>
+				</p:dialog>
+				<script type="text/javascript">
+					function handleUpdateRequest(xhr, status, args) {
+						if (args.validationFailed) {
+							PF('expToXml').jq.effect("shake", {
+								times : 5
+							}, 100);
+						} else {
+							PF('expToXml').hide();
+							window.location.reload();
+						}
+					}
+				</script>
+			</h:form>
+			<br />
+			<h:form id="csv">
+				<p:growl id="messages" showDetail="true" />
+				<p:commandButton value="#{internationalizationExport.csv}"
+					id="exportToCsv" icon="ui-icon-disk" onclick="expToCsv.show()" />
+				<p:dialog header="#{internationalizationExport.export}" modal="true"
+					widgetVar="expToCsv" focus="filename" resizable="false">
+					<h:panelGrid columns="2" cellpadding="5">
+						<h:outputLabel for="filename"
+							value="#{internationalizationExport.filename}:" />
+						<p:inputText id="filename" label="filename"
+							value="#{exportBean.fileName}" required="true"
+							requiredMessage="Filename is required">
+						</p:inputText>
+						<p:commandButton value="#{internationalizationExport.export}"
+							actionListener="#{exportBean.exportToCsv}" update="messages"
+							oncomplete="handleUpdateRequest(xhr, status, args)" />
+						<p:commandButton value="#{internationalizationGeneric.cancel}"
+							onclick="expToCsv.hide();" type="button" />
+					</h:panelGrid>
+				</p:dialog>
+				<script type="text/javascript">
+					function handleUpdateRequest(xhr, status, args) {
+						if (args.validationFailed) {
+							PF('expToCsv').jq.effect("shake", {
+								times : 5
+							}, 100);
+						} else {
+							PF('expToCsv').hide();
+							window.location.reload();
+						}
+					}
+				</script>
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

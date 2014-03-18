@@ -24,7 +24,8 @@ import com.siemens.ctbav.intership.shop.view.internationalization.enums.superadm
 
 @ManagedBean(name = "manageOperatorsBean")
 @ViewScoped
-@URLMappings(mappings = { @URLMapping(id = "manageOperators", pattern = "/superadmin/manageOperators/", viewId = "manageOperators.xhtml") })
+@URLMappings(mappings = { @URLMapping(id = "manageOperators", pattern = "/superadmin/manageOperators/", viewId = "manageOperators.xhtml"),
+		@URLMapping(id = "manageOperatorsAdmin", pattern = "/admin/manageOperators/", viewId = "manageOperators.xhtml")})
 public class ManageOperatorsBean implements Serializable {
 
 	private static final long serialVersionUID = 6307678468022334876L;

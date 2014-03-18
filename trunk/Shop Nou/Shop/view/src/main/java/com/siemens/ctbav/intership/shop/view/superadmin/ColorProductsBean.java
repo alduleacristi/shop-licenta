@@ -30,7 +30,9 @@ import com.siemens.ctbav.intership.shop.service.superadmin.ProductService;
 import com.siemens.ctbav.intership.shop.util.superadmin.NavigationUtils;
 import com.siemens.ctbav.intership.shop.view.internationalization.enums.superadmin.EColorProducts;
 
-@URLMappings(mappings = { @URLMapping(id = "colorProducts", pattern = "/superadmin/genericProducts/colorProducts/", viewId = "colorProducts.xhtml") })
+@URLMappings(mappings = {
+		@URLMapping(id = "colorProducts", pattern = "/superadmin/genericProducts/colorProducts/", viewId = "colorProducts.xhtml"),
+		@URLMapping(id = "colorProductsAdmin", pattern = "/admin/genericProducts/colorProducts/", viewId = "colorProducts.xhtml") })
 @ManagedBean(name = "colorProductBean")
 @ViewScoped
 public class ColorProductsBean implements Serializable {

@@ -26,7 +26,9 @@ import com.siemens.ctbav.intership.shop.service.superadmin.PhotoService;
 import com.siemens.ctbav.intership.shop.util.superadmin.NavigationUtils;
 import com.siemens.ctbav.intership.shop.view.internationalization.enums.superadmin.EPhotoProduct;
 
-@URLMappings(mappings = { @URLMapping(id = "colorProductSelectPhoto", pattern = "/superadmin/genericProducts/colorProducts/photos/#{colorProductSelectPhotoBean.id}", viewId = "productDescription.xhtml") })
+@URLMappings(mappings = {
+		@URLMapping(id = "colorProductSelectPhoto", pattern = "/superadmin/genericProducts/colorProducts/photos/#{colorProductSelectPhotoBean.id}", viewId = "productDescription.xhtml"),
+		@URLMapping(id = "colorProductSelectPhotoAdmin", pattern = "/admin/genericProducts/colorProducts/photos/#{colorProductSelectPhotoBean.id}", viewId = "productDescription.xhtml") })
 @ManagedBean(name = "colorProductSelectPhotoBean")
 @ViewScoped
 public class ColorProductSelectPhotoBean implements Serializable {

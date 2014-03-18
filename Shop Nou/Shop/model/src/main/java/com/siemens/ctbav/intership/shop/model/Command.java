@@ -20,7 +20,8 @@ import javax.persistence.*;
 		@NamedQuery(name = Command.GET_CLIENTS_ORDERS, query = "select c from Command c where  c.command_status.status='In Progress' and c.client.id=:id"),
 		@NamedQuery(name = Command.GET_ORDERS_BETWEEN_DATES, query = "select c from Command c where c.orderDate between  :date1 and  :date2 "),
 	//	@NamedQuery(name = Command.GET_RETURNED_ORDERS, query = "select c from Command c where c.returnDate is not null"),
-		@NamedQuery(name = Command.GET_CLIENTS_DELIVERED_ORDERS, query = "select c from Command c where c.command_status.status='delivered' and c.client.id=:id") })
+		@NamedQuery(name = Command.GET_CLIENTS_DELIVERED_ORDERS, query = "select c from Command c where c.command_status.status='delivered' and c.client.id=:id"),
+		@NamedQuery(name = Command.GET_ALL_ORDERS_FOR_CLIENT, query = "select c from Command c where c.client.id=:id order by c.orderDate desc")})
 public class Command implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -34,6 +35,7 @@ public class Command implements Serializable {
 	public static final String GET_ORDERS_BETWEEN_DATES = "getOrdersBetweenDates";
 	public static final String GET_RETURNED_ORDERS = "getReturnedOrders";
 	public final static String GET_CLIENTS_DELIVERED_ORDERS = "getClientDeliveredOrders";
+	public final static String GET_ALL_ORDERS_FOR_CLIENT = "getAllOrdersForClient";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

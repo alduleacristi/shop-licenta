@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<title>Returned Orders</title>
+</h:head>
+<h:body>
+
+
+	<ui:composition template="/resources/template/operator/index.xhtml">
+		<ui:define name="mainContent">
+			<h:form id="form">
+				<p:growl id="error">
+
+					<p:dataGrid id="list" value="#{returned.returnedOrders}"
+						var="order" columns="2"
+						paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+						rowsPerPageTemplate="9,12,15" styleClass="list">
+						<p:panel
+							header="#{order.command.client.firstName} #{order.command.client.lastName}"
+							style="text-align:left;background: #fff">
+							<h:panelGrid style="width:100%" columns="1">
+
+								<div align="left">
+									<b> Phone number: <h:outputText
+											value="#{order.command.client.phoneNumber}" /> Email: <h:outputText
+											value="#{order.command.client.user.email}" />
+									</b>
+								</div>
+								<br />
+								<b>The client wants to return the following products: </b>
+								<p:dataTable value="#{order.productsList}"
+									var="product">
+
+									<p:column style="width:7%">
+
+										<f:facet name="header">  
+                    Product name
+         		   </f:facet>
+										<h:outputText value="#{product.produc.prodColor.product.name}" />
+									</p:column>
+									<p:column style="width:7%">
+
+										<f:facet name="header">  
+                    Size
+         		   </f:facet>
+										<h:outputText value="#{product.product.size.name}" />
+									</p:column>
+									<p:column style="width:7%">
+										<f:facet name="header">  
+                    Color
+         		   </f:facet>
+										<h:outputText value="#{product.product.prodColor.color.name}" />
+									</p:column>
+									<p:column style="width:7%">
+										<f:facet name="header">  
+                   Nr pieces
+         		   </f:facet>
+										<h:outputText value="#{product.nrPieces}" />
+									</p:column>
+									<br />
+								</p:dataTable>
+								<div align="right">
+									<p:commandButton value="Add products"
+										actionListener="#{returned.returnOrder(order)}"
+										update=":form:error" style="background: #8b0000;color: #fff;" />
+								</div>
+							</h:panelGrid>
+						</p:panel>
+					</p:dataGrid>
+				</p:growl>
+			</h:form>
+		</ui:define>
+		<ui:define name="footer">
+			<ui:include src="/resources/template/operator/footer.xhtml"></ui:include>
+		</ui:define>
+	</ui:composition>
+
+</h:body>
+
+</html>

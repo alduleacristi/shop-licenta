@@ -20,8 +20,8 @@ import javax.persistence.Table;
 		@NamedQuery(name = User.GET_CLIENT_USERS, query = "select u from User u where u.rolename='client'"),
 		@NamedQuery(name = User.GET_USER_ID, query = "select u.id from User u where u.username=:user"),
 		@NamedQuery(name = User.GET_CLIENT_BY_USERNAME, query = "select u from User u where u.username = :username"),
-		@NamedQuery(name = User.GET_USER_BY_EMAIL, query = "select u from User u where u.email = :email and u.passwordStatus=2"),
-		@NamedQuery(name = User.GET_USER_BY_PASSWORD, query = "select u from User u where u.userPassword = :password and u.passwordStatus =1") })
+		@NamedQuery(name = User.GET_USER_BY_EMAIL, query = "select u from User u where u.email = :email and u.passwordStatus=1"),
+		@NamedQuery(name = User.GET_USER_BY_PASSWORD, query = "select u from User u where u.userPassword = :password and u.passwordStatus =0") })
 public class User implements Serializable {
 
 	private static final long serialVersionUID = -1412776763797658827L;

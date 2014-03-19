@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.siemens.ctbav.intership.shop.exception.operator.CommandNotFoundException;
 import com.siemens.ctbav.intership.shop.exception.operator.OrderIDNotFoundException;
-import com.siemens.ctbav.intership.shop.exception.operator.URLNotFoundException;
 import com.siemens.ctbav.intership.shop.service.operator.CommandService;
 import com.siemens.ctbav.intership.shop.util.operator.AES;
 
@@ -21,7 +20,7 @@ public class CancelOrder {
 	private CommandService cmdService;
 
 	public void cancel() {
-		String encryptedId= null;
+		String encryptedId = null;
 		try {
 			encryptedId = getID();
 			if (encryptedId == null)
@@ -30,42 +29,33 @@ public class CancelOrder {
 		} catch (OrderIDNotFoundException exc) {
 			FacesContext.getCurrentInstance().addMessage(
 					null,
-					new FacesMessage(FacesMessage.SEVERITY_ERROR, exc.getMessage(), exc
-							.getMessage()));
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, exc
+							.getMessage(), exc.getMessage()));
 		}
-		
-		String decrypt = AES.decrypt(encryptedId);
-		Long id = Long.parseLong(decrypt);
-		 try {
-		 //anuleaza comanda
-		 cmdService.cancelOrder(id);
-		 } catch (CommandNotFoundException e) {
-		 FacesContext context = FacesContext.getCurrentInstance();
-		 context.addMessage(null, new FacesMessage(
-		 FacesMessage.SEVERITY_ERROR, e.getMessage(),
-		 e.getMessage()));
-		 }
-	}
 
-	@SuppressWarnings("unused")
-	private String getURL() {
-		String url = null;
-		Object request = FacesContext.getCurrentInstance().getExternalContext()
-				.getRequest();
-		if (request instanceof HttpServletRequest) {
-			url = ((HttpServletRequest) request).getRequestURL().toString();
-			System.out.println(((HttpServletRequest) request).getQueryString());
+		String decrypt = AES.decrypt(encryptedId);
+		System.out.println("decript " + decrypt);
+		Long id = Long.parseLong(decrypt);
+		try {
+			// anuleaza comanda
+			cmdService.cancelOrder(id);
+			FacesContext context = FacesContext.getCurrentInstance();
+			context.addMessage(null, new FacesMessage(
+					FacesMessage.SEVERITY_INFO, "The order has been canceled",
+					""));
+		} catch (CommandNotFoundException e) {
+			FacesContext context = FacesContext.getCurrentInstance();
+			context.addMessage(
+					null,
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, e
+							.getMessage(), e.getMessage()));
 		}
-		System.out.println(url);
-		return url;
 	}
 
 	private String getID() {
-		Object request = FacesContext.getCurrentInstance().getExternalContext()
-				.getRequest();
-		if (request instanceof HttpServletRequest) {
-			return (((HttpServletRequest) request).getQueryString()).substring(3);
-		}
-		return null;
+		String queryString = ((HttpServletRequest) FacesContext
+				.getCurrentInstance().getExternalContext().getRequest())
+				.getQueryString();
+		return queryString.substring(6);
 	}
 }

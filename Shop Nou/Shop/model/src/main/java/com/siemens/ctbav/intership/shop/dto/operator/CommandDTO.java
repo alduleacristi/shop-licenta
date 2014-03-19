@@ -18,7 +18,9 @@ public class CommandDTO implements Serializable {
 	private Long id_operator;
 	private List<ClientProductDTO> listProducts;
 	
-	
+	public CommandDTO(){
+		this.id=(long) 0;
+	}
 	public CommandDTO(Long id, Date orderDate, Date deliveryDate,
 			AdressDTO adress, ClientDTO client, CommandStatusDTO status,
 			List<ClientProductDTO> listProducts) {

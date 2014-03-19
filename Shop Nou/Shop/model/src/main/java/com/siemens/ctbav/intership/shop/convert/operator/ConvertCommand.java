@@ -13,6 +13,7 @@ import com.siemens.ctbav.intership.shop.model.Command;
 public class ConvertCommand {
 
 	public static CommandDTO convertCommand(Command command){
+		if(command == null) return new CommandDTO();
 		AdressDTO adress = ConvertAdress.convertAdress(command.getAdress());
 		ClientDTO client= ConvertClient.convertClient(command.getClient());
 		CommandStatusDTO status= ConvertCommandStatus.convertStatus(command.getCommand_status());

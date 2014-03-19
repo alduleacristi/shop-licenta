@@ -179,17 +179,20 @@ public class OrdersBean {
 		System.out.println("trimit");
 		// creez pagina de html pe care vreau sa o trimit clientului
 		String encryptedId = AES.encrypt(order.getId().toString());
-		String page = "<html><body><form action='http://localhost:8080/Shop4j/cancelOrder/"
+		String page = "<form action='http://localhost:8080/Shop4j/rest/cancelOrder/"
 				+ encryptedId
-				+ "'><h1>Ne cerem scuze, dar acum nu avem destule produse in stoc pentru a va onora "
+				+ "'>Ne cerem scuze, dar acum nu avem destule produse in stoc pentru a va onora "
 				+ "comanda.<br>Produsele le veti primi cu o intarziere de cel mult 5 zile.<br>De asemenea, aveti "
 				+ "optiunea de a anula comanda, dand click pe butonul de mai jos.<br>"
-				+ "<input name='button' type ='submit' value='Anuleaza comanda'/></h1></form></body></html>";
+				+ "<button type='button' >Cancel order!</button></form>";
 		String email = order.getClient().getUser().getEmail();
 		System.out.println(email);
 		try {
 			// incerc sa trimit mail clientului
 			MailService.sendLink(email, "Delayed order", page, true);
+			FacesContext.getCurrentInstance().addMessage(
+					null,
+					new FacesMessage(FacesMessage.SEVERITY_INFO,"The mail has been sent",""));
 		} catch (Exception e) {
 			// daca nu se trimite, operatorul primeste mesaj
 			FacesContext

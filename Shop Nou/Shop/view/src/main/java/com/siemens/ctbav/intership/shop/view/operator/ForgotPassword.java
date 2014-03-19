@@ -95,6 +95,7 @@ public class ForgotPassword {
 
 			user.setPassword(password);
 			user.setPasswordStatus(PasswordStatus.NEW_GENERATED);
+
 			// setez parola random utilizatorului
 			// adica e nou generata,utilizatorul
 			// poate

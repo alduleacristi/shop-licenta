@@ -81,14 +81,14 @@
 
 							<p:commandButton value="Delivered"
 								actionListener="#{orders.deliveredOrder(order)}"
-								styleClass="ui-priority-primary" update=":form:ordersTable" />
+								styleClass="ui-priority-primary" update=":form:error" />
 						</p:column>
 
-						<p:column exportable="false">
+						<p:column>
 
 							<p:commandButton value="Change order"
 								actionListener="#{orders.changeOrder(order)}"
-								styleClass="ui-priority-primary" update=":form:ordersTable" />
+								styleClass="ui-priority-primary" update=":form:error" />
 						</p:column>
 						<f:facet name="footer">
 							<p:commandButton value="View" icon="ui-icon-search"

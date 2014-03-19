@@ -24,6 +24,7 @@ public class ConvertClient {
 	}
 	
 	public static ClientDTO convertClient(Client client) {
+		if(client == null) return new ClientDTO();
 		PasswordStatus ps = null;
 		switch(client.getUser().getPasswordStatus()){
 		case 1:ps=PasswordStatus.NEW_GENERATED;

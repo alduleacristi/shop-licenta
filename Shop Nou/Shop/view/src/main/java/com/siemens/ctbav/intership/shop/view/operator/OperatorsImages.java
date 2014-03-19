@@ -11,6 +11,7 @@ import javax.faces.bean.ManagedBean;
 @ApplicationScoped
 public class OperatorsImages {
 
+	private static int nrImages = 12;
 	private List<String> images;
 
 	public List<String> getImages() {
@@ -25,7 +26,7 @@ public class OperatorsImages {
 	public void postConstruct() {
 		System.out.println("post construct");
 		images = new ArrayList<String>();
-		for(int i=0; i<4; i++)
+		for(int i=0; i<=nrImages; i++)
 		images.add("/resources/operator/img"+i+".jpg");
 
 	}

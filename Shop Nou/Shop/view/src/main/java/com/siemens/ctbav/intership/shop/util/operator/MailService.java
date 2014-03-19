@@ -17,7 +17,8 @@ public class MailService {
 			password = "alinnuts";
 	static String smtpServ = "smtp.mail.yahoo.com";
 
-	public static void sendLink(String to, String subject, String mess, boolean isHtml) throws AddressException, MessagingException {
+	public static void sendLink(String to, String subject, String mess,
+			boolean isHtml) throws AddressException, MessagingException {
 		Properties props = new Properties();
 		props.put("mail.smtp.auth", "true");
 		props.put("mail.smtp.starttls.enable", "true");
@@ -31,22 +32,29 @@ public class MailService {
 					}
 				});
 
-		Message message = new MimeMessage(session);
+		
+		if (isHtml) {
+			System.out.println("trimit html");
+			MimeMessage message= new MimeMessage(session);
+			message.setContent(mess, "text/html; charset=utf-8");
+			message.saveChanges();
+			message.setFrom(new InternetAddress(username));
+			message.setRecipients(Message.RecipientType.TO,
+					InternetAddress.parse(to));
+			message.setSubject(subject);
+			Transport.send(message);
+		}
+		else{
+		Message message2 = new MimeMessage(session);
+		message2.setFrom(new InternetAddress(username));
+		message2.setRecipients(Message.RecipientType.TO,
+				InternetAddress.parse(to));
+		message2.setSubject(subject);
+		message2.setText(mess);
+		Transport.send(message2);
+		}
 
 		
-		
-		// else pentru timp sa vad
-		message.setFrom(new InternetAddress(username));
-		message.setRecipients(Message.RecipientType.TO,
-				InternetAddress.parse(to));
-		message.setSubject(subject);
-		if(isHtml){
-			System.out.println("trimit html");
-			message.setContent(mess,"text/html");
-		}
-		
-		message.setText(mess);
-		Transport.send(message);
 
 		System.out.println("Done");
 

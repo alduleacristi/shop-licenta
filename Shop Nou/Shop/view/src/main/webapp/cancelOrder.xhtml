@@ -17,14 +17,15 @@
 		<ui:define name="mainContent">
 
 
-			<form id="form">
-				<h:outputText value="Do you really want to cancel your order???" />
-				<br></br>
-				<p:commandButton value="Yes" name="yes"
-					action="#{cancelOrder.cancel}" styleClass="search-submit"
-					update=":form:growl" />
-				<p:growl id="growl" />
-			</form>
+			<h:form id="form">
+				<p:growl id="error">
+					<h:outputText value="Do you really want to cancel your order???" />
+					<br></br>
+					<p:commandButton value="Yes" name="yes"
+						action="#{cancelOrder.cancel}" styleClass="search-submit"
+						update=":form:error" />
+				</p:growl>
+			</h:form>
 
 		</ui:define>
 	</ui:composition>

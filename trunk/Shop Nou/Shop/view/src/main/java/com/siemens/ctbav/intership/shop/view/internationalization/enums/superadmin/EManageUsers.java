@@ -7,7 +7,8 @@ public enum EManageUsers {
 			"listO"), DETAIL_O("detailO"), REQUIRED_USER("requiredUser"), REQUIRED_EMAIL(
 			"requiredEmail"), REQUIRED_PASSWORD("requiredPassword"), RETYPE_MUST_MATCH(
 			"retypeMustMatch"), INVALID_PASSWORD("invalidPassword"), LENGTH(
-			"length"), INVALID_EMAIL("invalidEmail");
+			"length"), INVALID_EMAIL("invalidEmail"), REQUIRED_CAPTCHA(
+			"requiredCaptcha"), INVALID_CAPTCHA("invalidCaptcha"), TYPE("type");
 
 	private final String name;
 

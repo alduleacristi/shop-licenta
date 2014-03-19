@@ -35,6 +35,7 @@ public class InternationalizationLeftMenu {
 	private String viewCommands;
 	private String viewClients;
 	private String editProfile;
+	private String addBanner;
 
 	@PostConstruct
 	private void init() {
@@ -168,4 +169,9 @@ public class InternationalizationLeftMenu {
 		return editProfile;
 	}
 
+	public String getAddBanner() {
+		addBanner = internationalizationService.getMessage(EMenuLeft.ADD_BANNER
+				.getName());
+		return addBanner;
+	}
 }

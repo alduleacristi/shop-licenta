@@ -12,7 +12,8 @@ public enum EGenericProduct {
 			"categoryChanged"), NO_PARENT_SEL("noParentSelected"), NO_PROD_IN_DB(
 			"noProductInTheDB"), NAME_IS_REQUIRED("nameIsRequired"), PRICE_IS_REQUIRED(
 			"priceIsRequired"), LENGHT("length"), PRICE_RESTRICTION(
-			"priceRestriction"), SALE_REQUIRED("saleRequired");
+			"priceRestriction"), SALE_REQUIRED("saleRequired"), REINDEX_BUTTON(
+			"reindexProducts"), REINDEX_TOOLTIP("reindexTooltip");
 
 	private final String name;
 

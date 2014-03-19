@@ -1,10 +1,13 @@
 package com.siemens.ctbav.intership.shop.view.client;
 
 import java.io.Serializable;
+
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
+
 import org.primefaces.event.NodeSelectEvent;
+
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
 import com.siemens.ctbav.intership.shop.model.Category;
@@ -30,6 +33,3 @@ public class TreeBean extends TreeBeanVisitor implements Serializable {
 	}
 
 }
-
-
-

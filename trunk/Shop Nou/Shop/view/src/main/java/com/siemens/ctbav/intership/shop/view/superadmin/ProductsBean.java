@@ -43,6 +43,9 @@ public class ProductsBean implements Serializable {
 	@EJB
 	private InternationalizationService internationalizationService;
 
+	@EJB
+	private com.siemens.ctbav.intership.shop.service.client.ProductService productServiceReindex;
+
 	private boolean selectedCategory;
 	private List<Product> productList;
 	private Product selectedProduct;
@@ -386,6 +389,11 @@ public class ProductsBean implements Serializable {
 					internationalizationService
 							.getMessage(EGenericProduct.NO_PROD_IN_DB.getName()));
 		return oldProduct;
+	}
+
+	public void reindex() {
+		productServiceReindex.reindex();
+		System.out.println("in reindex");
 	}
 
 }

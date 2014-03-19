@@ -30,19 +30,19 @@
 			<h:form id="formCategories">
 				<p:growl id="error">
 					<p:dataGrid var="productColor"
-						value="#{clientProducts.productList}" columns="3"
+						value="#{visitorProducts.productList}" columns="3"
 						style="margin-left: 0px" rows="3" paginator="true"
 						paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-						rowsPerPageTemplate="3,9,12,15">
+						rowsPerPageTemplate="3,9,12,15" paginatorPosition="bottom">
 						<div class="products1">
 							<div class="cl">&nbsp;</div>
 							<ul>
 								<p:commandLink
-									actionListener="#{clientProducts.showProduct(productColor)}">
+									actionListener="#{visitorProducts.showProduct(productColor)}">
 									<li>
 										<center>
 											<p:graphicImage
-												url="http://localhost:8080/Shop4j/rest/products/id#{productColor.id}"
+												url="#{visitorProducts.host}/Shop4j/rest/products/id#{productColor.id}"
 												width="170" height="190" />
 											<div class="product-info">
 												<div class="reduction">

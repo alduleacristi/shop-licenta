@@ -19,12 +19,14 @@ public class InternationalizationSearchBox implements Serializable {
 	@EJB
 	private InternationalizationService internationalizationService;
 
-	public String searchBy;
-	public String keyword;
-	public String price;
-	public String search;
-	public String support;
-	public String categories;
+	private String searchBy;
+	private String keyword;
+	private String price;
+	private String search;
+	private String support;
+	private String categories;
+	private String toolTipKeyword;
+	private String toolTipSlider;
 
 	@PostConstruct
 	private void init() {
@@ -86,6 +88,16 @@ public class InternationalizationSearchBox implements Serializable {
 		categories = internationalizationService
 				.getMessage(ESearchBox.CATEGORIES.getName());
 		return categories;
+	}
+
+	public String getToolTipKeyword() {
+		toolTipKeyword = internationalizationService.getMessage(ESearchBox.TOOLTIPKEYWORD.getName());
+		return toolTipKeyword;
+	}
+
+	public String getToolTipSlider() {
+		toolTipSlider = internationalizationService.getMessage(ESearchBox.TOOLTIPSLIDER.getName());
+		return toolTipSlider;
 	}
 
 }

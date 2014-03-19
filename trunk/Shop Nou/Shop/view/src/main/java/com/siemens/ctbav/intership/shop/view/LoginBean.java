@@ -147,7 +147,6 @@ public class LoginBean implements Serializable {
 			// String hashPass2 = DigestUtils.md5Hex(this.password);
 			request.login(this.user.getUserName(), this.user.getPassword());
 			this.logged = true;
-			System.out.println("s-a facut true");
 			if (request.isUserInRole(UsersRole.SUPER_ADMINISTRATOR.toString())) {
 				FacesContext.getCurrentInstance().getExternalContext()
 						.getSessionMap().put("user", user);

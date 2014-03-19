@@ -2,7 +2,7 @@ package com.siemens.ctbav.intership.shop.view.internationalization.enums.client;
 
 public enum ESearchBox {
 	SEARCH_BY("searchBy"), KEYWORD("keyword"), PRICE("price"), SEARCH("search"), SUPPORT(
-			"support"), CATEGORIES("categories");
+			"support"), CATEGORIES("categories"),TOOLTIPKEYWORD("toolTipKeyword"),TOOLTIPSLIDER("toolTipSlider");
 
 	private final String name;
 

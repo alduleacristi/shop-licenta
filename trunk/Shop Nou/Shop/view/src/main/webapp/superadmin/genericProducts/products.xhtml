@@ -43,6 +43,13 @@
 				</p:tree>
 
 				<br />
+
+				<p:commandButton action="#{productBean.reindex()}"
+					value="#{internationalizationGenericProducts.reindexButton}"
+					styleClass="update-submit" id="reindex" style="width: 30%" />
+				<p:tooltip for="reindex"
+					value="#{internationalizationGenericProducts.reindexTooltip}" />
+				<br />
 			</h:form>
 
 
@@ -245,6 +252,7 @@
 						update="messages1, :formProducts:dataGrid"
 						oncomplete="handleChangeCategoryRequest(xhr, status, args)" />
 				</p:dialog>
+
 
 				<script type="text/javascript">
 					function handleUpdateRequest(xhr, status, args) {

@@ -52,8 +52,9 @@ import com.siemens.ctbav.intership.shop.view.internationalization.enums.client.E
 		@URLMapping(id = "sendCommand", pattern = "/client/user/sendCommand", viewId = "/client/user/sendCommand.xhtml") })
 public class Cart implements Serializable {
 	private static final long serialVersionUID = -4660863521509380343L;
-	
-	private static final Logger logger = Logger.getLogger("com.siemens.ctbav.intership.shop.view.client");
+
+	private static final Logger logger = Logger
+			.getLogger("com.siemens.ctbav.intership.shop.view.client");
 
 	@EJB
 	private ProductColorSizeService productColorSizeService;
@@ -253,7 +254,7 @@ public class Cart implements Serializable {
 							internationalizationService
 									.getMessage(ECart.SUCCESS_MESSAGE.getName()));
 
-			redirect("/Shop4j/client/user/recommandation");
+			redirect("/Shop4j/client/user/index");
 		} catch (AddToCartFailedException e) {
 			logger.warning(e.getMessage());
 		}

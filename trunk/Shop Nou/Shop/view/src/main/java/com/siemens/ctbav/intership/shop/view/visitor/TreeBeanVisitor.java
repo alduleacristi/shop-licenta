@@ -59,10 +59,12 @@ public class TreeBeanVisitor implements Serializable {
 		for (Category category : categories) {
 			if (category.getCategory() == null) {
 				root = new DefaultTreeNode(category, null);
+				expand(root);
 				treeNodes.add(root);
 			} else {
 				TreeNode node = new DefaultTreeNode(category,
 						getParent(category.getCategory().getId()));
+				expand(node);
 				treeNodes.add(node);
 			}
 		}
@@ -133,5 +135,12 @@ public class TreeBeanVisitor implements Serializable {
 		FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
 				.put("category", category);
 		redirect("/Shop4j/client/category/" + category.getId());
+	}
+	
+
+	private void expand(TreeNode treeNode) {
+		if (treeNode.getParent() != null) {
+			treeNode.getParent().setExpanded(true);
+		}
 	}
 }

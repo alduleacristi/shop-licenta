@@ -2,6 +2,8 @@ package com.siemens.ctbav.intership.shop.dto.operator;
 
 import com.siemens.ctbav.intership.shop.enums.operator.PasswordStatus;
 
+
+
 public class UserDTO {
 
 	private String username, email, password, rolename;
@@ -35,8 +37,8 @@ public class UserDTO {
 		return passwordStatus;
 	}
 
-	public void setPasswordStatus(PasswordStatus passwordStatus) {
-		this.passwordStatus = passwordStatus;
+	public void setPasswordStatus(PasswordStatus i) {
+		this.passwordStatus = i;
 	}
 
 	public void setEmail(String email) {

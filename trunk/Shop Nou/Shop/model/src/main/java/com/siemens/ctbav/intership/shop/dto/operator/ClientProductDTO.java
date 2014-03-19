@@ -9,6 +9,9 @@ public class ClientProductDTO {
 	private Double price;
 	private ProductColorSizeDTO product;
 	
+	public ClientProductDTO(){
+		
+	}
 	public ClientProductDTO(Long nrPieces, Double percRedution, Double price,
 			ProductColorSizeDTO product) {
 		this.setNrPieces(nrPieces);

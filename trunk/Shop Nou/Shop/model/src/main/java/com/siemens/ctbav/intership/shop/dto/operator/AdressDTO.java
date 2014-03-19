@@ -6,6 +6,10 @@ public class AdressDTO {
 
 	private String locality, staircase;
 	private Long number, block, flat;
+	
+	public AdressDTO(){
+		
+	}
 	public AdressDTO(String locality, String staircase, Long long1, Long long2, Long flat) {
 		this.locality = locality;
 		this.staircase = staircase;

@@ -10,6 +10,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 @Stateless
 @Path("/cancelOrder")
@@ -18,14 +19,15 @@ public class CancelOrder {
 	// 1 criptat
 	//Gc73hA6nX3DvakaxTUMUYg==
 	@GET
-	@Path("/{id}")
-	public Response cancelOrder(@PathParam("id") String id,
+	@Path("/{order}")
+	public Response cancelOrder(@PathParam("order") String order,
 			@Context HttpServletRequest request,
 			@Context HttpServletResponse response) {
+		
+		System.out.println(order);
 		String contextPath = request.getContextPath();
-		request.getSession().setAttribute("id", id);
-		redirectTo(response, contextPath,"/cancelOrder.xhtml?id=" + id);
-		return Response.status(200).entity(id).build();
+		redirectTo(response, contextPath,"/cancelOrder.xhtml?order=" + order);
+		return Response.status(Status.ACCEPTED).build();
 	}
 	
 	private void redirectTo(HttpServletResponse response, String contextPath, String to){

@@ -242,7 +242,8 @@ public class UserService {
 			Long id = getUserId(user.getUsername());
 			User u = new User(id, user.getUsername(), user.getPassword(),
 					user.getRolename(), user.getEmail());
-			// u.setPasswordStatus(user.getPasswordStatus());
+			u.setPasswordStatus(user.getPasswordStatus().ordinal());
+			System.out.println(user.getPasswordStatus().ordinal());
 			System.out.println("VReau sa  setez parola pentru  " + u);
 			em.merge(u);
 		} catch (UserException exc) {

@@ -36,6 +36,9 @@ public class InternationalizationManageUsers implements Serializable {
 	private String requiredPassword;
 	private String success;
 	private String successAdd;
+	private String requiredCaptcha;
+	private String invalidCaptcha;
+	private String type;
 
 	@PostConstruct
 	private void init() {
@@ -155,5 +158,23 @@ public class InternationalizationManageUsers implements Serializable {
 		successAdd = internationalizationService
 				.getMessage(EManageUsers.USER_ADDED.getName());
 		return successAdd;
+	}
+
+	public String getRequiredCaptcha() {
+		requiredCaptcha = internationalizationService
+				.getMessage(EManageUsers.REQUIRED_CAPTCHA.getName());
+		return requiredCaptcha;
+	}
+
+	public String getInvalidCaptcha() {
+		invalidCaptcha = internationalizationService
+				.getMessage(EManageUsers.INVALID_CAPTCHA.getName());
+		return invalidCaptcha;
+	}
+
+	public String getType() {
+		type = internationalizationService.getMessage(EManageUsers.TYPE
+				.getName());
+		return type;
 	}
 }

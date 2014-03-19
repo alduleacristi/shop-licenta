@@ -34,6 +34,8 @@ public class InternationalizationGenericProducts implements Serializable {
 	private String nameIsRequired;
 	private String priceIsRequired;
 	private String saleIsRequired;
+	private String reindexButton;
+	private String reindexTooltip;
 
 	@PostConstruct
 	private void init() {
@@ -145,5 +147,17 @@ public class InternationalizationGenericProducts implements Serializable {
 		saleIsRequired = internationalizationService
 				.getMessage(EGenericProduct.SALE_REQUIRED.getName());
 		return saleIsRequired;
+	}
+
+	public String getReindexButton() {
+		reindexButton = internationalizationService
+				.getMessage(EGenericProduct.REINDEX_BUTTON.getName());
+		return reindexButton;
+	}
+
+	public String getReindexTooltip() {
+		reindexTooltip = internationalizationService
+				.getMessage(EGenericProduct.REINDEX_TOOLTIP.getName());
+		return reindexTooltip;
 	}
 }

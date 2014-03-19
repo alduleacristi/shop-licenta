@@ -16,9 +16,10 @@
 
 					<br></br> <label>#{internationalizationSearchBox.keyword}</label> <br />
 					<p:autoComplete id="acMinLength" minQueryLength="3"
-						value="#{searchClient.query}" effect="fade"
-						style="width:210px !important" size="10"
-						completeMethod="#{searchClient.complete}" />
+						value="#{searchClient.query}" effect="fade" style="width:305px"
+						size="70" completeMethod="#{searchClient.complete}" />
+					<p:tooltip for="acMinLength"
+						value="#{internationalizationSearchBox.toolTipKeyword}"></p:tooltip>
 
 					<br />
 					<div class="inline-field">
@@ -30,7 +31,9 @@
 							<p:slider for="txt6,txt7" display="displayRange"
 								style="width:210px" range="true"
 								displayTemplate="#{internationalizationSearchBox.price} {min}$ - {max}$"
-								minValue="0" maxValue="200" />
+								minValue="0" maxValue="200" id="sliderSearch" />
+							<p:tooltip for="sliderSearch"
+								value="#{internationalizationSearchBox.toolTipSlider}"></p:tooltip>
 						</h:panelGrid>
 						<h:inputHidden id="txt6" value="#{searchClient.minPrice}" />
 						<h:inputHidden id="txt7" value="#{searchClient.maxPrice}" />
@@ -44,6 +47,7 @@
 					<br />
 				</div>
 			</div>
+			<p:growl showDetail="true"></p:growl>
 		</h:form>
 
 	</ui:composition>

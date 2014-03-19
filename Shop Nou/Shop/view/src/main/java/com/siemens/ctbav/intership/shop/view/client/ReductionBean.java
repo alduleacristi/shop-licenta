@@ -116,9 +116,4 @@ public class ReductionBean implements Serializable {
 		redirect("/Shop4j/client/user/productReduceDescription/"
 				+ product.getId());
 	}
-
-	public void reindex() {
-		productService.reindex();
-		// System.out.println("sa facut reindexare");
-	}
 }

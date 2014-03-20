@@ -1,24 +1,16 @@
 package com.siemens.ctbav.intership.shop.view.operator;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
-import javax.transaction.HeuristicMixedException;
-import javax.transaction.HeuristicRollbackException;
-import javax.transaction.NotSupportedException;
-import javax.transaction.RollbackException;
-import javax.transaction.SystemException;
-
-import com.siemens.ctbav.intership.shop.convert.operator.ConvertOperator;
-import com.siemens.ctbav.intership.shop.dto.operator.OperatorDTO;
+import com.siemens.ctbav.intership.shop.convert.operator.ConvertUser;
+import com.siemens.ctbav.intership.shop.dto.operator.UserDTO;
 import com.siemens.ctbav.intership.shop.exception.operator.DuplicateFieldException;
 import com.siemens.ctbav.intership.shop.model.User;
 import com.siemens.ctbav.intership.shop.service.operator.UserService;
-import com.siemens.ctbav.intership.shop.util.operator.Interval;
 
 @ManagedBean(name = "changeAccount")
 @RequestScoped
@@ -28,28 +20,38 @@ public class ChangeAccountBean {
 	public void init() {
 		User u = (User) FacesContext.getCurrentInstance().getExternalContext()
 				.getSessionMap().get("user");
-		operator = ConvertOperator.convertOperator(u);
+		user = ConvertUser.convertUser(u);
 	
 
 	}
 
 	@EJB
 	UserService userService;
-	private OperatorDTO operator;
+	//private OperatorDTO operator;
 
-	public OperatorDTO getOperator() {
-		return operator;
+	private UserDTO user;
+	
+
+	public UserDTO getUser() {
+		return user;
 	}
 
-	public void setOperator(OperatorDTO operator) {
-		this.operator = operator;
+
+	public void setUser(UserDTO user) {
+		this.user = user;
 	}
+
 
 	public void update() {
-		User user = (User) FacesContext.getCurrentInstance()
+		User u = (User) FacesContext.getCurrentInstance()
 				.getExternalContext().getSessionMap().get("user");
-		if (operator.equals(new OperatorDTO(user.getUsername(), user
-				.getUserPassword(), user.getUserPassword(), user.getEmail()))) {
+		
+		System.out.println("user initial : " + ConvertUser.convertUser(u));
+		
+		System.out.println("user dupa modofcari : " + user);
+		//UserDTO newUser = new UserDTO(user.getUsername(), user.getEmail(), user.getPassword(), user.getRolename(),user.getPasswordStatus());
+		if (user.equals(ConvertUser.convertUser(u))) {
+			System.out.println("nicio modificare");
 			FacesContext context = FacesContext.getCurrentInstance();
 			context.addMessage(null, new FacesMessage(
 					FacesMessage.SEVERITY_INFO, "No changes in your account dates",
@@ -58,7 +60,7 @@ public class ChangeAccountBean {
 		}
 
 		try {
-			userService.updateOperator(operator, user.getUsername());
+			userService.updateUser(user, u.getUsername());
 			FacesContext context = FacesContext.getCurrentInstance();
 			context.addMessage(null, new FacesMessage(
 					FacesMessage.SEVERITY_INFO, "Your account has been changed!",

@@ -37,12 +37,7 @@ public class ReturnedOrders {
 	@OneToOne
 	@JoinColumn(name = "id_command")
 	private Command command;
-	
-//	@LazyCollection(LazyCollectionOption.FALSE)
-//	@OneToMany
-//	@JoinColumn(name="id_command")
-//	private List<ReturnedProducts> productsList;
-	
+
 	
 	private Date returnDate;
 	private Date addDate;

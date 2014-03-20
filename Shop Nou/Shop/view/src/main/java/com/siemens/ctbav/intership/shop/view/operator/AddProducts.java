@@ -61,7 +61,8 @@ public class AddProducts {
 					null,
 					new FacesMessage(FacesMessage.SEVERITY_INFO,
 							product.getPiecesAdded()+" products were successfully added!", ""));
-		} catch (ProductException e) {
+			FacesContext.getCurrentInstance().getExternalContext().redirect("products.xhtml");
+		} catch (Exception e) {
 			FacesContext.getCurrentInstance().addMessage(
 					null,
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, e

@@ -31,45 +31,44 @@ public class PasswordRecovery {
 	private UserDTO user;
 
 	@GET
-	@Path("/{password}/{milis}")
-	public Response setNewPassword(@PathParam("password") String password,
-			@PathParam("milis") String milis,
+	@Path("/{milis}/{password}")
+	public Response setNewPassword(@PathParam("milis") String milis,
+			@PathParam("password") String password,
 			// @Context ServletContext context,
 			@Context HttpServletRequest request,
 			@Context HttpServletResponse response) {
 		// daca a accesat link-ul prea tarziu, atunci e redirectat la pagina de
 		// login
-
+		System.out.println(password + "   " + milis);
 		String contextPath = request.getContextPath();
 		String decrypted = null;
-		Long time=null;
+		Long time = null;
 		String decryptedPassword = null;
-		
-		//incerc sa decriptez datele din url
-		//daca utilizatorul a modificat ceva din url, atunci primeste exceptie
+
+		// incerc sa decriptez datele din url
+		// daca utilizatorul a modificat ceva din url, atunci primeste exceptie
 		try {
 			decrypted = AES.decrypt(milis);
-			time=Long.parseLong(decrypted);
+			time = Long.parseLong(decrypted);
+			System.out.println(time);
 			decryptedPassword = AES.decrypt(password);
 		} catch (Exception exc) {
 			System.out
 					.println("nu se poate decripta; clientul a modificat stringul");
-		//	request.
+			return Response.status(400).entity(password).build();
 		}
-		System.out.println(decrypted);
 		if (isValidLink(time) == false) {
 			redirectTo(response, contextPath, "/login.xhtml");
 			return Response.status(400).entity(milis).build();
 
 		}
 		try {
-			System.out.println(password);
-			System.out.println(decryptedPassword);
+			// System.out.println(password);
+			// System.out.println(decryptedPassword);
 			user = ConvertUser.convertUser(userService
-					.getUserByPassword(decryptedPassword));
+					.getUserByPassword(password));
 			if (user == null) {
-				System.out.println(" nu am gasit user cu parola "
-						+ decryptedPassword);
+				System.out.println(" nu am gasit user cu parola " + password);
 				return Response.status(200).entity(password).build();
 			}
 			// request.setAttribute("password", password);

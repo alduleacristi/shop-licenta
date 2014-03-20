@@ -6,7 +6,7 @@ import com.siemens.ctbav.intership.shop.enums.operator.PasswordStatus;
 
 public class UserDTO {
 
-	private String username, email, password, rolename;
+	private String username, email, password,retypePassword, rolename;
 	private PasswordStatus passwordStatus;
 
 	public UserDTO(){
@@ -66,6 +66,12 @@ public class UserDTO {
 		return username + ";" + email
 				+ ";" + password + ";" + rolename
 				+ ";" + passwordStatus;
+	}
+	public String getRetypePassword() {
+		return retypePassword;
+	}
+	public void setRetypePassword(String retypePassword) {
+		this.retypePassword = retypePassword;
 	}
 
 }

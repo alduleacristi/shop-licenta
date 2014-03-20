@@ -57,6 +57,7 @@ public class ProductService {
 			throw new ProductException("There are no products in the database");
 
 		for (ProductColorSize pcs : pcsList) {
+			System.out.println(pcs);
 			long nrPiecesLeft = pcs.getNrOfPieces();
 			try {
 				List<ClientProduct> list = getClientOrders(pcs);

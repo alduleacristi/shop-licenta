@@ -45,7 +45,7 @@ public class OrdersBean {
 	private Double minValue, maxValue;
 
 	private GenerateReport generate;
-	
+
 	// private List<CommandDTO> allOrders;
 	public List<CommandDTO> getOrderList() {
 		return orderList;
@@ -108,8 +108,12 @@ public class OrdersBean {
 	public void setReports(String[] reports) {
 		this.reports = reports;
 	}
+
 	@PostConstruct
 	private void postConstruct() {
+
+		if (orderList != null)
+			orderList.clear();
 		// setAllOrders(ConvertCommand.convertListOfOrders(commService.ordersInProgress()));
 		User user = (User) FacesContext.getCurrentInstance()
 				.getExternalContext().getSessionMap().get("user");
@@ -192,7 +196,8 @@ public class OrdersBean {
 			MailService.sendLink(email, "Delayed order", page, true);
 			FacesContext.getCurrentInstance().addMessage(
 					null,
-					new FacesMessage(FacesMessage.SEVERITY_INFO,"The mail has been sent",""));
+					new FacesMessage(FacesMessage.SEVERITY_INFO,
+							"The mail has been sent", ""));
 		} catch (Exception e) {
 			// daca nu se trimite, operatorul primeste mesaj
 			FacesContext
@@ -269,6 +274,10 @@ public class OrdersBean {
 				orders = ConvertCommand.convertListOfOrders(commService
 						.getOrdersBetweenDates(from, to));
 				orderList = orders;
+				FacesContext.getCurrentInstance().addMessage(
+						null,
+						new FacesMessage(FacesMessage.SEVERITY_INFO,
+								"These are the wanted orders", ""));
 				return;
 			}
 
@@ -277,6 +286,10 @@ public class OrdersBean {
 				orders = ConvertCommand.convertListOfOrders(commService
 						.getOrdersBetweenTotal(minValue, maxValue));
 				orderList = orders;
+				FacesContext.getCurrentInstance().addMessage(
+						null,
+						new FacesMessage(FacesMessage.SEVERITY_INFO,
+								"These are the wanted orders", ""));
 				return;
 			}
 
@@ -286,7 +299,10 @@ public class OrdersBean {
 					.convertListOfOrders(commService
 							.getOrdersBetweenDateAndTotals(from, to, minValue,
 									maxValue));
-
+			FacesContext.getCurrentInstance().addMessage(
+					null,
+					new FacesMessage(FacesMessage.SEVERITY_INFO,
+							"These are the wanted orders", ""));
 		} catch (IncorrectInputException e) {
 			FacesContext.getCurrentInstance().addMessage(
 					null,
@@ -350,45 +366,45 @@ public class OrdersBean {
 		try {
 			if (contains(Reports.PDF.getValue())) {
 				generate = new GeneratePDF(orderList);
-				smthSelected= true;
+				smthSelected = true;
 				generate.generate();
 			}
 
 			if (contains(Reports.XML.getValue())) {
 
 				generate = new GenerateXML(orderList);
-				smthSelected=true;
+				smthSelected = true;
 				generate.generate();
 			}
 			if (contains(Reports.JSON.getValue())) {
 				generate = new GenerateJson(orderList);
-				smthSelected= true;
+				smthSelected = true;
 				generate.generate();
 			}
 			if (contains(Reports.CSV.getValue())) {
 				generate = new GenerateCSV(orderList);
-				smthSelected= true;
+				smthSelected = true;
 				generate.generate();
 			}
-			if(smthSelected == false )
+			if (smthSelected == false)
 				FacesContext
-				.getCurrentInstance()
-				.addMessage(
-						null,
-						new FacesMessage(
-								FacesMessage.SEVERITY_INFO,
-								"You must check at least one checkbox and then click on the button",
-								""));
+						.getCurrentInstance()
+						.addMessage(
+								null,
+								new FacesMessage(
+										FacesMessage.SEVERITY_INFO,
+										"You must check at least one checkbox and then click on the button",
+										""));
 			else
-			FacesContext
-					.getCurrentInstance()
-					.addMessage(
-							null,
-							new FacesMessage(
-									FacesMessage.SEVERITY_INFO,
-									"The reports have been generated in folder Reports",
-									""));
-			
+				FacesContext
+						.getCurrentInstance()
+						.addMessage(
+								null,
+								new FacesMessage(
+										FacesMessage.SEVERITY_INFO,
+										"The reports have been generated in folder Reports",
+										""));
+
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			FacesContext.getCurrentInstance().addMessage(
@@ -397,7 +413,5 @@ public class OrdersBean {
 							.getMessage(), e.getMessage()));
 		}
 	}
-
-	
 
 }

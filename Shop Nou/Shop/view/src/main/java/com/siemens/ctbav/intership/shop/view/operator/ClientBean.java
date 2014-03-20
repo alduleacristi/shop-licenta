@@ -51,9 +51,10 @@ public class ClientBean {
 
 	private GenerateReport generate;
 
-	
 	@PostConstruct
 	public void initClientList() {
+		if (allClients != null)
+			allClients.clear();
 		setAllClients(ConvertClient.convertClientListDate(clientService
 				.getAllClients()));
 
@@ -69,6 +70,7 @@ public class ClientBean {
 
 	public void onRowToggle(ToggleEvent event) {
 
+		System.out.println("on row toggle");
 		FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, ""
 				+ event.getVisibility(), "More detalil");
 
@@ -91,6 +93,8 @@ public class ClientBean {
 					null,
 					new FacesMessage(FacesMessage.SEVERITY_INFO,
 							"Client deleted", "Client deleted"));
+			
+			FacesContext.getCurrentInstance().getExternalContext().redirect("clients.xhtml");
 		} catch (Exception e) {
 			FacesContext.getCurrentInstance().addMessage(
 					null,
@@ -110,8 +114,8 @@ public class ClientBean {
 	}
 
 	public void generateReports() {
-	//	for (int i = 0; i < reports.length; i++)
-		//	System.out.println(reports[i]);
+		// for (int i = 0; i < reports.length; i++)
+		// System.out.println(reports[i]);
 		try {
 			if (contains(Reports.PDF.getValue())) {
 				generate = new GeneratePDF(allClients);
@@ -121,7 +125,7 @@ public class ClientBean {
 			if (contains(Reports.XML.getValue())) {
 
 				generate = new GenerateXML(allClients);
-			//	System.out.println(getFilename() + ".xml");
+				// System.out.println(getFilename() + ".xml");
 				generate.generate();
 			}
 			if (contains(Reports.JSON.getValue())) {
@@ -141,7 +145,7 @@ public class ClientBean {
 									"The reports have been generated in folder Reports",
 									""));
 		} catch (Exception e) {
-			 System.out.println("exceptie " + e.getMessage());
+			System.out.println("exceptie " + e.getMessage());
 			FacesContext.getCurrentInstance().addMessage(
 					null,
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, e

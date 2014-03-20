@@ -218,37 +218,7 @@ create table command_status(
 );
 
 insert into command_status(status) values ("In progress"),("delivered");
-drop table if exists returnedOrders;
 
-create table returnedOrders(
-	id bigint not null auto_increment primary key,
-    id_command bigint unique,
-    returnDate Date not null,
-	addDate Date,
-    returned bool not null,
- foreign key returned_command(id_command)
-    references command(id)
-    on update cascade
-    on delete cascade
-
-);
-
-drop table if exists returnedProducts;
-create table returnedProducts(
-id bigint not null auto_increment primary key,
-id_command bigint not null,
-id_product bigint not null,
-
-foreign key returned_product1(id_command)
-references returnedOrders(id)
-on update cascade
-on delete cascade,
-
-foreign key returned_product2(id_product)
-references product_color_size(id_pcs)
-on update cascade
-on delete cascade
-);
 drop table if exists command;
 create table command(
     id bigint not null auto_increment primary key,
@@ -274,6 +244,38 @@ create table command(
 	references user(id)
 	on update no action
 	on delete no action
+);
+
+drop table if exists returnedOrders;
+
+create table returnedOrders(
+	id bigint not null auto_increment primary key,
+    id_command bigint unique,
+    returnDate Date not null,
+	addDate Date,
+    returned bool not null,
+ foreign key returned_command(id_command)
+    references command(id)
+    on update no action
+    on delete no action
+
+);
+
+drop table if exists returnedProducts;
+create table returnedProducts(
+id bigint not null auto_increment primary key,
+id_command bigint not null,
+id_product bigint not null,
+
+foreign key returned_product1(id_command)
+references returnedOrders(id)
+on update cascade
+on delete cascade,
+
+foreign key returned_product2(id_product)
+references product_color_size(id_pcs)
+on update cascade
+on delete cascade
 );
 
 drop table if exists client_product;

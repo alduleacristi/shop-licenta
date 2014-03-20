@@ -28,7 +28,7 @@ import com.siemens.ctbav.intership.shop.model.User;
 import com.siemens.ctbav.intership.shop.service.internationalization.InternationalizationService;
 
 @Stateless
-@TransactionManagement(value = TransactionManagementType.BEAN)
+@TransactionManagement
 public class UserService {
 
 	@PersistenceContext
@@ -74,27 +74,24 @@ public class UserService {
 	public void deleteUser(Long id) throws UserException {
 		User u = em.find(User.class, id);
 		if (u == null)
-			throw new UserException(internationalizationService.getMessage("userNotFound") + id);
+			throw new UserException(
+					internationalizationService.getMessage("userNotFound") + id);
 		em.remove(u);
 	}
 
-	public void deleteUserClient(String username) {
-		try {
-			userTransaction.begin();
-			try {
-				Long id = getUserId(username);
-				deleteUser(id);
+	public void deleteUserClient(String username) throws UserException,
+			UserNotFoundException {
+		// try {
+		// userTransaction.begin();
 
-			} catch (UserException e) {
-				userTransaction.rollback();
-			} catch (UserNotFoundException e) {
-				userTransaction.rollback();
-			}
+		System.out.println("in tranzactie");
+		Long id = getUserId(username);
+		deleteUser(id);
 
-			userTransaction.commit();
-		} catch (Exception exc) {
+		// userTransaction.commit();
+		// } catch (Exception exc) {
 
-		}
+		// }
 	}
 
 	public User getUserByUsername(String username) throws UserException,
@@ -161,8 +158,8 @@ public class UserService {
 			System.out.println("nu am gasit");
 			exists = false;
 		}
-		if (userTransaction.getStatus() != 6)
-			userTransaction.commit();
+		// if (userTransaction.getStatus() != 6)
+		// userTransaction.commit();
 		return exists;
 	}
 
@@ -185,60 +182,45 @@ public class UserService {
 				return true;
 			}
 		} catch (UserException e) {
-			System.out.println(u.getId() + "    " + id.longValue());
 			return false;
 
 		} catch (UserNotFoundException e) {
 			System.out.println("nu am gasit");
-			if (userTransaction.getStatus() != 6)
-				userTransaction.commit();
 			return false;
 
 		}
 	}
 
-	public void updateOperator(OperatorDTO oper, String oldUsername)
-			throws Exception {
+	public void updateUser(UserDTO oper, String oldUsername) throws Exception {
 		try {
-			userTransaction.begin();
-			System.out.println("in Tranzactie");
-			try {
-				Long id = getUserId(oldUsername);
-				if (!usernameAlreadyExists(oper.getUsername(), id)
-						&& !emailAlreadyExists(oper.getEmail(), id)) {
-					System.out.println("nu exista pot sa modific");
-					User user = new User(id, oper.getUsername(),
-							oper.getPassword(), "operator", oper.getEmail());
-					// System.out.println(user);
-					em.merge(user);
-					System.out.println("am modificat");
-				} else {
-					System.out
-							.println("Username or email already exists in the database");
-					throw new DuplicateFieldException(
-							internationalizationService.getMessage("alreadyExists"));
-				}
-			} catch (UserException e) {
-				userTransaction.rollback();
-			} catch (UserNotFoundException e) {
-				userTransaction.rollback();
+			Long id = getUserId(oldUsername);
+			if (!usernameAlreadyExists(oper.getUsername(), id)
+					&& !emailAlreadyExists(oper.getEmail(), id)) {
+				System.out.println("nu exista pot sa modific");
+				User user = em.find(User.class, id);
+				user.setUsername(oper.getUsername());
+				user.setEmail(oper.getEmail());
+				user.setUserPassword(oper.getPassword());
+				System.out.println(" vreau sa il modific pe urmatorul : "
+						+ user);
+				em.merge(user);
+				System.out.println("am modificat");
+			} else {
+				System.out
+						.println("Username or email already exists in the database");
+				throw new DuplicateFieldException(
+						internationalizationService.getMessage("alreadyExists"));
 			}
-
-			if (userTransaction.getStatus() != 6)
-				userTransaction.commit();
 		} catch (Exception exc) {
+			System.out.println(exc.getMessage());
 			if (exc instanceof DuplicateFieldException)
 				throw new DuplicateFieldException(exc.getMessage());
-			// throw new EJBException();
 		}
 	}
 
-	public void setTemporaryPassword(UserDTO user)
-			throws NotSupportedException, SystemException,
-			IllegalStateException, SecurityException, RollbackException,
-			HeuristicMixedException, HeuristicRollbackException {
-		userTransaction.begin();
-		try {
+	public void setTemporaryPassword(UserDTO user) throws UserException, UserNotFoundException {
+	//	userTransaction.begin();
+	
 			Long id = getUserId(user.getUsername());
 			User u = new User(id, user.getUsername(), user.getPassword(),
 					user.getRolename(), user.getEmail());
@@ -246,12 +228,6 @@ public class UserService {
 			System.out.println(user.getPasswordStatus().ordinal());
 			System.out.println("VReau sa  setez parola pentru  " + u);
 			em.merge(u);
-		} catch (UserException exc) {
-			userTransaction.rollback();
-		} catch (UserNotFoundException exc) {
-			userTransaction.rollback();
-		}
-		userTransaction.commit();
 	}
 
 	public boolean passwordAlreadyExists(String password) {
@@ -298,4 +274,5 @@ public class UserService {
 			throw new EJBException(exc);
 		}
 	}
+
 }

@@ -12,107 +12,97 @@
 <h:body>
 
 	<h:form id="form">
-		<p:growl id="error">
+		<p:growl id="error" showDetail="true" />
+		<p:dataTable id="clientsTable" var="client"
+			value="#{clients.allClients}">
+			<p:ajax event="rowToggle" listener="#{clients.onRowToggle}"
+				update=":form:error" />
 
-
-
-			<p:dataTable id="clientsTable" var="client"
-				value="#{clients.allClients}">
-				<p:ajax event="rowToggle" listener="#{clients.onRowToggle}"
-					update=":form:error" />
-
-				<f:facet name="header">  
+			<f:facet name="header">  
             Expand rows to see detailed information  
         </f:facet>
 
-				<p:column style="width:2%" exportable="false">
-					<p:rowToggler />
-				</p:column>
+			<p:column style="width:2%" exportable="false">
+				<p:rowToggler />
+			</p:column>
 
-				<p:column style="width:30%">
-					<f:facet name="header">  
+			<p:column style="width:30%">
+				<f:facet name="header">  
                     First name  
             </f:facet>
-					<h:outputText value="#{client.firstName}" />
-				</p:column>
+				<h:outputText value="#{client.firstName}" />
+			</p:column>
 
-				<p:column style="width:30%">
-					<f:facet name="header">  
+			<p:column style="width:30%">
+				<f:facet name="header">  
                     Last name  
             </f:facet>
-					<h:outputText value="#{client.lastName}" />
-				</p:column>
+				<h:outputText value="#{client.lastName}" />
+			</p:column>
 
-				<p:column style="width:20%">
-					<f:facet name="header">  
+			<p:column style="width:20%">
+				<f:facet name="header">  
                     Phone number 
             </f:facet>
-					<h:outputText value="#{client.phoneNumber}" />
-				</p:column>
+				<h:outputText value="#{client.phoneNumber}" />
+			</p:column>
 
 
-				<p:column style="width:20%">
-					<f:facet name="header">  
+			<p:column style="width:20%">
+				<f:facet name="header">  
                     Last order date 
             </f:facet>
-					<h:outputText value="#{client.lastOrderDate}" />
-				</p:column>
+				<h:outputText value="#{client.lastOrderDate}" />
+			</p:column>
+			<p:column>
+
+				<p:commandButton value="Delete"
+					actionListener="#{clients.deleteClient(client.user.username)}"
+					styleClass="ui-priority-primary" update=":form:error">
+
+					<p:confirm header="Confirmation"
+						message="Are you sure you want to delete the client???"
+						icon="ui-icon-alert" />
+				</p:commandButton>
+				<p:confirmDialog global="true" showEffect="fade"
+					hideEffect="explode">
+					<p:commandButton value="Yes" type="button"
+						styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+					<p:commandButton value="No" type="button"
+						styleClass="ui-confirmdialog-yes" icon="ui-icon-close" />
+				</p:confirmDialog>
+
+			</p:column>
+
+			<p:rowExpansion>
+				<h:panelGrid id="display" columns="2" cellpadding="4"
+					style="width:300px;" styleClass=" ui-widget-content grid">
+					<h:outputText value="Username:" />
+					<h:outputText id="user" value="#{client.user.username}" />
+					<h:outputText value="Email:" />
+					<h:outputText id="email" value="#{client.user.email}" />
 
 
+				</h:panelGrid>
 
-				<p:column>
+			</p:rowExpansion>
 
-					<p:commandButton value="Delete"
-						actionListener="#{clients.deleteClient(client.user.username)}"
-						styleClass="ui-priority-primary" update=":form:error">
+		</p:dataTable>
+		<h:selectManyCheckbox value="#{clients.reports}">
 
-						<p:confirm header="Confirmation"
-							message="Are you sure you want to delete the client???"
-							icon="ui-icon-alert" />
-					</p:commandButton>
-					<p:confirmDialog global="true" showEffect="fade"
-						hideEffect="explode">
-						<p:commandButton value="Yes" type="button"
-							styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
-						<p:commandButton value="No" type="button"
-							styleClass="ui-confirmdialog-yes" icon="ui-icon-close" />
-					</p:confirmDialog>
-
-				</p:column>
-
-				<p:rowExpansion>
-					<h:panelGrid id="display" columns="2" cellpadding="4"
-						style="width:300px;" styleClass=" ui-widget-content grid">
-						<h:outputText value="Username:" />
-						<h:outputText id="user" value="#{client.user.username}" />
-						<h:outputText value="Email:" />
-						<h:outputText id="email" value="#{client.user.email}" />
-
-
-					</h:panelGrid>
-
-				</p:rowExpansion>
-
-			</p:dataTable>
-
+			<f:selectItem itemValue="1" itemLabel="PDF" />
 			<br />
-			<h:selectManyCheckbox value="#{clients.reports}">
+			<f:selectItem itemValue="2" itemLabel="XML" />
+			<br />
+			<f:selectItem itemValue="3" itemLabel="JSON" />
+			<br />
+			<f:selectItem itemValue="4" itemLabel="CSV" />
+			<br />
+		</h:selectManyCheckbox>
 
-				<f:selectItem itemValue="1" itemLabel="PDF" />
-				<br />
-				<f:selectItem itemValue="2" itemLabel="XML" />
-				<br />
-				<f:selectItem itemValue="3" itemLabel="JSON" />
-				<br />
-				<f:selectItem itemValue="4" itemLabel="CSV" />
-				<br />
-			</h:selectManyCheckbox>
-
-			<h:commandButton value="Generate my reports, please"
-				styleClass="search-submitLong"
-				actionListener="#{clients.generateReports}" update=":form:error" />
-		</p:growl>
-
+		<h:commandButton value="Generate my reports, please"
+			styleClass="search-submitLong"
+			actionListener="#{clients.generateReports()}" update=":form:error" />
 	</h:form>
 </h:body>
 </html>

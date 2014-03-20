@@ -164,7 +164,7 @@ public class CommandBean implements Serializable {
 	public boolean isAlreadySaved(Command command) {
 		Date currentDate = new Date(Calendar.getInstance().getTimeInMillis());
 		CommandDTO com = ConvertCommand.convertCommand(command);
-		ReturnedOrdersDTO retOrder = new ReturnedOrdersDTO(com, currentDate, new ArrayList<ReturnedProductsDTO>());
+		ReturnedOrdersDTO retOrder = new ReturnedOrdersDTO(com, currentDate);
 		return commandService.willBeReturned(retOrder);
 
 	}
@@ -182,7 +182,7 @@ public class CommandBean implements Serializable {
 
 		Date currentDate = new Date(Calendar.getInstance().getTimeInMillis());
 		CommandDTO com = ConvertCommand.convertCommand(selectedOrder);
-		ReturnedOrdersDTO retOrder = new ReturnedOrdersDTO(com, currentDate, new ArrayList<ReturnedProductsDTO>());
+		ReturnedOrdersDTO retOrder = new ReturnedOrdersDTO(com, currentDate);
 		ProductColorSizeDTO pcs = ConvertProductColorSize.convert(product
 				.getProduct());
 		ReturnedProductsDTO retProd = new ReturnedProductsDTO(retOrder, pcs);

@@ -48,7 +48,7 @@
 						<br />
 						<strong class="price">List of products</strong>
 						<p:dataGrid var="p"
-							value="#{CommandBean.getClientProductsForCommand(c)}" columns="3"
+							value="#{c.clientProducts}" columns="3"
 							rows="3" paginator="true" paginatorPosition="bottom">
 							<center>
 								<p:graphicImage
@@ -63,94 +63,95 @@
 								<h3>#{internationalizationProduct.productName}</h3>
 								<p:outputLabel value="#{p.product.productcolor.product.name}"></p:outputLabel>
 								<br /> <br /> <strong class="price">#{internationalizationProduct.price}</strong>
-								<p:outputLabel value="#{p.price}$"
-						<center>
-							<strong> <p:outputLabel value="#{CommandBean.message}"
-									rendered="#{CommandBean.isAlreadySaved(c)}"></p:outputLabel></strong>
+								<p:outputLabel value="#{p.price}$"></p:outputLabel>
+								<center></center>
+<!-- 								<strong> <p:outputLabel value="#{CommandBean.message}" -->
+<!-- 										rendered="#{CommandBean.isAlreadySaved(c)}"></p:outputLabel></strong> -->
 
-							<p:commandButton rendered="#{CommandBean.canBeReturned(c)}"
-								value="Return command" style="background: #8b0000;color: #fff;"
-								action="#{CommandBean.setSelectedOrder(c)}"
-								update=":commandHistory:display"
-								oncomplete="PF('dialog').show()"></p:commandButton>
-						</center>
-						<br />
+<!-- 								<p:commandButton rendered="#{CommandBean.canBeReturned(c)}" -->
+<!-- 									value="Return command" style="background: #8b0000;color: #fff;" -->
+<!-- 									action="#{CommandBean.setSelectedOrder(c)}" -->
+<!-- 									update=":commandHistory:display" -->
+<!-- 									oncomplete="PF('dialog').show()"></p:commandButton> -->
+							</center>
+							<br />
+						</p:dataGrid>
 					</p:carousel>
 					<p:outputLabel value="No commands found"
 						rendered="#{!CommandBean.existCommands}"></p:outputLabel>
 
-					<p:dialog header="Choose the products you want to return "
-						widgetVar="dialog" width="600" showEffect="explode"
-						hideEffect="explode">
-						<p:dataTable id="display" value="#{CommandBean.selectedProducts}"
-							var="clientProduct" border="1">
+<!-- 					<p:dialog header="Choose the products you want to return " -->
+<!-- 						widgetVar="dialog" width="600" showEffect="explode" -->
+<!-- 						hideEffect="explode"> -->
+<!-- 						<p:dataTable id="display" value="#{CommandBean.selectedProducts}" -->
+<!-- 							var="clientProduct" border="1"> -->
 
-							<p:column>
-								<f:facet name="header">
-									Product name 
-							</f:facet>
-								<h:outputText
-									value="#{clientProduct.product.productcolor.product.name}"></h:outputText>
-							</p:column>
+<!-- 							<p:column> -->
+<!-- 								<f:facet name="header"> -->
+<!-- 									Product name  -->
+<!-- 							</f:facet> -->
+<!-- 								<h:outputText -->
+<!-- 									value="#{clientProduct.product.productcolor.product.name}"></h:outputText> -->
+<!-- 							</p:column> -->
 
-							<p:column>
-								<f:facet name="header">
-									Size
-							</f:facet>
-								<h:outputText value="#{clientProduct.product.size.size}"></h:outputText>
-							</p:column>
+<!-- 							<p:column> -->
+<!-- 								<f:facet name="header"> -->
+<!-- 									Size -->
+<!-- 							</f:facet> -->
+<!-- 								<h:outputText value="#{clientProduct.product.size.size}"></h:outputText> -->
+<!-- 							</p:column> -->
 
-							<p:column>
-								<f:facet name="header">
-									Color
-							</f:facet>
-								<h:outputText
-									value="#{clientProduct.product.productcolor.color.name}"></h:outputText>
-							</p:column>
+<!-- 							<p:column> -->
+<!-- 								<f:facet name="header"> -->
+<!-- 									Color -->
+<!-- 							</f:facet> -->
+<!-- 								<h:outputText -->
+<!-- 									value="#{clientProduct.product.productcolor.color.name}"></h:outputText> -->
+<!-- 							</p:column> -->
 
-							<p:column>
-								<f:facet name="header">
-									Nr. pieces
-							</f:facet>
-								<h:outputText value="#{clientProduct.nrPieces}"></h:outputText>
-							</p:column>
+<!-- 							<p:column> -->
+<!-- 								<f:facet name="header"> -->
+<!-- 									Nr. pieces -->
+<!-- 							</f:facet> -->
+<!-- 								<h:outputText value="#{clientProduct.nrPieces}"></h:outputText> -->
+<!-- 							</p:column> -->
 
-							<p:column>
-								<f:facet name="header">
-									Price
-							</f:facet>
-								<h:outputText value="#{clientProduct.price}"></h:outputText>
-							</p:column>
+<!-- 							<p:column> -->
+<!-- 								<f:facet name="header"> -->
+<!-- 									Price -->
+<!-- 							</f:facet> -->
+<!-- 								<h:outputText value="#{clientProduct.price}"></h:outputText> -->
+<!-- 							</p:column> -->
 
-							<p:column>
-								<f:facet name="header">
-									I want to return
-							</f:facet>
-								<p:commandButton value="Return product"
-									style="background: #8b0000;color: #fff;"
-									action="#{CommandBean.returnProduct(clientProduct)}"
-									update=":commandHistory:display" oncomplete="dialog.show()">
-									<p:confirm header="Confirmation"
-										message="Are you sure you want to return this product???"
-										icon="ui-icon-alert" />
-								</p:commandButton>
-								<p:confirmDialog global="true" showEffect="fade"
-									hideEffect="explode">
-									<p:commandButton value="Yes" type="button"
-										styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
-									<p:commandButton value="No" type="button"
-										styleClass="ui-confirmdialog-yes" icon="ui-icon-close" />
-								</p:confirmDialog>
-							</p:column>
-						</p:dataTable>
+<!-- 							<p:column> -->
+<!-- 								<f:facet name="header"> -->
+<!-- 									I want to return -->
+<!-- 							</f:facet> -->
+<!-- 								<p:commandButton value="Return product" -->
+<!-- 									style="background: #8b0000;color: #fff;" -->
+<!-- 									action="#{CommandBean.returnProduct(clientProduct)}" -->
+<!-- 									update=":commandHistory:display" oncomplete="dialog.show()"> -->
+<!-- 									<p:confirm header="Confirmation" -->
+<!-- 										message="Are you sure you want to return this product???" -->
+<!-- 										icon="ui-icon-alert" /> -->
+<!-- 								</p:commandButton> -->
+<!-- 								<p:confirmDialog global="true" showEffect="fade" -->
+<!-- 									hideEffect="explode"> -->
+<!-- 									<p:commandButton value="Yes" type="button" -->
+<!-- 										styleClass="ui-confirmdialog-yes" icon="ui-icon-check" /> -->
+<!-- 									<p:commandButton value="No" type="button" -->
+<!-- 										styleClass="ui-confirmdialog-yes" icon="ui-icon-close" /> -->
+<!-- 								</p:confirmDialog> -->
+<!-- 							</p:column> -->
+<!-- 						</p:dataTable> -->
 
-						<div align="right">
-							<strong> Total: <h:outputText
-									value="#{CommandBean.getTotalPrice(CommandBean.selectedOrder)}"></h:outputText>
-							</strong>
-						</div>
-						<br />
-					</p:dialog>
+<!-- 						<div align="right"> -->
+<!-- 							<strong> Total: <h:outputText -->
+<!-- 									value="#{CommandBean.getTotalPrice(CommandBean.selectedOrder)}"></h:outputText> -->
+<!-- 							</strong> -->
+<!-- 						</div> -->
+<!-- 						<br /> -->
+<!-- 					</p:dialog> -->
 					<br />
 				</center>
 				<p:outputLabel value="#{internationalizationCart.noRecords}"

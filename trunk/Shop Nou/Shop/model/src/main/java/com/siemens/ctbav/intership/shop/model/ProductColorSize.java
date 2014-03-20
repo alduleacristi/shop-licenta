@@ -33,7 +33,7 @@ public class ProductColorSize implements Serializable {
 	private Long id;
 
 	@Column(name = "nr_pieces")
-	Long nrOfPieces;
+	private Long nrOfPieces;
 
 	// join productColor
 	@ManyToOne(fetch = FetchType.EAGER)
@@ -110,4 +110,12 @@ public class ProductColorSize implements Serializable {
 			return false;
 		return true;
 	}
+
+	@Override
+	public String toString() {
+		return "ProductColorSize [id=" + id + ", nrOfPieces=" + nrOfPieces
+				+ ", productcolor=" + productcolor + ", size=" + size + "]";
+	}
+	
+	
 }

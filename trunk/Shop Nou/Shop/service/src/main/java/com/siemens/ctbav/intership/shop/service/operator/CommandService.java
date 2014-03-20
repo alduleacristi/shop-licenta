@@ -196,7 +196,7 @@ public class CommandService {
 				.getResultList();
 		if (orders == null || orders.size() == 0) {
 			throw new CommandNotFoundException(
-					"There are not orders between this dates");
+					"There are no orders between this dates");
 		}
 		return orders;
 	}

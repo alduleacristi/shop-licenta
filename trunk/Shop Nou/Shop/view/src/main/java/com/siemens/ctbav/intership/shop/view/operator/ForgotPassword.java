@@ -91,7 +91,8 @@ public class ForgotPassword {
 															// caractere
 
 				System.out.println(password);
-			} while (userService.passwordAlreadyExists(password));
+			} while (userService.passwordAlreadyExists(password)
+					|| containsSlash(AES.encrypt(password)));
 
 			user.setPassword(password);
 			user.setPasswordStatus(PasswordStatus.NEW_GENERATED);
@@ -103,10 +104,17 @@ public class ForgotPassword {
 			// trecut inca
 			userService.setTemporaryPassword(user);
 			cryptedPassword = AES.encrypt(password);
+
 			Long now = Calendar.getInstance().getTimeInMillis();
 			// folosesc algoritmul de criptare ca sa ascund data trimiterii
 			// asa clientul nu o poate modifica
 			String encryptedTime = AES.encrypt(now.toString());
+			while (containsSlash(encryptedTime)) {
+				encryptedTime = AES.encrypt(Long.toString(Calendar
+						.getInstance().getTimeInMillis()));
+			}
+
+			System.out.println(cryptedPassword + "   " + encryptedTime);
 			String link = confService.getHost()
 					+ "Shop4j/rest/passwordRecovery/" + cryptedPassword + "/"
 					+ encryptedTime;
@@ -132,6 +140,13 @@ public class ForgotPassword {
 							.getMessage(), e.getMessage()));
 			return;
 		}
+	}
+
+	private boolean containsSlash(String encrypt) {
+		int index = encrypt.indexOf('/');
+		if (index < 0 || index > encrypt.length())
+			return false;
+		return true;
 	}
 
 	public void cancel() {

@@ -12,7 +12,7 @@
 <h:body>
 
 
-	<ui:composition template="/resources/template/operator/index.xhtml">
+	<ui:composition template="/admin/index.xhtml">
 		<ui:define name="mainContent">
 			<h:form id="form">
 				<p:growl id="error">
@@ -79,7 +79,7 @@
 
 						<p:column exportable="false">
 
-							<p:commandButton value="Deliver order"
+							<p:commandButton value="Delivered"
 								actionListener="#{orders.deliveredOrder(order)}"
 								styleClass="ui-priority-primary" update=":form:error" />
 						</p:column>
@@ -103,18 +103,18 @@
 
 
 
-					<p:dialog header="Order details" widgetVar="dialog" width="600"
+					<p:dialog header="Detalii comanda" widgetVar="dialog" width="600"
 						showEffect="explode" hideEffect="explode">
 						<p:dataTable id="display" var="prodClient"
 							value="#{orders.selectedOrder.listProducts}" border="1">
 
 							<f:facet name="header">
-						Adress:<br></br>  #{orders.selectedOrder.adress.locality}, number #{orders.selectedOrder.adress.number} block #{orders.selectedOrder.adress.block} staircase #{orders.selectedOrder.adress.staircase} apartament #{orders.selectedOrder.adress.flat}
+						Adresa:<br></br>    Oras #{orders.selectedOrder.adress.locality}, numarul #{orders.selectedOrder.adress.number} bloc #{orders.selectedOrder.adress.block} scara #{orders.selectedOrder.adress.staircase} apartament #{orders.selectedOrder.adress.flat}
 						</f:facet>
 
 							<p:column>
 								<f:facet name="header">
-									Product
+									Produs
 							</f:facet>
 								<h:outputText
 									value="#{prodClient.product.prodColor.product.name}"></h:outputText>
@@ -122,7 +122,7 @@
 
 							<p:column>
 								<f:facet name="header">
-									Description
+									Descriere
 							</f:facet>
 								<h:outputText
 									value="#{prodClient.product.prodColor.product.description}"></h:outputText>
@@ -130,20 +130,20 @@
 
 							<p:column>
 								<f:facet name="header">
-									Category
+									Categorie
 							</f:facet>
 								<h:outputText
 									value="#{prodClient.product.prodColor.product.category.name}"></h:outputText>
 							</p:column>
 							<p:column>
 								<f:facet name="header">
-									Color
+									Culoare
 							</f:facet>
 								<h:outputText value="#{prodClient.product.prodColor.color.name}"></h:outputText>
 							</p:column>
 							<p:column>
 								<f:facet name="header">
-									Price
+									Pret
 							</f:facet>
 								<h:outputText
 									value="#{prodClient.product.prodColor.product.price}"></h:outputText>
@@ -151,39 +151,39 @@
 
 							<p:column>
 								<f:facet name="header">
-									Number of pieces
+									Numar bucati
 							</f:facet>
 								<h:outputText value="#{prodClient.nrPieces}"></h:outputText>
 							</p:column>
 
 							<p:column>
 								<f:facet name="header">
-									Procent reduction
+									Procent reducere
 							</f:facet>
 								<h:outputText value="#{prodClient.percReduction}"></h:outputText>
 							</p:column>
 							<p:column>
 								<f:facet name="header">
-									Price
+									Pret redus
 							</f:facet>
 								<h:outputText value="#{prodClient.price}"></h:outputText>
 							</p:column>
 
 							<p:column>
 								<f:facet name="header">
-									Total price
+									Pret total
 							</f:facet>
 								<h:outputText value="#{prodClient.totalPrice()}"></h:outputText>
 							</p:column>
 
 							<f:facet name="footer">
-								Total price: #{orders.total()}
+								Pret total: #{orders.total()}
 								<br></br>
 								#{orders.message()}
 								<br></br>
 								Transport : #{orders.transport}
 								<br></br>
-								Total price(transport included) : #{orders.totalPerOrder}
+								Pret final(cu transport) : #{orders.totalPerOrder}
 						</f:facet>
 						</p:dataTable>
 
@@ -209,9 +209,7 @@
 				</p:growl>
 			</h:form>
 		</ui:define>
-		<ui:define name="footer">
-			<ui:include src="/resources/template/operator/footer.xhtml"></ui:include>
-		</ui:define>
+		
 	</ui:composition>
 
 </h:body>

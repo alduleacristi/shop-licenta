@@ -87,7 +87,7 @@ public class ProductColor implements Serializable {
 	@Override
 	public String toString() {
 		return "ProductColor [id=" + id + ", product=" + product + ", color="
-				+ color + ", productColorSize=" + productColorSize + "]";
+				+ color;
 	}
 
 	@Override

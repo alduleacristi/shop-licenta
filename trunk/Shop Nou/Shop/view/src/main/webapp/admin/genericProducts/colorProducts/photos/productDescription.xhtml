@@ -13,7 +13,7 @@
 	<ui:composition template="/admin/index.xhtml">
 		<br />
 		<ui:define name="menu">
-			<ui:include src="/resources/template/superadmin/menuProducts.xhtml"></ui:include>
+			<ui:include src="/resources/template/admin/menuProducts.xhtml"></ui:include>
 		</ui:define>
 
 		<ui:define name="mainContent">
@@ -81,7 +81,7 @@
 
 								<h3>#{internationalizationPhotoProducts.description}</h3>
 								<br></br>
-								<p:inputTextarea cols="20" rows="12" maxlength="200" style="25%"
+								<p:inputTextarea cols="20" rows="12" maxlength="200" style="width:165px"
 									value="#{colorProductSelectPhotoBean.selectedProduct.product.description}"
 									readonly="true">
 								</p:inputTextarea>

@@ -69,7 +69,7 @@
 
 								<h3>#{internationalizationColorSizeProducts.description}</h3>
 								<br></br>
-								<p:inputTextarea cols="20" rows="12" maxlength="200"
+								<p:inputTextarea cols="20" rows="12" maxlength="200" style="width:165px"
 									value="#{colorProductSizeSelectBean.selectedProduct.product.description}"
 									readonly="true">
 								</p:inputTextarea>
@@ -84,11 +84,12 @@
 				<br />
 				<p:selectOneMenu id="selectOneMenu"
 					value="#{colorProductSizeSelectBean.idSelectedProductColorSize}"
-					style="width:180px" update="edit,delete">
+					style="width:190px" update="edit,delete">
 					<f:selectItems
 						value="#{colorProductSizeSelectBean.selectedProduct.productColorSize}"
 						var="psize" itemLabel="#{psize.size.size}" itemValue="#{psize.id}" />
-					<p:ajax event="valueChange" update=":mainForm:outputPieces" />
+					<p:ajax event="valueChange"
+						update=":mainForm:outputPieces, :add:add, :edit:edit" />
 				</p:selectOneMenu>
 				<br />
 			</h:form>
@@ -96,10 +97,14 @@
 
 			<h:form id="add">
 				<p:growl id="messages1" showDetail="true" />
-				<h:commandButton
-					value="#{internationalizationColorSizeProducts.addPieces}"
-					type="button" styleClass="search-submit" onclick="addDialog.show()"
-					style="width: 25%" update="messages1" />
+				<h:panelGroup id="add">
+					<h:commandButton
+						value="#{internationalizationColorSizeProducts.addPieces}"
+						type="button" styleClass="search-submit"
+						onclick="addDialog.show()"
+						rendered="#{colorProductSizeSelectBean.getSelectedSize()}"
+						style="width: 28%" update="messages1" />
+				</h:panelGroup>
 				<p:dialog header="#{internationalizationColorSizeProducts.choose}"
 					widgetVar="addDialog" resizable="false" modal="true">
 					<h:panelGrid columns="2" cellpadding="4">
@@ -133,10 +138,13 @@
 
 			<h:form id="edit">
 				<p:growl id="messagesE" showDetail="true" />
-				<h:commandButton id="edit"
-					value="#{internationalizationColorSizeProducts.setPieces}"
-					styleClass="search-submit" onclick="editDialog.show()"
-					style="width: 25%" update="messagesE" type="button" />
+				<h:panelGroup id="edit">
+					<h:commandButton
+						value="#{internationalizationColorSizeProducts.setPieces}"
+						styleClass="search-submit" onclick="editDialog.show()"
+						style="width: 28%" update="messagesE" type="button"
+						rendered="#{colorProductSizeSelectBean.getSelectedSize()}" />
+				</h:panelGroup>
 				<p:dialog
 					header="#{internationalizationColorSizeProducts.setPieces}"
 					widgetVar="editDialog" resizable="false" modal="true">

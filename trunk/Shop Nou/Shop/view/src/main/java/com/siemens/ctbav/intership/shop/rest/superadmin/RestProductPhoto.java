@@ -13,7 +13,7 @@ import com.siemens.ctbav.intership.shop.service.superadmin.*;
 @Stateless
 @Path("/products")
 public class RestProductPhoto {
-	
+
 	@EJB
 	PhotoService photoService;
 
@@ -23,6 +23,9 @@ public class RestProductPhoto {
 			@PathParam("name") String name) {
 		InputStream is = null;
 		is = photoService.getPhotoStreamFromRepository(id, name);
+		if (is == null)
+			is = Thread.currentThread().getContextClassLoader()
+					.getResourceAsStream("product.jpg");
 		return is;
 	}
 

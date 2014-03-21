@@ -13,7 +13,7 @@
 	<ui:composition template="/admin/index.xhtml">
 		<br />
 		<ui:define name="menu">
-			<ui:include src="/resources/template/superadmin/menuProducts.xhtml"></ui:include>
+			<ui:include src="/resources/template/admin/menuProducts.xhtml"></ui:include>
 		</ui:define>
 
 		<ui:define name="mainContent">
@@ -69,7 +69,7 @@
 
 								<h3>#{internationalizationColorSizeProducts.description}</h3>
 								<br></br>
-								<p:inputTextarea cols="20" rows="12" maxlength="200"
+								<p:inputTextarea cols="20" rows="12" maxlength="200" style="width:165px"
 									value="#{colorProductSizeSelectBean.selectedProduct.product.description}"
 									readonly="true">
 								</p:inputTextarea>
@@ -84,18 +84,23 @@
 				<br />
 				<p:selectOneMenu id="selectOneMenu"
 					value="#{colorProductSizeSelectBean.idSelectedProductColorSize}"
-					style="width:180px" update="edit,delete">
+					style="width:180px" update="edit,delete"
+					valueChangeListener="#{colorProductSizeSelectBean.changed}">
 					<f:selectItems
 						value="#{colorProductSizeSelectBean.selectedProduct.productColorSize}"
 						var="psize" itemLabel="#{psize.size.size}" itemValue="#{psize.id}" />
-					<p:ajax event="valueChange" update=":mainForm:outputPieces" />
+					<p:ajax event="valueChange"
+						update=":mainForm:outputPieces, :menu:delete, :edit:edit" />
 				</p:selectOneMenu>
 				<br />
 				<br />
 				<p:growl id="messagesD" showDetail="true" />
-				<h:commandButton value="#{internationalizationGeneric.delete}"
-					type="button" onclick="cd.show()" styleClass="search-submit"
-					id="delete" immediate="true" process="@this" style="width: 25%" />
+				<h:panelGroup id="delete">
+					<h:commandButton value="#{internationalizationGeneric.delete}"
+						type="button" onclick="cd.show()" styleClass="search-submit"
+						immediate="true" process="@this" style="width: 25%"
+						rendered="#{colorProductSizeSelectBean.getSelectedSize()}" />
+				</h:panelGroup>
 				<p:confirmDialog
 					message="#{internationalizationGeneric.confirmMessage}"
 					header="#{internationalizationGeneric.confirmation}"
@@ -156,10 +161,13 @@
 
 			<h:form id="edit">
 				<p:growl id="messagesE" showDetail="true" />
-				<h:commandButton id="edit"
-					value="#{internationalizationGeneric.update}"
-					styleClass="search-submit" onclick="editDialog.show()"
-					style="width: 25%" update="messagesE" type="button" />
+				<h:panelGroup id="edit">
+					<h:commandButton
+						rendered="#{colorProductSizeSelectBean.getSelectedSize()}"
+						value="#{internationalizationGeneric.update}"
+						styleClass="search-submit" onclick="editDialog.show()"
+						style="width: 25%" update="messagesE" type="button" />
+				</h:panelGroup>
 				<p:dialog header="#{internationalizationGeneric.update}"
 					widgetVar="editDialog" resizable="false" modal="true">
 					<h:panelGrid columns="2" cellpadding="4">

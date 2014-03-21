@@ -52,8 +52,7 @@
 					value="#{colorProductBean.productList}" columns="3" rows="12"
 					paginator="true"
 					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-					rowsPerPageTemplate="3,6,9,12,15"
-					paginatorPosition="bottom"
+					rowsPerPageTemplate="3,6,9,12,15" paginatorPosition="bottom"
 					rendered="#{colorProductBean.selectedCategory}">
 					<p:column>
 						<div class="productsA">
@@ -81,8 +80,9 @@
 								<h:outputText
 									value="#{internationalizationColorProducts.description}: " />
 								<br />
-								<p:inputTextarea cols="20" rows="11" maxlength="200"
-									value="#{product.description}" readonly="true">
+								<p:inputTextarea cols="15" rows="14" maxlength="200"
+									style="width:150px" value="#{product.description}"
+									readonly="true">
 								</p:inputTextarea>
 								<br />
 								<p:commandLink

@@ -99,8 +99,8 @@
 							rendered="#{manageSalesBean.selectedProduct != null}">
 							<h:outputText
 								value="#{internationalizationGenericProducts.sale}: " />
-							<p:inputText value="#{manageSalesBean.selectedProduct.reduction}"
-								required="true"
+							<p:inputText value="#{manageSalesBean.reduction}"
+								required="true" converterMessage="Invalid"
 								requiredMessage="#{internationalizationGenericProducts.saleIsRequired}">
 							</p:inputText>
 							<p:commandButton value="#{internationalizationGeneric.update}"

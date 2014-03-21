@@ -71,13 +71,13 @@
 							value="#{internationalizationGenericProducts.productPrice}:" />
 						<p:inputText id="price" label="price" required="true"
 							requiredMessage="#{internationalizationGenericProducts.priceIsRequired}"
+							converterMessage="Invalid"
 							value="#{productBean.newProduct.price}">
-							<f:validator validatorId="validateProductPrice" />
 						</p:inputText>
 						<h:outputText
 							value="#{internationalizationGenericProducts.productDescription}: " />
 						<p:inputTextarea cols="22" rows="10" maxlength="200"
-							maxLength="200" value="#{productBean.newProduct.description}" />
+							style="width:150px" value="#{productBean.newProduct.description}" />
 						<p:commandButton value="#{internationalizationGeneric.create}"
 							actionListener="#{productBean.create}"
 							update="messages2, :formProducts:dataGrid"

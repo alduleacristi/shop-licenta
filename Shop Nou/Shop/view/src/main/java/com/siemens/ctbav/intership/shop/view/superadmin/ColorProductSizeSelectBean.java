@@ -12,6 +12,8 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.faces.event.ValueChangeEvent;
+import javax.servlet.http.HttpServletRequest;
 
 import org.primefaces.context.RequestContext;
 import org.primefaces.model.TreeNode;
@@ -28,6 +30,7 @@ import com.siemens.ctbav.intership.shop.service.internationalization.Internation
 import com.siemens.ctbav.intership.shop.service.superadmin.ColorProductService;
 import com.siemens.ctbav.intership.shop.service.superadmin.ColorSizeProductService;
 import com.siemens.ctbav.intership.shop.service.superadmin.SizeService;
+import com.siemens.ctbav.intership.shop.util.UsersRole;
 import com.siemens.ctbav.intership.shop.util.superadmin.NavigationUtils;
 import com.siemens.ctbav.intership.shop.view.internationalization.enums.superadmin.EColorSizeProducts;
 
@@ -79,18 +82,25 @@ public class ColorProductSizeSelectBean implements Serializable {
 		idSelectedProductColorSize = (long) -1;
 		TreeNode selectedNode = (TreeNode) (FacesContext.getCurrentInstance()
 				.getExternalContext().getSessionMap().get("selectedNode"));
-		Category selectedCategory = (Category) (selectedNode.getData());
+		Category selectedCategory = null;
+		if (selectedNode != null)
+			selectedCategory = (Category) (selectedNode.getData());
+
 		if (selectedCategory != null) {
 			long idSelectedcategory = selectedCategory.getId();
-			allSizes = new ArrayList<Size>();
-			if (idSelectedcategory > 0) {
-				List<Size> currentSizes = sizeService
-						.getSizesByCategory(idSelectedcategory);
-				List<Size> parentsSizes = sizeService
-						.storedProcedureGetParentsSizes(idSelectedcategory);
-				allSizes.addAll(currentSizes);
-				allSizes.addAll(parentsSizes);
-			}
+			setAvailableSizes(idSelectedcategory);
+		}
+	}
+
+	private void setAvailableSizes(long idSelectedcategory) {
+		allSizes = new ArrayList<Size>();
+		if (idSelectedcategory > 0) {
+			List<Size> currentSizes = sizeService
+					.getSizesByCategory(idSelectedcategory);
+			List<Size> parentsSizes = sizeService
+					.storedProcedureGetParentsSizes(idSelectedcategory);
+			allSizes.addAll(currentSizes);
+			allSizes.addAll(parentsSizes);
 		}
 	}
 
@@ -127,6 +137,14 @@ public class ColorProductSizeSelectBean implements Serializable {
 			selectedProduct = colorProductService.getProductById(id);
 			FacesContext.getCurrentInstance().getExternalContext()
 					.getSessionMap().put("selectedProduct", selectedProduct);
+			if (selectedProduct != null
+					&& selectedProduct.getProductColorSize().size() == 1)
+				selectedSize = true;
+			if (selectedProduct != null) {
+				long idCategory = selectedProduct.getProduct().getCategory()
+						.getId();
+				setAvailableSizes(idCategory);
+			}
 		}
 	}
 
@@ -189,7 +207,7 @@ public class ColorProductSizeSelectBean implements Serializable {
 		this.allSizes = allSizes;
 	}
 
-	public boolean isSelectedSize() {
+	public boolean getSelectedSize() {
 		return selectedSize;
 	}
 
@@ -203,6 +221,10 @@ public class ColorProductSizeSelectBean implements Serializable {
 
 	public void setHost(String host) {
 		this.host = host;
+	}
+
+	public void changed(ValueChangeEvent e) {
+		setSelectedSize(true);
 	}
 
 	public void add(ActionEvent actionEvent) {
@@ -284,9 +306,23 @@ public class ColorProductSizeSelectBean implements Serializable {
 					e.getMessage());
 		} finally {
 			NavigationUtils.addMessage(msg);
-			NavigationUtils
-					.redirect("/Shop4j/superadmin/genericProducts/colorProducts/sizes/"
-							+ selectedProduct.getId());
+			HttpServletRequest request = (HttpServletRequest) FacesContext
+					.getCurrentInstance().getExternalContext().getRequest();
+
+			if (FacesContext.getCurrentInstance().getExternalContext()
+					.getSessionMap().get("user") != null) {
+				if (request.isUserInRole(UsersRole.ADMINISTRATOR.toString())) {
+					NavigationUtils
+							.redirect("/Shop4j/admin/genericProducts/colorProducts/sizes/"
+									+ selectedProduct.getId());
+				}
+				if (request.isUserInRole(UsersRole.SUPER_ADMINISTRATOR
+						.toString())) {
+					NavigationUtils
+							.redirect("/Shop4j/superadmin/genericProducts/colorProducts/sizes/"
+									+ selectedProduct.getId());
+				}
+			}
 		}
 	}
 
@@ -308,6 +344,10 @@ public class ColorProductSizeSelectBean implements Serializable {
 				pcs = colorSizeProductService
 						.getProductById(idSelectedProductColorSize);
 			}
+			if (selectedProduct.getProductColorSize().size() == 1) {
+				selectedSize = true;
+			} else
+				selectedSize = false;
 		}
 	}
 

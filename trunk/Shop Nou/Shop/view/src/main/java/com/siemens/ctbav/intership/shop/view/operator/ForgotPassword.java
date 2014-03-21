@@ -116,7 +116,7 @@ public class ForgotPassword {
 
 			System.out.println(cryptedPassword + "   " + encryptedTime);
 			String link = confService.getHost()
-					+ "Shop4j/rest/passwordRecovery/" + cryptedPassword + "/"
+					+ "/Shop4j/rest/passwordRecovery/" + cryptedPassword + "/"
 					+ encryptedTime;
 			// aici trimite linkul dar acum nu am net
 			// in orice caz linkul se trimite ok

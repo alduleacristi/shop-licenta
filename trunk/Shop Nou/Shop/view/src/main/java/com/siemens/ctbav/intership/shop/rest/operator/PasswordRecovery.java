@@ -39,19 +39,18 @@ public class PasswordRecovery {
 			@Context HttpServletResponse response) {
 		// daca a accesat link-ul prea tarziu, atunci e redirectat la pagina de
 		// login
-		System.out.println(password + "   " + milis);
 		String contextPath = request.getContextPath();
-		String decrypted = null;
+		String decryptedPass = null;
 		Long time = null;
-		String decryptedPassword = null;
+		String decryptedTime = null;
 
 		// incerc sa decriptez datele din url
 		// daca utilizatorul a modificat ceva din url, atunci primeste exceptie
 		try {
-			decrypted = AES.decrypt(milis);
-			time = Long.parseLong(decrypted);
-			System.out.println(time);
-			decryptedPassword = AES.decrypt(password);
+			decryptedPass = AES.decrypt(milis);
+			decryptedTime = AES.decrypt(password);
+			time = Long.parseLong(decryptedTime);
+			System.out.println(decryptedPass + "  " + decryptedTime);
 		} catch (Exception exc) {
 			System.out
 					.println("nu se poate decripta; clientul a modificat stringul");
@@ -62,28 +61,25 @@ public class PasswordRecovery {
 			return Response.status(400).entity(milis).build();
 
 		}
-		try {
-			// System.out.println(password);
-			// System.out.println(decryptedPassword);
-			user = ConvertUser.convertUser(userService
-					.getUserByPassword(password));
-			if (user == null) {
-				System.out.println(" nu am gasit user cu parola " + password);
-				return Response.status(200).entity(password).build();
-			}
-			// request.setAttribute("password", password);
-			// context.getRequestDispatcher("/operator/changePassword.xhtml").forward(request,
-			// response);
-			// response.sendRedirect(contextPath
-			// + "/changePassword.xhtml?password=" + password);
-			redirectTo(response, contextPath, "/changePassword.xhtml?password="
-					+ password);
-			return Response.status(Status.ACCEPTED).build();
-
-		} catch (UserNotFoundException e) {
-			redirectTo(response, contextPath, "/login.xhtml");
-		}
-		return Response.status(200).entity(password).build();
+		// try {
+		// user =
+		// ConvertUser.convertUser(userService.getUserByPassword(password));
+		// } catch (UserNotFoundException e) {
+		// System.out.println(e.getMessage());
+		// }
+		// if (user == null) {
+		// System.out.println(" nu am gasit user cu parola " + password);
+		// return Response.status(200).entity(password).build();
+		// }
+				//	 request.setAttribute("password", password);
+				//	 context.getRequestDispatcher("/operator/changePassword.xhtml").forward(request,
+				//	 response);
+					// response.sendRedirect(contextPath
+					// + "/changePassword.xhtml?password=" + password);
+					redirectTo(response, contextPath, "/changePassword.xhtml?password="
+							+ milis);
+					return Response.status(Status.ACCEPTED).build();
+	//	return Response.status(200).entity(password).build();
 	}
 
 	public boolean isValidLink(Long milis) {

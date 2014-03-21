@@ -8,18 +8,11 @@ import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
-import javax.ejb.TransactionManagementType;
 import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.transaction.HeuristicMixedException;
-import javax.transaction.HeuristicRollbackException;
-import javax.transaction.NotSupportedException;
-import javax.transaction.RollbackException;
-import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
 
-import com.siemens.ctbav.intership.shop.dto.operator.OperatorDTO;
 import com.siemens.ctbav.intership.shop.dto.operator.UserDTO;
 import com.siemens.ctbav.intership.shop.exception.UserException;
 import com.siemens.ctbav.intership.shop.exception.operator.DuplicateFieldException;
@@ -125,9 +118,10 @@ public class UserService {
 		@SuppressWarnings("unchecked")
 		List<User> usersList = em.createNamedQuery(User.GET_USER_BY_EMAIL)
 				.setParameter("email", email).getResultList();
-		if (usersList.size() == 0)
+		if (usersList.size() == 0) {
 			throw new UserNotFoundException(
 					internationalizationService.getMessage("emailNotFound"));
+		}
 		if (usersList.size() > 1)
 			throw new UserException(
 					internationalizationService.getMessage("moreEmail"));
@@ -218,16 +212,17 @@ public class UserService {
 		}
 	}
 
-	public void setTemporaryPassword(UserDTO user) throws UserException, UserNotFoundException {
-	//	userTransaction.begin();
-	
-			Long id = getUserId(user.getUsername());
-			User u = new User(id, user.getUsername(), user.getPassword(),
-					user.getRolename(), user.getEmail());
-			u.setPasswordStatus(user.getPasswordStatus().ordinal());
-			System.out.println(user.getPasswordStatus().ordinal());
-			System.out.println("VReau sa  setez parola pentru  " + u);
-			em.merge(u);
+	public void setTemporaryPassword(UserDTO user) throws UserException,
+			UserNotFoundException {
+		// userTransaction.begin();
+
+		Long id = getUserId(user.getUsername());
+		User u = new User(id, user.getUsername(), user.getPassword(),
+				user.getRolename(), user.getEmail());
+		u.setPasswordStatus(user.getPasswordStatus().ordinal());
+		System.out.println(user.getPasswordStatus().ordinal());
+		System.out.println("VReau sa  setez parola pentru  " + u);
+		em.merge(u);
 	}
 
 	public boolean passwordAlreadyExists(String password) {
@@ -254,7 +249,7 @@ public class UserService {
 	public void changePassword(String generatedPassword, String newPassword)
 			throws UserNotFoundException {
 		try {
-			userTransaction.begin();
+		//	userTransaction.begin();
 
 			System.out.println("vreau sa modific");
 			System.out.println(generatedPassword + " " + newPassword);
@@ -262,13 +257,16 @@ public class UserService {
 			// if (user == null)
 			// throw new UserNotFoundException(
 			// "the password does not exists in the database");
-			user.setPasswordStatus(2);
+			user.setPasswordStatus(1);
 			user.setUserPassword(newPassword);
+			System.out.println(user);
 			em.merge(user);
 			System.out.println("am modificat");
-			userTransaction.commit();
+		//	userTransaction.commit();
 
 		} catch (Exception exc) {
+			
+			System.out.println(exc.getMessage());
 			if (exc instanceof UserNotFoundException)
 				throw new UserNotFoundException(exc.getMessage());
 			throw new EJBException(exc);

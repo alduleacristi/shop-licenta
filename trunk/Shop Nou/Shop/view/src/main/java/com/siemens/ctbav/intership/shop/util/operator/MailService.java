@@ -13,8 +13,8 @@ import javax.mail.internet.MimeMessage;
 
 public class MailService {
 
-	static final String username = "deliutzzz_23@yahoo.com",
-			password = "alinnuts";
+	static final String username = "shop4j@yahoo.com",
+			password = "proiectLicenta1";
 	static String smtpServ = "smtp.mail.yahoo.com";
 
 	public static void sendLink(String to, String subject, String mess,

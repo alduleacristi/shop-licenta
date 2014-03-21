@@ -1,6 +1,5 @@
 package com.siemens.ctbav.intership.shop.view.superadmin;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,13 +11,13 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import javax.jcr.RepositoryException;
 
 import org.primefaces.event.FileUploadEvent;
 
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
 import com.siemens.ctbav.intership.shop.conf.ConfigurationService;
+import com.siemens.ctbav.intership.shop.exception.PhotoException;
 import com.siemens.ctbav.intership.shop.model.ProductColor;
 import com.siemens.ctbav.intership.shop.service.internationalization.InternationalizationService;
 import com.siemens.ctbav.intership.shop.service.superadmin.ColorProductService;
@@ -147,11 +146,7 @@ public class ColorProductSelectPhotoBean implements Serializable {
 							.getMessage(EPhotoProduct.SUCCESS.getName()),
 					internationalizationService
 							.getMessage(EPhotoProduct.PHOTO_UPLOADED.getName()));
-		} catch (RepositoryException e) {
-			message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
-					internationalizationService.getMessage(EPhotoProduct.ERROR
-							.getName()), e.getMessage());
-		} catch (IOException e) {
+		} catch (PhotoException e) {
 			message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
 					internationalizationService.getMessage(EPhotoProduct.ERROR
 							.getName()), e.getMessage());
@@ -170,8 +165,10 @@ public class ColorProductSelectPhotoBean implements Serializable {
 					internationalizationService
 							.getMessage(EPhotoProduct.PHOTO_DELETED.getName()));
 			NavigationUtils.addMessage(message);
-		} catch (RepositoryException e) {
+		} catch (PhotoException e) {
 			System.out.println(e);
+		} finally {
+
 		}
 	}
 

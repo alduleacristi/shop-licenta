@@ -232,8 +232,7 @@ public class DescriptionProductSearchBean implements Serializable {
 		System.out.println("display photos: "+idProductColor);
 		photos = new ArrayList<String>();
 		try {
-			photos = photoService.displayOfPhotos("id"
-					+ idProductColor);
+			photos = photoService.displayOfPhotos("id"+idProductColor);
 		} catch (Exception e) {
 			System.out.println(e);
 		}

@@ -6,6 +6,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import com.siemens.ctbav.intership.shop.exception.UserException;
 import com.siemens.ctbav.intership.shop.exception.client.ClientDoesNotExistException;
 import com.siemens.ctbav.intership.shop.exception.client.NullClientException;
 import com.siemens.ctbav.intership.shop.model.Client;
@@ -35,5 +36,18 @@ public class ClientService {
 			throw new NullClientException("The client object is null.");
 		
 		em.merge(client);
+	}
+	
+	public void addClient(Client client) throws UserException{
+		try{
+			em.persist(client.getUser());
+			client.setId(client.getUser().getId());
+			em.persist(client);
+			em.flush();
+		}catch(Exception exc){
+			exc.printStackTrace();
+			throw new UserException("Invalid username or password");
+		}
+		
 	}
 }

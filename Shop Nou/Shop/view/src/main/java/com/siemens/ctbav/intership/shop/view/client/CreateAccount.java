@@ -14,9 +14,10 @@ import org.primefaces.context.RequestContext;
 
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
-import com.siemens.ctbav.intership.shop.exception.superadmin.UserException;
+import com.siemens.ctbav.intership.shop.exception.UserException;
+import com.siemens.ctbav.intership.shop.model.Client;
 import com.siemens.ctbav.intership.shop.model.User;
-import com.siemens.ctbav.intership.shop.service.client.UserService;
+import com.siemens.ctbav.intership.shop.service.client.ClientService;
 import com.siemens.ctbav.intership.shop.service.internationalization.InternationalizationService;
 import com.siemens.ctbav.intership.shop.util.UsersRole;
 import com.siemens.ctbav.intership.shop.util.superadmin.NavigationUtils;
@@ -30,7 +31,7 @@ public class CreateAccount implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@EJB
-	private UserService userService;
+	private ClientService clientService;
 
 	@EJB
 	private InternationalizationService internationalizationService;
@@ -74,15 +75,7 @@ public class CreateAccount implements Serializable {
 							"internationalization/superadmin/messages/manageUsers/ManageUsers");
 		}
 	}
-
-	public UserService getUserService() {
-		return userService;
-	}
-
-	public void setUserService(UserService userService) {
-		this.userService = userService;
-	}
-
+	
 	public String getUsername() {
 		return username;
 	}
@@ -126,11 +119,15 @@ public class CreateAccount implements Serializable {
 	public void addUser(ActionEvent actionEvent) {
 		User user = new User(username, password, UsersRole.CLIENT.toString(),
 				email);
+		Client client = new Client();
+		client.setUser(user);
+		client.setFirstname("");
+		client.setLastname("");
 		FacesMessage msg = null;
 		RequestContext context = RequestContext.getCurrentInstance();
 		boolean create = false;
 		try {
-			userService.addUser(user);
+			clientService.addClient(client);
 			msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
 					internationalizationService.getMessage(EManageUsers.SUCCESS
 							.getName()),
@@ -141,10 +138,7 @@ public class CreateAccount implements Serializable {
 					.getSessionMap().put("created", created);
 			create = true;
 		} catch (UserException e) {
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,
-					internationalizationService.getMessage(EManageUsers.ERROR
-							.getName()), e.getMessage());
-			create = false;
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,"Error",e.getMessage());
 		} finally {
 			NavigationUtils.addMessage(msg);
 			context.addCallbackParam("create", create);

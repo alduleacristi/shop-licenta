@@ -31,14 +31,23 @@
 				<p:growl id="messages" showDetail="true" />
 				<br />
 				<h:outputText id="success"
-					value="#{internationalizationManageUsers.success}"
+					value="#{internationalizationCreateAccount.succesMessage}"
 					rendered="#{createAccountBean.created}" />
 				<br />
+				<br />
+				<br />
 				<center>
-					<p:commandButton value="Login" id="login"
+					<h:commandButton value="Login" id="login"
 						actionListener="#{createAccountBean.redirectLogin}"
-						rendered="#{createAccountBean.created}" />
-					<h:panelGrid rendered="#{createAccountBean.created == false}">
+						rendered="#{createAccountBean.created}" styleClass="update-submit" />
+				</center>
+				<br />
+				<p:panel header="#{internationalizationCreateAccount.header}"
+					rendered="#{createAccountBean.created == false}">
+					<h:panelGrid columns="1" cellpadding="10"
+						rendered="#{createAccountBean.created == false}">
+						<center>
+							<h:panelGrid rendered="#{createAccountBean.created == false}">
 					#{internationalizationManageUsers.m1}
 					<br />
 					#{internationalizationManageUsers.m2}
@@ -46,46 +55,49 @@
 					#{internationalizationManageUsers.m3}
 					<br />
 					#{internationalizationManageUsers.m4}
-					<h:panelGrid columns="2" cellpadding="5">
-							<h:outputLabel for="username"
-								value="#{internationalizationManageUsers.username}:" />
-							<p:inputText id="username" label="username"
-								value="#{createAccountBean.username}" required="true"
-								requiredMessage="#{internationalizationManageUsers.requiredUsername}" />
-							<h:outputLabel for="email" value="Email:" />
-							<p:inputText id="email" label="email"
-								value="#{createAccountBean.email}" required="true"
-								requiredMessage="#{internationalizationManageUsers.requiredEmail}">
-								<f:validator validatorId="emailValidate" />
-							</p:inputText>
-							<h:outputLabel for="password"
-								value="#{internationalizationManageUsers.password}:" />
-							<p:password id="password" label="password" type="password"
-								value="#{createAccountBean.password}" required="true"
-								requiredMessage="#{internationalizationManageUsers.requiredPassword}">
-								<f:validator validatorId="passwordValidate" />
-								<f:attribute name="confirm" value="#{confirm}" />
-							</p:password>
-							<h:outputLabel for="confirm"
-								value="#{internationalizationManageUsers.retype}:" />
-							<p:password id="confirm" label="repassword" binding="#{confirm}"
-								value="#{createAccountBean.repassword}" required="true"
-								requiredMessage="#{internationalizationManageUsers.requiredPassword}">
-							</p:password>
-						</h:panelGrid>
-						<p:captcha label="Captcha" theme="white" value="Verif"
-							id="captcha"
-							requiredMessage="#{internationalizationManageUsers.requiredCaptcha}"
-							validatorMessage="#{internationalizationManageUsers.invalidCaptcha}"
-							language="#{internationalizationManageUsers.type}" />
-						<br />
-						<p:commandButton value="#{internationalizationGeneric.create}"
-							actionListener="#{createAccountBean.addUser}"
-							oncomplete="handleCreateRequest(xhr, status, args)"
-							update="login,messages" styleClass="update-submit" />
+					<br />
+								<h:panelGrid columns="2" cellpadding="10">
+									<h:outputLabel for="username"
+										value="#{internationalizationManageUsers.username}:" />
+									<p:inputText id="username" label="username"
+										value="#{createAccountBean.username}" required="true"
+										requiredMessage="#{internationalizationManageUsers.requiredUsername}" />
+									<h:outputLabel for="email" value="Email:" />
+									<p:inputText id="email" label="email"
+										value="#{createAccountBean.email}" required="true"
+										requiredMessage="#{internationalizationManageUsers.requiredEmail}">
+										<f:validator validatorId="emailValidate" />
+									</p:inputText>
+									<h:outputLabel for="password"
+										value="#{internationalizationManageUsers.password}:" />
+									<p:password id="password" label="password" type="password"
+										value="#{createAccountBean.password}" required="true"
+										requiredMessage="#{internationalizationManageUsers.requiredPassword}">
+										<f:validator validatorId="passwordValidate" />
+										<f:attribute name="confirm" value="#{confirm}" />
+									</p:password>
+									<h:outputLabel for="confirm"
+										value="#{internationalizationManageUsers.retype}:" />
+									<p:password id="confirm" label="repassword"
+										binding="#{confirm}" value="#{createAccountBean.repassword}"
+										required="true"
+										requiredMessage="#{internationalizationManageUsers.requiredPassword}">
+									</p:password>
+								</h:panelGrid>
+								<p:captcha label="Captcha" theme="white" value="Verif"
+									id="captcha"
+									requiredMessage="#{internationalizationManageUsers.requiredCaptcha}"
+									validatorMessage="#{internationalizationManageUsers.invalidCaptcha}"
+									language="#{internationalizationManageUsers.type}" />
+								<br />
+								<h:commandButton value="#{internationalizationGeneric.create}"
+									actionListener="#{createAccountBean.addUser}"
+									oncomplete="handleCreateRequest(xhr, status, args)"
+									update="login,messages" styleClass="search-submit" />
+							</h:panelGrid>
+						</center>
 					</h:panelGrid>
-				</center>
-
+				</p:panel>
 				<script type="text/javascript">
 					function handleCreateRequest(xhr, status, args) {
 						if (args.validationFailed || !args.create) {
@@ -98,7 +110,7 @@
 				<br />
 				<br />
 				<br />
-				
+
 			</h:form>
 
 		</ui:define>

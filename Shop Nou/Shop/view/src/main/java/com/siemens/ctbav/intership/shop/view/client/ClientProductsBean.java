@@ -20,6 +20,6 @@ public class ClientProductsBean extends VisitorProductsBean {
 				.put("myObj", product);
 
 		setId(product.getId());
-		NavigationUtil.redirect("/Shop4j/client/products/" + product.getId());
+		NavigationUtil.redirect("/Shop4j/client/user/products/" + product.getId());
 	}
 }

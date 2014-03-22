@@ -12,14 +12,9 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-
-import org.apache.derby.tools.sysinfo;
-
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
-import com.siemens.ctbav.intership.shop.convert.operator.ConvertClientProduct;
 import com.siemens.ctbav.intership.shop.convert.operator.ConvertCommand;
 import com.siemens.ctbav.intership.shop.convert.operator.ConvertProductColorSize;
-import com.siemens.ctbav.intership.shop.dto.operator.ClientProductDTO;
 import com.siemens.ctbav.intership.shop.dto.operator.CommandDTO;
 import com.siemens.ctbav.intership.shop.dto.operator.ProductColorSizeDTO;
 import com.siemens.ctbav.intership.shop.dto.operator.ReturnedOrdersDTO;
@@ -31,7 +26,6 @@ import com.siemens.ctbav.intership.shop.model.ClientProduct;
 import com.siemens.ctbav.intership.shop.model.Command;
 import com.siemens.ctbav.intership.shop.model.ProductColorSize;
 import com.siemens.ctbav.intership.shop.service.client.CommandService;
-import com.siemens.ctbav.intership.shop.util.Enum.CommandStatusEnum;
 
 /**
  * Is used as bean for CommndHistory page
@@ -88,14 +82,16 @@ public class CommandBean implements Serializable {
 				existCommands = true;
 			else
 				existCommands = false;
+
+			selectedOrder = commands.get(0);
+			selectedProducts = new ArrayList<ClientProduct>();
+
 		} catch (CommandDoesNotExistException e) {
 			existCommands = false;
 		} catch (ClientDoesNotExistException e) {
 			existCommands = false;
 		}
 
-		selectedOrder = commands.get(0);
-		selectedProducts = new ArrayList<ClientProduct>();
 	}
 
 	public String getMessage() {
@@ -119,8 +115,6 @@ public class CommandBean implements Serializable {
 	}
 
 	public List<ClientProduct> getSelectedProducts() {
-		System.out.println("in get selected products "
-				+ selectedProducts.size());
 		return selectedProducts;
 	}
 
@@ -131,6 +125,9 @@ public class CommandBean implements Serializable {
 	public Double getTotalPrice(Command command) {
 		Double totalPrice = 0.0d;
 
+		if(command == null)
+			return totalPrice;
+		
 		List<ClientProduct> cpList = command.getClientProducts();
 		for (ClientProduct cp : cpList)
 			totalPrice += (cp.getPrice() - cp.getPrice() * cp.getPercRedution()
@@ -171,6 +168,10 @@ public class CommandBean implements Serializable {
 
 	public boolean canBeReturned(Command command) {
 		Date date = command.getDeliveryDate();
+		
+		if(date == null)
+			return false; 
+		
 		Date now = new Date();
 		int days = (int) ((now.getTime() - date.getTime()) / DAY_IN_MILIS);
 		if (days > MAX_DAYS)
@@ -179,6 +180,8 @@ public class CommandBean implements Serializable {
 	}
 
 	public void returnProduct(ClientProduct product) {
+		if(product == null)
+			return;
 
 		Date currentDate = new Date(Calendar.getInstance().getTimeInMillis());
 		CommandDTO com = ConvertCommand.convertCommand(selectedOrder);
@@ -218,17 +221,19 @@ public class CommandBean implements Serializable {
 				break;
 			}
 		}
-		
-		if(cp != null) selectedProducts.remove(cp);
+
+		if (cp != null)
+			selectedProducts.remove(cp);
 
 	}
 
 	private boolean sameProduct(ReturnedProductsDTO retProd,
 			ProductColorSize pcs) {
-		
+
 		ProductColorSizeDTO pDTO = ConvertProductColorSize.convert(pcs);
-		
-		if(pDTO.equals(retProd.getProduct())) return true;
+
+		if (pDTO.equals(retProd.getProduct()))
+			return true;
 		return false;
 	}
 

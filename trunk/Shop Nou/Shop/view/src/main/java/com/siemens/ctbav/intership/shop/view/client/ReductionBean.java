@@ -47,6 +47,9 @@ public class ReductionBean implements Serializable {
 		if (msg != null) {
 			FacesContext.getCurrentInstance().addMessage(null,
 					new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", msg));
+
+			FacesContext.getCurrentInstance().getExternalContext()
+					.getSessionMap().remove("commandSent");
 		}
 
 		this.host = confService.getHost();

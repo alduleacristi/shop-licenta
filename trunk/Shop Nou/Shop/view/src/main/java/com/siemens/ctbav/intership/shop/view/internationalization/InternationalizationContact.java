@@ -76,7 +76,7 @@ public class InternationalizationContact implements Serializable {
 
 	public String getRequiredSubject() {
 		requiredSubject = internationalizationService
-				.getMessage(EContact.REQUIRED_MESSAGE.getName());
+				.getMessage(EContact.REQUIRED_SUBJECT.getName());
 		return requiredSubject;
 	}
 

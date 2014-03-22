@@ -56,8 +56,6 @@ public class Client implements Serializable {
 	@Id
 	private Long id;
 
-	
-
 	@Column(name = "first_name")
 	private String firstname;
 

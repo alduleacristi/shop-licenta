@@ -29,19 +29,15 @@
 		<ui:define name="mainContent">
 			<h:form id="formCategories">
 				<p:growl id="messages" showDetail="true" />
-				<br />
 				<h:outputText id="success"
 					value="#{internationalizationCreateAccount.succesMessage}"
 					rendered="#{createAccountBean.created}" />
-				<br />
-				<br />
 				<br />
 				<center>
 					<h:commandButton value="Login" id="login"
 						actionListener="#{createAccountBean.redirectLogin}"
 						rendered="#{createAccountBean.created}" styleClass="update-submit" />
 				</center>
-				<br />
 				<p:panel header="#{internationalizationCreateAccount.header}"
 					rendered="#{createAccountBean.created == false}">
 					<h:panelGrid columns="1" cellpadding="10"

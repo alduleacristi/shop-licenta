@@ -32,20 +32,20 @@
 				<p:growl id="login" showDetail="true" sticky="true" />
 				<p:panel header="#{internationalizationLoginBean.login}">
 					<h:panelGrid columns="1" cellpadding="5">
-							<p:outputLabel value="#{internationalizationLoginBean.username}:" />
-							<p:inputText value="#{Login.user.userName}" id="username" />
+						<p:outputLabel value="#{internationalizationLoginBean.username}:" />
+						<p:inputText value="#{Login.user.userName}" id="username" />
 
-							<p:outputLabel value="#{internationalizationLoginBean.password}:" />
-							<p:password value="#{Login.user.password}" id="pass" />
+						<p:outputLabel value="#{internationalizationLoginBean.password}:" />
+						<p:password value="#{Login.user.password}" id="pass" />
 
-							<h:commandButton value="#{internationalizationLoginBean.login}"
-								actionListener="#{Login.login()}" ajax="false" update="register"
-								styleClass="search-submit" action="#{cart.readCookie()}"
-								style="width:75%" />
-							<h:commandLink styleClass="active" action="forgotPassword.xhtml">
-								<h:outputText value="#{internationalizationLoginBean.forgot}"
-									styleClass="active"></h:outputText>
-							</h:commandLink>
+						<h:commandButton value="#{internationalizationLoginBean.login}"
+							actionListener="#{Login.login()}" ajax="false" update="register"
+							styleClass="search-submit" action="#{cart.readCookie()}"
+							style="width:75%" />
+						<h:commandLink styleClass="active" action="forgotPassword.xhtml">
+							<h:outputText value="#{internationalizationLoginBean.forgot}"
+								styleClass="active"></h:outputText>
+						</h:commandLink>
 					</h:panelGrid>
 
 
@@ -53,15 +53,15 @@
 			</h:form>
 
 		</ui:define>
+
+		<ui:define name="advertise">
+			<ui:include src="/resources/template/advertise.xhtml"></ui:include>
+		</ui:define>
+
+		<ui:define name="footer">
+			<ui:include src="/resources/template/footer.xhtml"></ui:include>
+		</ui:define>
 	</ui:composition>
-
-	<ui:define name="advertise">
-		<ui:include src="/resources/template/advertise.xhtml"></ui:include>
-	</ui:define>
-
-	<ui:define name="footer">
-		<ui:include src="/resources/template/footer.xhtml"></ui:include>
-	</ui:define>
 
 </h:body>
 

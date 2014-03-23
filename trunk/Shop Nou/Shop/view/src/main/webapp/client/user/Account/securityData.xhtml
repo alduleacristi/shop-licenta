@@ -35,32 +35,42 @@
 				<p:growl id="securityData" showDetail="true" sticky="true" />
 				<p:panel header="#{internationalizationGeneric.update}">
 					<h:panelGrid columns="1" cellpadding="1">
+						<h:panelGrid rendered="#{createAccountBean.created == false}">
+					#{internationalizationManageUsers.m1}
+					<br />
+					#{internationalizationManageUsers.m2}
+					<br />
+					#{internationalizationManageUsers.m3}
+					<br />
+					#{internationalizationManageUsers.m4}
+					<br />
+					<br />
+							<h:outputLabel for="oldPassword"
+								value="#{internationalizationSecurityData.oldPass}: " />
+							<p:password id="oldPassword"
+								value="#{updateClientSecurityData.oldPassword}"
+								label="Old password" />
 
-						<h:outputLabel for="oldPassword"
-							value="#{internationalizationSecurityData.oldPass}: " />
-						<p:password id="oldPassword"
-							value="#{updateClientSecurityData.oldPassword}"
-							label="Old password" />
+							<h:outputLabel for="password"
+								value="#{internationalizationSecurityData.pass}: " />
+							<p:password id="password"
+								value="#{updateClientSecurityData.client.password}"
+								label="Password">
+								<f:validator validatorId="passwordValidate" />
+								<f:attribute name="confirm" value="#{confirm}" />
+							</p:password>
 
-						<h:outputLabel for="password"
-							value="#{internationalizationSecurityData.pass}: " />
-						<p:password id="password"
-							value="#{updateClientSecurityData.client.password}"
-							label="Password">
-							<f:validator validatorId="validatePassword" />
-							<f:attribute name="confirm" value="#{confirm}" />
-						</p:password>
+							<h:outputLabel for="confirm"
+								value="#{internationalizationSecurityData.retype}: " />
+							<p:password id="confirm"
+								value="#{updateClientSecurityData.client.retypedPassword}"
+								label="Retyped password" binding="#{confirm}" />
 
-						<h:outputLabel for="confirm"
-							value="#{internationalizationSecurityData.retype}: " />
-						<p:password id="confirm"
-							value="#{updateClientSecurityData.client.retypedPassword}"
-							label="Retyped password" binding="#{confirm}" />
-
+						</h:panelGrid>
+						<h:commandButton value="#{internationalizationGeneric.update}"
+							ajax="false" action="#{updateClientSecurityData.update()}"
+							styleClass="update-submit" />
 					</h:panelGrid>
-					<h:commandButton value="#{internationalizationGeneric.update}"
-						ajax="false" action="#{updateClientSecurityData.update()}"
-						styleClass="update-submit" />
 				</p:panel>
 			</h:form>
 		</ui:define>

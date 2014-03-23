@@ -3,14 +3,12 @@ package com.siemens.ctbav.intership.shop.view.client;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
-
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
-
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.siemens.ctbav.intership.shop.conf.ConfigurationService;
 import com.siemens.ctbav.intership.shop.model.Product;
@@ -134,13 +132,14 @@ public class SearchBean implements Serializable {
 	}
 
 	public List<String> complete(String str) {
+		System.out.println("string-ul "+str);
+		
 		String lowerQuery = str.toLowerCase();
 		List<String> names = searchService.searchForAutoComplete(lowerQuery);
 
 		for (String s : names)
 			if (!names.contains(s)) {
 				names.add(s);
-				//System.out.println(s);
 			}
 
 		return names;

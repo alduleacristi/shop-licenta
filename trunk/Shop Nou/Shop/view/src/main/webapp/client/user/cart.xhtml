@@ -45,7 +45,14 @@
 							<h3>#{internationalizationProduct.productName}</h3>
 							<p:outputLabel value="#{p.name}"></p:outputLabel>
 							<br /> <br /> <strong class="price">#{internationalizationProduct.price}</strong>
-							<p:outputLabel value="#{p.price}$"></p:outputLabel>
+							<p:outputLabel value="#{p.price}$"
+								rendered="#{p.reduction == 0.0}"></p:outputLabel>
+							<p:outputLabel value="#{p.price}$"
+								rendered="#{p.reduction != 0.0}"
+								style="text-decoration:line-through;"></p:outputLabel>
+							<br />
+							<p:outputLabel value="#{p.price - p.price * p.reduction / 100}$"
+								rendered="#{p.reduction != 0.0}"></p:outputLabel>
 							<br /> <br /> <strong class="price">#{internationalizationProduct.color}</strong>
 							<p:outputLabel value="#{p.name}"></p:outputLabel>
 							<br /> <br /> <strong class="price">#{internationalizationProduct.size}</strong>

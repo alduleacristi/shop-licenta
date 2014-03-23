@@ -38,22 +38,16 @@
 							value="#{internationalizationPersonalData.firstName}: " />
 						<p:inputText id="firstName"
 							value="#{updateClientData.client.firstName}" label="First Name" />
-						<p:message for="firstName" />
 
 						<h:outputLabel for="lastName"
 							value="#{internationalizationPersonalData.lastName}: " />
 						<p:inputText id="lastName"
 							value="#{updateClientData.client.lastName}" label="First Name" />
-						<p:message for="lastName" />
 
 						<h:outputLabel for="phone"
 							value="#{internationalizationPersonalData.phone}: " />
 						<p:inputText id="phone" value="#{updateClientData.client.phone}"
 							label="phone" />
-						<p:message for="phone" />
-
-
-
 					</h:panelGrid>
 					<h:commandButton value="#{internationalizationGeneric.update}"
 						ajax="false" action="#{updateClientData.update()}"

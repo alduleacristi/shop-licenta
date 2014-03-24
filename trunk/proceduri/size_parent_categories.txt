@@ -1,0 +1,50 @@
+delimiter $$
+drop procedure if exists shop4j.sizes_parent_categories $$
+CREATE PROCEDURE shop4j.sizes_parent_categories(in param bigint)
+begin
+    select s.id_size, s.name, s.id_cat from size s join
+    (
+        select c.id, c.name, c.id_parent from category c join
+        (select
+            @id_parent as _user_id,
+            (
+                select @id_parent := id_parent
+                from category   
+                where id = _user_id
+            ) as parent
+        from
+        (
+            select @id_parent := param
+        )alias,
+        category c
+        where @id_parent is not null) t
+        on t.parent = c.id
+    )categories
+    on s.id_cat = categories.id;
+end $$
+
+
+delimiter ;;
+drop procedure if exists sizes_parent_categories;;
+CREATE PROCEDURE sizes_parent_categories(in param bigint)
+begin
+    select s.id_size, s.name, s.id_cat from Size s join
+    (
+        select c.id, c.name, c.id_parent from Category c join
+        (select
+            @id_parent as _user_id,
+            (
+                select @id_parent := id_parent
+                from Category   
+                where id = _user_id
+            ) as parent
+        from
+        (
+            select @id_parent := param
+        )alias,
+        Category c
+        where @id_parent is not null) t
+        on t.parent = c.id
+    )categories
+    on s.id_cat = categories.id;
+end ;;

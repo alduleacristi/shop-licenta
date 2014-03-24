@@ -1,6 +1,7 @@
 package com.siemens.ctbav.intership.shop.service.superadmin.exporter;
 
-import java.io.OutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.util.List;
 
@@ -14,7 +15,8 @@ import com.siemens.ctbav.intership.shop.model.ProductColorSize;
 public class ExportToXml implements Exporter {
 
 	@Override
-	public void export(OutputStream stream, List<ProductColorSize> list) {
+	public void export(File stream, List<ProductColorSize> list)
+			throws FileNotFoundException {
 		System.out.println("export");
 		ProductsDto psdto = new ProductsDto(list);
 		PrintStream printer = new PrintStream(stream);
@@ -24,7 +26,6 @@ public class ExportToXml implements Exporter {
 			marshaller = prepareMarshaller();
 		} catch (JAXBException e) {
 			System.out.println(e.getMessage());
-			return;
 		}
 		if (marshaller == null) {
 			System.out.println("marsh null");

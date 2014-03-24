@@ -206,7 +206,16 @@ public class VisitorProductsBean implements Serializable {
 				.put("myObj", product);
 
 		setId(product.getId());
-		redirect("/Shop4j/client/user/products/" + product.getId());
+		String url = "/Shop4j/client/user/products/" + product.getId();
+		FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
+				.put("urlProduct", url);
+
+		if (FacesContext.getCurrentInstance().getExternalContext()
+				.getSessionMap().get("client") != null) {
+			redirect(url);
+		} else {
+			redirect("/Shop4j/Login");
+		}
 	}
 
 	public void changeSize() {

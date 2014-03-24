@@ -22,6 +22,7 @@ import com.siemens.ctbav.intership.shop.model.User;
 import com.siemens.ctbav.intership.shop.service.ClientService;
 import com.siemens.ctbav.intership.shop.service.UserService;
 import com.siemens.ctbav.intership.shop.util.UsersRole;
+import com.siemens.ctbav.intership.shop.util.client.NavigationUtil;
 
 /**
  * This class is used for page login.xhtml which is a page used for the
@@ -82,8 +83,8 @@ public class LoginBean implements Serializable {
 			try {
 				if (FacesContext.getCurrentInstance().getExternalContext()
 						.getSessionMap().get("client") != null) {
-					FacesContext.getCurrentInstance().getExternalContext()
-							.redirect("/Shop4j/client/user/index");
+
+					NavigationUtil.redirect("/Shop4j/client/user/index");
 				}
 
 				if (FacesContext.getCurrentInstance().getExternalContext()
@@ -173,8 +174,21 @@ public class LoginBean implements Serializable {
 						.getUserName());
 				FacesContext.getCurrentInstance().getExternalContext()
 						.getSessionMap().put("client", client);
-				FacesContext.getCurrentInstance().getExternalContext()
-						.redirect("client/user/index");
+
+				String url = (String) FacesContext.getCurrentInstance()
+						.getExternalContext().getSessionMap().get("urlProduct");
+
+				if (url != null) {
+					FacesContext.getCurrentInstance().getExternalContext()
+							.getSessionMap().remove("urlProduct");
+
+					System.out.println(url);
+					FacesContext.getCurrentInstance().getExternalContext()
+							.redirect(url);
+				} else {
+					FacesContext.getCurrentInstance().getExternalContext()
+							.redirect("client/user/index");
+				}
 			}
 		} catch (ServletException e) {
 			FacesContext context = FacesContext.getCurrentInstance();

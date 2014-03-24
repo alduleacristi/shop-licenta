@@ -66,14 +66,14 @@
 									<h3>#{product.product.name}</h3>
 									<div class="product-desc">
 										<h4>#{product.product.category.name}'S</h4>
-										<p>
+										<h3>
 											#{internationalizationColorSizeProducts.color}:
-											#{product.color.name}<br />
-										</p>
+											#{product.color.name}
+										</h3>
 									</div>
 									<h:outputText
 										value="#{internationalizationColorSizeProducts.sizes}: #{colorProductsSizeBean.displaySizes(product)}" />
-									<br />
+									
 									<div align="right">
 										<p:commandLink
 											actionListener="#{colorProductsSizeBean.showProduct(product)}">

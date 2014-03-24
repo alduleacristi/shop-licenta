@@ -1,9 +1,9 @@
 package com.siemens.ctbav.intership.shop.view.superadmin;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.InputStream;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -13,6 +13,9 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
@@ -26,8 +29,9 @@ import com.siemens.ctbav.intership.shop.view.internationalization.enums.superadm
 
 @ManagedBean(name = "exportBean")
 @RequestScoped
-@URLMappings(mappings = { @URLMapping(id = "exportBean", pattern = "/superadmin/exportProducts/", viewId = "exportProducts.xhtml"),
-		@URLMapping(id = "exportBeanAdmin", pattern = "/admin/exportProducts/", viewId = "exportProducts.xhtml")})
+@URLMappings(mappings = {
+		@URLMapping(id = "exportBean", pattern = "/superadmin/exportProducts/", viewId = "exportProducts.xhtml"),
+		@URLMapping(id = "exportBeanAdmin", pattern = "/admin/exportProducts/", viewId = "exportProducts.xhtml") })
 public class ExportBean {
 
 	@EJB
@@ -38,6 +42,9 @@ public class ExportBean {
 
 	private String fileName;
 	private String photo;
+	private StreamedContent fileXml;
+	private StreamedContent fileCsv;
+	private InputStream inputStream;
 
 	@PostConstruct
 	private void init() {
@@ -79,51 +86,73 @@ public class ExportBean {
 		return photo;
 	}
 
+	public StreamedContent getFileXml() {
+		fileXml = new DefaultStreamedContent(inputStream, "xml", fileName);
+		return fileXml;
+	}
+
+	public void setFileXml(StreamedContent fileXml) {
+		this.fileXml = fileXml;
+	}
+
+	public StreamedContent getFileCsv() {
+		fileXml = new DefaultStreamedContent(inputStream, "csv", fileName);
+		return fileCsv;
+	}
+
+	public void setFileCsv(StreamedContent fileCsv) {
+		this.fileCsv = fileCsv;
+	}
+
 	public void exportToCsv(ActionEvent actionEvent) {
 		Exporter exporter = null;
-		OutputStream stream = null;
+		File stream = null;
 		FacesMessage msg = null;
 
 		exporter = new ExportToCsv();
+		stream = new File(fileName + ".csv");
+		export(exporter, stream, msg);
+
 		try {
-			stream = new FileOutputStream(fileName + ".csv");
-			export(exporter, stream, msg);
-			stream.close();
+			inputStream = new FileInputStream(stream);
 		} catch (FileNotFoundException e) {
-			System.out.println(e);
-		} catch (IOException e) {
-			System.out.println(e);
 		}
 	}
 
 	public void exportToXml(ActionEvent actionEvent) {
 		Exporter exporter = null;
-		OutputStream stream = null;
+		File stream = null;
 		FacesMessage msg = null;
 
 		exporter = new ExportToXml();
-		try {
-			stream = new FileOutputStream(fileName + ".xml");
-			export(exporter, stream, msg);
-			stream.close();
-		} catch (FileNotFoundException e) {
-			System.out.println(e);
-		} catch (IOException e) {
-			System.out.println(e);
-		}
+		stream = new File(fileName + ".xml");
+		export(exporter, stream, msg);
 
+		try {
+			inputStream = new FileInputStream(stream);
+		} catch (FileNotFoundException e) {
+		}
 	}
 
-	private void export(Exporter exporter, OutputStream stream, FacesMessage msg) {
+	private void export(Exporter exporter, File stream, FacesMessage msg) {
 		List<ProductColorSize> pcss = colorSizeProductService
 				.getAllProductsColorSize();
 		if (exporter != null) {
-			exporter.export(stream, pcss);
-			msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
-					internationalizationService.getMessage(EExport.SUCCES
-							.getName()),
-					internationalizationService.getMessage(EExport.SUCCES_M
-							.getName()));
+			try {
+				exporter.export(stream, pcss);
+				msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
+						internationalizationService.getMessage(EExport.SUCCES
+								.getName()),
+						internationalizationService.getMessage(EExport.SUCCES_M
+								.getName()));
+			} catch (FileNotFoundException e) {
+				msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
+						internationalizationService.getMessage(EExport.ERROR
+								.getName()),
+						internationalizationService.getMessage(EExport.ERROR_M
+								.getName()));
+			}
+
 		}
 		FacesContext.getCurrentInstance().getExternalContext().getFlash()
 				.setKeepMessages(true);

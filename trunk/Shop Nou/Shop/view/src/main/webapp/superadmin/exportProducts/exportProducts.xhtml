@@ -7,7 +7,7 @@
 	xmlns:p="http://primefaces.org/ui">
 <h:head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<title>Categories</title>
+	<title>Export</title>
 </h:head>
 <h:body>
 	<ui:composition template="/superadmin/index.xhtml">
@@ -33,7 +33,10 @@
 						</p:inputText>
 						<p:commandButton value="#{internationalizationExport.export}"
 							actionListener="#{exportBean.exportToXml}" update="messages2"
-							oncomplete="handleUpdateRequest(xhr, status, args)" />
+							onclick="handleUpdateRequest(xhr, status, args)"
+							oncomplete="window.location.reload();">
+							<p:fileDownload value="#{exportBean.fileXml}" />
+						</p:commandButton>
 						<p:commandButton value="#{internationalizationGeneric.cancel}"
 							onclick="expToXml.hide();" type="button" />
 					</h:panelGrid>
@@ -48,6 +51,15 @@
 							PF('expToXml').hide();
 							window.location.reload();
 						}
+					}
+				</script>
+				<script type="text/javascript">
+					function start() {
+						PF('statusDialog').show();
+					}
+
+					function stop() {
+						PF('statusDialog').hide();
 					}
 				</script>
 			</h:form>
@@ -67,7 +79,10 @@
 						</p:inputText>
 						<p:commandButton value="#{internationalizationExport.export}"
 							actionListener="#{exportBean.exportToCsv}" update="messages"
-							oncomplete="handleUpdateRequest(xhr, status, args)" />
+							onclick="handleUpdateRequest(xhr, status, args)"
+							oncomplete="window.location.reload();">
+							<p:fileDownload value="#{exportBean.fileXml}" />
+						</p:commandButton>
 						<p:commandButton value="#{internationalizationGeneric.cancel}"
 							onclick="expToCsv.hide();" type="button" />
 					</h:panelGrid>
@@ -82,6 +97,15 @@
 							PF('expToCsv').hide();
 							window.location.reload();
 						}
+					}
+				</script>
+				<script type="text/javascript">
+					function start() {
+						PF('statusDialog').show();
+					}
+
+					function stop() {
+						PF('statusDialog').hide();
 					}
 				</script>
 			</h:form>

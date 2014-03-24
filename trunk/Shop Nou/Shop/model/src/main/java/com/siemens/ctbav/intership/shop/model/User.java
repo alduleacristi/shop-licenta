@@ -21,6 +21,7 @@ import javax.persistence.Table;
 		@NamedQuery(name = User.GET_USER_ID, query = "select u.id from User u where u.username=:user"),
 		@NamedQuery(name = User.GET_CLIENT_BY_USERNAME, query = "select u from User u where u.username = :username"),
 		@NamedQuery(name = User.GET_USER_BY_EMAIL, query = "select u from User u where u.email = :email and u.passwordStatus=1"),
+		@NamedQuery(name = User.GET_CLIENT_BY_EMAIL, query = "select u from User u where u.email = :email"),
 		@NamedQuery(name = User.GET_USER_BY_PASSWORD, query = "select u from User u where u.userPassword = :password and u.passwordStatus =0") })
 public class User implements Serializable {
 
@@ -31,6 +32,7 @@ public class User implements Serializable {
 	public static final String GET_USER_ID = "get user id";
 	public static final String GET_CLIENT_BY_USERNAME = "get user by username";
 	public static final String GET_USER_BY_EMAIL = "get user by email";
+	public static final String GET_CLIENT_BY_EMAIL = "getClientByEmail";
 	public static final String GET_USER_BY_PASSWORD = "get user by pssword";
 	public static final String GET_ALL_ADMINS = "getAllAdmins";
 	public static final String GET_ALL_OPERATORS = "getAllOperators";

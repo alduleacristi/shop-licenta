@@ -98,9 +98,7 @@ public class ClientProduct implements Serializable {
 
 	@Override
 	public String toString() {
-		return "ClientProduct [nrPieces=" + nrPieces + ", percRedution="
-				+ percRedution + ", price=" + price + ", product=" + product
-				+ ", command=" + command + "]";
+		return product.getProductcolor().getProduct().getName() + " " + product.getSize().getSize() + " "+product.getProductcolor().getColor()+ " "+this.getPrice() + " "+this.getPrice();
 	}
 	
 	

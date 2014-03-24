@@ -91,6 +91,11 @@
 		<error-code>404</error-code>
 		<location>/error</location>
 	</error-page>
+	
+	<error-page>
+		<error-code>403</error-code>
+		<location>/AccesDenied</location>
+	</error-page>
 
 	<login-config>
 		<auth-method>FORM</auth-method>

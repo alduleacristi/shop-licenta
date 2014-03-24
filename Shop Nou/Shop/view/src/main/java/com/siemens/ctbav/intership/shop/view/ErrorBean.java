@@ -8,12 +8,15 @@ import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
+import com.ocpsoft.pretty.faces.annotation.URLMappings;
 import com.siemens.ctbav.intership.shop.util.UsersRole;
 import com.siemens.ctbav.intership.shop.util.client.NavigationUtil;
 
 @ViewScoped
 @ManagedBean(name = "errorBean")
-@URLMapping(id = "errorBean", pattern = "/error", viewId = "/error.xhtml")
+@URLMappings(mappings = {
+		@URLMapping(id = "errorBean", pattern = "/error", viewId = "/error.xhtml"),
+		@URLMapping(id = "accesDeniedBean", pattern = "/AccesDenied", viewId = "/accesDenied.xhtml") })
 public class ErrorBean {
 
 	public void goHome() {

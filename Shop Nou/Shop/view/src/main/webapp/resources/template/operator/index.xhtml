@@ -13,6 +13,10 @@
 
 
 	<ui:composition template="/resources/template/template.xhtml">
+
+		<ui:define name="search">
+			<ui:include src="/resources/template/searchBox.xhtml"></ui:include>
+		</ui:define>
 		<ui:define name="menu">
 			<ui:include src="/resources/template/operator/menu.xhtml"></ui:include>
 		</ui:define>

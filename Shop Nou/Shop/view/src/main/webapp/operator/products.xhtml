@@ -17,9 +17,9 @@
 			<h:form id="form">
 				<p:growl id="error">
 					<p:dataTable id="productsTable" var="product"
-						value="#{addProducts.productList}" paginator="true" rows="20"
+						value="#{addProducts.productList}" paginator="true" rows="10"
 						paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
-						rowsPerPageTemplate="5,10,15">
+						paginatorPosition="bottom" rowsPerPageTemplate="3,6,9,12,15">
 
 						<p:column style="width:7%">
 

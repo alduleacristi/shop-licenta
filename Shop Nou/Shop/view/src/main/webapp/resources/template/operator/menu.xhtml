@@ -13,8 +13,9 @@
 	<ui:composition>
 		<div id="navigation">
 			<ul>
-				<li><a href="operatorPage.xhtml"> <img
-						src="../resources/operator/home.jpg" width="42" height="42" /></a></li>
+				<li><a href="operatorPage.xhtml" class="active">Home <!-- 				 <img -->
+						<!-- 						src="../resources/operator/home.jpg" width="42" height="42" /> -->
+				</a></li>
 				<li><a href="clients.xhtml" class="active">Clients</a></li>
 				<li><a href="orders.xhtml" class="active">Orders</a></li>
 				<!-- 				<li><a href="returnedOrders.xhtml" class="active">Returned -->
@@ -25,10 +26,11 @@
 						validity</a></li>
 				<li><a href="changeAccount.xhtml" class="active">Change
 						Account</a></li>
-				<p:commandLink rendered="#{Login.logged}" styleClass="active"
-					actionListener="#{Login.logout()}">
-					<h:outputText value="Logout" styleClass="active"></h:outputText>
-				</p:commandLink>
+				<li><p:commandLink styleClass="active"
+						action="#{Login.logout()}">
+						<h:outputText value="#{internationalizationBean.menuIndexLogout}"
+							styleClass="active"></h:outputText>
+					</p:commandLink></li>
 			</ul>
 		</div>
 	</ui:composition>

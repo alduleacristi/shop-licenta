@@ -50,7 +50,18 @@ public class ClientBean {
 	}
 
 	private GenerateReport generate;
+	
+	private List<ClientDTO> filteredClients;
 
+
+	public List<ClientDTO> getFilteredClients() {
+		return filteredClients;
+	}
+
+	public void setFilteredClients(List<ClientDTO> filteredClients) {
+		this.filteredClients = filteredClients;
+	}
+	
 	@PostConstruct
 	public void initClientList() {
 		if (allClients != null)
@@ -99,7 +110,7 @@ public class ClientBean {
 			FacesContext.getCurrentInstance().addMessage(
 					null,
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, e
-							.getMessage(), e.getMessage()));
+							.getMessage(), "Please try again later."));
 			return;
 		}
 	}
@@ -145,12 +156,12 @@ public class ClientBean {
 									"The reports have been generated in folder Reports",
 									""));
 		} catch (Exception e) {
-			System.out.println("exceptie " + e.getMessage());
 			FacesContext.getCurrentInstance().addMessage(
 					null,
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, e
 							.getMessage(), e.getMessage()));
 		}
 	}
+
 
 }

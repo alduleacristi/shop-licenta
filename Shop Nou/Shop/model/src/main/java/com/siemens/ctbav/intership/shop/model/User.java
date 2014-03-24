@@ -76,6 +76,7 @@ public class User implements Serializable {
 		this.userPassword = userPassword;
 		this.rolename = rolename;
 		this.email = email;
+		this.passwordStatus = 1;
 	}
 
 	public String getEmail() {

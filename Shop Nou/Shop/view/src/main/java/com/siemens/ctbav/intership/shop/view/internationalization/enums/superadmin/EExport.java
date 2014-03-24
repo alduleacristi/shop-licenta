@@ -3,7 +3,7 @@ package com.siemens.ctbav.intership.shop.view.internationalization.enums.superad
 public enum EExport {
 	XML("xml"), CSV("csv"), MESSAGE("message"), EXPORT("export"), FILE(
 			"filename"), SUCCES("success"), SUCCES_M("successMessage"), REQUIRED(
-			"required");
+			"required"), ERROR("error"), ERROR_M("errorMessage");
 
 	private final String name;
 

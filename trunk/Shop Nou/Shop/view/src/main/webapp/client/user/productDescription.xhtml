@@ -75,13 +75,20 @@
 								<div class="product-desc">
 									<center>
 										<strong class="price">#{internationalizationProduct.name}</strong>
-										#{clientProducts.selectedProduct.product.name}<br /> <br />
-										<strong class="price">#{internationalizationProduct.category}</strong>
-										#{clientProducts.selectedProduct.product.category.name}<br />
-										<br /> <strong class="price">#{internationalizationProduct.color}</strong>
-										#{clientProducts.selectedProduct.color.name}<br /> <br /> <strong
+										#{clientProducts.selectedProduct.product.name}<br /> <strong
+											class="price">#{internationalizationProduct.category}</strong>
+										#{clientProducts.selectedProduct.product.category.name} <br />
+										<strong class="price">#{internationalizationProduct.color}</strong>
+										#{clientProducts.selectedProduct.color.name}<br /> <strong
 											class="price">#{internationalizationProduct.price}</strong>
-										#{clientProducts.selectedProduct.product.price}$
+										<p:outputLabel
+											value="#{clientProducts.selectedProduct.product.price}$"
+											rendered="#{clientProducts.selectedProduct.product.reduction == 0.0 and clientProducts.selectedProduct != null}"></p:outputLabel>
+										<p:outputLabel
+											value="#{clientProducts.selectedProduct.product.price}$"
+											rendered="#{clientProducts.selectedProduct.product.reduction != 0.0 and clientProducts.selectedProduct != null}"
+											style="text-decoration:line-through;"></p:outputLabel>
+										<br />
 									</center>
 								</div>
 							</div>
@@ -134,8 +141,8 @@
 										<f:converter converterId="NrOfPiecesConverter"></f:converter>
 									</p:inputText>
 									<br /> <br />
-									<p:commandButton value="#{internationalizationProduct.add}" id="addButton"
-										styleClass="update-submit"
+									<p:commandButton value="#{internationalizationProduct.add}"
+										id="addButton" styleClass="update-submit"
 										actionListener="#{cart.addProductFromPage(clientProducts.productColorSize,clientProducts.nrOfPieces)}"
 										disabled="#{clientProducts.isAvailabel}"
 										update="messageConverter,:cartLink:nrProducts,:cartLink:totalPrice,:cartLink:dialog"

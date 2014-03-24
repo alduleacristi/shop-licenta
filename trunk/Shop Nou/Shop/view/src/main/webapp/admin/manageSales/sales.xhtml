@@ -46,6 +46,7 @@
 				<p:growl id="messages1" showDetail="true" />
 
 				<p:dataGrid id="dataGrid" var="product"
+					emptyMessage="#{internationalizationCart.noRecords}"
 					value="#{manageSalesBean.productList}" columns="3" rows="12"
 					paginator="true"
 					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
@@ -99,8 +100,8 @@
 							rendered="#{manageSalesBean.selectedProduct != null}">
 							<h:outputText
 								value="#{internationalizationGenericProducts.sale}: " />
-							<p:inputText value="#{manageSalesBean.reduction}"
-								required="true" converterMessage="Invalid"
+							<p:inputText value="#{manageSalesBean.reduction}" required="true"
+								converterMessage="Invalid"
 								requiredMessage="#{internationalizationGenericProducts.saleIsRequired}">
 							</p:inputText>
 							<p:commandButton value="#{internationalizationGeneric.update}"

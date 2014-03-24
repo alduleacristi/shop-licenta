@@ -83,6 +83,7 @@
 				<p:dataTable var="operator"
 					value="#{manageOperatorsBean.allOperators}" rowKey="#{operator.id}"
 					paginator="true" rows="10"
+					emptyMessage="#{internationalizationCart.noRecords}"
 					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 					paginatorPosition="bottom" rowsPerPageTemplate="3,6,9,12,15"
 					selection="#{manageOperatorsBean.selectedOperator}"

@@ -75,7 +75,7 @@ public class CreateAccount implements Serializable {
 							"internationalization/superadmin/messages/manageUsers/ManageUsers");
 		}
 	}
-	
+
 	public String getUsername() {
 		return username;
 	}
@@ -127,6 +127,10 @@ public class CreateAccount implements Serializable {
 		RequestContext context = RequestContext.getCurrentInstance();
 		boolean create = false;
 		try {
+			if (clientService.emailExists(email))
+				throw new UserException("Email exists");
+			if (clientService.usernameExists(username))
+				throw new UserException("Username exists");
 			clientService.addClient(client);
 			msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
 					internationalizationService.getMessage(EManageUsers.SUCCESS
@@ -138,7 +142,8 @@ public class CreateAccount implements Serializable {
 					.getSessionMap().put("created", created);
 			create = true;
 		} catch (UserException e) {
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,"Error",e.getMessage());
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
+					e.getMessage());
 		} finally {
 			NavigationUtils.addMessage(msg);
 			context.addCallbackParam("create", create);

@@ -1,114 +1,23 @@
 package com.siemens.ctbav.intership.shop.view.client;
 
-import java.io.IOException;
 import java.io.Serializable;
-import java.util.List;
-import javax.annotation.PostConstruct;
-import javax.ejb.EJB;
-import javax.faces.application.FacesMessage;
+
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import javax.faces.context.FacesContext;
+
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
-import com.siemens.ctbav.intership.shop.conf.ConfigurationService;
 import com.siemens.ctbav.intership.shop.model.Product;
-import com.siemens.ctbav.intership.shop.model.ProductColor;
-import com.siemens.ctbav.intership.shop.service.client.ProductColorService;
-import com.siemens.ctbav.intership.shop.service.client.SearchService;
+import com.siemens.ctbav.intership.shop.util.client.NavigationUtil;
+import com.siemens.ctbav.intership.shop.view.visitor.SearchBeanVisitor;
 
 @SessionScoped
 @ManagedBean(name = "searchClient")
 @URLMapping(id = "searchClient", pattern = "/client/user/Search", viewId = "/client/user/search.xhtml")
-public class SearchBean implements Serializable {
-	/**
-	 * 
-	 */
+public class SearchBean extends SearchBeanVisitor implements Serializable {
+
 	private static final long serialVersionUID = 5001018970672831617L;
 
-	@EJB
-	private SearchService searchService;
-	
-	@EJB
-	private ProductColorService productColorService;
-	
-	@EJB
-	private ConfigurationService confService;
-
-	private String query,host;
-
-	private int minPrice = 0, maxPrice = 80;
-
-	private List<Product> products;
-	
-	private boolean noProducts;
-	
-	@PostConstruct
-	private void initialize(){
-		this.host = confService.getHost();
-	}
-
-	public String getQuery() {
-		return query;
-	}
-
-	public void setQuery(String query) {
-		this.query = query;
-	}
-
-	public int getMinPrice() {
-		return minPrice;
-	}
-
-	public void setMinPrice(int minPrice) {
-		this.minPrice = minPrice;
-	}
-
-	public int getMaxPrice() {
-		return maxPrice;
-	}
-
-	public void setMaxPrice(int maxPrice) {
-		this.maxPrice = maxPrice;
-	}
-
-	public List<Product> getProducts() {
-		return products;
-	}
-
-	public void setProducts(List<Product> products) {
-		this.products = products;
-	}
-
-	public boolean getNoProducts() {
-		return noProducts;
-	}
-
-	public void setNoProducts(boolean noProducts) {
-		this.noProducts = noProducts;
-	}
-
-	public String getHost() {
-		return host;
-	}
-
-	public void setHost(String host) {
-		this.host = host;
-	}
-
-	private void redirect(String url) {
-		FacesContext fc = FacesContext.getCurrentInstance();
-
-		try {
-			fc.getExternalContext().getFlash().setKeepMessages(true);
-			fc.getExternalContext().redirect(url);
-		} catch (IOException e) {
-			e.printStackTrace();
-			FacesContext ctx = FacesContext.getCurrentInstance();
-			ctx.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
-					"Error", "Sorry.Description is not availabel."));
-		}
-	}
-
+	@Override
 	public void search(String query) {
 		if (query.length() < 3)
 			return;
@@ -116,45 +25,31 @@ public class SearchBean implements Serializable {
 		String lowerQuery = query.toLowerCase();
 
 		products = searchService.search(lowerQuery);
-		
-		for(int i=0;i<products.size();i++)
-			if(products.get(i).getPrice() < minPrice || products.get(i).getPrice() > maxPrice){
+
+		for (int i = 0; i < products.size(); i++)
+			if (products.get(i).getPrice() < minPrice
+					|| products.get(i).getPrice() > maxPrice) {
 				products.remove(i);
 				i--;
 			}
 
-		if (products.size() == 0)
+		System.out.println(products.size());
+		if (products.size() == 0) {
 			setNoProducts(false);
-		else
+			System.out.println("lista e goala");
+		}
+
+		else {
 			setNoProducts(true);
+			System.out.println("lista nu e goala");
+		}
 
-		redirect("/Shop4j/client/user/Search");
+		NavigationUtil.redirect("/Shop4j/client/user/Search");
 	}
 
-	public List<String> complete(String str) {
-		System.out.println("string-ul "+str);
-		
-		String lowerQuery = str.toLowerCase();
-		List<String> names = searchService.searchForAutoComplete(lowerQuery);
-
-		for (String s : names)
-			if (!names.contains(s)) {
-				names.add(s);
-			}
-
-		return names;
-	}
-	
+	@Override
 	public void chooseAProduct(Product product) {
-		redirect("/Shop4j/client/user/productSearchDescription/"
+		NavigationUtil.redirect("/Shop4j/client/user/productSearchDescription/"
 				+ product.getId());
-	}
-	
-	public String getProductColorId(Product p) {
-		List<ProductColor> productsColor = productColorService
-				.getColorsForProduct(p.getId());
-		if (productsColor.size() > 0)
-			return productsColor.get(0).getId().toString();
-		return "-1";
 	}
 }

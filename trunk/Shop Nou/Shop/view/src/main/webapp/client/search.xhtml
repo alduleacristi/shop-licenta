@@ -12,31 +12,27 @@
 <h:body>
 	<ui:composition template="/resources/template/template.xhtml">
 		<ui:define name="menu">
-			<ui:include src="/resources/template/client/user/menuBox.xhtml"></ui:include>
-		</ui:define>
-
-		<ui:define name="cart">
-			<ui:include src="/resources/template/client/user/cartBox.xhtml"></ui:include>
+			<ui:include src="/resources/template/client/menuBox.xhtml"></ui:include>
 		</ui:define>
 
 		<ui:define name="search">
-			<ui:include src="/resources/template/client/user/searchBox.xhtml"></ui:include>
+			<ui:include src="/resources/template/client/searchBox.xhtml"></ui:include>
 		</ui:define>
 
 		<ui:define name="categories">
 			<ui:include
-				src="/resources/template/client/user/productsCategoryBox.xhtml"></ui:include>
+				src="/resources/template/client/productsCategoryBox.xhtml"></ui:include>
 		</ui:define>
 
 		<ui:define name="mainContent">
 			<h:form id="searchForm">
-				<p:carousel value="#{searchClient.products}" var="p"
+				<p:carousel value="#{searchVisitor.products}" var="p"
 					itemStyle="width:237px" styleClass="products-reduce-index"
-					rendered="#{searchClient.noProducts}">
-					<p:commandLink actionListener="#{searchClient.chooseAProduct(p)}">
+					rendered="#{searchVisitor.noProducts}">
+					<p:commandLink actionListener="#{searchVisitor.chooseAProduct(p)}">
 						<center>
 							<p:graphicImage
-								url="#{searchClient.host}/Shop4j/rest/products/id#{searchClient.getProductColorId(p)}"
+								url="#{searchVisitor.host}/Shop4j/rest/products/id#{searchVisitor.getProductColorId(p)}"
 								width="170" height="190" />
 							<div class="product-info">
 								<div class="reduction">
@@ -59,7 +55,7 @@
 					</p:commandLink>
 				</p:carousel>
 				<p:outputLabel value="#{internationalizationCart.noRecords}"
-					rendered="#{!searchClient.noProducts}"></p:outputLabel>
+					rendered="#{!searchVisitor.noProducts}"></p:outputLabel>
 			</h:form>
 		</ui:define>
 

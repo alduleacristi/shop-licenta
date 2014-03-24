@@ -16,8 +16,8 @@
 
 					<br></br> <label>#{internationalizationSearchBox.keyword}</label> <br />
 					<p:autoComplete id="acMinLength" minQueryLength="3"
-						value="#{searchVisitor.query}" effect="fade" style="width:305px"
-						size="70" completeMethod="#{searchVisitor.complete}" />
+						value="#{searchClient.query}" effect="fade" style="width:305px"
+						size="70" completeMethod="#{searchClient.complete}" />
 					<p:tooltip for="acMinLength"
 						value="#{internationalizationSearchBox.toolTipKeyword}"></p:tooltip>
 
@@ -27,7 +27,7 @@
 						<br />
 						<h:panelGrid columns="1" style="margin-bottom:10px">
 							<h:outputText id="displayRange"
-								value="#{internationalizationSearchBox.price} #{searchVisitor.minPrice}$ - #{searchVisitor.maxPrice}$" />
+								value="#{internationalizationSearchBox.price} #{searchClient.minPrice}$ - #{searchClient.maxPrice}$" />
 							<p:slider for="txt6,txt7" display="displayRange"
 								style="width:210px" range="true"
 								displayTemplate="#{internationalizationSearchBox.price} {min}$ - {max}$"
@@ -35,11 +35,11 @@
 							<p:tooltip for="sliderSearch"
 								value="#{internationalizationSearchBox.toolTipSlider}"></p:tooltip>
 						</h:panelGrid>
-						<h:inputHidden id="txt6" value="#{searchVisitor.minPrice}" />
-						<h:inputHidden id="txt7" value="#{searchVisitor.maxPrice}" />
+						<h:inputHidden id="txt6" value="#{searchClient.minPrice}" />
+						<h:inputHidden id="txt7" value="#{searchClient.maxPrice}" />
 						<p:commandButton value="#{internationalizationSearchBox.search}"
 							styleClass="search-submit"
-							action="#{searchVisitor.search(searchVisitor.query)}" />
+							action="#{searchClient.search(searchClient.query)}" />
 					</div>
 					<p>
 						<a href="/Shop4j/client/user/contact" class="bul">#{internationalizationSearchBox.support}</a>

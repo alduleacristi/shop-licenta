@@ -11,13 +11,10 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 
 @Entity
-@NamedQueries({
-	@NamedQuery(name = ReturnedProducts.getReturnedProductsForOrder, query = "SELECT p from ReturnedProducts p where p.command.command.id=:id"), 
-	})
-
+@NamedQueries({ @NamedQuery(name = ReturnedProducts.getReturnedProductsForOrder, query = "SELECT p from ReturnedProducts p where p.command.command.id=:id"), })
 public class ReturnedProducts {
 
-	public final static String getReturnedProductsForOrder="getReturnedProductsForOrder";
+	public final static String getReturnedProductsForOrder = "getReturnedProductsForOrder";
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -29,6 +26,10 @@ public class ReturnedProducts {
 	@OneToOne
 	@JoinColumn(name = "id_product")
 	private ProductColorSize product;
+
+	public ReturnedProducts() {
+
+	}
 
 	public ReturnedProducts(ReturnedOrders command, ProductColorSize product) {
 		this.command = command;

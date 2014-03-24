@@ -51,8 +51,14 @@
 												</div>
 												<h3>#{internationalizationProduct.productName}</h3>
 												#{productColor.product.name} <br /> <strong class="price">#{internationalizationProduct.category}
-													name</strong>#{productColor.product.category.name} <br /> <br /> <strong
-													class="price">#{internationalizationProduct.price}</strong>#{productColor.product.price}$
+													name</strong>#{productColor.product.category.name} <br />
+												<br /> <strong
+													class="price">#{internationalizationProduct.price}</strong>
+												<p:outputLabel value="#{productColor.product.price}$"
+													rendered="#{productColor.product.reduction == 0.0 and productColor.product != null}"></p:outputLabel>
+												<p:outputLabel value="#{productColor.product.price}$"
+													rendered="#{productColor.product.reduction != 0.0 and productColor.product != null}"
+													style="text-decoration:line-through;"></p:outputLabel>
 												<br /> <br /> <strong class="price">#{internationalizationProduct.color}</strong>#{productColor.color.name}
 											</div>
 										</center>

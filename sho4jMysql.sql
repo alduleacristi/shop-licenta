@@ -111,14 +111,14 @@ on delete no action
 drop table if exists country;
 create table country(
         id bigint not null auto_increment primary key,
-        name varchar(20) not null
+        name varchar(100) not null
 );
 
 -- create table county
 drop table if exists county;
 create table county(
     id bigint not null auto_increment primary key,
-    name varchar(20) not null,
+    name varchar(100) not null,
     id_country bigint not null,
     foreign key county_country(id_country)
     references country(id)
@@ -131,7 +131,7 @@ create table county(
 drop table if exists locality;
 create table locality(
     id bigint not null auto_increment primary key,
-    name varchar(20) not null,
+    name varchar(100) not null,
     id_county bigint not null,
     foreign key locality_county(id_county)
     references county(id)
@@ -143,10 +143,10 @@ create table locality(
 drop table if exists user;
 create table user(
     id bigint not null auto_increment primary key,
-    username varchar(20) not null unique,
+    username varchar(50) not null unique,
     user_password char(32) not null,
     rolename varchar(50) not null,
-    email varchar(30) not null unique,
+    email varchar(100) not null unique,
     passwordStatus int not null,
 	ban int not null
 );
@@ -159,9 +159,9 @@ insert into user(username,user_password,rolename,email) values ("client1","clien
 drop table if exists client;
 create table client(
     id bigint not null primary key,
-    first_name varchar(20) not null,
-    last_name varchar(20) not null,
-    phone_number varchar(10),
+    first_name varchar(50) not null,
+    last_name varchar(50) not null,
+    phone_number varchar(20),
     foreign key client_user(id)
     references user(id)
     on update cascade
@@ -177,7 +177,7 @@ create table adress(
     id_locality bigint not null,
     street varchar(200) not null,
     number bigint not null,
-    staircase varchar(3),
+    staircase varchar(10),
     block bigint,
     flat bigint,
     id_client bigint not null,
@@ -195,8 +195,8 @@ create table adress(
 drop table if exists messages;
 create table messages(
     id bigint not null auto_increment primary key,
-    subject varchar(20)not null,
-    message varchar(900) not null,
+    subject varchar(50)not null,
+    message varchar(2000) not null,
     send_date date not null,
     is_replied bit not null,
     id_user bigint,

@@ -12,6 +12,10 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+
+import org.apache.derby.tools.sysinfo;
+import org.primefaces.model.DualListModel;
+
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.siemens.ctbav.intership.shop.convert.operator.ConvertCommand;
 import com.siemens.ctbav.intership.shop.convert.operator.ConvertProductColorSize;
@@ -138,7 +142,7 @@ public class CommandBean implements Serializable {
 	}
 
 	public void setSelectedOrder(Command c) {
-		System.out.println("sel order");
+		// System.out.println("sel order");
 		if (c == null)
 			return;
 		selectedOrder = c;
@@ -148,10 +152,7 @@ public class CommandBean implements Serializable {
 
 		selectedProducts.clear();
 		selectedProducts.addAll(selectedOrder.getClientProducts());
-		// for (ClientProduct cp : selectedOrder.getClientProducts()) {
-		// ClientProductDTO scp = ConvertClientProduct.convert(cp);
-		// selectedProducts.add(scp);
-		// }
+
 	}
 
 	public Command getSelectedOrder() {
@@ -237,4 +238,17 @@ public class CommandBean implements Serializable {
 		return false;
 	}
 
+	public void showProducts() {
+
+	}
+
+	public DualListModel<ClientProduct> getList() {
+
+		DualListModel<ClientProduct> listt = new DualListModel<ClientProduct>(
+				selectedOrder.getClientProducts(),
+				new ArrayList<ClientProduct>());
+		System.out.println(listt.getSource().size());
+		return listt;
+
+	}
 }

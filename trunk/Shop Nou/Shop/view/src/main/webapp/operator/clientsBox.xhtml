@@ -14,7 +14,7 @@
 	<h:form id="form">
 		<p:growl id="error" showDetail="true" />
 		<p:dataTable id="clientsTable" var="client"
-			value="#{clients.allClients}">
+			value="#{clients.allClients}" filteredValue="#{clients.filteredClients}">
 			<p:ajax event="rowToggle" listener="#{clients.onRowToggle}"
 				update=":form:error" />
 

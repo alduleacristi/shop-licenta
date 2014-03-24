@@ -40,10 +40,11 @@
 					<br />
 					<br />
 					<p:dataTable id="ordersTable" var="order"
-						value="#{orders.orderList}" paginator="true" rows="20"
+						value="#{orders.orderList}" paginator="true" rows="10"
 						paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
-						rowsPerPageTemplate="5,10,15" selection="#{orders.selectedOrder}"
-						rowKey="#{order.id}" selectionMode="single">
+						paginatorPosition="bottom" rowsPerPageTemplate="3,6,9,12,15"
+						selection="#{orders.selectedOrder}" rowKey="#{order.id}"
+						selectionMode="single">
 
 						<p:column style="width:7%">
 
@@ -189,7 +190,7 @@
 
 					</p:dialog>
 					<br></br>
-					
+
 					<h:selectManyCheckbox value="#{orders.reports}">
 
 						<f:selectItem itemValue="1" itemLabel="PDF" />

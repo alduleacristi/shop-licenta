@@ -89,7 +89,8 @@
 					rowsPerPageTemplate="3,6,9,12,15" paginatorPosition="bottom"
 					selection="#{manageAdminsBean.selectedAdmin}"
 					selectionMode="single"
-					filteredValue="#{manageAdminsBean.filteredAdmins}" id="adminsTable">
+					filteredValue="#{manageAdminsBean.filteredAdmins}" id="adminsTable"
+					emptyMessage="#{internationalizationCart.noRecords}">
 					<p:ajax event="rowSelect" update=":manageAdmins:display"
 						oncomplete="dialog.show()" />
 					<f:facet name="header">

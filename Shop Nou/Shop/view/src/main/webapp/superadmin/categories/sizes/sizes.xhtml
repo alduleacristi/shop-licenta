@@ -97,7 +97,8 @@
 					rendered="#{sizeBean.addSize}" paginator="true" rows="10"
 					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 					rowsPerPageTemplate="5,10,15" type="none"
-					paginatorPosition="bottom">
+					paginatorPosition="bottom"
+					emptyMessage="#{internationalizationCart.noRecords}">
 					<f:facet name="header">
 						<p:ajax event="rowSelect" update=":formSizes"
 							listener="#{sizeBean.onRowSelect}"
@@ -173,7 +174,8 @@
 					paginator="true" rows="10"
 					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 					rowsPerPageTemplate="5,10,15" type="none"
-					paginatorPosition="bottom" emptyMessage="#{internationalizationCart.noRecords}">
+					paginatorPosition="bottom"
+					emptyMessage="#{internationalizationCart.noRecords}">
 					<f:facet name="header">  
             		#{internationalizationSize.table2}
         			</f:facet>

@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
+import com.siemens.ctbav.intership.shop.exception.UserException;
 import com.siemens.ctbav.intership.shop.exception.client.ClientDoesNotExistException;
 import com.siemens.ctbav.intership.shop.exception.client.UserDoesNotExistException;
 import com.siemens.ctbav.intership.shop.model.Client;
@@ -147,6 +148,8 @@ public class LoginBean implements Serializable {
 
 			// String hashPass2 = DigestUtils.md5Hex(this.password);
 			request.login(this.user.getUserName(), this.user.getPassword());
+			if (user.getBan() == 1)
+				throw new UserException("User is banned");
 			this.logged = true;
 			if (request.isUserInRole(UsersRole.SUPER_ADMINISTRATOR.toString())) {
 				FacesContext.getCurrentInstance().getExternalContext()
@@ -215,6 +218,10 @@ public class LoginBean implements Serializable {
 			context.addMessage(null, new FacesMessage(
 					FacesMessage.SEVERITY_ERROR, "Error ",
 					"You are already logged."));
+		} catch (UserException e) {
+			FacesContext context = FacesContext.getCurrentInstance();
+			context.addMessage(null, new FacesMessage(
+					FacesMessage.SEVERITY_ERROR, "Error ", e.getMessage()));
 		}
 	}
 

@@ -69,7 +69,8 @@
 					paginator="true" rows="5"
 					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 					paginatorPosition="bottom" rowsPerPageTemplate="5,10,15"
-					type="none" style="width:550px;">
+					type="none" style="width:550px;"
+					emptyMessage="#{internationalizationCart.noRecords}">
 					<p:column headerText="#{internationalizationColor.colors}">
 						<p:commandButton icon="ui-icon-search" update=":form:colorDetail"
 							oncomplete="PF('colorDialog').show()" title="View Detail">

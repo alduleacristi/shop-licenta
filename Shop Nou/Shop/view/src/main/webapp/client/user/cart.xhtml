@@ -35,7 +35,7 @@
 					rendered="#{cart.isEmpty()}">
 					<center>
 						<p:graphicImage
-							url="http://localhost:8080/Shop4j/rest/products/id#{p.productColor.id}"
+							url="#{clientProducts.host}/Shop4j/rest/products/id#{p.productColor.id}"
 							width="170" height="190" id="image" cache="false" />
 						<div class="product-info">
 							<div class="reduction">
@@ -63,7 +63,7 @@
 								icon="ui-icon-search"
 								value="#{internationalizationProduct.description}"
 								title="Description" styleClass="update-submit"
-								update=":cartForm:descriptionDlg">
+								update=":cartForm:descriptionDlg" style="width:150px">
 								<f:setPropertyActionListener value="#{p}"
 									target="#{cart.selectedProductForDescription}" />
 							</p:commandButton>

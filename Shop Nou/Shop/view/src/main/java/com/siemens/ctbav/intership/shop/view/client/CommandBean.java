@@ -12,10 +12,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-
-import org.apache.derby.tools.sysinfo;
 import org.primefaces.model.DualListModel;
-
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.siemens.ctbav.intership.shop.convert.operator.ConvertCommand;
 import com.siemens.ctbav.intership.shop.convert.operator.ConvertProductColorSize;
@@ -84,8 +81,10 @@ public class CommandBean implements Serializable {
 
 			if (ok)
 				existCommands = true;
-			else
+			else{
 				existCommands = false;
+				throw new CommandDoesNotExistException();
+			}
 
 			selectedOrder = commands.get(0);
 			selectedProducts = new ArrayList<ClientProduct>();
@@ -243,9 +242,17 @@ public class CommandBean implements Serializable {
 	}
 
 	public DualListModel<ClientProduct> getList() {
-
+		List<ClientProduct> list;
+		if(selectedOrder != null)
+			list = selectedOrder.getClientProducts();
+		else
+			list = new ArrayList<ClientProduct>();
+		
+		if(list == null)
+			list = new ArrayList<ClientProduct>();
+		
 		DualListModel<ClientProduct> listt = new DualListModel<ClientProduct>(
-				selectedOrder.getClientProducts(),
+				list,
 				new ArrayList<ClientProduct>());
 		System.out.println(listt.getSource().size());
 		return listt;

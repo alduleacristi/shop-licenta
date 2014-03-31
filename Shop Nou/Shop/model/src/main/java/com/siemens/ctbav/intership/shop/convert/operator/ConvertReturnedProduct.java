@@ -18,7 +18,7 @@ public class ConvertReturnedProduct {
 		ReturnedOrdersDTO comm = ConvertReturnedOrders.convertReturnedOrder(prod.getCommand());
 		ProductColorSizeDTO product = ConvertProductColorSize.convert(prod.getProduct());
 		
-		return new ReturnedProductsDTO(comm, product);
+		return new ReturnedProductsDTO(prod.getIdreturnedproducts(),comm, product);
 	}
 	
 	public static List<ReturnedProductsDTO> convertList(List<ReturnedProducts> list){

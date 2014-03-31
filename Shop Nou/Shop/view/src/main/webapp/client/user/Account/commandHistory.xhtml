@@ -32,27 +32,40 @@
 
 		<ui:define name="mainContent">
 			<h:form id="commandHistory">
-				<center>
-					<p:carousel value="#{CommandBean.commands}" vertical="true" var="c"
-						rendered="#{CommandBean.existCommands}" numVisible="1"
-						styleClass="products-reduce-commandHistory"
-						headerText="List of commands" itemStyle="width:723px">
-						<center>
-							<strong class="price">Number of Items:</strong>
-							#{c.getClientProducts().size()} <br /> <strong class="price">Total
-								price:</strong> #{CommandBean.getTotalPrice(c)}$
+				<p:growl id="message">
+					<center>
+						<p:carousel value="#{CommandBean.commands}" vertical="true"
+							var="c" rendered="#{CommandBean.existCommands}" numVisible="1"
+							styleClass="products-reduce-commandHistory"
+							headerText="List of commands" itemStyle="width:723px">
+							<center>
+								<strong class="price">Number of Items:</strong>
+								#{c.getClientProducts().size()} <br /> <strong class="price">Total
+									price:</strong> #{CommandBean.getTotalPrice(c)}$
 
-						</center>
-						<strong class="price">Status</strong>
+							</center>
+							<strong class="price">Status</strong>
 							#{c.command_status.status}
 						<br />
-						<strong class="price">List of products</strong>
-						<p:dataGrid var="p" value="#{c.clientProducts}" columns="3"
-							rows="3" paginator="true" paginatorPosition="bottom">
-							<center>
-								<p:graphicImage
-									url="#{clientProducts.host}/Shop4j/rest/products/id#{p.product.productcolor.id}"
-									width="170" height="190" />
+							<strong class="price">List of products</strong>
+							<p:dataGrid var="p" value="#{c.clientProducts}" columns="3"
+								rows="3" paginator="true" paginatorPosition="bottom">
+								<center>
+									<p:graphicImage
+										url="http://localhost:8080/Shop4j/rest/products/id#{p.product.productcolor.id}"
+										width="170" height="190" />
+									<br />
+									<div class="price">
+										<p:outputLabel value="-#{p.percRedution}%"
+											rendered="#{p.percRedution != 0.0}"></p:outputLabel>
+										<strong class="price">Number of Items</strong> #{p.nrPieces}
+									</div>
+									<h3>#{internationalizationProduct.productName}</h3>
+									<p:outputLabel value="#{p.product.productcolor.product.name}"></p:outputLabel>
+									<br /> <br /> <strong class="price">#{internationalizationProduct.price}</strong>
+									<p:outputLabel value="#{p.price}$"></p:outputLabel>
+
+								</center>
 								<br />
 								<div class="price">
 									<p:outputLabel value="-#{p.percRedution}%"
@@ -67,26 +80,41 @@
 								<!-- 								<strong> <p:outputLabel value="#{CommandBean.message}" -->
 								<!-- 										rendered="#{CommandBean.isAlreadySaved(c)}"></p:outputLabel></strong> -->
 
-								<!-- 								<p:commandButton rendered="#{CommandBean.canBeReturned(c)}" -->
-								<!-- 									value="Return command" style="background: #8b0000;color: #fff;" -->
-								<!-- 									action="#{CommandBean.setSelectedOrder(c)}" -->
-								<!-- 									update=":commandHistory:display" -->
-								<!-- 									oncomplete="PF('dialog').show()"></p:commandButton> -->
+							</p:dataGrid>
+							<center>
+								<strong> <p:outputLabel value="#{CommandBean.message}"
+										rendered="#{CommandBean.isAlreadySaved(c)}"></p:outputLabel></strong>
+
+								<p:commandButton rendered="#{CommandBean.canBeReturned(c)}"
+									value="Return command" style="background: #8b0000;color: #fff;"
+									action="#{CommandBean.setSelectedOrder(c)}"
+									oncomplete="PF('dialog').show()"></p:commandButton>
 							</center>
-							<br />
 
-						</p:dataGrid>
-						<center>
-							<strong> <p:outputLabel value="#{CommandBean.message}"
-									rendered="#{CommandBean.isAlreadySaved(c)}"></p:outputLabel></strong>
+						</p:carousel>
+						<p:dialog id="dlg" header="Returned products" widgetVar="dialog"
+							width="600" showEffect="explode" hideEffect="explode">
+							<p:pickList id="pickList" value="#{CommandBean.dualList}"
+								converter="orderConverter" var="clientProduct"
+								itemLabel="#{clientProduct}" itemValue="#{clientProduct}" />
+							<p:commandButton id="submit" value="Remove products"
+								actionListener="#{CommandBean.removeProducts}"
+								style="background: #8b0000;color: #fff;" update =":commandHistory:message">
+<!-- 								update=":commandHistory:dlg" oncomplete="dialog.show()" -->
+								
+								<p:confirm header="Confirmation"
+									message="Are you sure you want to return this products???"
+									icon="ui-icon-alert" />
 
-							<p:commandButton rendered="#{CommandBean.canBeReturned(c)}"
-								value="Return command" style="background: #8b0000;color: #fff;"
-								action="#{CommandBean.setSelectedOrder(c)}"
-								oncomplete="PF('dialog').show()"></p:commandButton>
-						</center>
-					</p:carousel>
+							</p:commandButton>
 
+							<p:confirmDialog global="true" showEffect="fade"
+								hideEffect="explode">
+								<p:commandButton value="Yes" type="button"
+									styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+								<p:commandButton value="No" type="button"
+									styleClass="ui-confirmdialog-yes" icon="ui-icon-close" />
+							</p:confirmDialog>
 
 
 					<p:pickList id="pickList" value="#{CommandBean.getList()}"
@@ -119,12 +147,9 @@
 						</strong>
 					</div>
 					<br /> <br />
-				</center>
-				<p:outputLabel value="#{internationalizationCart.noRecords}"
-					rendered="#{!CommandBean.existCommands}"></p:outputLabel>
-				<br />
-				<br />
-				<br />
+					<br />
+					<br />
+				</p:growl>
 			</h:form>
 		</ui:define>
 

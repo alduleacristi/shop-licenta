@@ -11,6 +11,7 @@ import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import org.primefaces.model.DualListModel;
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
@@ -56,7 +57,8 @@ public class CommandBean implements Serializable {
 	private final String message = "Your order has been saved";
 
 	private Command selectedOrder;
-	private List<ClientProduct> selectedProducts;
+	// private List<ClientProduct> selectedProducts;
+	private DualListModel<ClientProduct> dualList;
 
 	@PostConstruct
 	private void initialize() {
@@ -87,14 +89,25 @@ public class CommandBean implements Serializable {
 			}
 
 			selectedOrder = commands.get(0);
-			selectedProducts = new ArrayList<ClientProduct>();
+			// selectedProducts = new ArrayList<ClientProduct>();
 
 		} catch (CommandDoesNotExistException e) {
 			existCommands = false;
 		} catch (ClientDoesNotExistException e) {
 			existCommands = false;
 		}
+		dualList = new DualListModel<ClientProduct>(
+				selectedOrder.getClientProducts(),
+				new ArrayList<ClientProduct>());
+	}
 
+	public DualListModel<ClientProduct> getDualList() {
+		System.out.println("get dual list");
+		return dualList;
+	}
+
+	public void setDualList(DualListModel<ClientProduct> dualList) {
+		this.dualList = dualList;
 	}
 
 	public String getMessage() {
@@ -117,20 +130,12 @@ public class CommandBean implements Serializable {
 		this.existCommands = existCommands;
 	}
 
-	public List<ClientProduct> getSelectedProducts() {
-		return selectedProducts;
-	}
-
-	public void setSelectedProducts(List<ClientProduct> selectedProducts) {
-		this.selectedProducts = selectedProducts;
-	}
-
 	public Double getTotalPrice(Command command) {
 		Double totalPrice = 0.0d;
 
-		if(command == null)
+		if (command == null)
 			return totalPrice;
-		
+
 		List<ClientProduct> cpList = command.getClientProducts();
 		for (ClientProduct cp : cpList)
 			totalPrice += (cp.getPrice() - cp.getPrice() * cp.getPercRedution()
@@ -141,7 +146,7 @@ public class CommandBean implements Serializable {
 	}
 
 	public void setSelectedOrder(Command c) {
-		// System.out.println("sel order");
+		System.out.println("sel order");
 		if (c == null)
 			return;
 		selectedOrder = c;
@@ -149,9 +154,7 @@ public class CommandBean implements Serializable {
 		if (selectedOrder.getClientProducts() == null)
 			return;
 
-		selectedProducts.clear();
-		selectedProducts.addAll(selectedOrder.getClientProducts());
-
+		dualList.setSource(selectedOrder.getClientProducts());
 	}
 
 	public Command getSelectedOrder() {
@@ -161,17 +164,19 @@ public class CommandBean implements Serializable {
 	public boolean isAlreadySaved(Command command) {
 		Date currentDate = new Date(Calendar.getInstance().getTimeInMillis());
 		CommandDTO com = ConvertCommand.convertCommand(command);
-		ReturnedOrdersDTO retOrder = new ReturnedOrdersDTO(com, currentDate);
+		ReturnedOrdersDTO retOrder = new ReturnedOrdersDTO();
+		retOrder.setCommand(com);
+		retOrder.setReturnDate(currentDate);
 		return commandService.willBeReturned(retOrder);
 
 	}
 
 	public boolean canBeReturned(Command command) {
 		Date date = command.getDeliveryDate();
-		
-		if(date == null)
-			return false; 
-		
+
+		if (date == null)
+			return false;
+
 		Date now = new Date();
 		int days = (int) ((now.getTime() - date.getTime()) / DAY_IN_MILIS);
 		if (days > MAX_DAYS)
@@ -179,34 +184,23 @@ public class CommandBean implements Serializable {
 		return !isAlreadySaved(command);
 	}
 
-	public void returnProduct(ClientProduct product) {
-		if(product == null)
-			return;
-
-		Date currentDate = new Date(Calendar.getInstance().getTimeInMillis());
-		CommandDTO com = ConvertCommand.convertCommand(selectedOrder);
-		ReturnedOrdersDTO retOrder = new ReturnedOrdersDTO(com, currentDate);
-		ProductColorSizeDTO pcs = ConvertProductColorSize.convert(product
-				.getProduct());
-		ReturnedProductsDTO retProd = new ReturnedProductsDTO(retOrder, pcs);
-
+	public void removeProducts() {
+		ExternalContext context = FacesContext.getCurrentInstance()
+				.getExternalContext();
+		context.getFlash().setKeepMessages(true);
 		try {
-			commandService.addProductToReturn(retProd);
-			System.out.println("remove product " + selectedProducts.size());
-			removeProduct(retProd);
-			System.out.println("s-a sters");
-			System.out.println("after remove product "
-					+ selectedProducts.size());
+			commandService.removeProducts(dualList.getTarget(), selectedOrder);
 			FacesContext.getCurrentInstance().addMessage(
 					null,
 					new FacesMessage(FacesMessage.SEVERITY_INFO,
-							"The product has been added in the database", ""));
+							"The products have been removed",
+							"The products have been removed"));
+			context.redirect("commandHistory.xhtml");
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
 			FacesContext.getCurrentInstance().addMessage(
 					null,
-					new FacesMessage(FacesMessage.SEVERITY_ERROR, e
-							.getMessage(), ""));
+					new FacesMessage(FacesMessage.SEVERITY_ERROR,"The following products couldn't be removed:  " + e
+							.getMessage(), e.getMessage()));
 		}
 
 	}

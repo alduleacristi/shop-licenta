@@ -7,22 +7,24 @@ import com.siemens.ctbav.intership.shop.model.Command;
 
 public class ReturnedOrdersDTO {
 
-	
+	private Long id;
 	private CommandDTO command;
 	private Date returnDate;
 	private Date addDate;
 	private boolean returned;
-//	private List<ReturnedProductsDTO> productsList;
+	private boolean retreived;
 	
 	public ReturnedOrdersDTO(){
 		
 	}
-	public ReturnedOrdersDTO(CommandDTO command, Date returnDate) {
+	public ReturnedOrdersDTO(Long id, CommandDTO command, Date returnDate, boolean retreived) {
+		this.id=id;
 		this.command = command;
 		this.returnDate = returnDate;
-		//this.productsList=productsList;
 		this.addDate=null;
 		this.returned=false;
+		this.retreived=retreived;
+		
 	}
 	
 	
@@ -49,6 +51,22 @@ public class ReturnedOrdersDTO {
 	}
 	public void setReturned(boolean returned) {
 		this.returned = returned;
+	}
+	public Long getId() {
+		return id;
+	}
+	public boolean isRetreived() {
+		return retreived;
+	}
+	public void setRetreived(boolean retreived) {
+		this.retreived = retreived;
+	}
+	
+	@Override
+	public String toString() {
+		return "ReturnedOrdersDTO [id=" + id + ", command=" + command
+				+ ", returnDate=" + returnDate + ", addDate=" + addDate
+				+ ", returned=" + returned + "]";
 	}
 	
 }

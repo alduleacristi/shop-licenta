@@ -17,7 +17,7 @@ public class ConvertReturnedOrders {
 
 		CommandDTO cDTO = ConvertCommand.convertCommand(order.getCommand());
 	//	List<ReturnedProductsDTO> list = ConvertReturnedProduct.convertList(order.getProductsList());
-		return new ReturnedOrdersDTO(cDTO, order.getReturnDate());
+		return new ReturnedOrdersDTO(order.getId(),cDTO, order.getReturnDate(), order.isRetreived());
 	}
 
 	public static List<ReturnedOrdersDTO> convertListOfReturnedOrders(

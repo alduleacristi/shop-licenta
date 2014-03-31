@@ -1,5 +1,6 @@
 package com.siemens.ctbav.intership.shop.model;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -24,10 +25,10 @@ import com.siemens.ctbav.intership.shop.dto.operator.CommandDTO;
 @Entity
 @NamedQueries({
 	@NamedQuery(name = ReturnedOrders.getReturnedOrder, query = "SELECT c from ReturnedOrders c where c.command.id=:id"), 
-	@NamedQuery(name = ReturnedOrders.getAllReturnedOrders, query ="select r from ReturnedOrders r order by r.returnDate desc")})
-public class ReturnedOrders {
+	@NamedQuery(name = ReturnedOrders.getAllReturnedOrders, query ="select r from ReturnedOrders r where  r.returned= false order by r.returnDate desc")})
+public class ReturnedOrders implements Serializable{
 
-
+	private static final long serialVersionUID = 1L;
 	public final static String getReturnedOrder="getReturnedOrders";
 	public final static  String getAllReturnedOrders="getAllReturnedOrders";
 	@Id
@@ -42,6 +43,7 @@ public class ReturnedOrders {
 	private Date returnDate;
 	private Date addDate;
 	private boolean returned;
+	private boolean retreived;
 	
 	public ReturnedOrders() {
 	
@@ -53,6 +55,7 @@ public class ReturnedOrders {
 		this.returnDate = returnDate;
 		this.addDate = null;
 		this.returned = false;
+		this.retreived=false;
 	}
 
 
@@ -101,6 +104,16 @@ public class ReturnedOrders {
 		return "ReturnedOrders [id=" + id + ", command=" + command
 				+ ", returnDate=" + returnDate + ", addDate=" + addDate
 				+ ", returned=" + returned + "]";
+	}
+
+
+	public boolean isRetreived() {
+		return retreived;
+	}
+
+
+	public void setRetreived(boolean retreived) {
+		this.retreived = retreived;
 	}
 	
 	

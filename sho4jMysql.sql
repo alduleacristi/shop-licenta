@@ -253,7 +253,7 @@ create table returnedOrders(
     id_command bigint unique,
     returnDate Date not null,
 	addDate Date,
-    returned bool not null,
+    returned bool not null,retreived bool not null,
  foreign key returned_command(id_command)
     references command(id)
     on update no action
@@ -269,12 +269,12 @@ id_product bigint not null,
 
 foreign key returned_product1(id_command)
 references returnedOrders(id)
-on update cascade
+on update cascade 
 on delete cascade,
 
 foreign key returned_product2(id_product)
 references product_color_size(id_pcs)
-on update cascade
+on update cascade 
 on delete cascade
 );
 

@@ -1,14 +1,19 @@
 package com.siemens.ctbav.intership.shop.service.operator;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+
+import com.siemens.ctbav.intership.shop.dto.operator.ClientProductDTO;
 import com.siemens.ctbav.intership.shop.dto.operator.CommandDTO;
+import com.siemens.ctbav.intership.shop.dto.operator.ProductColorSizeDTO;
 import com.siemens.ctbav.intership.shop.dto.operator.ReturnedOrdersDTO;
+import com.siemens.ctbav.intership.shop.dto.operator.ReturnedProductsDTO;
 import com.siemens.ctbav.intership.shop.exception.client.ProductDoesNotExistException;
 import com.siemens.ctbav.intership.shop.exception.operator.CommandNotFoundException;
 import com.siemens.ctbav.intership.shop.exception.operator.CommandStatusException;
@@ -17,6 +22,7 @@ import com.siemens.ctbav.intership.shop.exception.operator.UserNotFoundException
 import com.siemens.ctbav.intership.shop.model.ClientProduct;
 import com.siemens.ctbav.intership.shop.model.Command;
 import com.siemens.ctbav.intership.shop.model.CommandStatus;
+import com.siemens.ctbav.intership.shop.model.ProductColorSize;
 import com.siemens.ctbav.intership.shop.model.ReturnedOrders;
 import com.siemens.ctbav.intership.shop.model.ReturnedProducts;
 import com.siemens.ctbav.intership.shop.model.User;
@@ -241,16 +247,52 @@ public class CommandService {
 		return orders;
 	}
 
-//	public List<ReturnedProducts> getReturnedProductsForOrder(
-//			ReturnedOrdersDTO order) throws ProductDoesNotExistException {
-//		System.out.println(order);
-//		return new ArrayList<ReturnedProducts>();
-//		List<ReturnedProducts> list = em
-//				.createNamedQuery(ReturnedProducts.getReturnedProductsForOrder)
-//				.setParameter("id", order.getCommand().getId()).getResultList();
-//		if (list == null || list.size() == 0)
-//			throw new ProductDoesNotExistException(
-//					"There aren;t returned products for this order");
-//		return list;
-//	}
+	@SuppressWarnings("unchecked")
+	public List<ReturnedProducts> getReturnedProductsForOrder(
+			ReturnedOrdersDTO order) {
+		System.out.println(order);
+		List<ReturnedProducts> list = (List<ReturnedProducts>) em
+				.createNamedQuery(ReturnedProducts.getReturnedProductsForOrder)
+				.setParameter("id", order.getId()).getResultList();
+		return list;
+	}
+
+	@SuppressWarnings("unchecked")
+	public void addReturnedProductsPieces(ClientProductDTO cp) throws ProductDoesNotExistException {
+		Long nrPieces = cp.getNrPieces();
+		ProductColorSizeDTO pcs = cp.getProduct();
+		List<ProductColorSize> products = em
+				.createNamedQuery(ProductColorSize.GET_PRODUCT_COLOR_SIZE)
+				.setParameter("size", pcs.getSize().getName())
+				.setParameter("color", pcs.getProdColor().getColor().getName())
+				.setParameter("name", pcs.getProdColor().getProduct().getName())
+				.getResultList();
+		
+		if (products == null || products.size() ==0) throw new ProductDoesNotExistException();
+		
+		ProductColorSize product = products.get(0);
+		System.out.println(product.getNrOfPieces());
+		product.setNrOfPieces(nrPieces + product.getNrOfPieces());
+		System.out.println(product.getNrOfPieces());
+		em.merge(product);
+
+	}
+
+
+	public void setAsReturned(ReturnedOrdersDTO order) {
+		Date currDate = Calendar.getInstance().getTime();
+		ReturnedOrders ord = em.find(ReturnedOrders.class, order.getId());
+		ord.setAddDate(currDate);
+		ord.setReturned(true);
+		em.merge(ord);
+	}
+
+	public void setAsRetreived(ReturnedOrdersDTO order) throws CommandNotFoundException {
+		ReturnedOrders ord = em.find(ReturnedOrders.class, order.getId());
+		if(ord == null) throw new CommandNotFoundException("No returned order with this id");
+		ord.setRetreived(true);
+		em.merge(ord);
+		
+	}
+
 }

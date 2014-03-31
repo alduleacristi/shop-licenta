@@ -17,12 +17,14 @@ import javax.persistence.Table;
 @Entity
 @NamedQueries({
 		@NamedQuery(name = ClientProduct.GET_PRODUCTS_FROM_COMMAND, query = "SELECT c FROM ClientProduct c"),
-		@NamedQuery(name = ClientProduct.GET_CLIENT_PRODUCTS_FOR_PRODUCTS, query = "select c from ClientProduct c where c.product.id=:id") })
+		@NamedQuery(name = ClientProduct.GET_CLIENT_PRODUCTS_FOR_PRODUCTS, query = "select c from ClientProduct c where c.product.id=:id"),
+		@NamedQuery(name = ClientProduct.GET_CLIENTPRODUCTS_ID, query = "select c from ClientProduct c where c.idProductClient=:id") })
 @Table(name = "client_product")
 public class ClientProduct implements Serializable {
 	private static final long serialVersionUID = 1L;
 	public static final String GET_PRODUCTS_FROM_COMMAND = "getProductsFromCommand";
 	public static final String GET_CLIENT_PRODUCTS_FOR_PRODUCTS = "getclientproducts";
+	public static final String GET_CLIENTPRODUCTS_ID="get product color size by clientproducts's id";
 	@Id
 	@Column(name = "id_client_product")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -98,8 +100,10 @@ public class ClientProduct implements Serializable {
 
 	@Override
 	public String toString() {
-		return product.getProductcolor().getProduct().getName() + " " + product.getSize().getSize() + " "+product.getProductcolor().getColor()+ " "+this.getPrice() + " "+this.getPrice();
+		return product.getProductcolor().getProduct().getName() + " "
+				+ product.getSize().getSize() + " "
+				+ product.getProductcolor().getColor() + " " + this.getPrice()
+				+ " " + this.getPrice();
 	}
-	
-	
+
 }

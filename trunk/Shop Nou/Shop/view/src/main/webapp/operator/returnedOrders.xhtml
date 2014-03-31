@@ -18,14 +18,26 @@
 				<p:growl id="error">
 
 					<p:dataGrid id="list" value="#{returned.returnedOrders}"
-						var="order" columns="2"
+						var="order" columns="2" paginator="true" rows="10"
 						paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
-						rowsPerPageTemplate="9,12,15" styleClass="list">
+						paginatorPosition="bottom" rowsPerPageTemplate="3,6,9,12,15"
+						styleClass="list">
+
+
+
 						<p:panel
 							header="#{order.command.client.firstName} #{order.command.client.lastName}"
 							style="text-align:left;background: #fff">
 							<h:panelGrid style="width:100%" columns="1">
-
+								<div align="right">
+									<h:outputText rendered="#{order.retreived==false}"
+										value="Are the order's products back in stock?" />
+									<p:commandButton value="Yes"
+										rendered="#{order.retreived==false}"
+										actionListener="#{returned.retreiveOrder(order)}"
+										update=":form:error"
+										style="background: #00FF00;color: 00FF00;" />
+								</div>
 								<div align="left">
 									<b> Phone number: <h:outputText
 											value="#{order.command.client.phoneNumber}" /> Email: <h:outputText
@@ -34,7 +46,7 @@
 								</div>
 								<br />
 								<b>The client wants to return the following products: </b>
-								<p:dataTable value="#{order.productsList}"
+								<p:dataTable value="#{returned.productList(order)}"
 									var="product">
 
 									<p:column style="width:7%">
@@ -42,7 +54,8 @@
 										<f:facet name="header">  
                     Product name
          		   </f:facet>
-										<h:outputText value="#{product.produc.prodColor.product.name}" />
+										<h:outputText
+											value="#{product.product.prodColor.product.name}" />
 									</p:column>
 									<p:column style="width:7%">
 
@@ -61,22 +74,26 @@
 										<f:facet name="header">  
                    Nr pieces
          		   </f:facet>
-										<h:outputText value="#{product.nrPieces}" />
+										<h:outputText value="#{returned.piecesForProduct()}" />
 									</p:column>
 									<br />
 								</p:dataTable>
 								<div align="right">
 									<p:commandButton value="Add products"
+										rendered="#{order.retreived==true}"
 										actionListener="#{returned.returnOrder(order)}"
 										update=":form:error" style="background: #8b0000;color: #fff;" />
 								</div>
+
+
+
 							</h:panelGrid>
 						</p:panel>
 					</p:dataGrid>
 				</p:growl>
 			</h:form>
 		</ui:define>
-		
+
 	</ui:composition>
 
 </h:body>

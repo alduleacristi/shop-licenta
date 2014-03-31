@@ -5,9 +5,13 @@ public class ReturnedProductsDTO {
 	
 	private ReturnedOrdersDTO order;
 	private ProductColorSizeDTO product;
-	public ReturnedProductsDTO(ReturnedOrdersDTO comm, ProductColorSizeDTO product) {
+	private Long id;
+
+	public ReturnedProductsDTO(Long id, ReturnedOrdersDTO comm, ProductColorSizeDTO product) {
+		this.id=id;
 		this.order = comm;
 		this.product = product;
+		
 	}
 	
 	public ReturnedProductsDTO(){
@@ -25,6 +29,10 @@ public class ReturnedProductsDTO {
 	public void setProduct(ProductColorSizeDTO product) {
 		this.product = product;
 	}
-	
+
+	public Long getId() {
+		return id;
+	}
+
 	
 }

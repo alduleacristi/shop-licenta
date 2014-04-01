@@ -49,7 +49,7 @@ public class CommandBean implements Serializable {
 	private CommandService commandService;
 
 	private List<Command> commands;
-
+	private List<ClientProduct> selectedProducts;
 	private boolean existCommands;
 
 	private static final long DAY_IN_MILIS = 1000 * 60 * 60 * 24;

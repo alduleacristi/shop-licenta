@@ -62,6 +62,7 @@ public class CommandBean implements Serializable {
 
 	@PostConstruct
 	private void initialize() {
+		List<ClientProduct> list = new ArrayList<ClientProduct>();
 		try {
 			Client client = (Client) FacesContext.getCurrentInstance()
 					.getExternalContext().getSessionMap().get("client");
@@ -83,13 +84,17 @@ public class CommandBean implements Serializable {
 
 			if (ok)
 				existCommands = true;
-			else{
+			else {
 				existCommands = false;
 				throw new CommandDoesNotExistException();
 			}
 
+			
+			if (commands.size() == 0)
+					throw new CommandDoesNotExistException();
 			selectedOrder = commands.get(0);
-			// selectedProducts = new ArrayList<ClientProduct>();
+			
+			list = selectedOrder.getClientProducts();
 
 		} catch (CommandDoesNotExistException e) {
 			existCommands = false;
@@ -97,7 +102,7 @@ public class CommandBean implements Serializable {
 			existCommands = false;
 		}
 		dualList = new DualListModel<ClientProduct>(
-				selectedOrder.getClientProducts(),
+				list,
 				new ArrayList<ClientProduct>());
 	}
 
@@ -199,8 +204,9 @@ public class CommandBean implements Serializable {
 		} catch (Exception e) {
 			FacesContext.getCurrentInstance().addMessage(
 					null,
-					new FacesMessage(FacesMessage.SEVERITY_ERROR,"The following products couldn't be removed:  " + e
-							.getMessage(), e.getMessage()));
+					new FacesMessage(FacesMessage.SEVERITY_ERROR,
+							"The following products couldn't be removed:  "
+									+ e.getMessage(), e.getMessage()));
 		}
 
 	}
@@ -237,17 +243,16 @@ public class CommandBean implements Serializable {
 
 	public DualListModel<ClientProduct> getList() {
 		List<ClientProduct> list;
-		if(selectedOrder != null)
+		if (selectedOrder != null)
 			list = selectedOrder.getClientProducts();
 		else
 			list = new ArrayList<ClientProduct>();
-		
-		if(list == null)
+
+		if (list == null)
 			list = new ArrayList<ClientProduct>();
-		
+
 		DualListModel<ClientProduct> listt = new DualListModel<ClientProduct>(
-				list,
-				new ArrayList<ClientProduct>());
+				list, new ArrayList<ClientProduct>());
 		System.out.println(listt.getSource().size());
 		return listt;
 

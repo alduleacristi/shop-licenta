@@ -1,4 +1,4 @@
-package com.siemens.ctbav.intership.shop.model;
+    package com.siemens.ctbav.intership.shop.model;
 
 import java.io.Serializable;
 

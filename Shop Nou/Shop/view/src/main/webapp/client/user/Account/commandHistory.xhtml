@@ -38,12 +38,7 @@
 							var="c" rendered="#{CommandBean.existCommands}" numVisible="1"
 							styleClass="products-reduce-commandHistory"
 							headerText="List of commands" itemStyle="width:723px">
-							<center>
-								<strong class="price">Number of Items:</strong>
-								#{c.getClientProducts().size()} <br /> <strong class="price">Total
-									price:</strong> #{CommandBean.getTotalPrice(c)}$
 
-							</center>
 							<strong class="price">Status</strong>
 							#{c.command_status.status}
 						<br />
@@ -55,6 +50,10 @@
 										url="http://localhost:8080/Shop4j/rest/products/id#{p.product.productcolor.id}"
 										width="170" height="190" />
 									<br />
+
+								</center>
+								<br />
+								<center>
 									<div class="price">
 										<p:outputLabel value="-#{p.percRedution}%"
 											rendered="#{p.percRedution != 0.0}"></p:outputLabel>
@@ -64,19 +63,7 @@
 									<p:outputLabel value="#{p.product.productcolor.product.name}"></p:outputLabel>
 									<br /> <br /> <strong class="price">#{internationalizationProduct.price}</strong>
 									<p:outputLabel value="#{p.price}$"></p:outputLabel>
-
 								</center>
-								<br />
-								<div class="price">
-									<p:outputLabel value="-#{p.percRedution}%"
-										rendered="#{p.percRedution != 0.0}"></p:outputLabel>
-									<strong class="price">Number of Items</strong> #{p.nrPieces}
-								</div>
-								<h3>#{internationalizationProduct.productName}</h3>
-								<p:outputLabel value="#{p.product.productcolor.product.name}"></p:outputLabel>
-								<br /> <br /> <strong class="price">#{internationalizationProduct.price}</strong>
-								<p:outputLabel value="#{p.price}$"></p:outputLabel>
-
 								<!-- 								<strong> <p:outputLabel value="#{CommandBean.message}" -->
 								<!-- 										rendered="#{CommandBean.isAlreadySaved(c)}"></p:outputLabel></strong> -->
 
@@ -97,11 +84,10 @@
 							<p:pickList id="pickList" value="#{CommandBean.dualList}"
 								converter="orderConverter" var="clientProduct"
 								itemLabel="#{clientProduct}" itemValue="#{clientProduct}" />
-							<p:commandButton id="submit" value="Remove products"
+							<p:commandButton id="submit2" value="Remove products"
 								actionListener="#{CommandBean.removeProducts}"
-								style="background: #8b0000;color: #fff;" update =":commandHistory:message">
-<!-- 								update=":commandHistory:dlg" oncomplete="dialog.show()" -->
-								
+								style="background: #8b0000;color: #fff;"
+								update=":commandHistory:message">
 								<p:confirm header="Confirmation"
 									message="Are you sure you want to return this products???"
 									icon="ui-icon-alert" />
@@ -117,38 +103,37 @@
 							</p:confirmDialog>
 
 
-					<p:pickList id="pickList" value="#{CommandBean.getList()}"
-						var="clientProduct" itemLabel="#{clientProduct}"
-						itemValue="#{clientProduct}"
-						rendered="#{CommandBean.existCommands}" />
-					<p:commandButton id="submit" value="Remove products"
-						actionListener="#{CommandBean.showProducts}"
-						style="background: #8b0000;color: #fff;"
-						rendered="#{CommandBean.existCommands}">
-
-						<p:confirm header="Confirmation"
-							message="Are you sure you want to return this products???"
-							icon="ui-icon-alert" />
-
-					</p:commandButton>
-
-					<p:confirmDialog global="true" showEffect="fade"
-						hideEffect="explode">
-						<p:commandButton value="Yes" type="button"
-							styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
-						<p:commandButton value="No" type="button"
-							styleClass="ui-confirmdialog-yes" icon="ui-icon-close" />
-					</p:confirmDialog>
-					<div align="right">
-						<strong> <p:outputLabel value="Total:"
-								rendered="#{CommandBean.existCommands}" /> <h:outputText
-								value="#{CommandBean.getTotalPrice(CommandBean.selectedOrder)}"
+							<p:pickList id="pickList2" value="#{CommandBean.getList()}"
+								var="clientProduct" itemLabel="#{clientProduct}"
+								itemValue="#{clientProduct}"
 								rendered="#{CommandBean.existCommands}" />
-						</strong>
-					</div>
-					<br /> <br />
-					<br />
-					<br />
+							<p:commandButton id="submit" value="Remove products"
+								actionListener="#{CommandBean.showProducts}"
+								style="background: #8b0000;color: #fff;"
+								rendered="#{CommandBean.existCommands}">
+
+								<p:confirm header="Confirmation"
+									message="Are you sure you want to return this products???"
+									icon="ui-icon-alert" />
+
+							</p:commandButton>
+						</p:dialog>
+						<p:confirmDialog global="true" showEffect="fade"
+							hideEffect="explode">
+							<p:commandButton value="Yes" type="button"
+								styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+							<p:commandButton value="No" type="button"
+								styleClass="ui-confirmdialog-yes" icon="ui-icon-close" />
+						</p:confirmDialog>
+						<div align="right">
+							<strong> <p:outputLabel value="Total:"
+									rendered="#{CommandBean.existCommands}" /> <h:outputText
+									value="#{CommandBean.getTotalPrice(CommandBean.selectedOrder)}"
+									rendered="#{CommandBean.existCommands}" />
+							</strong>
+						</div>
+						<br /> <br /> <br /> <br />
+					</center>
 				</p:growl>
 			</h:form>
 		</ui:define>

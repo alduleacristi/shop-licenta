@@ -49,7 +49,6 @@ public class CommandBean implements Serializable {
 	private CommandService commandService;
 
 	private List<Command> commands;
-	private List<ClientProduct> selectedProducts;
 	private boolean existCommands;
 
 	private static final long DAY_IN_MILIS = 1000 * 60 * 60 * 24;
@@ -57,7 +56,7 @@ public class CommandBean implements Serializable {
 	private final String message = "Your order has been saved";
 
 	private Command selectedOrder;
-	// private List<ClientProduct> selectedProducts;
+	private List<ClientProduct> selectedProducts;
 	private DualListModel<ClientProduct> dualList;
 
 	@PostConstruct
@@ -96,6 +95,10 @@ public class CommandBean implements Serializable {
 			
 			list = selectedOrder.getClientProducts();
 
+			dualList = new DualListModel<ClientProduct>(
+					selectedOrder.getClientProducts(),
+					new ArrayList<ClientProduct>());
+
 		} catch (CommandDoesNotExistException e) {
 			existCommands = false;
 		} catch (ClientDoesNotExistException e) {
@@ -107,7 +110,6 @@ public class CommandBean implements Serializable {
 	}
 
 	public DualListModel<ClientProduct> getDualList() {
-		System.out.println("get dual list");
 		return dualList;
 	}
 
@@ -211,22 +213,6 @@ public class CommandBean implements Serializable {
 
 	}
 
-	private void removeProduct(ReturnedProductsDTO retProd) {
-		ClientProduct cp = null;
-		for (int i = 0; i < selectedProducts.size(); i++) {
-			ProductColorSize pcs = selectedProducts.get(i).getProduct();
-			if (sameProduct(retProd, pcs)) {
-				System.out.println(pcs);
-				cp = selectedProducts.get(i);
-				break;
-			}
-		}
-
-		if (cp != null)
-			selectedProducts.remove(cp);
-
-	}
-
 	private boolean sameProduct(ReturnedProductsDTO retProd,
 			ProductColorSize pcs) {
 
@@ -243,10 +229,11 @@ public class CommandBean implements Serializable {
 
 	public DualListModel<ClientProduct> getList() {
 		List<ClientProduct> list;
-		if (selectedOrder != null)
+		if (selectedOrder != null){
 			list = selectedOrder.getClientProducts();
-		else
+		} else{
 			list = new ArrayList<ClientProduct>();
+		}
 
 		if (list == null)
 			list = new ArrayList<ClientProduct>();

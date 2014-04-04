@@ -40,6 +40,7 @@ import com.siemens.ctbav.intership.shop.model.ProductColorSize;
 import com.siemens.ctbav.intership.shop.service.client.ClientProductService;
 import com.siemens.ctbav.intership.shop.service.client.CommandStatusService;
 import com.siemens.ctbav.intership.shop.service.client.ProductColorSizeService;
+import com.siemens.ctbav.intership.shop.service.client.RecommandService;
 import com.siemens.ctbav.intership.shop.service.internationalization.InternationalizationService;
 import com.siemens.ctbav.intership.shop.util.Enum.CommandStatusEnum;
 import com.siemens.ctbav.intership.shop.util.client.CookieEncryption;
@@ -67,6 +68,9 @@ public class Cart implements Serializable {
 
 	@EJB
 	private InternationalizationService internationalizationService;
+	
+	@EJB
+	private RecommandService recommandService;
 
 	@ManagedProperty(value = "#{SendCommandBean}")
 	private SendCommandBean sendCommand;
@@ -254,7 +258,7 @@ public class Cart implements Serializable {
 							internationalizationService
 									.getMessage(ECart.SUCCESS_MESSAGE.getName()));
 
-			redirect("/Shop4j/client/user/index");
+			redirect("/Shop4j/client/user/recommandation");
 		} catch (AddToCartFailedException e) {
 			logger.warning(e.getMessage());
 		}
@@ -609,6 +613,23 @@ public class Cart implements Serializable {
 		return clientProducts;
 	}
 
+	private List<Long> buildClientPrefernces() {
+		List<Long> preferences = new ArrayList<Long>();
+
+		Iterator<Map.Entry<ProductColorSize, Long>> it = cart.entrySet()
+				.iterator();
+		
+		while (it.hasNext()) {
+			Map.Entry<ProductColorSize, Long> ob = it.next();
+			
+			ProductColorSize pcs = ob.getKey();
+			
+			preferences.add(pcs.getProductcolor().getProduct().getId());
+		}
+
+		return preferences;
+	}
+
 	public void sendCommand() {
 		internationalizationInit();
 
@@ -620,6 +641,9 @@ public class Cart implements Serializable {
 			Command command = buildCommand(adress);
 
 			List<ClientProduct> clientProducts = buildClientProducts(command);
+			
+			List<Long> preferences = buildClientPrefernces();
+			recommandService.writePreferences(command.getClient().getId(), preferences);
 
 			if (this.sendCommand.getUseExistingAdress()) {
 				clientProductService

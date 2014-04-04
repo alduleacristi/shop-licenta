@@ -64,6 +64,19 @@
 									<br /> <br /> <strong class="price">#{internationalizationProduct.price}</strong>
 									<p:outputLabel value="#{p.price}$"></p:outputLabel>
 								</center>
+								<br />
+								<div class="price">
+									<p:outputLabel value="-#{p.percRedution}%"
+										rendered="#{p.percRedution != 0.0}"></p:outputLabel>
+									<strong class="price">Number of Items</strong> #{p.nrPieces}
+								</div>
+								<h3>#{internationalizationProduct.productName}</h3>
+								<p:outputLabel value="#{p.product.productcolor.product.name}"></p:outputLabel>
+								<br />
+								<br />
+								<strong class="price">#{internationalizationProduct.price}</strong>
+								<p:outputLabel value="#{p.price}$"></p:outputLabel>
+
 								<!-- 								<strong> <p:outputLabel value="#{CommandBean.message}" -->
 								<!-- 										rendered="#{CommandBean.isAlreadySaved(c)}"></p:outputLabel></strong> -->
 
@@ -88,6 +101,7 @@
 								actionListener="#{CommandBean.removeProducts}"
 								style="background: #8b0000;color: #fff;"
 								update=":commandHistory:message">
+
 								<p:confirm header="Confirmation"
 									message="Are you sure you want to return this products???"
 									icon="ui-icon-alert" />
@@ -102,21 +116,6 @@
 									styleClass="ui-confirmdialog-yes" icon="ui-icon-close" />
 							</p:confirmDialog>
 
-
-							<p:pickList id="pickList2" value="#{CommandBean.getList()}"
-								var="clientProduct" itemLabel="#{clientProduct}"
-								itemValue="#{clientProduct}"
-								rendered="#{CommandBean.existCommands}" />
-							<p:commandButton id="submit" value="Remove products"
-								actionListener="#{CommandBean.showProducts}"
-								style="background: #8b0000;color: #fff;"
-								rendered="#{CommandBean.existCommands}">
-
-								<p:confirm header="Confirmation"
-									message="Are you sure you want to return this products???"
-									icon="ui-icon-alert" />
-
-							</p:commandButton>
 						</p:dialog>
 						<p:confirmDialog global="true" showEffect="fade"
 							hideEffect="explode">
@@ -134,6 +133,12 @@
 						</div>
 						<br /> <br /> <br /> <br />
 					</center>
+
+					<p:outputLabel value="#{internationalizationCart.noRecords}"
+						rendered="#{!CommandBean.existCommands}" />
+					<br />
+					<br />
+					<br />
 				</p:growl>
 			</h:form>
 		</ui:define>

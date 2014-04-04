@@ -69,12 +69,10 @@ public class RecommadationBean {
 	}
 
 	public String getMessage() {
-		System.out.println("in get message: " + message);
 		return message;
 	}
 
 	public void setMessage(String message) {
-		System.out.println("in set message: " + message);
 		this.message = message;
 	}
 
@@ -131,5 +129,18 @@ public class RecommadationBean {
 	public void chooseAProduct(Product product) {
 		redirect("/Shop4j/client/user/productRecommandedDescription/"
 				+ product.getId());
+	}
+	
+	public void addProduct(){
+		Product product;
+		int k=1;
+		
+		for(int i=0;i<1500;i++){
+			product = new Product();
+			product.setName("Product"+k++);
+			product.setPrice(100.0);
+			product.setReduction(0.0);
+			productService.addProduct(product,4L);
+		}
 	}
 }

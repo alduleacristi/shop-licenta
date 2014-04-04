@@ -35,7 +35,8 @@
 			<h:form id="recommandForm">
 				<br />
 				<b><p:outputLabel style="color: #8b0000;size: 3px"
-						value="#{internationalizationProduct.recommand}" /></b>
+						value="#{internationalizationProduct.recommand}"
+						rendered="#{recommandationClient.isEmpty()}" /></b>
 				<br />
 				<br />
 				<p:carousel value="#{recommandationClient.recommandedProducts}"
@@ -63,9 +64,41 @@
 						</center>
 					</p:commandLink>
 				</p:carousel>
-				<p:outputLabel value="#{internationalizationCart.noRecords}"
-					rendered="#{recommandationClient.isEmpty() == false}"></p:outputLabel>
+
+				<p:carousel value="#{reductionProductsClient.products}" var="p"
+					itemStyle="width:237px" styleClass="products-reduce-index"
+					rendered="#{recommandationClient.isEmpty() == false}">
+					<p:commandLink
+						actionListener="#{reductionProductsClient.chooseAProduct(p)}">
+						<center>
+							<p:graphicImage
+								url="#{reductionProductsClient.host}/Shop4j/rest/products/id#{reductionProductsClient.getProductColorId(p)}"
+								width="170" height="190" />
+							<div class="product-info">
+								<div class="reduction">
+									<p:outputLabel value="-#{p.reduction}%"
+										rendered="#{p.reduction != 0.0}"></p:outputLabel>
+								</div>
+								<h3>#{internationalizationProduct.productName}</h3>
+								<p:outputLabel value="#{p.name}"></p:outputLabel>
+								<br /> <br /> <strong class="price">#{internationalizationProduct.price}</strong>
+								<p:outputLabel value="#{p.price}$"
+									rendered="#{p.reduction == 0.0}"></p:outputLabel>
+								<p:outputLabel value="#{p.price}$"
+									rendered="#{p.reduction != 0.0}"
+									style="text-decoration:line-through;"></p:outputLabel>
+								<br />
+								<p:outputLabel value="#{p.price - p.price * p.reduction / 100}$"
+									rendered="#{p.reduction != 0.0}"></p:outputLabel>
+							</div>
+						</center>
+					</p:commandLink>
+				</p:carousel>
 				<p:growl showDetail="true" />
+
+				<br />
+				<p:commandButton value="Generate products"
+					action="#{recommandationClient.addProduct}" />
 			</h:form>
 		</ui:define>
 

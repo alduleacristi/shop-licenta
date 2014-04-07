@@ -43,4 +43,8 @@ public class RecommandService {
 		List<Long> recommandId = recommand.getRecommandation(idUser);
 		return recommandId;
 	}
+	
+	public void writePreferences(Long userId,List<Long> itemIds){
+		recommand.writePreferences(userId, itemIds);
+	}
 }

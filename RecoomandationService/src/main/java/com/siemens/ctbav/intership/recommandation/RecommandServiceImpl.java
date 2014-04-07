@@ -18,7 +18,6 @@ package com.siemens.ctbav.intership.recommandation;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.ejb.EJB;
 import javax.jws.WebService;
 
@@ -32,8 +31,7 @@ public class RecommandServiceImpl implements RecommandService {
 	private RecommandationEngine recommandationEngine;
 
 	public void writePreferences(Long idUser, List<Long> preferences) {
-		System.out.println("s-au scris preferintele");
-		System.out.println(recommandationEngine.getText());
+		recommandationEngine.writePreferences(idUser, preferences);
 
 	}
 

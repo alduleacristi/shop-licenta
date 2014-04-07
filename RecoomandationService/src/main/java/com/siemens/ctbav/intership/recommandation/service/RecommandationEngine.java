@@ -1,13 +1,18 @@
 package com.siemens.ctbav.intership.recommandation.service;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
+import javax.faces.context.FacesContext;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.mahout.cf.taste.common.TasteException;
 import org.apache.mahout.cf.taste.impl.model.file.FileDataModel;
@@ -26,9 +31,12 @@ public class RecommandationEngine {
 	private UserNeighborhood neighborhood;
 	private DataModel model;
 	private Recommender recomender;
+	private Integer fileIndex;
 
 	@PostConstruct
 	private void initialize() {
+		fileIndex = 1;
+		
 		try {
 			createDataModel();
 			computeSimilarity();
@@ -82,7 +90,29 @@ public class RecommandationEngine {
 		return recomadationsId;
 	}
 
-	public String getText() {
-		return "abc";
+	public void writePreferences(Long idUser, List<Long> preferences) {		
+		BufferedWriter out = null;
+//		String path = Thread.currentThread().getContextClassLoader().getResource("Preferences.csv").getPath();
+//		path = path + "." + fileIndex;
+		
+//		String path = FacesContext.getCurrentInstance().getExternalContext().getRealPath("");
+//		System.out.println("path: " + path);
+
+//		File file = new File(path);
+//		try {
+//			out = new BufferedWriter(new FileWriter(file));
+//			
+//			for(Long itemId:preferences)
+//				System.out.println(idUser+" "+itemId);
+//			
+//			if(out != null)
+//				System.out.println("nu e null");
+//			else
+//				System.out.println("este null");
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}finally{
+//
+//		}
 	}
 }

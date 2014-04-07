@@ -2,6 +2,7 @@ package com.siemens.ctbav.intership.shop.service.client;
 
 import java.util.List;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -10,22 +11,29 @@ import org.hibernate.search.MassIndexer;
 import org.hibernate.search.jpa.FullTextEntityManager;
 import org.hibernate.search.jpa.Search;
 
+import org.jboss.ejb3.annotation.SecurityDomain;
+
 import com.siemens.ctbav.intership.shop.exception.client.ProductDoesNotExistException;
+import com.siemens.ctbav.intership.shop.model.Category;
 import com.siemens.ctbav.intership.shop.model.Product;
 
 @Stateless(name = "productServiceClient")
+@SecurityDomain("Shop4J")
+@RolesAllowed("client")
 public class ProductService {
 	@PersistenceContext
 	private EntityManager em;
 
 	@SuppressWarnings("unchecked")
-	public List<Product> getReducedProducts() throws ProductDoesNotExistException {
-		List<Product> products = em.createNamedQuery(Product.GET_REDUCE_PRODUCTS)
-				.getResultList();
-		
-		if(products.size() == 0)
-			throw new ProductDoesNotExistException("There are not products reduced");
-		
+	public List<Product> getReducedProducts()
+			throws ProductDoesNotExistException {
+		List<Product> products = em.createNamedQuery(
+				Product.GET_REDUCE_PRODUCTS).getResultList();
+
+		if (products.size() == 0)
+			throw new ProductDoesNotExistException(
+					"There are not products reduced");
+
 		return products;
 	}
 
@@ -41,16 +49,20 @@ public class ProductService {
 					+ "does not exist.");
 	}
 
-	public List<Product> getProductsRandom(int numberOfProducts) throws ProductDoesNotExistException{
+	public List<Product> getProductsRandom(int numberOfProducts)
+			throws ProductDoesNotExistException {
 		@SuppressWarnings("unchecked")
-		List<Product> products = em.createNamedQuery(Product.GET_PRODUCTS_BY_RAND).setMaxResults(numberOfProducts).getResultList();
-		
-		if(products.size() < numberOfProducts)
-			throw new ProductDoesNotExistException("There are not enough products");
-		
+		List<Product> products = em
+				.createNamedQuery(Product.GET_PRODUCTS_BY_RAND)
+				.setMaxResults(numberOfProducts).getResultList();
+
+		if (products.size() < numberOfProducts)
+			throw new ProductDoesNotExistException(
+					"There are not enough products");
+
 		return products;
 	}
-	
+
 	public void reindex() {
 		FullTextEntityManager fullTextEm = Search.getFullTextEntityManager(em);
 		MassIndexer massIndexer = fullTextEm.createIndexer(Product.class);
@@ -61,5 +73,11 @@ public class ProductService {
 		}
 		fullTextEm.flushToIndexes();
 		// search("bluza");
+	}
+
+	public void addProduct(Product product, Long category) {
+		Category cat = em.find(Category.class, category);
+		product.setCategory(cat);
+		em.persist(product);
 	}
 }

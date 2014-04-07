@@ -857,6 +857,11 @@ a.bul {
 	line-height: 25px;
 }
 
+.comments-autor{
+	font-size: 23px;
+	color: #8b0000;
+}
+
 .reduction {
 	display: block;
 	font-size: 20px;

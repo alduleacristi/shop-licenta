@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:composite="http://java.sun.com/jsf/composite">
+
+<composite:interface>
+
+	<composite:attribute name="comments" />
+	<composite:attribute name="name" />
+	<composite:attribute name="style" />
+	<composite:attribute name="paginator" />
+	<composite:attribute name="paginatorTemplate" />
+	<composite:attribute name="paginatorPosition" />
+	<composite:attribute name="rowsPerPageTemplate" />
+	<composite:attribute name="rows" />
+	<composite:attribute name="type" />
+	<composite:attribute name="buttonStyle" />
+	<composite:attribute name="buttonName" />
+	<composite:attribute name="createNewComment" />
+	<composite:attribute name="textareaStyle" />
+	<composite:attribute name="required" />
+	<composite:attribute name="requiredMessage" />
+	<composite:attribute name="textareaValue" />
+
+	<composite:attribute name="buttonAction"
+		method-signature="java.lang.String action()" />
+
+</composite:interface>
+
+<composite:implementation>
+
+	<h:form>
+
+		<p:panelGrid columns="1" id="textPanel" style="#{cc.attrs.style}">
+
+			<p:dataList value="#{cc.attrs.comments}" var="item"
+				paginator="#{cc.attrs.paginator}"
+				paginatorTemplate="#{cc.attrs.paginatorTemplate}"
+				paginatorPosition="#{cc.attrs.paginatorPosition}"
+				rowsPerPageTemplate="#{cc.attrs.rowsPerPageTemplate}"
+				rows="#{cc.attrs.rows}" type="#{cc.attrs.type}">
+				<f:facet name="header">  
+                #{cc.attrs.name}
+            	</f:facet>
+				<p:panel>
+					<p:outputLabel styleClass="comments-autor" value="Gigi" />
+					&nbsp;&nbsp;
+					<p:outputLabel styleClass="comments-autor" value="04/05/2014" />
+					<br />
+					<br />
+					<p:outputLabel value="#{item}" />
+				</p:panel>
+
+			</p:dataList>
+
+			<p:panel visible="#{cc.attrs.createNewComment}">
+				<p:inputTextarea style="#{cc.attrs.textareaStyle}"
+					required="#{cc.attrs.required}"
+					requiredMessage="#{cc.attrs.requiredMessage}"
+					value="#{cc.attrs.textareaValue}" />
+				<br />
+				<br />
+				<h:commandButton action="#{cc.attrs.buttonAction}"
+					styleClass="#{cc.attrs.buttonStyle}" value="#{cc.attrs.buttonName}" />
+			</p:panel>
+
+		</p:panelGrid>
+
+
+
+	</h:form>
+
+</composite:implementation>
+
+</html>

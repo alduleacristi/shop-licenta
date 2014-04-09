@@ -78,7 +78,7 @@ name varchar(10) not null,
 id_cat bigint not null,
 foreign key id_cat(id_cat) references category(id)
 on update cascade
-on delete no action
+on delete cascade
 );
 
 drop table if exists product_color;

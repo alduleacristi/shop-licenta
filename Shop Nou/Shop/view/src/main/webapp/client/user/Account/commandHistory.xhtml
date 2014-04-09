@@ -80,16 +80,18 @@
 								<!-- 								<strong> <p:outputLabel value="#{CommandBean.message}" -->
 								<!-- 										rendered="#{CommandBean.isAlreadySaved(c)}"></p:outputLabel></strong> -->
 
-							</p:dataGrid>
-							<center>
-								<strong> <p:outputLabel value="#{CommandBean.message}"
-										rendered="#{CommandBean.isAlreadySaved(c)}"></p:outputLabel></strong>
+								<center>
+									<strong> <p:outputLabel value="#{CommandBean.message}"
+											rendered="#{CommandBean.isAlreadySaved(c)}"></p:outputLabel></strong>
 
-								<p:commandButton rendered="#{CommandBean.canBeReturned(c)}"
-									value="Return command" style="background: #8b0000;color: #fff;"
-									action="#{CommandBean.setSelectedOrder(c)}"
-									oncomplete="PF('dialog').show()"></p:commandButton>
-							</center>
+									<p:commandButton rendered="#{CommandBean.canBeReturned(c)}"
+										value="Return command"
+										style="background: #8b0000;color: #fff;"
+										action="#{CommandBean.setSelectedOrder(c)}"
+										oncomplete="PF('dialog').show()"></p:commandButton>
+								</center>
+							</p:dataGrid>
+
 
 						</p:carousel>
 						<p:dialog id="dlg" header="Returned products" widgetVar="dialog"

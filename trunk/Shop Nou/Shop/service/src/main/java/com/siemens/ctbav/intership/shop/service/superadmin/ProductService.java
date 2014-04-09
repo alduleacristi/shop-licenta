@@ -61,6 +61,17 @@ public class ProductService {
 		em.flush();
 	}
 
+	public void createProduct(String name, String description, Double price,
+			Long categId, Double reduction) throws ProductException {
+		Category category = em.find(Category.class, categId);
+		if (category == null)
+			throw new ProductException("Category not found in the database!");
+		Product product = new Product(name, description, price, category);
+		product.setReduction(reduction);
+		em.persist(product);
+		em.flush();
+	}
+
 	public void changeParent(long idProduct, long idCategory)
 			throws ProductException {
 		Product product = em.find(Product.class, idProduct);
@@ -95,5 +106,19 @@ public class ProductService {
 		product.setReduction(sale);
 		em.merge(product);
 		em.flush();
+	}
+
+	@SuppressWarnings("unchecked")
+	public Product getProductByFields(String name, String description,
+			Double price, Long idCategory, Double reduction) {
+		List<Product> p = em.createNamedQuery(Product.GET_PRODUCT_BY_FIELDS)
+				.setParameter("reduction", reduction)
+				.setParameter("idCategory", idCategory)
+				.setParameter("price", price)
+				.setParameter("description", description)
+				.setParameter("name", name).getResultList();
+		if (p.size() > 0)
+			return p.get(0);
+		return null;
 	}
 }

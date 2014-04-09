@@ -17,7 +17,6 @@ public class ExportToXml implements Exporter {
 	@Override
 	public void export(File stream, List<ProductColorSize> list)
 			throws FileNotFoundException {
-		System.out.println("export");
 		ProductsDto psdto = new ProductsDto(list);
 		PrintStream printer = new PrintStream(stream);
 		printer.write(100);

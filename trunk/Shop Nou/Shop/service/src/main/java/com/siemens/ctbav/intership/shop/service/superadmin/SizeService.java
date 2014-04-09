@@ -58,4 +58,7 @@ public class SizeService {
 		em.flush();
 	}
 
+	public Size getSize(long id) {
+		return em.find(Size.class, id);
+	}
 }

@@ -33,6 +33,11 @@ public class ColorSizeProductService {
 		em.persist(pcs);
 		em.flush();
 	}
+	
+	public void addProductColorSize(ProductColorSize product){
+		em.persist(product);
+		em.flush();
+	}
 
 	public void addPieces(Long idProductColorSize, Long nrPieces)
 			throws ColorSizeProductException {
@@ -90,6 +95,23 @@ public class ColorSizeProductService {
 		return em
 				.createNamedQuery(ProductColorSize.GET_ALL_PRODUCTS_COLOR_SIZE)
 				.getResultList();
+	}
+
+	@SuppressWarnings("unchecked")
+	public ProductColorSize getProductByFields(String name, String description,
+			Double price, Long idCategory, Long idSize, Long idColor) {
+		List<ProductColorSize> pcs = em
+				.createNamedQuery(
+						ProductColorSize.GET_PRODUCT_COLOR_SIZE_BY_FIELDS)
+				.setParameter("name", name)
+				.setParameter("description", description)
+				.setParameter("price", price)
+				.setParameter("idCategory", idCategory)
+				.setParameter("idSize", idSize)
+				.setParameter("idColor", idColor).getResultList();
+		if (pcs.size() > 0)
+			return pcs.get(0);
+		return null;
 	}
 
 }

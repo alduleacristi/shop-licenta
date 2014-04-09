@@ -8,9 +8,10 @@ import javax.ejb.Singleton;
 
 @Singleton
 public class ConfigurationService {
-	
+
 	private Properties properties;
 	private String host;
+	private String bankService;
 
 	@PostConstruct
 	private void initialize() {
@@ -25,10 +26,15 @@ public class ConfigurationService {
 
 	private void setProperties() {
 		host = properties.getProperty("host");
+		bankService = properties.getProperty("bankService");
 	}
 
 	public String getHost() {
 		return this.host;
+	}
+
+	public String getBankService() {
+		return bankService;
 	}
 
 }

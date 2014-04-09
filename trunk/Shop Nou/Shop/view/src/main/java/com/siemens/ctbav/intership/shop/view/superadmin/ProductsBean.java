@@ -1,6 +1,7 @@
 package com.siemens.ctbav.intership.shop.view.superadmin;
 
 import java.io.Serializable;
+import java.text.DecimalFormat;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -21,12 +22,12 @@ import com.siemens.ctbav.intership.shop.convert.superadmin.ConvertProduct;
 import com.siemens.ctbav.intership.shop.dto.superadmin.CategoryDTO;
 import com.siemens.ctbav.intership.shop.dto.superadmin.ProductDTO;
 import com.siemens.ctbav.intership.shop.exception.superadmin.ProductException;
+import com.siemens.ctbav.intership.shop.internationalization.enums.superadmin.EGenericProduct;
 import com.siemens.ctbav.intership.shop.model.Product;
 import com.siemens.ctbav.intership.shop.model.Category;
 import com.siemens.ctbav.intership.shop.service.internationalization.InternationalizationService;
 import com.siemens.ctbav.intership.shop.service.superadmin.ProductService;
 import com.siemens.ctbav.intership.shop.util.superadmin.NavigationUtils;
-import com.siemens.ctbav.intership.shop.view.internationalization.enums.superadmin.EGenericProduct;
 
 @URLMappings(mappings = {
 		@URLMapping(id = "products", pattern = "/superadmin/genericProducts/", viewId = "products.xhtml"),
@@ -51,6 +52,10 @@ public class ProductsBean implements Serializable {
 	private Product selectedProduct;
 	private ProductDTO newProduct;
 	private String photo;
+	private Double euroPrice;
+	private Double leiPrice;
+
+	private boolean englishSelected;
 
 	@PostConstruct
 	void init() {
@@ -59,14 +64,8 @@ public class ProductsBean implements Serializable {
 	}
 
 	private void internationalizationInit() {
-		boolean isEnglishSelected;
-		Boolean b = (Boolean) FacesContext.getCurrentInstance()
-				.getExternalContext().getSessionMap().get("isEnglishSelected");
-		if (b == null)
-			isEnglishSelected = true;
-		else
-			isEnglishSelected = b;
-		if (isEnglishSelected) {
+		setLanguage();
+		if (englishSelected) {
 			photo = "/resources/gproducts.jpg";
 			String language = new String("en");
 			String country = new String("US");
@@ -81,6 +80,15 @@ public class ProductsBean implements Serializable {
 					.setCurrentLocale(language, country,
 							"internationalization/superadmin/messages/genericProducts/GenericProducts");
 		}
+	}
+
+	private void setLanguage() {
+		Boolean b = (Boolean) FacesContext.getCurrentInstance()
+				.getExternalContext().getSessionMap().get("isEnglishSelected");
+		if (b == null)
+			englishSelected = true;
+		else
+			englishSelected = b;
 	}
 
 	public boolean isSelectedCategory() {
@@ -105,6 +113,7 @@ public class ProductsBean implements Serializable {
 
 	public void setSelectedProduct(Product selectedProduct) {
 		this.selectedProduct = selectedProduct;
+		setLeiAndEuro(selectedProduct);
 	}
 
 	public ProductDTO getNewProduct() {
@@ -119,6 +128,52 @@ public class ProductsBean implements Serializable {
 		return photo;
 	}
 
+	public Double getEuroPrice() {
+		return euroPrice;
+	}
+
+	public void setEuroPrice(Double euroPrice) {
+		this.euroPrice = euroPrice;
+		Double b = (Double) FacesContext.getCurrentInstance()
+				.getExternalContext().getSessionMap().get("RON");
+		this.leiPrice = euroPrice * b;
+	}
+
+	public Double getLeiPrice() {
+		return leiPrice;
+	}
+
+	public void setLeiPrice(Double leiPrice) {
+		this.leiPrice = leiPrice;
+		Double b = (Double) FacesContext.getCurrentInstance()
+				.getExternalContext().getSessionMap().get("RON");
+		this.euroPrice = leiPrice / b;
+	}
+
+	public boolean isEnglishSelected() {
+		return englishSelected;
+	}
+
+	public void setEnglishSelected(boolean englishSelected) {
+		this.englishSelected = englishSelected;
+	}
+
+	private void setLeiAndEuro(Product selectedProduct) {
+		setLanguage();
+		Double b = (Double) FacesContext.getCurrentInstance()
+				.getExternalContext().getSessionMap().get("RON");
+		if (englishSelected) {
+			euroPrice = selectedProduct.getPrice();
+			leiPrice = selectedProduct.getPrice() * b;
+		} else {
+			leiPrice = selectedProduct.getPrice();
+			euroPrice = selectedProduct.getPrice() / b;
+		}
+		DecimalFormat df = new DecimalFormat("#.##");
+		leiPrice = Double.parseDouble(df.format(leiPrice));
+		euroPrice = Double.parseDouble(df.format(euroPrice));
+	}
+
 	public void onNodeSelect(NodeSelectEvent event) {
 		FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
 				.put("selectedNode", event.getTreeNode());
@@ -127,6 +182,14 @@ public class ProductsBean implements Serializable {
 				.put("selectedCategory", selectedCategory);
 		long id = ((Category) event.getTreeNode().getData()).getId();
 		productList = productService.getGenericProductsByCategory(id);
+		setLanguage();
+		if (!englishSelected) {
+			Double b = (Double) FacesContext.getCurrentInstance()
+					.getExternalContext().getSessionMap().get("RON");
+			for (Product p : productList) {
+				p.multiplyPrice(b);
+			}
+		}
 	}
 
 	public void onNewParentSelect(NodeSelectEvent event) {
@@ -139,6 +202,14 @@ public class ProductsBean implements Serializable {
 				.getExternalContext().getSessionMap().get("selectedNode");
 		long id = ((Category) node.getData()).getId();
 		productList = productService.getGenericProductsByCategory(id);
+		setLanguage();
+		if (!englishSelected) {
+			Double b = (Double) FacesContext.getCurrentInstance()
+					.getExternalContext().getSessionMap().get("RON");
+			for (Product p : productList) {
+				p.multiplyPrice(b);
+			}
+		}
 	}
 
 	public void delete(ActionEvent actionEvent) {
@@ -197,6 +268,7 @@ public class ProductsBean implements Serializable {
 		createExceptions(selectedNode);
 
 		long idCategory = ((Category) selectedNode.getData()).getId();
+		newProduct.setPrice(euroPrice);
 		productService.createProduct(newProduct, idCategory);
 		msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
 				internationalizationService.getMessage(EGenericProduct.SUCCESS
@@ -270,6 +342,16 @@ public class ProductsBean implements Serializable {
 		productList.clear();
 		productList.addAll(productService
 				.getGenericProductsByCategory(idCategory));
+
+		setLanguage();
+		if (!englishSelected) {
+			Double b = (Double) FacesContext.getCurrentInstance()
+					.getExternalContext().getSessionMap().get("RON");
+			for (Product p : productList) {
+				p.multiplyPrice(b);
+			}
+		}
+
 		return msg;
 	}
 
@@ -359,7 +441,7 @@ public class ProductsBean implements Serializable {
 		if (!oldProduct.equals(selectedProduct)) {
 			check(((Category) selectedNode.getData()).getId());
 		}
-
+		selectedProduct.setPrice(euroPrice);
 		productService.updateProduct(selectedProduct.getId(), selectedProduct);
 
 		msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
@@ -394,6 +476,13 @@ public class ProductsBean implements Serializable {
 	public void reindex() {
 		productServiceReindex.reindex();
 		System.out.println("in reindex");
+	}
+
+	public double getReductionPrice(Product p) {
+		double r = p.getPrice() - p.getPrice() * p.getReduction() / 100;
+		DecimalFormat df = new DecimalFormat("#.##");
+		r = Double.parseDouble(df.format(r));
+		return r;
 	}
 
 }

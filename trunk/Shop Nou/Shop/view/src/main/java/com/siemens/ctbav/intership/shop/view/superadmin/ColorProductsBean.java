@@ -1,6 +1,7 @@
 package com.siemens.ctbav.intership.shop.view.superadmin;
 
 import java.io.Serializable;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +20,7 @@ import org.primefaces.model.TreeNode;
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
 import com.siemens.ctbav.intership.shop.exception.superadmin.ColorProductException;
+import com.siemens.ctbav.intership.shop.internationalization.enums.superadmin.EColorProducts;
 import com.siemens.ctbav.intership.shop.model.Category;
 import com.siemens.ctbav.intership.shop.model.Color;
 import com.siemens.ctbav.intership.shop.model.Product;
@@ -28,7 +30,6 @@ import com.siemens.ctbav.intership.shop.service.superadmin.ColorProductService;
 import com.siemens.ctbav.intership.shop.service.superadmin.ColorService;
 import com.siemens.ctbav.intership.shop.service.superadmin.ProductService;
 import com.siemens.ctbav.intership.shop.util.superadmin.NavigationUtils;
-import com.siemens.ctbav.intership.shop.view.internationalization.enums.superadmin.EColorProducts;
 
 @URLMappings(mappings = {
 		@URLMapping(id = "colorProducts", pattern = "/superadmin/genericProducts/colorProducts/", viewId = "colorProducts.xhtml"),
@@ -59,6 +60,7 @@ public class ColorProductsBean implements Serializable {
 	private Long idSelectedColor;
 	private Color selectedColor;
 	private String photo;
+	private boolean isEnglishSelected;
 
 	@PostConstruct
 	void init() {
@@ -67,13 +69,7 @@ public class ColorProductsBean implements Serializable {
 	}
 
 	private void internationalizationInit() {
-		boolean isEnglishSelected;
-		Boolean b = (Boolean) FacesContext.getCurrentInstance()
-				.getExternalContext().getSessionMap().get("isEnglishSelected");
-		if (b == null)
-			isEnglishSelected = true;
-		else
-			isEnglishSelected = b;
+		setLanguage();
 		if (isEnglishSelected) {
 			photo = "/resources/cproducts.jpg";
 			String language = new String("en");
@@ -89,6 +85,15 @@ public class ColorProductsBean implements Serializable {
 					.setCurrentLocale(language, country,
 							"internationalization/superadmin/messages/colorProducts/ColorProducts");
 		}
+	}
+
+	private void setLanguage() {
+		Boolean b = (Boolean) FacesContext.getCurrentInstance()
+				.getExternalContext().getSessionMap().get("isEnglishSelected");
+		if (b == null)
+			isEnglishSelected = true;
+		else
+			isEnglishSelected = b;
 	}
 
 	public boolean isSelectedCategory() {
@@ -324,10 +329,25 @@ public class ColorProductsBean implements Serializable {
 				.getExternalContext().getSessionMap().get("selectedNode");
 		long id = ((Category) selectedNode.getData()).getId();
 		productList = productService.getGenericProductsByCategory(id);
+		setLanguage();
+		if (!isEnglishSelected) {
+			Double b = (Double) FacesContext.getCurrentInstance()
+					.getExternalContext().getSessionMap().get("RON");
+			for (Product p : productList) {
+				p.multiplyPrice(b);
+			}
+		}
 		for (Product product : productList) {
 			product.setProductColor(colorProductService
 					.getColorsForProduct(product.getId()));
 		}
+	}
+
+	public double getReductionPrice(Product p) {
+		double r = p.getPrice() - p.getPrice() * p.getReduction() / 100;
+		DecimalFormat df = new DecimalFormat("#.##");
+		r = Double.parseDouble(df.format(r));
+		return r;
 	}
 
 }

@@ -62,19 +62,21 @@
 								value="#{internationalizationGenericProducts.price}:"
 								rendered="#{product.reduction == 0.0}" />
 							<strong class="price"> <p:outputLabel
-									value="$#{product.price}"
+									value="#{product.price} #{internationalizationCoin.coin}"
 									rendered="#{product.reduction == 0.0}"></p:outputLabel></strong>
-							<strike> <p:outputLabel value="$#{product.price}"
+							<strike> <p:outputLabel
+									value="#{product.price} #{internationalizationCoin.coin}"
 									rendered="#{product.reduction != 0.0}"></p:outputLabel>
 							</strike>
 							<strong class="price"> <p:outputLabel
-									value="$#{product.price-product.price*product.reduction/100}"
+									value="#{manageSalesBean.getReductionPrice(product)} #{internationalizationCoin.coin}"
 									rendered="#{product.reduction != 0.0}"></p:outputLabel></strong>
 							<h:outputText
 								value="#{internationalizationGenericProducts.description}" />
 							<br />
-							<p:inputTextarea cols="20" rows="11" maxlength="200" style="width:150px"
-								value="#{product.description}" readonly="true">
+							<p:inputTextarea cols="20" rows="11" maxlength="200"
+								style="width:150px" value="#{product.description}"
+								readonly="true">
 							</p:inputTextarea>
 							<br />
 							<h:outputText
@@ -100,10 +102,18 @@
 							rendered="#{manageSalesBean.selectedProduct != null}">
 							<h:outputText
 								value="#{internationalizationGenericProducts.sale}: " />
-							<p:inputText value="#{manageSalesBean.selectedProduct.reduction}"
-								required="true"
+							<p:inputText value="#{manageSalesBean.sale}" required="true"
 								requiredMessage="#{internationalizationGenericProducts.saleIsRequired}">
+								<p:ajax event="keyup" update="lei,euro" />
 							</p:inputText>
+							<h:outputText
+								value="#{internationalizationGenericProducts.productPrice} (EUR): " />
+							<p:inputText id="euro" value="#{manageSalesBean.euroPrice}"
+								readonly="true" />
+							<h:outputText
+								value="#{internationalizationGenericProducts.productPrice} (LEI): " />
+							<p:inputText id="lei" value="#{manageSalesBean.leiPrice}"
+								readonly="true" />
 							<p:commandButton value="#{internationalizationGeneric.update}"
 								actionListener="#{manageSalesBean.update}"
 								update="messages1, :formProducts:dataGrid"

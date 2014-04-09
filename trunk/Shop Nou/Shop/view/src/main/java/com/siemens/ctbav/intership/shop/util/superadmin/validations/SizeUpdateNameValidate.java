@@ -13,8 +13,8 @@ import javax.faces.validator.ValidatorException;
 
 import com.siemens.ctbav.intership.shop.convert.superadmin.ConvertSize;
 import com.siemens.ctbav.intership.shop.dto.superadmin.SizeDTO;
+import com.siemens.ctbav.intership.shop.internationalization.enums.superadmin.ESize;
 import com.siemens.ctbav.intership.shop.model.Size;
-import com.siemens.ctbav.intership.shop.view.internationalization.enums.superadmin.ESize;
 
 @FacesValidator("validateUpdateSize")
 public class SizeUpdateNameValidate implements Validator {

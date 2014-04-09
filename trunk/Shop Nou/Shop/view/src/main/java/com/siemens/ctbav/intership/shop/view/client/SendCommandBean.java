@@ -12,6 +12,7 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.validation.constraints.Size;
 
+import com.siemens.ctbav.intership.shop.internationalization.enums.client.ECart;
 import com.siemens.ctbav.intership.shop.model.Adress;
 import com.siemens.ctbav.intership.shop.model.Client;
 import com.siemens.ctbav.intership.shop.model.Country;
@@ -23,7 +24,6 @@ import com.siemens.ctbav.intership.shop.service.client.CountyService;
 import com.siemens.ctbav.intership.shop.service.client.LocalityService;
 import com.siemens.ctbav.intership.shop.service.client.ProductColorSizeService;
 import com.siemens.ctbav.intership.shop.service.internationalization.InternationalizationService;
-import com.siemens.ctbav.intership.shop.view.internationalization.enums.client.ECart;
 
 @SessionScoped
 @ManagedBean(name = "SendCommandBean")

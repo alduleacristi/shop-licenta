@@ -74,13 +74,41 @@
 							value="#{productBean.newProduct.name}">
 							<f:validator validatorId="validateProductName" />
 						</p:inputText>
-						<h:outputLabel for="price"
-							value="#{internationalizationGenericProducts.productPrice}:" />
-						<p:inputText id="price" label="price" required="true"
-							requiredMessage="#{internationalizationGenericProducts.priceIsRequired}"
-							value="#{productBean.newProduct.price}">
+
+						<h:outputText value="" />
+						<h:outputText value="#{internationalizationCoinSign.add}" />
+
+						<h:outputText
+							value="#{internationalizationGenericProducts.productPrice} (EUR): "
+							rendered="#{productBean.englishSelected}" />
+						<p:inputText value="#{productBean.euroPrice}" required="true"
+							rendered="#{productBean.englishSelected}"
+							requiredMessage="#{internationalizationGenericProducts.priceIsRequired}">
+							<p:ajax event="keyup" update="lei" />
 							<f:validator validatorId="validateProductPrice" />
 						</p:inputText>
+						<h:outputText
+							value="#{internationalizationGenericProducts.productPrice} (LEI): "
+							rendered="#{productBean.englishSelected}" />
+						<p:inputText id="lei" value="#{productBean.leiPrice}"
+							readonly="true" rendered="#{productBean.englishSelected}" />
+
+						<h:outputText
+							value="#{internationalizationGenericProducts.productPrice} (LEI): "
+							rendered="#{!productBean.englishSelected}" />
+						<p:inputText value="#{productBean.leiPrice}"
+							rendered="#{!productBean.englishSelected}" required="true"
+							requiredMessage="#{internationalizationGenericProducts.priceIsRequired}">
+							<p:ajax event="keyup" update="euro" />
+							<f:validator validatorId="validateProductPrice" />
+						</p:inputText>
+						<h:outputText
+							value="#{internationalizationGenericProducts.productPrice} (EUR): "
+							rendered="#{!productBean.englishSelected}" />
+						<p:inputText id="euro" value="#{productBean.euroPrice}"
+							rendered="#{!productBean.englishSelected}" readonly="true" />
+
+
 						<h:outputText
 							value="#{internationalizationGenericProducts.productDescription}: " />
 						<p:inputTextarea cols="22" rows="10" maxlength="200"
@@ -131,13 +159,14 @@
 								value="#{internationalizationGenericProducts.price}:"
 								rendered="#{product.reduction == 0.0}" />
 							<strong class="price"> <p:outputLabel
-									value="$#{product.price}"
+									value="#{product.price} #{internationalizationCoin.coin}"
 									rendered="#{product.reduction == 0.0}"></p:outputLabel></strong>
-							<strike> <p:outputLabel value="$#{product.price}"
+							<strike> <p:outputLabel
+									value="#{product.price} #{internationalizationCoin.coin}"
 									rendered="#{product.reduction != 0.0}"></p:outputLabel>
 							</strike>
 							<strong class="price"> <p:outputLabel
-									value="$#{product.price-product.price*product.reduction/100}"
+									value="#{productBean.getReductionPrice(product)} #{internationalizationCoin.coin}"
 									rendered="#{product.reduction != 0.0}"></p:outputLabel></strong>
 							<h:outputText
 								value="#{internationalizationGenericProducts.description}:" />
@@ -188,13 +217,39 @@
 								<h:outputText styleClass="ui-icon ui-icon-search"
 									style="margin:0 auto;" />
 							</p:commandLink>
+							<h:outputText value="" />
+							<h:outputText value="#{internationalizationCoinSign.update}" />
+							
 							<h:outputText
-								value="#{internationalizationGenericProducts.productPrice}: " />
-							<p:inputText value="#{productBean.selectedProduct.price}"
-								required="true"
+								value="#{internationalizationGenericProducts.productPrice} (EUR): "
+								rendered="#{productBean.englishSelected}" />
+							<p:inputText value="#{productBean.euroPrice}" required="true"
+								rendered="#{productBean.englishSelected}"
 								requiredMessage="#{internationalizationGenericProducts.priceIsRequired}">
+								<p:ajax event="keyup" update="lei" />
 								<f:validator validatorId="validateProductPrice" />
 							</p:inputText>
+							<h:outputText
+								value="#{internationalizationGenericProducts.productPrice} (LEI): "
+								rendered="#{productBean.englishSelected}" />
+							<p:inputText id="lei" value="#{productBean.leiPrice}"
+								rendered="#{productBean.englishSelected}" readonly="true" />
+								
+							<h:outputText
+								value="#{internationalizationGenericProducts.productPrice} (LEI): "
+								rendered="#{!productBean.englishSelected}" />
+							<p:inputText value="#{productBean.leiPrice}" required="true"
+								rendered="#{!productBean.englishSelected}"
+								requiredMessage="#{internationalizationGenericProducts.priceIsRequired}">
+								<p:ajax event="keyup" update="euro" />
+								<f:validator validatorId="validateProductPrice" />
+							</p:inputText>
+							<h:outputText
+								value="#{internationalizationGenericProducts.productPrice} (EUR): "
+								rendered="#{!productBean.englishSelected}" />
+							<p:inputText id="euro" value="#{productBean.euroPrice}"
+								rendered="#{!productBean.englishSelected}" readonly="true" />
+
 							<h:outputText
 								value="#{internationalizationGenericProducts.productDescription}: " />
 							<p:inputTextarea cols="22" rows="10" maxlength="200"

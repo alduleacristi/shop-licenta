@@ -3,6 +3,7 @@ package com.siemens.ctbav.intership.shop.view.superadmin;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
@@ -19,13 +20,14 @@ import org.primefaces.model.StreamedContent;
 
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
+import com.siemens.ctbav.intership.shop.internationalization.enums.superadmin.EExport;
 import com.siemens.ctbav.intership.shop.model.ProductColorSize;
 import com.siemens.ctbav.intership.shop.service.internationalization.InternationalizationService;
 import com.siemens.ctbav.intership.shop.service.superadmin.ColorSizeProductService;
 import com.siemens.ctbav.intership.shop.service.superadmin.exporter.ExportToCsv;
 import com.siemens.ctbav.intership.shop.service.superadmin.exporter.ExportToXml;
 import com.siemens.ctbav.intership.shop.service.superadmin.exporter.Exporter;
-import com.siemens.ctbav.intership.shop.view.internationalization.enums.superadmin.EExport;
+import com.siemens.ctbav.intership.shop.util.superadmin.NavigationUtils;
 
 @ManagedBean(name = "exportBean")
 @RequestScoped
@@ -44,7 +46,8 @@ public class ExportBean {
 	private String photo;
 	private StreamedContent fileXml;
 	private StreamedContent fileCsv;
-	private InputStream inputStream;
+	private InputStream inputStreamXml;
+	private InputStream inputStreamCsv;
 
 	@PostConstruct
 	private void init() {
@@ -87,7 +90,7 @@ public class ExportBean {
 	}
 
 	public StreamedContent getFileXml() {
-		fileXml = new DefaultStreamedContent(inputStream, "xml", fileName);
+		fileXml = new DefaultStreamedContent(inputStreamXml, "xml", fileName);
 		return fileXml;
 	}
 
@@ -96,7 +99,8 @@ public class ExportBean {
 	}
 
 	public StreamedContent getFileCsv() {
-		fileXml = new DefaultStreamedContent(inputStream, "csv", fileName);
+		fileCsv = new DefaultStreamedContent(inputStreamCsv, "text/csv",
+				fileName + ".csv");
 		return fileCsv;
 	}
 
@@ -110,11 +114,16 @@ public class ExportBean {
 		FacesMessage msg = null;
 
 		exporter = new ExportToCsv();
-		stream = new File(fileName + ".csv");
+		try {
+			stream = File.createTempFile(fileName, ".csv");
+		} catch (IOException e1) {
+			System.out.println(e1);
+		}
 		export(exporter, stream, msg);
 
 		try {
-			inputStream = new FileInputStream(stream);
+			inputStreamCsv = new FileInputStream(stream);
+			stream.delete();
 		} catch (FileNotFoundException e) {
 		}
 	}
@@ -125,11 +134,16 @@ public class ExportBean {
 		FacesMessage msg = null;
 
 		exporter = new ExportToXml();
-		stream = new File(fileName + ".xml");
+		try {
+			stream = File.createTempFile(fileName, ".xml");
+		} catch (IOException e1) {
+			System.out.println(e1);
+		}
 		export(exporter, stream, msg);
 
 		try {
-			inputStream = new FileInputStream(stream);
+			inputStreamXml = new FileInputStream(stream);
+			stream.delete();
 		} catch (FileNotFoundException e) {
 		}
 	}
@@ -154,8 +168,6 @@ public class ExportBean {
 			}
 
 		}
-		FacesContext.getCurrentInstance().getExternalContext().getFlash()
-				.setKeepMessages(true);
-		FacesContext.getCurrentInstance().addMessage(null, msg);
+		NavigationUtils.addMessage(msg);
 	}
 }

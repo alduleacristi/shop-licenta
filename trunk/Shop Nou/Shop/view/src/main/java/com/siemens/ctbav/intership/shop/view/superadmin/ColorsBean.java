@@ -17,11 +17,11 @@ import org.primefaces.event.CloseEvent;
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
 import com.siemens.ctbav.intership.shop.exception.superadmin.ColorException;
+import com.siemens.ctbav.intership.shop.internationalization.enums.superadmin.EColor;
 import com.siemens.ctbav.intership.shop.model.Color;
 import com.siemens.ctbav.intership.shop.service.internationalization.InternationalizationService;
 import com.siemens.ctbav.intership.shop.service.superadmin.ColorService;
 import com.siemens.ctbav.intership.shop.util.superadmin.NavigationUtils;
-import com.siemens.ctbav.intership.shop.view.internationalization.enums.superadmin.EColor;
 
 @ManagedBean(name = "colorsBean")
 @ViewScoped

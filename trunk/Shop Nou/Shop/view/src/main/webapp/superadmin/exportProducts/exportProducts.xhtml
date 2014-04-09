@@ -81,7 +81,7 @@
 							actionListener="#{exportBean.exportToCsv}" update="messages"
 							onclick="handleUpdateRequest(xhr, status, args)"
 							oncomplete="window.location.reload();">
-							<p:fileDownload value="#{exportBean.fileXml}" />
+							<p:fileDownload value="#{exportBean.fileCsv}" />
 						</p:commandButton>
 						<p:commandButton value="#{internationalizationGeneric.cancel}"
 							onclick="expToCsv.hide();" type="button" />

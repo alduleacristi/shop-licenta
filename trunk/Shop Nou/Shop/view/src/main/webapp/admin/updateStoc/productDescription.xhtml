@@ -33,17 +33,22 @@
 										#{colorProductSizeSelectBean.selectedProduct.color.name}<br />
 									</p>
 									<strong class="price"> <p:outputLabel
-											value="$#{colorProductSizeSelectBean.selectedProduct.product.price}"
+											value="#{colorProductSizeSelectBean.selectedProduct.product.price} #{internationalizationCoinSign.coin}"
 											rendered="#{colorProductSizeSelectBean.selectedProduct.product.reduction == 0.0}"></p:outputLabel></strong>
 									<strike> <p:outputLabel
-											value="$#{colorProductSizeSelectBean.selectedProduct.product.price}"
+											value="#{colorProductSizeSelectBean.selectedProduct.product.price} #{internationalizationCoinSign.coin}"
 											rendered="#{colorProductSizeSelectBean.selectedProduct.product.reduction != 0.0}"></p:outputLabel>
 									</strike> <strong class="price"> <p:outputLabel
-											value="$#{colorProductSizeSelectBean.selectedProduct.product.price-colorProductSizeSelectBean.selectedProduct.product.price*colorProductSizeSelectBean.selectedProduct.product.reduction/100}"
+											value="#{colorProductsSizeBean.getReductionPrice(colorProductSizeSelectBean.selectedProduct)} #{internationalizationCoinSign.coin}"
 											rendered="#{colorProductSizeSelectBean.selectedProduct.product.reduction != 0.0}"></p:outputLabel></strong>
 									<br />
 									<h:outputText id="outputPieces"
 										value="#{internationalizationColorSizeProducts.available}: #{colorProductSizeSelectBean.getAvailablePieces()}" />
+									<br />
+									<br />
+									<h:outputText
+										value="#{internationalizationGenericProducts.sale}: #{colorProductSizeSelectBean.selectedProduct.product.reduction}%"
+										rendered="#{colorProductSizeSelectBean.selectedProduct.product.reduction!= 0.0}" />
 								</div>
 							</div>
 						</li>
@@ -69,7 +74,8 @@
 
 								<h3>#{internationalizationColorSizeProducts.description}</h3>
 								<br></br>
-								<p:inputTextarea cols="20" rows="12" maxlength="200" style="width:165px"
+								<p:inputTextarea cols="20" rows="12" maxlength="200"
+									style="width:165px"
 									value="#{colorProductSizeSelectBean.selectedProduct.product.description}"
 									readonly="true">
 								</p:inputTextarea>

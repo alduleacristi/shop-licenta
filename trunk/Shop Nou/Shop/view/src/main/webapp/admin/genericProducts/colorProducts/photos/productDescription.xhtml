@@ -33,14 +33,19 @@
 										#{colorProductSelectPhotoBean.selectedProduct.color.name}<br />
 									</p>
 									<strong class="price"> <p:outputLabel
-											value="$#{colorProductSelectPhotoBean.selectedProduct.product.price}"
+											value="#{colorProductSelectPhotoBean.selectedProduct.product.price} #{internationalizationCoinSign.coin}"
 											rendered="#{colorProductSelectPhotoBean.selectedProduct.product.reduction == 0.0}"></p:outputLabel></strong>
 									<strike> <p:outputLabel
-											value="$#{colorProductSelectPhotoBean.selectedProduct.product.price}"
+											value="#{colorProductSelectPhotoBean.selectedProduct.product.price} #{internationalizationCoinSign.coin}"
 											rendered="#{colorProductSelectPhotoBean.selectedProduct.product.reduction != 0.0}"></p:outputLabel>
 									</strike> <strong class="price"> <p:outputLabel
-											value="$#{colorProductSelectPhotoBean.selectedProduct.product.price-colorProductSelectPhotoBean.selectedProduct.product.price*colorProductSelectPhotoBean.selectedProduct.product.reduction/100}"
+											value="#{colorProductPhotosBean.getReductionPrice(colorProductSelectPhotoBean.selectedProduct)} #{internationalizationCoinSign.coin}"
 											rendered="#{colorProductSelectPhotoBean.selectedProduct.product.reduction != 0.0}"></p:outputLabel></strong>
+									<br />
+									<br />
+									<h:outputText
+										value="#{internationalizationGenericProducts.sale}: #{colorProductSelectPhotoBean.selectedProduct.product.reduction}%"
+										rendered="#{colorProductSelectPhotoBean.selectedProduct.product.reduction!= 0.0}" />
 								</div>
 							</div>
 						</li>
@@ -81,7 +86,8 @@
 
 								<h3>#{internationalizationPhotoProducts.description}</h3>
 								<br></br>
-								<p:inputTextarea cols="20" rows="12" maxlength="200" style="width:165px"
+								<p:inputTextarea cols="20" rows="12" maxlength="200"
+									style="width:165px"
 									value="#{colorProductSelectPhotoBean.selectedProduct.product.description}"
 									readonly="true">
 								</p:inputTextarea>
@@ -107,7 +113,7 @@
 			<h:form id="galleria">
 				<p:galleria id="refreshMe"
 					value="#{colorProductSelectPhotoBean.photos}" var="image"
-					panelWidth="500" panelHeight="313" showCaption="false"
+					panelWidth="500" panelHeight="560" showCaption="false"
 					title="#{colorProductSelectPhotoBean.selectedProduct.product.name}"
 					autoPlay="false">
 					<p:graphicImage url="#{image}">

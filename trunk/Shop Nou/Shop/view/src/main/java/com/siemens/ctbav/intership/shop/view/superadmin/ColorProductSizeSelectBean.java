@@ -22,6 +22,7 @@ import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
 import com.siemens.ctbav.intership.shop.conf.ConfigurationService;
 import com.siemens.ctbav.intership.shop.exception.superadmin.ColorSizeProductException;
+import com.siemens.ctbav.intership.shop.internationalization.enums.superadmin.EColorSizeProducts;
 import com.siemens.ctbav.intership.shop.model.Category;
 import com.siemens.ctbav.intership.shop.model.ProductColor;
 import com.siemens.ctbav.intership.shop.model.ProductColorSize;
@@ -32,7 +33,6 @@ import com.siemens.ctbav.intership.shop.service.superadmin.ColorSizeProductServi
 import com.siemens.ctbav.intership.shop.service.superadmin.SizeService;
 import com.siemens.ctbav.intership.shop.util.UsersRole;
 import com.siemens.ctbav.intership.shop.util.superadmin.NavigationUtils;
-import com.siemens.ctbav.intership.shop.view.internationalization.enums.superadmin.EColorSizeProducts;
 
 @URLMappings(mappings = {
 		@URLMapping(id = "colorProductSizeSelect", pattern = "/superadmin/genericProducts/colorProducts/sizes/#{colorProductSizeSelectBean.id}", viewId = "productDescription.xhtml"),
@@ -71,6 +71,8 @@ public class ColorProductSizeSelectBean implements Serializable {
 	private List<Size> allSizes;
 	private boolean selectedSize;
 
+	private boolean isEnglishSelected;
+
 	@PostConstruct
 	void initialization() {
 		this.host = confService.getHost();
@@ -105,13 +107,7 @@ public class ColorProductSizeSelectBean implements Serializable {
 	}
 
 	private void internationalizationInit() {
-		boolean isEnglishSelected;
-		Boolean b = (Boolean) FacesContext.getCurrentInstance()
-				.getExternalContext().getSessionMap().get("isEnglishSelected");
-		if (b == null)
-			isEnglishSelected = true;
-		else
-			isEnglishSelected = b;
+		setLanguage();
 		if (isEnglishSelected) {
 			String language = new String("en");
 			String country = new String("US");
@@ -127,6 +123,15 @@ public class ColorProductSizeSelectBean implements Serializable {
 		}
 	}
 
+	private void setLanguage() {
+		Boolean b = (Boolean) FacesContext.getCurrentInstance()
+				.getExternalContext().getSessionMap().get("isEnglishSelected");
+		if (b == null)
+			isEnglishSelected = true;
+		else
+			isEnglishSelected = b;
+	}
+
 	public long getId() {
 		return id;
 	}
@@ -137,6 +142,12 @@ public class ColorProductSizeSelectBean implements Serializable {
 			selectedProduct = colorProductService.getProductById(id);
 			FacesContext.getCurrentInstance().getExternalContext()
 					.getSessionMap().put("selectedProduct", selectedProduct);
+			setLanguage();
+			if (!isEnglishSelected) {
+				Double b = (Double) FacesContext.getCurrentInstance()
+						.getExternalContext().getSessionMap().get("RON");
+				selectedProduct.setProductMultiplyPrice(b);
+			}
 			if (selectedProduct != null
 					&& selectedProduct.getProductColorSize().size() == 1)
 				selectedSize = true;
@@ -155,6 +166,7 @@ public class ColorProductSizeSelectBean implements Serializable {
 		if (product == null) {
 			product = colorProductService.getProductById(id);
 		}
+		
 		setFirstSize();
 		return product;
 

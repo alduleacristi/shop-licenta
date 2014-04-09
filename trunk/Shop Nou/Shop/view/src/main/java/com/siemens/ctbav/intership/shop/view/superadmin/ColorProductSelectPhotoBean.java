@@ -18,12 +18,12 @@ import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
 import com.siemens.ctbav.intership.shop.conf.ConfigurationService;
 import com.siemens.ctbav.intership.shop.exception.PhotoException;
+import com.siemens.ctbav.intership.shop.internationalization.enums.superadmin.EPhotoProduct;
 import com.siemens.ctbav.intership.shop.model.ProductColor;
 import com.siemens.ctbav.intership.shop.service.internationalization.InternationalizationService;
 import com.siemens.ctbav.intership.shop.service.superadmin.ColorProductService;
 import com.siemens.ctbav.intership.shop.service.superadmin.PhotoService;
 import com.siemens.ctbav.intership.shop.util.superadmin.NavigationUtils;
-import com.siemens.ctbav.intership.shop.view.internationalization.enums.superadmin.EPhotoProduct;
 
 @URLMappings(mappings = {
 		@URLMapping(id = "colorProductSelectPhoto", pattern = "/superadmin/genericProducts/colorProducts/photos/#{colorProductSelectPhotoBean.id}", viewId = "productDescription.xhtml"),
@@ -53,19 +53,15 @@ public class ColorProductSelectPhotoBean implements Serializable {
 	private List<String> photos;
 	private String host;
 
+	private boolean isEnglishSelected;
+
 	@PostConstruct
 	private void init() {
 		internationalizationInit();
 	}
 
 	private void internationalizationInit() {
-		boolean isEnglishSelected;
-		Boolean b = (Boolean) FacesContext.getCurrentInstance()
-				.getExternalContext().getSessionMap().get("isEnglishSelected");
-		if (b == null)
-			isEnglishSelected = true;
-		else
-			isEnglishSelected = b;
+		setLanguage();
 		if (isEnglishSelected) {
 			String language = new String("en");
 			String country = new String("US");
@@ -81,6 +77,15 @@ public class ColorProductSelectPhotoBean implements Serializable {
 		}
 	}
 
+	private void setLanguage() {
+		Boolean b = (Boolean) FacesContext.getCurrentInstance()
+				.getExternalContext().getSessionMap().get("isEnglishSelected");
+		if (b == null)
+			isEnglishSelected = true;
+		else
+			isEnglishSelected = b;
+	}
+
 	public long getId() {
 		return id;
 	}
@@ -91,6 +96,12 @@ public class ColorProductSelectPhotoBean implements Serializable {
 			selectedProduct = colorProductService.getProductById(id);
 			FacesContext.getCurrentInstance().getExternalContext()
 					.getSessionMap().put("selectedProduct", selectedProduct);
+			setLanguage();
+			if (!isEnglishSelected) {
+				Double b = (Double) FacesContext.getCurrentInstance()
+						.getExternalContext().getSessionMap().get("RON");
+				selectedProduct.setProductMultiplyPrice(b);
+			}
 			displayPhotos();
 		}
 	}

@@ -20,12 +20,12 @@ import org.primefaces.model.TreeNode;
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
 import com.siemens.ctbav.intership.shop.exception.superadmin.CategoryException;
+import com.siemens.ctbav.intership.shop.internationalization.enums.superadmin.ECategory;
 import com.siemens.ctbav.intership.shop.model.Category;
 import com.siemens.ctbav.intership.shop.service.internationalization.InternationalizationService;
 import com.siemens.ctbav.intership.shop.service.superadmin.CategoryService;
 import com.siemens.ctbav.intership.shop.util.superadmin.NavigationUtils;
 import com.siemens.ctbav.intership.shop.util.superadmin.validations.CategoryUpdateNameValidate;
-import com.siemens.ctbav.intership.shop.view.internationalization.enums.superadmin.ECategory;
 
 @URLMappings(mappings = { @URLMapping(id = "categories", pattern = "/superadmin/categories/", viewId = "categories.xhtml") })
 @ManagedBean(name = "categoryBean")

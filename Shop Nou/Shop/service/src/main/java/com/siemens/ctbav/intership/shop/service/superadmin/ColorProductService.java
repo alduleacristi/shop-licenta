@@ -50,6 +50,7 @@ public class ColorProductService {
 	}
 
 	public void addProductColor(Product p, Color c) {
+		System.out.println("add");
 		ProductColor newPc = new ProductColor(p, c);
 		em.persist(newPc);
 		em.flush();
@@ -62,5 +63,18 @@ public class ColorProductService {
 		pc.setColor(c);
 		em.merge(pc);
 		em.flush();
+	}
+
+	@SuppressWarnings("unchecked")
+	public ProductColor getProductColorByFields(Product product, Color color) {
+		List<ProductColor> pc = em
+				.createNamedQuery(ProductColor.GET_COLOR_PRODUCT_BY_FIELDS)
+				.setParameter("product", product).setParameter("color", color)
+				.getResultList();
+		System.out.println(pc.size());
+		if (pc.size() > 0)
+			return pc.get(0);
+
+		return null;
 	}
 }

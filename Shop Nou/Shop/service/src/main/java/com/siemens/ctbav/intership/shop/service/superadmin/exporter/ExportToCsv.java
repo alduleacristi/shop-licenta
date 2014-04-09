@@ -10,23 +10,19 @@ import com.siemens.ctbav.intership.shop.model.ProductColorSize;
 public class ExportToCsv implements Exporter {
 
 	@Override
-	public void export(File stream, List<ProductColorSize> list) throws FileNotFoundException {
+	public void export(File stream, List<ProductColorSize> list)
+			throws FileNotFoundException {
 		PrintStream printer = new PrintStream(stream);
 		printer.println("Product's name, Product's description, Product's price, Product's reduction, Product's category, Product's color, Product's size, Number of pieces");
 
 		for (ProductColorSize pcs : list) {
-			printer.println(pcs.getProductcolor().getProduct().getName()
-					+ ", "
-					+ pcs.getProductcolor().getProduct().getDescription()
-					+ ", "
-					+ pcs.getProductcolor().getProduct().getPrice()
-					+ ", "
-					+ pcs.getProductcolor().getProduct().getReduction()
-					+ ", "
-					+ pcs.getProductcolor().getProduct().getCategory()
-							.getName() + ", "
-					+ pcs.getProductcolor().getColor().getName() + ", "
-					+ pcs.getSize().getSize() + ", " + pcs.getNrOfPieces());
+			printer.println(pcs.getProductcolor().getProduct().getName() + ","
+					+ pcs.getProductcolor().getProduct().getDescription() + ","
+					+ pcs.getProductcolor().getProduct().getPrice() + ","
+					+ pcs.getProductcolor().getProduct().getReduction() + ","
+					+ pcs.getProductcolor().getProduct().getCategory().getId()
+					+ "," + pcs.getProductcolor().getColor().getId() + ","
+					+ pcs.getSize().getId() + "," + pcs.getNrOfPieces());
 		}
 
 		printer.close();

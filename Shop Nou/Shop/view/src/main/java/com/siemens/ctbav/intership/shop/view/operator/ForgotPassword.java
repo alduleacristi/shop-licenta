@@ -8,6 +8,7 @@ import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
 import com.siemens.ctbav.intership.shop.conf.ConfigurationService;
@@ -81,6 +82,9 @@ public class ForgotPassword {
 	}
 
 	public void generateNewPassword() {
+		ExternalContext context1 = FacesContext.getCurrentInstance()
+				.getExternalContext();
+		context1.getFlash().setKeepMessages(true);
 		try {
 			UserDTO user = ConvertUser.convertUser(userService
 					.getUserByEmail(email));
@@ -130,7 +134,7 @@ public class ForgotPassword {
 					new FacesMessage(FacesMessage.SEVERITY_INFO, "Info",
 							internationalizationService
 									.getMessage(EForgot.INFO_MESSAGE.getName())));
-			context.getExternalContext().redirect("login.xhtml");
+			context1.redirect("login.xhtml");
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			FacesContext context = FacesContext.getCurrentInstance();

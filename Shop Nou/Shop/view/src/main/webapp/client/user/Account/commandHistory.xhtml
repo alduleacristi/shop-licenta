@@ -65,20 +65,6 @@
 									<p:outputLabel value="#{p.price}$"></p:outputLabel>
 								</center>
 								<br />
-								<div class="price">
-									<p:outputLabel value="-#{p.percRedution}%"
-										rendered="#{p.percRedution != 0.0}"></p:outputLabel>
-									<strong class="price">Number of Items</strong> #{p.nrPieces}
-								</div>
-								<h3>#{internationalizationProduct.productName}</h3>
-								<p:outputLabel value="#{p.product.productcolor.product.name}"></p:outputLabel>
-								<br />
-								<br />
-								<strong class="price">#{internationalizationProduct.price}</strong>
-								<p:outputLabel value="#{p.price}$"></p:outputLabel>
-
-								<!-- 								<strong> <p:outputLabel value="#{CommandBean.message}" -->
-								<!-- 										rendered="#{CommandBean.isAlreadySaved(c)}"></p:outputLabel></strong> -->
 
 								<center>
 									<strong> <p:outputLabel value="#{CommandBean.message}"
@@ -90,6 +76,7 @@
 										action="#{CommandBean.setSelectedOrder(c)}"
 										oncomplete="PF('dialog').show()"></p:commandButton>
 								</center>
+
 							</p:dataGrid>
 
 

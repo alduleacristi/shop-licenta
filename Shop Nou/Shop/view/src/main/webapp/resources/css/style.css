@@ -1213,13 +1213,13 @@ h3.ico4 {
 	padding: 0 2px;
 }
 
-#leftcolumn {
-	width: 350px;
+.leftcolumn {
+	width: 200px;
 	float: left;
 }
 
-#rightcolumn {
-	width: 350px;
+.rightcolumn {
+	width: 200px;
 	float: right;
 }
 
@@ -1281,3 +1281,4 @@ h3.ico4 {
 	{
 	width: 205px;
 }
+

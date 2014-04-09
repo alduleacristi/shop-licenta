@@ -13,11 +13,11 @@ import javax.faces.context.FacesContext;
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
 import com.siemens.ctbav.intership.shop.exception.client.NullUserException;
+import com.siemens.ctbav.intership.shop.internationalization.enums.client.ESecurityData;
 import com.siemens.ctbav.intership.shop.model.Client;
 import com.siemens.ctbav.intership.shop.model.User;
 import com.siemens.ctbav.intership.shop.service.client.UserService;
 import com.siemens.ctbav.intership.shop.service.internationalization.InternationalizationService;
-import com.siemens.ctbav.intership.shop.view.internationalization.enums.client.ESecurityData;
 
 @ViewScoped
 @ManagedBean(name = "updateClientSecurityData")

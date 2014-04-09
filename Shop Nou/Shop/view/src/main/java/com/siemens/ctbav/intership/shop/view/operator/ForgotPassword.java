@@ -14,12 +14,12 @@ import com.siemens.ctbav.intership.shop.conf.ConfigurationService;
 import com.siemens.ctbav.intership.shop.convert.operator.ConvertUser;
 import com.siemens.ctbav.intership.shop.dto.operator.UserDTO;
 import com.siemens.ctbav.intership.shop.enums.operator.PasswordStatus;
+import com.siemens.ctbav.intership.shop.internationalization.enums.EForgot;
 import com.siemens.ctbav.intership.shop.service.internationalization.InternationalizationService;
 import com.siemens.ctbav.intership.shop.service.operator.UserService;
 import com.siemens.ctbav.intership.shop.util.operator.AES;
 import com.siemens.ctbav.intership.shop.util.operator.GenerateString;
 import com.siemens.ctbav.intership.shop.util.operator.MailService;
-import com.siemens.ctbav.intership.shop.view.internationalization.enums.EForgot;
 
 @ManagedBean(name = "forgotPassword")
 @RequestScoped

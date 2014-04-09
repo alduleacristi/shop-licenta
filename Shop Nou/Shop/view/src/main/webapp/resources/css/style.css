@@ -810,6 +810,15 @@ a.bul {
 	overflow: hidden;
 }
 
+.product-percA{
+	position: absolute;
+	width: 50px;
+	height: 250px;
+	left: 150px;
+	right: 0;
+	
+}
+
 .product-infoA {
 	position: absolute;
 	width: 230px;

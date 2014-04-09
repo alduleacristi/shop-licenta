@@ -30,6 +30,7 @@ import com.siemens.ctbav.intership.shop.exception.client.CommandCouldNotPersistE
 import com.siemens.ctbav.intership.shop.exception.client.CommmandStatusDoesNotExistException;
 import com.siemens.ctbav.intership.shop.exception.client.NotEnoughProductsInStockException;
 import com.siemens.ctbav.intership.shop.exception.client.ProductColorSizeDoesNotExistException;
+import com.siemens.ctbav.intership.shop.internationalization.enums.client.ECart;
 import com.siemens.ctbav.intership.shop.model.Adress;
 import com.siemens.ctbav.intership.shop.model.Client;
 import com.siemens.ctbav.intership.shop.model.ClientProduct;
@@ -44,7 +45,6 @@ import com.siemens.ctbav.intership.shop.service.client.RecommandService;
 import com.siemens.ctbav.intership.shop.service.internationalization.InternationalizationService;
 import com.siemens.ctbav.intership.shop.util.Enum.CommandStatusEnum;
 import com.siemens.ctbav.intership.shop.util.client.CookieEncryption;
-import com.siemens.ctbav.intership.shop.view.internationalization.enums.client.ECart;
 
 @SessionScoped
 @ManagedBean(name = "cart")

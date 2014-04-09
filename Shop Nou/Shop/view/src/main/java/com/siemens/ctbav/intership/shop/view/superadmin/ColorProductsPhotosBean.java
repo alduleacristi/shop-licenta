@@ -1,7 +1,10 @@
 package com.siemens.ctbav.intership.shop.view.superadmin;
 
 import java.io.Serializable;
+import java.text.DecimalFormat;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -41,22 +44,29 @@ public class ColorProductsPhotosBean implements Serializable {
 	private String host;
 	private String photo;
 
+	private boolean isEnglishSelected;
+
+	private Map<Long, Long> m;
+
 	@PostConstruct
 	private void postConstruct() {
 		this.host = confService.getHost();
+		setLanguage();
+		if (isEnglishSelected) {
+			photo = "/resources/pproducts.jpg";
+		} else {
+			photo = "/resources/pproductsR.jpg";
+		}
+	}
 
-		boolean isEnglishSelected;
+	private void setLanguage() {
+		m = new HashMap<Long, Long>();
 		Boolean b = (Boolean) FacesContext.getCurrentInstance()
 				.getExternalContext().getSessionMap().get("isEnglishSelected");
 		if (b == null)
 			isEnglishSelected = true;
 		else
 			isEnglishSelected = b;
-		if (isEnglishSelected) {
-			photo = "/resources/pproducts.jpg";
-		} else {
-			photo = "/resources/pproductsR.jpg";
-		}
 	}
 
 	public boolean isSelectedCategory() {
@@ -101,6 +111,18 @@ public class ColorProductsPhotosBean implements Serializable {
 				.getExternalContext().getSessionMap().get("selectedNode");
 		long id = ((Category) selectedNode.getData()).getId();
 		productList = colorProductService.getProductsByCategory(id);
+		setLanguage();
+		if (!isEnglishSelected) {
+			Double b = (Double) FacesContext.getCurrentInstance()
+					.getExternalContext().getSessionMap().get("RON");
+			for (ProductColor pc : productList) {
+				if (!m.containsKey(pc.getProduct().getId())) {
+					pc.setProductMultiplyPrice(b);
+					m.put(pc.getProduct().getId(), pc.getProduct().getId());
+				}
+			}
+		}
+
 	}
 
 	public void showProduct(ProductColor product) {
@@ -109,7 +131,12 @@ public class ColorProductsPhotosBean implements Serializable {
 
 		FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
 				.put("selectedProduct", product);
-
+		setLanguage();
+		if (!isEnglishSelected) {
+			Double b = (Double) FacesContext.getCurrentInstance()
+					.getExternalContext().getSessionMap().get("RON");
+			product.setProductMultiplyPrice(b);
+		}
 		if (FacesContext.getCurrentInstance().getExternalContext()
 				.getSessionMap().get("user") != null) {
 
@@ -124,5 +151,13 @@ public class ColorProductsPhotosBean implements Serializable {
 								+ product.getId());
 			}
 		}
+	}
+
+	public double getReductionPrice(ProductColor p) {
+		double r = p.getProduct().getPrice() - p.getProduct().getPrice()
+				* p.getProduct().getReduction() / 100;
+		DecimalFormat df = new DecimalFormat("#.##");
+		r = Double.parseDouble(df.format(r));
+		return r;
 	}
 }

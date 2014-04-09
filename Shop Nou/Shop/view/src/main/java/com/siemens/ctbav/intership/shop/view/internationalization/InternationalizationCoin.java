@@ -5,22 +5,21 @@ import java.io.Serializable;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
-import com.siemens.ctbav.intership.shop.internationalization.enums.EUnimplemented;
+import com.siemens.ctbav.intership.shop.internationalization.enums.ECoin;
 import com.siemens.ctbav.intership.shop.service.internationalization.InternationalizationService;
 
-@ManagedBean(name = "internationalizationUnimplemented")
-@RequestScoped
-public class InternationalizationUnimplemented implements Serializable {
-	private static final long serialVersionUID = -6500826395561045431L;
+@ManagedBean(name = "internationalizationCoin")
+@ViewScoped
+public class InternationalizationCoin implements Serializable {
+	private static final long serialVersionUID = 1L;
 
 	@EJB
 	private InternationalizationService internationalizationService;
 
-	private String sorry;
-	private String message;
+	private String coin;
 
 	@PostConstruct
 	private void init() {
@@ -39,24 +38,17 @@ public class InternationalizationUnimplemented implements Serializable {
 			String language = new String("en");
 			String country = new String("US");
 			internationalizationService.setCurrentLocale(language, country,
-					"internationalization/unimplemented/Unimplemented");
+					"internationalization/coin/Coin");
 		} else {
 			String language = new String("ro");
 			String country = new String("RO");
 			internationalizationService.setCurrentLocale(language, country,
-					"internationalization/unimplemented/Unimplemented");
+					"internationalization/coin/Coin");
 		}
 	}
 
-	public String getSorry() {
-		sorry = internationalizationService.getMessage(EUnimplemented.SORRY
-				.getName());
-		return sorry;
-	}
-
-	public String getMessage() {
-		message = internationalizationService.getMessage(EUnimplemented.MESSAGE
-				.getName());
-		return message;
+	public String getCoin() {
+		coin = internationalizationService.getMessage(ECoin.COIN.getName());
+		return coin;
 	}
 }

@@ -66,13 +66,13 @@
 									value="#{internationalizationColorProducts.price}:"
 									rendered="#{product.reduction == 0.0}" />
 								<strong class="price"> <p:outputLabel
-										value="$#{product.price}"
+										value="#{product.price} #{internationalizationCoin.coin}"
 										rendered="#{product.reduction == 0.0}"></p:outputLabel></strong>
-								<strike> <p:outputLabel value="$#{product.price}"
+								<strike> <p:outputLabel value="#{product.price} #{internationalizationCoin.coin}"
 										rendered="#{product.reduction != 0.0}"></p:outputLabel>
 								</strike>
 								<strong class="price"> <p:outputLabel
-										value="$#{product.price-product.price*product.reduction/100}"
+										value="#{colorProductBean.getReductionPrice(product)} #{internationalizationCoin.coin}"
 										rendered="#{product.reduction != 0.0}"></p:outputLabel></strong>
 								<br />
 								<h:outputText
@@ -85,6 +85,10 @@
 									style="width:150px" value="#{product.description}"
 									readonly="true">
 								</p:inputTextarea>
+								<br />
+								<h:outputText
+									value="#{internationalizationGenericProducts.sale}: #{product.reduction}%"
+									rendered="#{product.reduction != 0.0}" />
 								<br />
 								<p:commandLink
 									title="#{internationalizationColorProducts.colors}"

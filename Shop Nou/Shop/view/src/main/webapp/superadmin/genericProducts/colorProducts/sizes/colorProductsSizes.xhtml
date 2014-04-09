@@ -66,14 +66,12 @@
 									<h3>#{product.product.name}</h3>
 									<div class="product-desc">
 										<h4>#{product.product.category.name}'S</h4>
-										<h3>
-											#{internationalizationColorSizeProducts.color}:
-											#{product.color.name}
-										</h3>
+										<h3>#{internationalizationColorSizeProducts.color}:
+											#{product.color.name}</h3>
 									</div>
 									<h:outputText
 										value="#{internationalizationColorSizeProducts.sizes}: #{colorProductsSizeBean.displaySizes(product)}" />
-									
+
 									<div align="right">
 										<p:commandLink
 											actionListener="#{colorProductsSizeBean.showProduct(product)}">
@@ -83,16 +81,24 @@
 										</p:commandLink>
 									</div>
 									<strong class="price"> <p:outputLabel
-											value="$#{product.product.price}"
+											value="#{product.product.price} #{internationalizationCoinSign.coin}"
 											rendered="#{product.product.reduction == 0.0}"></p:outputLabel></strong>
+									<strong class="price"> <p:outputLabel
+											value="#{colorProductsSizeBean.getReductionPrice(product)} #{internationalizationCoinSign.coin}"
+											rendered="#{product.product.reduction != 0.0}"></p:outputLabel></strong>
 									<strike> <strong class="reduction"> <p:outputLabel
-												value="$#{product.product.price}"
+												value="#{product.product.price} #{internationalizationCoinSign.coin}"
 												rendered="#{product.product.reduction != 0.0}"></p:outputLabel>
 									</strong>
-									</strike> <strong class="price"> <p:outputLabel
-											value="$#{product.product.price-product.product.price*product.product.reduction/100}"
-											rendered="#{product.product.reduction != 0.0}"></p:outputLabel></strong>
-
+									</strike> 
+									<div align="right">
+										<strong class="price"> <h:outputText
+												value="-#{product.product.reduction}%"
+												rendered="#{product.product.reduction != 0.0}">
+												<f:convertNumber pattern="#0.00" />
+											</h:outputText>
+										</strong>
+									</div>
 								</div></li>
 						</ul>
 						<div class="cl">&nbsp;</div>

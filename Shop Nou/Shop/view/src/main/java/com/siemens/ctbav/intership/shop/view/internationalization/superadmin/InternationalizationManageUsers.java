@@ -8,8 +8,8 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 
+import com.siemens.ctbav.intership.shop.internationalization.enums.superadmin.EManageUsers;
 import com.siemens.ctbav.intership.shop.service.internationalization.InternationalizationService;
-import com.siemens.ctbav.intership.shop.view.internationalization.enums.superadmin.EManageUsers;
 
 @ManagedBean(name = "internationalizationManageUsers")
 @RequestScoped

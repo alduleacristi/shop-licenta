@@ -17,20 +17,23 @@
 			<div class="box">
 				<p:graphicImage value="#{importBean.photo}" width="720" height="100" />
 			</div>
-			#{internationalizationUnimplemented.sorry}
-			<br />
-			#{internationalizationUnimplemented.message}
 			<br />
 			<br />
 			<h:form id="xml">
-				<p:growl id="messages" showDetail="true" />
-				<p:commandButton value="#{internationalizationImport.xml}"
-					id="importToXml" icon="ui-icon-arrowrefresh-1-w" />
+				<p:growl id="messages" showDetail="false" sticky="true" />
+				<p:fileUpload fileUploadListener="#{importBean.uploadXml}"
+					allowTypes="/(\.|\/)(xml)$/" sizeLimit="10240"
+					label="#{internationalizationImport.xml}" update=":xml:messages"
+					id="xml" icon="ui-icon-arrowrefresh-1-w">
+				</p:fileUpload>
 			</h:form>
 			<h:form id="csv">
-				<p:growl id="messages" showDetail="true" />
-				<p:commandButton value="#{internationalizationImport.csv}"
-					id="importToCsv" icon="ui-icon-arrowrefresh-1-w" />
+				<p:growl id="messages" showDetail="false" sticky="true"/>
+				<p:fileUpload fileUploadListener="#{importBean.uploadCsv}"
+					allowTypes="/(\.|\/)(csv)$/" sizeLimit="10240"
+					label="#{internationalizationImport.csv}" update=":csv:messages"
+					id="csv" icon="ui-icon-arrowrefresh-1-w">
+				</p:fileUpload>
 			</h:form>
 		</ui:define>
 	</ui:composition>

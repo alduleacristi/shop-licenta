@@ -13,8 +13,8 @@ import javax.faces.validator.ValidatorException;
 
 import org.primefaces.model.TreeNode;
 
+import com.siemens.ctbav.intership.shop.internationalization.enums.superadmin.ECategory;
 import com.siemens.ctbav.intership.shop.model.Category;
-import com.siemens.ctbav.intership.shop.view.internationalization.enums.superadmin.ECategory;
 
 @FacesValidator("validateUpdateCategory")
 public class CategoryUpdateNameValidate implements Validator {

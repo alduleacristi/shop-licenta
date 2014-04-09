@@ -20,13 +20,13 @@ import org.primefaces.model.TreeNode;
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
 import com.siemens.ctbav.intership.shop.exception.superadmin.SizeException;
+import com.siemens.ctbav.intership.shop.internationalization.enums.superadmin.ESize;
 import com.siemens.ctbav.intership.shop.model.Category;
 import com.siemens.ctbav.intership.shop.model.Size;
 import com.siemens.ctbav.intership.shop.service.internationalization.InternationalizationService;
 import com.siemens.ctbav.intership.shop.service.superadmin.SizeService;
 import com.siemens.ctbav.intership.shop.util.superadmin.NavigationUtils;
 import com.siemens.ctbav.intership.shop.util.superadmin.selectable.SelectableSize;
-import com.siemens.ctbav.intership.shop.view.internationalization.enums.superadmin.ESize;
 
 @ManagedBean(name = "sizeBean")
 @ViewScoped

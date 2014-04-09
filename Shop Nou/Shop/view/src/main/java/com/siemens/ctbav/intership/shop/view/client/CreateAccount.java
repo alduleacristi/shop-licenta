@@ -15,13 +15,13 @@ import org.primefaces.context.RequestContext;
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
 import com.siemens.ctbav.intership.shop.exception.UserException;
+import com.siemens.ctbav.intership.shop.internationalization.enums.superadmin.EManageUsers;
 import com.siemens.ctbav.intership.shop.model.Client;
 import com.siemens.ctbav.intership.shop.model.User;
 import com.siemens.ctbav.intership.shop.service.client.ClientService;
 import com.siemens.ctbav.intership.shop.service.internationalization.InternationalizationService;
 import com.siemens.ctbav.intership.shop.util.UsersRole;
 import com.siemens.ctbav.intership.shop.util.superadmin.NavigationUtils;
-import com.siemens.ctbav.intership.shop.view.internationalization.enums.superadmin.EManageUsers;
 
 @ManagedBean(name = "createAccountBean")
 @ViewScoped

@@ -1,7 +1,10 @@
 package com.siemens.ctbav.intership.shop.view.superadmin;
 
 import java.io.Serializable;
+import java.text.DecimalFormat;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -44,22 +47,29 @@ public class ColorProductsSizeBean implements Serializable {
 	private String host;
 	private String photo;
 
+	private boolean isEnglishSelected;
+
+	private Map<Long, Long> m;
+
 	@PostConstruct
 	private void postConstruct() {
 		this.host = confService.getHost();
+		setLanguage();
+		if (isEnglishSelected) {
+			photo = "/resources/sproducts.jpg";
+		} else {
+			photo = "/resources/sproductsR.jpg";
+		}
+	}
 
-		boolean isEnglishSelected;
+	private void setLanguage() {
+		m = new HashMap<Long, Long>();
 		Boolean b = (Boolean) FacesContext.getCurrentInstance()
 				.getExternalContext().getSessionMap().get("isEnglishSelected");
 		if (b == null)
 			isEnglishSelected = true;
 		else
 			isEnglishSelected = b;
-		if (isEnglishSelected) {
-			photo = "/resources/sproducts.jpg";
-		} else {
-			photo = "/resources/sproductsR.jpg";
-		}
 	}
 
 	public boolean isSelectedCategory() {
@@ -104,6 +114,17 @@ public class ColorProductsSizeBean implements Serializable {
 				.getExternalContext().getSessionMap().get("selectedNode");
 		long id = ((Category) selectedNode.getData()).getId();
 		productList = colorProductService.getProductsByCategory(id);
+		setLanguage();
+		if (!isEnglishSelected) {
+			Double b = (Double) FacesContext.getCurrentInstance()
+					.getExternalContext().getSessionMap().get("RON");
+			for (ProductColor pc : productList) {
+				if (!m.containsKey(pc.getProduct().getId())) {
+					pc.setProductMultiplyPrice(b);
+					m.put(pc.getProduct().getId(), pc.getProduct().getId());
+				}
+			}
+		}
 	}
 
 	public String displaySizes(ProductColor p) {
@@ -143,6 +164,12 @@ public class ColorProductsSizeBean implements Serializable {
 
 		FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
 				.put("selectedProductSize", product);
+		setLanguage();
+		if (!isEnglishSelected) {
+			Double b = (Double) FacesContext.getCurrentInstance()
+					.getExternalContext().getSessionMap().get("RON");
+			product.setProductMultiplyPrice(b);
+		}
 		if (FacesContext.getCurrentInstance().getExternalContext()
 				.getSessionMap().get("user") != null) {
 			if (request.isUserInRole(UsersRole.ADMINISTRATOR.toString())) {
@@ -154,5 +181,13 @@ public class ColorProductsSizeBean implements Serializable {
 						+ product.getId());
 			}
 		}
+	}
+	
+	public double getReductionPrice(ProductColor p) {
+		double r = p.getProduct().getPrice() - p.getProduct().getPrice()
+				* p.getProduct().getReduction() / 100;
+		DecimalFormat df = new DecimalFormat("#.##");
+		r = Double.parseDouble(df.format(r));
+		return r;
 	}
 }

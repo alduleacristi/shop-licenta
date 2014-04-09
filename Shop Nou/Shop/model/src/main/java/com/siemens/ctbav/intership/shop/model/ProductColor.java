@@ -19,7 +19,9 @@ import org.hibernate.annotations.NamedNativeQueries;
 import org.hibernate.annotations.NamedNativeQuery;
 
 @Entity(name = "product_color")
-@NamedQueries({ @NamedQuery(name = ProductColor.GET_COLOR_PRODUCTS_FOR_PRODUCT, query = "SELECT p FROM product_color p where p.product.id = :id") })
+@NamedQueries({
+		@NamedQuery(name = ProductColor.GET_COLOR_PRODUCTS_FOR_PRODUCT, query = "SELECT p FROM product_color p where p.product.id = :id"),
+		@NamedQuery(name = ProductColor.GET_COLOR_PRODUCT_BY_FIELDS, query = "SELECT p FROM product_color p where p.product = :product and p.color = :color") })
 @NamedNativeQueries({ @NamedNativeQuery(name = ProductColor.GET_PRODUCTS_FROM_CATEGORY, query = "CALL products_child_categories(:param)", resultClass = ProductColor.class) })
 public class ProductColor implements Serializable {
 
@@ -27,6 +29,7 @@ public class ProductColor implements Serializable {
 
 	public final static String GET_PRODUCTS_FROM_CATEGORY = "get_product_from_category";
 	public final static String GET_COLOR_PRODUCTS_FOR_PRODUCT = "getColorProductsForProduct";
+	public final static String GET_COLOR_PRODUCT_BY_FIELDS = "getColorProductByFields";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -70,6 +73,10 @@ public class ProductColor implements Serializable {
 
 	public List<ProductColorSize> getProductColorSize() {
 		return productColorSize;
+	}
+	
+	public void setProductMultiplyPrice(Double multiply){
+		product.multiplyPrice(multiply);
 	}
 
 	public void setProductColorSize(List<ProductColorSize> productColorSize) {

@@ -10,11 +10,11 @@ public class ProductDto {
 	private String name;
 	private String description;
 	private String price;
-	private String reduction;
+	private String percReduction;
 	private String category;
 	private String color;
 	private String size;
-	private String nrPcs;
+	private String nrPieces;
 
 	public String getName() {
 		return name;
@@ -40,12 +40,12 @@ public class ProductDto {
 		this.price = price;
 	}
 
-	public String getReduction() {
-		return reduction;
+	public String getPercReduction() {
+		return percReduction;
 	}
 
-	public void setReduction(String reduction) {
-		this.reduction = reduction;
+	public void setPercReduction(String reduction) {
+		this.percReduction = reduction;
 	}
 
 	public String getCategory() {
@@ -72,12 +72,19 @@ public class ProductDto {
 		this.size = size;
 	}
 
-	public String getNrPcs() {
-		return nrPcs;
+	public String getNrPieces() {
+		return nrPieces;
 	}
 
-	public void setNrPcs(String nrPcs) {
-		this.nrPcs = nrPcs;
+	public void setNrPieces(String nrPieces) {
+		this.nrPieces = nrPieces;
 	}
 
+	@Override
+	public String toString() {
+		return "ProductDto [name=" + name + ", description=" + description
+				+ ", price=" + price + ", percReduction=" + percReduction
+				+ ", category=" + category + ", color=" + color + ", size="
+				+ size + ", nrPieces=" + nrPieces + "]";
+	}
 }

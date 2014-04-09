@@ -18,14 +18,15 @@ import com.siemens.ctbav.intership.shop.model.Size;
 @Entity(name = "product_color_size")
 @NamedQueries({
 		@NamedQuery(name = ProductColorSize.GET_ALL_PRODUCTS_COLOR_SIZE, query = "SELECT p FROM product_color_size p "),
-		@NamedQuery(name=ProductColorSize.GET_PRODUCT_COLOR_SIZE, query="select p from product_color_size p where p.size.size=:size and p.productcolor.color.name=:color and p.productcolor.product.name=:name")
-})
+		@NamedQuery(name = ProductColorSize.GET_PRODUCT_COLOR_SIZE, query = "select p from product_color_size p where p.size.size=:size and p.productcolor.color.name=:color and p.productcolor.product.name=:name"),
+		@NamedQuery(name = ProductColorSize.GET_PRODUCT_COLOR_SIZE_BY_FIELDS, query = "SELECT p FROM product_color_size p where p.productcolor.product.name=:name and p.productcolor.product.description=:description and p.productcolor.product.price=:price and p.productcolor.product.category.id=:idCategory and p.size.id=:idSize and p.productcolor.color.id=:idColor") })
 public class ProductColorSize implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	public final static String GET_PRODUCT_COLOR_SIZE = "getProductbyColor,size,name";
 	public final static String GET_ALL_PRODUCTS_COLOR_SIZE = "getAllProductsColorSize";
+	public final static String GET_PRODUCT_COLOR_SIZE_BY_FIELDS = "getProductsColorSizeByFields";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,7 +45,7 @@ public class ProductColorSize implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "id_size")
 	private Size size;
-	
+
 	public ProductColorSize() {
 	}
 
@@ -76,6 +77,10 @@ public class ProductColorSize implements Serializable {
 
 	public void setProductcolor(ProductColor productcolor) {
 		this.productcolor = productcolor;
+	}
+	
+	public void setProductColoMultiplyPrice(double multiply){
+		productcolor.setProductMultiplyPrice(multiply);
 	}
 
 	public Size getSize() {
@@ -116,6 +121,5 @@ public class ProductColorSize implements Serializable {
 		return "ProductColorSize [id=" + id + ", nrOfPieces=" + nrOfPieces
 				+ ", productcolor=" + productcolor + ", size=" + size + "]";
 	}
-	
-	
+
 }

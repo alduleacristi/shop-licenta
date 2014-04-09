@@ -1,6 +1,7 @@
 package com.siemens.ctbav.intership.shop.model;
 
 import java.io.Serializable;
+import java.text.DecimalFormat;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -28,20 +29,24 @@ import org.hibernate.search.annotations.Indexed;
 import org.hibernate.search.annotations.Parameter;
 import org.hibernate.search.annotations.TokenFilterDef;
 import org.hibernate.search.annotations.TokenizerDef;
+
 import com.siemens.ctbav.intership.shop.util.client.ProductCategoryIndex;
 
 @NamedQueries({
 		@NamedQuery(name = Product.GET_PRODUCTS_BY_CATEGORY, query = "SELECT p FROM Product p where p.category.id = :id"),
 		@NamedQuery(name = Product.GET_REDUCE_PRODUCTS, query = "SELECT p FROM Product p WHERE p.reduction > 0"),
 		@NamedQuery(name = Product.GET_PRODUCT_BY_ID, query = "SELECT p FROM Product p WHERE p.id = :id"),
-		@NamedQuery(name = Product.GET_PRODUCTS_BY_RAND , query = "SELECT p from Product p order by rand()")})
+		@NamedQuery(name = Product.GET_PRODUCTS_BY_RAND, query = "SELECT p from Product p order by rand()"),
+		@NamedQuery(name = Product.GET_PRODUCT_BY_FIELDS, query = "SELECT p FROM Product p where p.name = :name and p.description = :description and p.price = :price and p.category.id = :idCategory and p.reduction = :reduction") })
 @NamedNativeQueries({ @NamedNativeQuery(name = Product.GET_GENERIC_PRODUCTS_FROM_CATEGORY, query = "CALL generic_products_child_categories(:param)", resultClass = Product.class) })
 @Indexed()
 @ClassBridges({
-//		@ClassBridge(name = "category", impl = CategoryIndex.class, params = @Parameter(name = "sepChar", value = "/"), analyzer = @Analyzer(definition = "categorySearchAnalyzer")),
-		@ClassBridge(name = "productCategory", impl = ProductCategoryIndex.class, params = @Parameter(name = "sepChar", value = "/"), analyzer = @Analyzer(definition = "productSearchAnalyzer")) })
+// @ClassBridge(name = "category", impl = CategoryIndex.class, params =
+// @Parameter(name = "sepChar", value = "/"), analyzer = @Analyzer(definition =
+// "categorySearchAnalyzer")),
+@ClassBridge(name = "productCategory", impl = ProductCategoryIndex.class, params = @Parameter(name = "sepChar", value = "/"), analyzer = @Analyzer(definition = "productSearchAnalyzer")) })
 @AnalyzerDefs({
-		@AnalyzerDef(name = "productSearchAnalyzer",  filters = {
+		@AnalyzerDef(name = "productSearchAnalyzer", filters = {
 				@TokenFilterDef(factory = LowerCaseFilterFactory.class),
 				@TokenFilterDef(factory = NGramFilterFactory.class, params = {
 						@Parameter(name = "maxGramSize", value = "10"),
@@ -63,6 +68,7 @@ public class Product implements Serializable {
 	public final static String GET_REDUCE_PRODUCTS = "get_reduce_products";
 	public final static String GET_PRODUCT_BY_ID = "get_product_by_id";
 	public final static String GET_PRODUCTS_BY_RAND = "getProductsRandom";
+	public final static String GET_PRODUCT_BY_FIELDS = "getProductByFields";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -122,11 +128,21 @@ public class Product implements Serializable {
 	}
 
 	public Double getPrice() {
+		DecimalFormat df = new DecimalFormat("#.##");
+		this.price = Double.parseDouble(df.format(price));
 		return price;
 	}
 
 	public void setPrice(Double price) {
 		this.price = price;
+		DecimalFormat df = new DecimalFormat("#.##");
+		this.price = Double.parseDouble(df.format(price));
+	}
+
+	public void multiplyPrice(Double multiply) {
+		this.price *= multiply;
+		DecimalFormat df = new DecimalFormat("#.##");
+		this.price = Double.parseDouble(df.format(price));
 	}
 
 	public Category getCategory() {

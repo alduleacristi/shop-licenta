@@ -9,6 +9,7 @@ import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
 import com.siemens.ctbav.intership.shop.convert.operator.ConvertCommand;
@@ -138,6 +139,10 @@ public class OrdersBean {
 
 	public void deliveredOrder(CommandDTO order) {
 		System.out.println("in deliver");
+		ExternalContext context = FacesContext.getCurrentInstance()
+				.getExternalContext();
+		context.getFlash().setKeepMessages(true);
+
 		Date date = new Date(Calendar.getInstance().getTimeInMillis());
 		order.setDeliveryDate(date);
 		order.getStatus().setStatus("delivered");
@@ -147,8 +152,7 @@ public class OrdersBean {
 					null,
 					new FacesMessage(FacesMessage.SEVERITY_INFO,
 							"Order delivered", "Order delivered"));
-			FacesContext.getCurrentInstance().getExternalContext()
-					.redirect("orders.xhtml");
+			context.redirect("orders.xhtml");
 		} catch (NotEnoughProductsException e) {
 			System.out.println("not enough, trimit mail");
 			FacesContext.getCurrentInstance().addMessage(

@@ -179,6 +179,8 @@ public class CommandBean implements Serializable {
 	}
 
 	public boolean canBeReturned(Command command) {
+		
+		System.out.println("in can be returned");
 		Date date = command.getDeliveryDate();
 
 		if (date == null)
@@ -186,6 +188,7 @@ public class CommandBean implements Serializable {
 
 		Date now = new Date();
 		int days = (int) ((now.getTime() - date.getTime()) / DAY_IN_MILIS);
+		System.out.println(days);
 		if (days > MAX_DAYS)
 			return false;
 		return !isAlreadySaved(command);

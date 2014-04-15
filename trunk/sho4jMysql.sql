@@ -13,7 +13,7 @@ create table category(
 
         foreign key id_category_id_parent(id_parent)
         references category(id)
-        on update no action
+        on update cascade
         on delete no action
 );
 
@@ -42,7 +42,7 @@ create table product(
 
     foreign key product_category(id_category)
     references category(id)
-    on update no action
+    on update cascade
     on delete no action
 );
 
@@ -68,7 +68,7 @@ description varchar (30) not null,
 code varchar (20) not null
 );
 
-insert into color(name,description) values ("Red","Red product"),("Green","Greean product"),("Blue","Blue product");
+insert into color(name,description) values ("Red","Red product"),("Green","Green product"),("Blue","Blue product");
 
 
 drop table if exists size;
@@ -104,8 +104,8 @@ on delete cascade,
 nr_pieces int not null,
 id_size bigint not null,
 foreign key id_size(id_size) references size(id_size)
-on update no action
-on delete no action
+on update cascade
+on delete cascade
 );
 
 drop table if exists country;
@@ -203,12 +203,12 @@ create table messages(
     id_client bigint,
     foreign key messages_user(id_user)
     references user(id)
-    on update no action
-    on delete no action,
+    on update cascade
+    on delete cascade,
     foreign key messages_client(id_client)
     references client(id)
-    on update no action
-    on delete no action
+    on update cascade
+    on delete cascade
 );
 
 drop table if exists command_status;
@@ -473,3 +473,84 @@ begin
 
 end $$
 call generic_products_child_categories(1)$$
+
+INSERT INTO `User` (`id`, `Username`, `User_password`, `rolename`, `email`, `passwordStatus`, `ban`) VALUES
+(6, 'client4', 'pass4', 'client', 'client4@yahoo.com', 1, 0),
+(7, 'client5', 'pass5', 'client', 'client5@yahoo.com', 1, 0),
+(8, 'client6', 'pass6', 'client', 'client6@yahoo.com', 1, 0),
+(9, 'client7', 'pass7', 'client', 'client7@yahoo.com', 1, 0),
+(10, 'client8', 'pass8', 'client', 'client8@yahoo.com', 1, 0),
+(11, 'client9', 'pass9', 'client', 'client9@yahoo.com', 1, 0),
+(12, 'client10', 'pass10', 'client', 'client10@yahoo.com', 1, 0),
+(13, 'client11', 'pass11', 'client', 'client11@yahoo.com', 1, 0),
+(14, 'client12', 'pass12', 'client', 'client12@yahoo.com', 1, 0),
+(15, 'client13', 'pass13', 'client', 'client13@yahoo.com', 1, 0),
+(16, 'client14', 'pass14', 'client', 'client14@yahoo.com', 1, 0),
+(17, 'client15', 'pass15', 'client', 'client15@yahoo.com', 1, 0),
+(18, 'client16', 'pass16', 'client', 'client16@yahoo.com', 1, 0),
+(19, 'client17', 'pass17', 'client', 'client17@yahoo.com', 1, 0),
+(20, 'client18', 'pass18', 'client', 'client18@yahoo.com', 1, 0),
+(21, 'client19', 'pass19', 'client', 'client19@yahoo.com', 1, 0),
+(22, 'client20', 'pass20', 'client', 'client20@yahoo.com', 1, 0),
+(23, 'client21', 'pass21', 'client', 'client21@yahoo.com', 1, 0),
+(24, 'client22', 'pass22', 'client', 'client22@yahoo.com', 1, 0),
+(25, 'client23', 'pass23', 'client', 'client23@yahoo.com', 1, 0),
+(26, 'client2', 'Client2', 'client', 'client2@yahoo.com', 1, 0),
+(27, 'client24', 'Pass24', 'client', 'client24@yahoo.com', 1, 0),
+(28, 'vanessa', 'Vanessa1', 'client', 'gligor.vanessa@gmail.com', 1, 0),
+(29, 'client1', 'Client1', 'client', 'client1@yahoo.com', 1, 0);
+
+
+
+INSERT INTO `Country` (`id`, `name`) VALUES
+(1, 'Romania'),
+(2, 'Great Britain');
+
+INSERT INTO `County` (`id`, `name`, `id_Country`) VALUES
+(1, 'Brasov', 1),
+(2, 'Sibiu', 1),
+(3, 'Timis', 1),
+(4, 'Constanta', 1),
+(5, 'Ilfov', 1);
+
+INSERT INTO `Locality` (`id`, `name`, `id_County`) VALUES
+(1, 'Brasov', 1),
+(2, 'Podu-Oltului', 1),
+(3, 'Harman', 1),
+(4, 'Ghimbav', 1),
+(5, 'Sibiu', 2),
+(6, 'Timisoara', 3),
+(7, 'Constanta', 4),
+(8, 'Bucuresti', 5);
+
+INSERT INTO `Adress` (`id`, `id_Locality`, `street`, `number`, `staircase`, `block`, `flat`, `id_Client`) VALUES
+(24, 7, 'Harmanului', 99, 'a', 17, 2, 9),
+(25, 1, 'Vald Tepes', 8, 'd', 11, 2, 10),
+(26, 2, 'Florilor', 88, 'c', 14, 2, 11),
+(27, 8, 'Andrei Saguna', 7, 'a', 22, 2, 12),
+(28, 1, 'Independentei', 2, 'a', 12, 2, 13),
+(29, 3, 'Castanilor', 9, 'b', 3, 2, 14),
+(30, 1, 'Garii', 2, 'a', 17, 2, 15),
+(31, 5, 'Toamnei', 77, 'c', 18, 2, 16),
+(32, 2, 'Morii', 2, 'a', 19, 4, 17),
+(33, 2, 'Soarelui', 2, 'b', 1, 5, 18),
+(34, 1, 'Scolii', 2, 'c', 2, 6, 19),
+(35, 7, 'Carierei', 99, 'a', 17, 2, 20),
+(36, 1, 'Vald Tepes', 8, 'd', 11, 2, 21),
+(37, 2, 'Eroilor', 88, 'c', 14, 9, 22),
+(38, 8, 'Iuliu Maniu', 7, 'a', 22, 2, 23),
+(39, 7, 'Harmanului', 99, 'a', 17, 2, 9),
+(40, 1, 'Vald Tepes', 8, 'd', 11, 2, 10),
+(41, 2, 'Florilor', 88, 'c', 14, 2, 11),
+(42, 8, 'Andrei Saguna', 7, 'a', 22, 2, 12),
+(43, 1, 'Independentei', 2, 'a', 12, 2, 13),
+(44, 3, 'Castanilor', 9, 'b', 3, 2, 14),
+(45, 1, 'Garii', 2, 'a', 17, 2, 15),
+(46, 5, 'Toamnei', 77, 'c', 18, 2, 16),
+(47, 2, 'Morii', 2, 'a', 19, 4, 17),
+(48, 2, 'Soarelui', 2, 'b', 1, 5, 18),
+(49, 1, 'Scolii', 2, 'c', 2, 6, 19),
+(50, 7, 'Carierei', 99, 'a', 17, 2, 20),
+(51, 1, 'Vald Tepes', 8, 'd', 11, 2, 21),
+(52, 2, 'Eroilor', 88, 'c', 14, 9, 22),
+(53, 8, 'Iuliu Maniu', 7, 'a', 22, 2, 23);

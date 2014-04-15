@@ -152,7 +152,7 @@ public class ManageSalesBean implements Serializable {
 					* sale / 100;
 			euroPrice = leiPrice / b;
 		}
-		DecimalFormat df = new DecimalFormat("#.##");
+		DecimalFormat df = new DecimalFormat("#.#");
 		leiPrice = Double.parseDouble(df.format(leiPrice));
 		euroPrice = Double.parseDouble(df.format(euroPrice));
 	}
@@ -221,7 +221,7 @@ public class ManageSalesBean implements Serializable {
 
 	public double getReductionPrice(Product p) {
 		double r = p.getPrice() - p.getPrice() * p.getReduction() / 100;
-		DecimalFormat df = new DecimalFormat("#.##");
+		DecimalFormat df = new DecimalFormat("#.#");
 		r = Double.parseDouble(df.format(r));
 		return r;
 	}

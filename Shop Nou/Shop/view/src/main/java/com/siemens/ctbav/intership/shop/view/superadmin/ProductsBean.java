@@ -11,6 +11,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.faces.event.AjaxBehaviorEvent;
 
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.NodeSelectEvent;
@@ -137,6 +138,9 @@ public class ProductsBean implements Serializable {
 		Double b = (Double) FacesContext.getCurrentInstance()
 				.getExternalContext().getSessionMap().get("RON");
 		this.leiPrice = euroPrice * b;
+		DecimalFormat df = new DecimalFormat("#.#");
+		leiPrice = Double.parseDouble(df.format(leiPrice));
+		euroPrice = Double.parseDouble(df.format(euroPrice));
 	}
 
 	public Double getLeiPrice() {
@@ -148,6 +152,9 @@ public class ProductsBean implements Serializable {
 		Double b = (Double) FacesContext.getCurrentInstance()
 				.getExternalContext().getSessionMap().get("RON");
 		this.euroPrice = leiPrice / b;
+		DecimalFormat df = new DecimalFormat("#.#");
+		leiPrice = Double.parseDouble(df.format(leiPrice));
+		euroPrice = Double.parseDouble(df.format(euroPrice));
 	}
 
 	public boolean isEnglishSelected() {
@@ -169,8 +176,18 @@ public class ProductsBean implements Serializable {
 			leiPrice = selectedProduct.getPrice();
 			euroPrice = selectedProduct.getPrice() / b;
 		}
-		DecimalFormat df = new DecimalFormat("#.##");
+		DecimalFormat df = new DecimalFormat("#.#");
 		leiPrice = Double.parseDouble(df.format(leiPrice));
+		euroPrice = Double.parseDouble(df.format(euroPrice));
+	}
+
+	public void leiCheck(AjaxBehaviorEvent event) {
+		DecimalFormat df = new DecimalFormat("#.#");
+		leiPrice = Double.parseDouble(df.format(leiPrice));
+	}
+
+	public void euroCheck(AjaxBehaviorEvent event) {
+		DecimalFormat df = new DecimalFormat("#.#");
 		euroPrice = Double.parseDouble(df.format(euroPrice));
 	}
 
@@ -302,10 +319,6 @@ public class ProductsBean implements Serializable {
 		RequestContext context = RequestContext.getCurrentInstance();
 		boolean change = false;
 		FacesMessage msg = null;
-		/*
-		 * selectedProduct = (Product) FacesContext.getCurrentInstance()
-		 * .getExternalContext().getSessionMap().get("selectedProduct");
-		 */
 		try {
 			msg = tryToChangeParent();
 			change = true;
@@ -475,12 +488,11 @@ public class ProductsBean implements Serializable {
 
 	public void reindex() {
 		productServiceReindex.reindex();
-		System.out.println("in reindex");
 	}
 
 	public double getReductionPrice(Product p) {
 		double r = p.getPrice() - p.getPrice() * p.getReduction() / 100;
-		DecimalFormat df = new DecimalFormat("#.##");
+		DecimalFormat df = new DecimalFormat("#.#");
 		r = Double.parseDouble(df.format(r));
 		return r;
 	}

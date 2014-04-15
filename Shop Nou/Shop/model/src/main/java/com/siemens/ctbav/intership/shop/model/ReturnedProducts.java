@@ -21,7 +21,7 @@ public class ReturnedProducts implements Serializable {
 	public final static String getReturnedProductsForOrder = "getReturnedProductsForOrder";
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long idreturnedproducts;
+	private Long id;
 
 	@ManyToOne
 	@JoinColumn(name = "id_command")
@@ -42,7 +42,7 @@ public class ReturnedProducts implements Serializable {
 
 	
 	public Long getIdreturnedproducts() {
-		return idreturnedproducts;
+		return id;
 	}
 
 	public ReturnedOrders getCommand() {

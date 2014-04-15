@@ -12,6 +12,7 @@ public class ConvertUser {
 		switch(user.getPasswordStatus()){
 		case 1:ps=PasswordStatus.NEW_GENERATED;
 		case 2 :ps=PasswordStatus.SAVED;
+		default: ps = PasswordStatus.SAVED;
 		}
 		if(ps == null) return null;
 		

@@ -6,7 +6,7 @@ public enum ECategory {
 			"categoryAdded"), NOCATEGORYSELECTED("noCategorySelected"), CATEGORYSNAMEUPDATED(
 			"categorysNameUpdates"), CATEGORYSNAMEANDPARENTUPDATED(
 			"categorysNameAndParentUpdated "), CATEGORYSPARENTUPDATED(
-			"categorysParentUpdated "), DONTDELETEROOT("dontDeleteRoot"), NOTHINGTOUPDATE(
+			"categorysParentUpdated"), DONTDELETEROOT("dontDeleteRoot"), NOTHINGTOUPDATE(
 			"nothingToUpdate"), CREATEM("createM"), UPDATEM("updateM"), LENGTH(
 			"length"), ERRORPARENT("errorParent"), CYRCULARD(
 			"cyrcularDependency"), SELECTPARENT("selectParent"), INVALIDNAME1(

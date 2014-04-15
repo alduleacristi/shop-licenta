@@ -68,7 +68,10 @@
 										<h4>#{product.product.category.name}'S</h4>
 										<p>
 											#{internationalizationPhotoProducts.color}:
-											#{product.color.name}<br />
+											<h:outputText id="color"
+											value="#{product.color.name}"
+											style="background-color:#{product.color.code}" />
+											<br />
 										</p>
 									</div>
 									<div align="right">

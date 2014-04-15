@@ -68,8 +68,12 @@
 										<h4>#{product.product.category.name}'S</h4>
 										<p>
 											#{internationalizationPhotoProducts.color}:
-											#{product.color.name}<br />
+
+											<h:outputText id="color" value="#{product.color.name}"
+												style="background-color:#{product.color.code}" />
 										</p>
+
+										<br />
 									</div>
 									<div align="right">
 										<p:commandLink
@@ -89,7 +93,7 @@
 												value="#{product.product.price} #{internationalizationCoinSign.coin}"
 												rendered="#{product.product.reduction != 0.0}"></p:outputLabel>
 									</strong>
-									</strike> 
+									</strike>
 									<div align="right">
 										<strong class="price"> <h:outputText
 												value="-#{product.product.reduction}%"

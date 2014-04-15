@@ -137,7 +137,6 @@
 							<p:selectOneMenu id="selectOneMenu"
 								value="#{colorProductBean.idSelectedProductColor}"
 								style="width:155px">
-								<!-- 								<f:selectItem itemLabel="Choose a color" /> -->
 								<f:selectItems
 									value="#{colorProductBean.selectedProduct.productColor}"
 									var="pcolor" itemLabel="#{pcolor.color.name}"
@@ -218,10 +217,14 @@
 							value="#{colorProductBean.idSelectedColor}" style="width:155px">
 							<f:selectItems value="#{colorProductBean.allColors}" var="color"
 								itemLabel="#{color.name}" itemValue="#{color.id}" />
-							<p:ajax event="valueChange" update="descriptionColor" />
+							<p:ajax event="valueChange" update="descriptionColor,idc" />
 						</p:selectOneMenu>
 						<h:outputText
 							value="#{internationalizationColorProducts.description}: " />
+						<h:outputText value="" />
+						<h:outputText id="idc"
+							value="#{colorProductBean.selectedColor.name}"
+							style="background-color:#{colorProductBean.selectedColor.code}" />
 						<p:inputTextarea id="descriptionColor" cols="22" rows="5"
 							maxlength="100"
 							value="#{colorProductBean.selectedColor.description}"

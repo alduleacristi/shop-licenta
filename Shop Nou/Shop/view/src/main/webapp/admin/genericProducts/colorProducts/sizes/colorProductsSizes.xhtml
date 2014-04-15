@@ -66,8 +66,10 @@
 									<h3>#{product.product.name}</h3>
 									<div class="product-desc">
 										<h4>#{product.product.category.name}'S</h4>
-										<h3>#{internationalizationColorSizeProducts.color}:
-											#{product.color.name}</h3>
+										<p>#{internationalizationColorSizeProducts.color}:
+											<h:outputText id="color"
+											value="#{product.color.name}"
+											style="background-color:#{product.color.code}" /></p>
 									</div>
 									<h:outputText
 										value="#{internationalizationColorSizeProducts.sizes}: #{colorProductsSizeBean.displaySizes(product)}" />

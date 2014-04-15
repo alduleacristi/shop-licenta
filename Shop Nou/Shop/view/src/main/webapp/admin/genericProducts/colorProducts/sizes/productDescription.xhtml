@@ -30,7 +30,10 @@
 										#{colorProductSizeSelectBean.selectedProduct.product.category.name}'S</h4>
 									<p>
 										<br /> #{internationalizationColorSizeProducts.color}:
-										#{colorProductSizeSelectBean.selectedProduct.color.name}<br />
+										<h:outputText id="color"
+											value="#{colorProductSelectPhotoBean.selectedProduct.color.name}"
+											style="background-color:#{colorProductSelectPhotoBean.selectedProduct.color.code}" />
+										<br />
 									</p>
 									<strong class="price"> <p:outputLabel
 											value="#{colorProductSizeSelectBean.selectedProduct.product.price} #{internationalizationCoinSign.coin}"
@@ -73,7 +76,8 @@
 
 								<h3>#{internationalizationColorSizeProducts.description}</h3>
 								<br></br>
-								<p:inputTextarea cols="20" rows="12" maxlength="200" style="width:165px"
+								<p:inputTextarea cols="20" rows="12" maxlength="200"
+									style="width:165px"
 									value="#{colorProductSizeSelectBean.selectedProduct.product.description}"
 									readonly="true">
 								</p:inputTextarea>

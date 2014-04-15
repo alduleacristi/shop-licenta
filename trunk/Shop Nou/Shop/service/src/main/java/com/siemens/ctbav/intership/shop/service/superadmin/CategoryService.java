@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -14,13 +15,23 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 
 import com.siemens.ctbav.intership.shop.model.Category;
+import com.siemens.ctbav.intership.shop.model.Product;
+import com.siemens.ctbav.intership.shop.model.ProductColor;
 import com.siemens.ctbav.intership.shop.exception.superadmin.CategoryException;
+import com.siemens.ctbav.intership.shop.exception.superadmin.ColorProductException;
+import com.siemens.ctbav.intership.shop.exception.superadmin.ProductException;
 
 @Stateless(name = "categoryService")
 public class CategoryService {
 
 	@PersistenceContext
 	private EntityManager em;
+
+	@EJB
+	ColorProductService pcService;
+
+	@EJB
+	ProductService pService;
 
 	@SuppressWarnings("unchecked")
 	public List<Category> getCategories() {
@@ -117,6 +128,33 @@ public class CategoryService {
 		if (category == null)
 			throw new CategoryException(
 					"Couldn't find the category in the database");
+
+		List<Category> c = storedProcedureGetChildren(idCategory);
+
+		if (c.size() == 0) {
+
+			List<ProductColor> pc = new ArrayList<ProductColor>();
+			pc = pcService.getProductsByCategory(category.getId());
+			for (ProductColor aux : pc) {
+				try {
+					pcService.removeProductColor(aux.getId());
+				} catch (ColorProductException e1) {
+					System.out.println(e1);
+				}
+			}
+
+			List<Product> p = new ArrayList<Product>();
+			p = pService.getGenericProductsByCategory(category.getId());
+			for (Product aux : p) {
+				try {
+					pService.removeProduct(aux.getId());
+				} catch (ProductException e) {
+					System.out.println(e);
+				}
+			}
+
+		}
+
 		em.remove(category);
 		em.flush();
 	}

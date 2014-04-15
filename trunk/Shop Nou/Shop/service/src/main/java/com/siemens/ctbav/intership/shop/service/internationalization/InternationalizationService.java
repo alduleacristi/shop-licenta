@@ -1,6 +1,7 @@
 package com.siemens.ctbav.intership.shop.service.internationalization;
 
 import java.util.Locale;
+import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 import javax.ejb.Stateful;
@@ -16,6 +17,11 @@ public class InternationalizationService {
 	}
 
 	public String getMessage(String message) {
-		return messages.getString(message);
+		try {
+			return messages.getString(message);
+		} catch (MissingResourceException e) {
+			return "";
+		}
+
 	}
 }

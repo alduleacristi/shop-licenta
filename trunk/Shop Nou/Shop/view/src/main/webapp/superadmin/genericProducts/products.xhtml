@@ -82,9 +82,11 @@
 							value="#{internationalizationGenericProducts.productPrice} (EUR): "
 							rendered="#{productBean.englishSelected}" />
 						<p:inputText value="#{productBean.euroPrice}" required="true"
-							rendered="#{productBean.englishSelected}"
+							id="euroEuro" rendered="#{productBean.englishSelected}"
 							requiredMessage="#{internationalizationGenericProducts.priceIsRequired}">
 							<p:ajax event="keyup" update="lei" />
+							<p:ajax event="blur" update="euroEuro,lei"
+								listener="#{productBean.euroCheck}" />
 							<f:validator validatorId="validateProductPrice" />
 						</p:inputText>
 						<h:outputText
@@ -96,10 +98,12 @@
 						<h:outputText
 							value="#{internationalizationGenericProducts.productPrice} (LEI): "
 							rendered="#{!productBean.englishSelected}" />
-						<p:inputText value="#{productBean.leiPrice}"
+						<p:inputText value="#{productBean.leiPrice}" id="leiEur"
 							rendered="#{!productBean.englishSelected}" required="true"
 							requiredMessage="#{internationalizationGenericProducts.priceIsRequired}">
 							<p:ajax event="keyup" update="euro" />
+							<p:ajax event="blur" update="euro,leiEur"
+								listener="#{productBean.leiCheck}" />
 							<f:validator validatorId="validateProductPrice" />
 						</p:inputText>
 						<h:outputText
@@ -192,12 +196,12 @@
 
 				</p:dataGrid>
 
-				<p:dialog
+				<p:dialog id="dialogProducts"
 					header="#{internationalizationGenericProducts.productDetail}"
 					widgetVar="productDialog" modal="true">
 					<p:outputPanel id="productDetail" style="text-align:center;">
 
-						<h:panelGrid columns="2" cellpadding="4"
+						<h:panelGrid columns="2" cellpadding="4" id="panel"
 							rendered="#{productBean.selectedProduct != null}">
 							<h:outputText
 								value="#{internationalizationGenericProducts.productName}: " />
@@ -208,7 +212,8 @@
 							</p:inputText>
 							<h:outputText
 								value="#{internationalizationGenericProducts.productCategory}: " />
-							<p:inputText value="#{productBean.selectedProduct.category.name}"
+							<p:inputText id="category"
+								value="#{productBean.selectedProduct.category.name}"
 								readonly="true" />
 							<h:outputText
 								value="#{internationalizationGenericProducts.changeParent}:" />
@@ -219,14 +224,16 @@
 							</p:commandLink>
 							<h:outputText value="" />
 							<h:outputText value="#{internationalizationCoinSign.update}" />
-							
+
 							<h:outputText
 								value="#{internationalizationGenericProducts.productPrice} (EUR): "
 								rendered="#{productBean.englishSelected}" />
 							<p:inputText value="#{productBean.euroPrice}" required="true"
-								rendered="#{productBean.englishSelected}"
+								rendered="#{productBean.englishSelected}" id="euroEuro"
 								requiredMessage="#{internationalizationGenericProducts.priceIsRequired}">
 								<p:ajax event="keyup" update="lei" />
+								<p:ajax event="blur" update="euroEuro,lei"
+									listener="#{productBean.euroCheck}" />
 								<f:validator validatorId="validateProductPrice" />
 							</p:inputText>
 							<h:outputText
@@ -234,14 +241,16 @@
 								rendered="#{productBean.englishSelected}" />
 							<p:inputText id="lei" value="#{productBean.leiPrice}"
 								rendered="#{productBean.englishSelected}" readonly="true" />
-								
+
 							<h:outputText
 								value="#{internationalizationGenericProducts.productPrice} (LEI): "
 								rendered="#{!productBean.englishSelected}" />
 							<p:inputText value="#{productBean.leiPrice}" required="true"
-								rendered="#{!productBean.englishSelected}"
+								rendered="#{!productBean.englishSelected}" id="leiEur"
 								requiredMessage="#{internationalizationGenericProducts.priceIsRequired}">
 								<p:ajax event="keyup" update="euro" />
+								<p:ajax event="blur" update="euro,leiEur"
+									listener="#{productBean.leiCheck}" />
 								<f:validator validatorId="validateProductPrice" />
 							</p:inputText>
 							<h:outputText
@@ -306,7 +315,7 @@
 					<p:commandButton
 						value="#{internationalizationGenericProducts.changeParent}"
 						actionListener="#{productBean.changeCategory}"
-						update="messages1, :formProducts:dataGrid"
+						update="messages1, :formProducts:dataGrid, dialogProducts"
 						oncomplete="handleChangeCategoryRequest(xhr, status, args)" />
 				</p:dialog>
 

@@ -128,20 +128,20 @@ public class Product implements Serializable {
 	}
 
 	public Double getPrice() {
-		DecimalFormat df = new DecimalFormat("#.##");
+		DecimalFormat df = new DecimalFormat("#.#");
 		this.price = Double.parseDouble(df.format(price));
 		return price;
 	}
 
 	public void setPrice(Double price) {
 		this.price = price;
-		DecimalFormat df = new DecimalFormat("#.##");
+		DecimalFormat df = new DecimalFormat("#.#");
 		this.price = Double.parseDouble(df.format(price));
 	}
 
 	public void multiplyPrice(Double multiply) {
 		this.price *= multiply;
-		DecimalFormat df = new DecimalFormat("#.##");
+		DecimalFormat df = new DecimalFormat("#.#");
 		this.price = Double.parseDouble(df.format(price));
 	}
 

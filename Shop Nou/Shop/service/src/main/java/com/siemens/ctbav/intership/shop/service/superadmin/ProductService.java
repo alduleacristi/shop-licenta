@@ -2,6 +2,7 @@ package com.siemens.ctbav.intership.shop.service.superadmin;
 
 import java.util.List;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -10,14 +11,20 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 
 import com.siemens.ctbav.intership.shop.dto.superadmin.ProductDTO;
+import com.siemens.ctbav.intership.shop.exception.superadmin.ColorProductException;
 import com.siemens.ctbav.intership.shop.exception.superadmin.ProductException;
 import com.siemens.ctbav.intership.shop.model.Category;
 import com.siemens.ctbav.intership.shop.model.Product;
+import com.siemens.ctbav.intership.shop.model.ProductColor;
 
 @Stateless(name = "productService")
 public class ProductService {
+
 	@PersistenceContext
 	private EntityManager em;
+
+	@EJB
+	private ColorProductService pcService;
 
 	@SuppressWarnings("unchecked")
 	public List<Product> getProductsByCategory(long id) {
@@ -45,6 +52,15 @@ public class ProductService {
 		if (product == null)
 			throw new ProductException(
 					"Couldn't find the product in the database");
+
+		for (ProductColor pc : product.getProductColor()) {
+			try {
+				pcService.removeProductColor(pc.getId());
+			} catch (ColorProductException e) {
+				System.out.println(e);
+			}
+		}
+
 		em.remove(product);
 		em.flush();
 	}

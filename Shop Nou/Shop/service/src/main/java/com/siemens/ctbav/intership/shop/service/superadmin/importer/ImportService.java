@@ -149,10 +149,10 @@ public class ImportService {
 	private void validateProduct(List<ProductDto> products,
 			List<ProductColorSize> finalProduct)
 			throws InvalidProductsException {
-		System.out.println("validateProduct");
+		// System.out.println("validateProduct");
 		invalidProductsException.clearExceptions();
 		for (ProductDto p : products) {
-			System.out.println(p);
+			// System.out.println(p);
 			ProductColorSize product = new ProductColorSize();
 			InvalidProductException invalidProductException = defineException(p);
 			exceptionOccured = false;
@@ -240,7 +240,7 @@ public class ImportService {
 			setNrPcs(p, product, invalidProductException);
 
 		if (!exceptionOccured) {
-			System.out.println("DA");
+			// System.out.println("DA");
 			finalProduct.add(product);
 		} else {
 			invalidProductsException.addException(invalidProductException);
@@ -276,15 +276,13 @@ public class ImportService {
 	private ProductColor getProductColor(Product prod, Color color) {
 		ProductColor prodCol = null;
 		if (!exceptionOccured) {
-			System.out.println("get product color");
+			// System.out.println("get product color");
 			prodCol = productColorService.getProductColorByFields(prod, color);
 			if (prodCol == null) {
-				System.out.println("add product color");
+				// System.out.println("add product color");
 				productColorService.addProductColor(prod, color);
 				prodCol = productColorService.getProductColorByFields(prod,
 						color);
-			} else {
-				System.out.println("s-a luat produsul, nu a fost adaugat nou");
 			}
 		}
 		return prodCol;
@@ -315,7 +313,7 @@ public class ImportService {
 		}
 		if (prod == null) {
 			try {
-				System.out.println("create product");
+				// System.out.println("create product");
 				productService.createProduct(p.getName(), p.getDescription(),
 						price, category.getId(), reduction);
 				prod = productService.getProductByFields(p.getName(),
@@ -325,6 +323,7 @@ public class ImportService {
 				exceptionOccured = true;
 			}
 		}
+		// System.out.println(prod);
 		return prod;
 	}
 
@@ -510,7 +509,7 @@ public class ImportService {
 							.getSize().getId(), product.getProductcolor()
 							.getColor().getId());
 			if (existentProduct != null) {
-				System.out.println("nu e null adaug bucati");
+				// System.out.println("nu e null adaug bucati");
 				try {
 					productColorSizeService.addPieces(existentProduct.getId(),
 							product.getNrOfPieces());
@@ -518,7 +517,7 @@ public class ImportService {
 					System.out.println(e);
 				}
 			} else {
-				System.out.println("e nou si adaugam");
+				// System.out.println("e nou si adaugam");
 				productColorSizeService.addProductColorSize(product);
 			}
 		}

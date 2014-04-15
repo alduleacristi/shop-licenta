@@ -2,6 +2,7 @@ package com.siemens.ctbav.intership.shop.service.superadmin;
 
 import java.util.List;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -9,6 +10,7 @@ import javax.persistence.PersistenceContext;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
+import com.siemens.ctbav.intership.shop.exception.PhotoException;
 import com.siemens.ctbav.intership.shop.exception.superadmin.ColorProductException;
 import com.siemens.ctbav.intership.shop.model.Color;
 import com.siemens.ctbav.intership.shop.model.Product;
@@ -16,8 +18,12 @@ import com.siemens.ctbav.intership.shop.model.ProductColor;
 
 @Stateless(name = "colorProductService")
 public class ColorProductService {
+	
 	@PersistenceContext
 	private EntityManager em;
+	
+	@EJB
+	private PhotoService photoService;
 
 	@SuppressWarnings("unchecked")
 	public List<ProductColor> getProductsByCategory(Long id) {
@@ -45,6 +51,11 @@ public class ColorProductService {
 		if (pc == null)
 			throw new ColorProductException(
 					"No such color for the product in the database");
+		try {
+			photoService.removePhotos("id" + id);
+		} catch (PhotoException e1) {
+			System.out.println(e1);
+		}
 		em.remove(pc);
 		em.flush();
 	}

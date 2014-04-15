@@ -26,6 +26,7 @@ create table product(
     description varchar(200),
     price float not null,
 	perc_reduction float not null default 0,
+	rating int default null,
 
     foreign key product_category(id_category)
     references category(id)
@@ -258,7 +259,6 @@ price double not null
 /* insert values*/
 
 INSERT INTO `User` (`id`, `Username`, `User_password`, `rolename`, `email`, `passwordStatus`, `ban`) VALUES
-(6, 'client4', 'pass4', 'client', 'client4@yahoo.com', 1, 0),
 (7, 'client5', 'pass5', 'client', 'client5@yahoo.com', 1, 0),
 (8, 'client6', 'pass6', 'client', 'client6@yahoo.com', 1, 0),
 (9, 'client7', 'pass7', 'client', 'client7@yahoo.com', 1, 0),

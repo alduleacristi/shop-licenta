@@ -68,7 +68,7 @@ public class Cart implements Serializable {
 
 	@EJB
 	private InternationalizationService internationalizationService;
-	
+
 	@EJB
 	private RecommandService recommandService;
 
@@ -618,13 +618,15 @@ public class Cart implements Serializable {
 
 		Iterator<Map.Entry<ProductColorSize, Long>> it = cart.entrySet()
 				.iterator();
-		
+
 		while (it.hasNext()) {
 			Map.Entry<ProductColorSize, Long> ob = it.next();
-			
+
 			ProductColorSize pcs = ob.getKey();
-			
-			preferences.add(pcs.getProductcolor().getProduct().getId());
+
+			if (!preferences.contains(pcs.getProductcolor().getProduct()
+					.getId()))
+				preferences.add(pcs.getProductcolor().getProduct().getId());
 		}
 
 		return preferences;
@@ -641,9 +643,10 @@ public class Cart implements Serializable {
 			Command command = buildCommand(adress);
 
 			List<ClientProduct> clientProducts = buildClientProducts(command);
-			
+
 			List<Long> preferences = buildClientPrefernces();
-			recommandService.writePreferences(command.getClient().getId(), preferences);
+			recommandService.writePreferences(command.getClient().getId(),
+					preferences);
 
 			if (this.sendCommand.getUseExistingAdress()) {
 				clientProductService

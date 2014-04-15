@@ -345,7 +345,7 @@ public class ColorProductsBean implements Serializable {
 
 	public double getReductionPrice(Product p) {
 		double r = p.getPrice() - p.getPrice() * p.getReduction() / 100;
-		DecimalFormat df = new DecimalFormat("#.##");
+		DecimalFormat df = new DecimalFormat("#.#");
 		r = Double.parseDouble(df.format(r));
 		return r;
 	}

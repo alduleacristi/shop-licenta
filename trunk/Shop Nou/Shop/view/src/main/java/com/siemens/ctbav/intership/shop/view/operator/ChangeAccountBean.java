@@ -20,8 +20,9 @@ public class ChangeAccountBean {
 	public void init() {
 		User u = (User) FacesContext.getCurrentInstance().getExternalContext()
 				.getSessionMap().get("user");
+		System.out.println(u);
 		user = ConvertUser.convertUser(u);
-	
+		System.out.println(user);
 
 	}
 
@@ -33,6 +34,7 @@ public class ChangeAccountBean {
 	
 
 	public UserDTO getUser() {
+		System.out.println("get user");
 		return user;
 	}
 

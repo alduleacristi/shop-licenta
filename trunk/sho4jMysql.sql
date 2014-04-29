@@ -256,31 +256,45 @@ perc_reduction double,
 price double not null
 );
 
+drop table if exists comments;
+create table comments(
+	id_comments bigint not null auto_increment primary key,
+	id_product bigint not null,
+	id_user bigint not null,
+	comment varchar(1000),
+	date date,
+	foreign key id_comment_product(id_product) references product(id)
+	on update no action
+	on delete no action,
+	foreign key id_comment_user(id_user) references user(id)
+	on update no action
+	on delete no action
+);
+
 /* insert values*/
 
 INSERT INTO `User` (`id`, `Username`, `User_password`, `rolename`, `email`, `passwordStatus`, `ban`) VALUES
-(7, 'client5', 'pass5', 'client', 'client5@yahoo.com', 1, 0),
-(8, 'client6', 'pass6', 'client', 'client6@yahoo.com', 1, 0),
-(9, 'client7', 'pass7', 'client', 'client7@yahoo.com', 1, 0),
-(10, 'client8', 'pass8', 'client', 'client8@yahoo.com', 1, 0),
-(11, 'client9', 'pass9', 'client', 'client9@yahoo.com', 1, 0),
-(12, 'client10', 'pass10', 'client', 'client10@yahoo.com', 1, 0),
-(13, 'client11', 'pass11', 'client', 'client11@yahoo.com', 1, 0),
-(14, 'client12', 'pass12', 'client', 'client12@yahoo.com', 1, 0),
-(15, 'client13', 'pass13', 'client', 'client13@yahoo.com', 1, 0),
-(16, 'client14', 'pass14', 'client', 'client14@yahoo.com', 1, 0),
-(17, 'client15', 'pass15', 'client', 'client15@yahoo.com', 1, 0),
-(18, 'client16', 'pass16', 'client', 'client16@yahoo.com', 1, 0),
-(19, 'client17', 'pass17', 'client', 'client17@yahoo.com', 1, 0),
-(20, 'client18', 'pass18', 'client', 'client18@yahoo.com', 1, 0),
-(21, 'client19', 'pass19', 'client', 'client19@yahoo.com', 1, 0),
-(22, 'client20', 'pass20', 'client', 'client20@yahoo.com', 1, 0),
-(23, 'client21', 'pass21', 'client', 'client21@yahoo.com', 1, 0),
-(24, 'client22', 'pass22', 'client', 'client22@yahoo.com', 1, 0),
-(25, 'client23', 'pass23', 'client', 'client23@yahoo.com', 1, 0),
-(26, 'client2', 'Client2', 'client', 'client2@yahoo.com', 1, 0),
-(27, 'client24', 'Pass24', 'client', 'client24@yahoo.com', 1, 0),
-(28, 'vanessa', 'Vanessa1', 'client', 'gligor.vanessa@gmail.com', 1, 0);
+(7, 'client5', 'd35f6fa9a79434bcd17f8049714ebfcb', 'client', 'client5@yahoo.com', 1, 0),
+(8, 'client6', 'e9568c9ea43ab05188410a7cf85f9f5e', 'client', 'client6@yahoo.com', 1, 0),
+(9, 'client7', '8c96c3884a827355aed2c0f744594a52', 'client', 'client7@yahoo.com', 1, 0),
+(10, 'client8', 'ccd3cd18225730c5edfc69f964b9d7b3', 'client', 'client8@yahoo.com', 1, 0),
+(11, 'client9', 'c28cce9cbd2daf76f10eb54478bb0454', 'client', 'client9@yahoo.com', 1, 0),
+(12, 'client10', 'a3224611fd03510682690769d0195d66', 'client', 'client10@yahoo.com', 1, 0),
+(13, 'client11', '0102812fbd5f73aa18aa0bae2cd8f79f', 'client', 'client11@yahoo.com', 1, 0),
+(14, 'client12', '0bd0fe6372c64e09c4ae81e056a9dbda', 'client', 'client12@yahoo.com', 1, 0),
+(15, 'client13', 'c868bff94e54b8eddbdbce22159c0299', 'client', 'client13@yahoo.com', 1, 0),
+(16, 'client14', 'd1f38b569c772ebb8fa464e1a90c5a00', 'client', 'client14@yahoo.com', 1, 0),
+(17, 'client15', 'b279786ec5a7ed00dbe4d3fe1516c121', 'client', 'client15@yahoo.com', 1, 0),
+(18, 'client16', '66c99bf933f5e6bf3bf2052d66577ca8', 'client', 'client16@yahoo.com', 1, 0),
+(19, 'client17', '6c2a5c9ead1d7d6ba86c8764d5cad395', 'client', 'client17@yahoo.com', 1, 0),
+(20, 'client18', '64152ab7368fc7ca6b3ef6b71e330b86', 'client', 'client18@yahoo.com', 1, 0),
+(21, 'client19', '1f61b744f2c9e8f49ae4c4965f39963f', 'client', 'client19@yahoo.com', 1, 0),
+(22, 'client20', '90bfa11df19a9b9d429ccfa6997104df', 'client', 'client20@yahoo.com', 1, 0),
+(23, 'client21', '5cddd1f7857fd4ab8095f676fcf88835', 'client', 'client21@yahoo.com', 1, 0),
+(28, 'vanessa', '282bbbfb69da08d03ff4bcf34a94bc53', 'client', 'gligor.vanessa@gmail.com', 1, 0),
+(29,'operator1','37832cda757792aef82ce5e21f542006','operator','operator@shop4j.com',1,0),
+(30,'admin1','e00cf25ad42683b3df678c61f42c6bda','admin','admin@shop4j.com',1,0),
+(31,'superadmin1','2c7b0576873ffcbb4ca61c5a225b94e7','superadmin','superadmin@shop4j.com',1,0);
 
 UPDATE `shop4j`.`user` SET `passwordStatus`='2' WHERE `id`='1';
 UPDATE `shop4j`.`user` SET `passwordStatus`='2' WHERE `id`='2';
@@ -305,8 +319,6 @@ INSERT INTO `Client` (`id`, `first_name`, `last_name`, `phone_number`) VALUES
 (21, 'Bangala', 'Andreea', '729087423'),
 (22, 'Catioiu', 'Anisia', '729006532'),
 (23, 'Codrea', 'Andrei', '745693655'),
-(26, 'Fieraru', 'Bogdan', 0725635421),
-(27, 'Marian', 'Andrei', 0745213456),
 (28, 'Andrei', 'Cozma', 0723456789);
 
 INSERT INTO `Category` (`id`, `name`, `id_parent`) VALUES
@@ -489,6 +501,9 @@ INSERT INTO `client_product` (`id_client_product`, `id_Command`, `id_pcs`, `nr_p
 (5, 8, 34, 5, 35, 70),
 (6, 8, 36, 2, 35, 70),
 (7, 8, 31, 10, 35, 70);
+
+insert into `comments` (`id_comments`,`id_product`,`id_user`,`comment`) values
+(1,1,7,"Comentariu 1");
 
 /* recursive procedure for category */
 delimiter $$

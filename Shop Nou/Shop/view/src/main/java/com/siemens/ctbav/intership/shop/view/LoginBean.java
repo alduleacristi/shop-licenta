@@ -13,6 +13,8 @@ import javax.faces.context.FacesContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.codec.digest.DigestUtils;
+
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
 import com.siemens.ctbav.intership.shop.exception.UserException;
@@ -146,8 +148,8 @@ public class LoginBean implements Serializable {
 			User user = userService
 					.getClientByUsername(this.user.getUserName());
 
-			// String hashPass2 = DigestUtils.md5Hex(this.password);
-			request.login(this.user.getUserName(), this.user.getPassword());
+			String hashPass = DigestUtils.md5Hex(this.user.getPassword());
+			request.login(this.user.getUserName(), hashPass);
 			if (user.getBan() == 1)
 				throw new UserException("User is banned");
 			this.logged = true;

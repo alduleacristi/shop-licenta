@@ -1,4 +1,4 @@
-package com.siemens.ctbav.intership.shop.view.client;
+package com.siemens.ctbav.intership.shop.view.visitor;
 
 import java.io.Serializable;
 
@@ -21,11 +21,12 @@ import com.siemens.ctbav.intership.shop.model.User;
 import com.siemens.ctbav.intership.shop.service.client.ClientService;
 import com.siemens.ctbav.intership.shop.service.internationalization.InternationalizationService;
 import com.siemens.ctbav.intership.shop.util.UsersRole;
+import com.siemens.ctbav.intership.shop.util.client.NavigationUtil;
 import com.siemens.ctbav.intership.shop.util.superadmin.NavigationUtils;
 
 @ManagedBean(name = "createAccountBean")
 @ViewScoped
-@URLMappings(mappings = { @URLMapping(id = "createAccount", pattern = "/client/CreateAccount/", viewId = "createAccount.xhtml") })
+@URLMappings(mappings = { @URLMapping(id = "createAccount", pattern = "/client/CreateAccount/", viewId = "/client/CreateAccount/createAccount.xhtml") })
 public class CreateAccount implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -40,16 +41,9 @@ public class CreateAccount implements Serializable {
 	private String password;
 	private String email;
 	private String repassword;
-	private boolean created;
 
 	@PostConstruct
 	void initialization() {
-		Boolean c = (Boolean) FacesContext.getCurrentInstance()
-				.getExternalContext().getSessionMap().get("created");
-		if (c == null)
-			created = false;
-		else
-			created = c;
 		internationalizationInit();
 	}
 
@@ -108,46 +102,44 @@ public class CreateAccount implements Serializable {
 		this.repassword = repassword;
 	}
 
-	public boolean isCreated() {
-		return created;
-	}
-
-	public void setCreated(boolean created) {
-		this.created = created;
-	}
-
 	public void addUser(ActionEvent actionEvent) {
-		User user = new User(username, password, UsersRole.CLIENT.toString(),
-				email);
-		Client client = new Client();
-		client.setUser(user);
-		client.setFirstname("");
-		client.setLastname("");
-		FacesMessage msg = null;
-		RequestContext context = RequestContext.getCurrentInstance();
-		boolean create = false;
-		try {
-			if (clientService.emailExists(email))
-				throw new UserException("Email exists");
-			if (clientService.usernameExists(username))
-				throw new UserException("Username exists");
-			clientService.addClient(client);
-			msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
-					internationalizationService.getMessage(EManageUsers.SUCCESS
-							.getName()),
-					internationalizationService
-							.getMessage(EManageUsers.USER_ADDED.getName()));
-			created = true;
-			FacesContext.getCurrentInstance().getExternalContext()
-					.getSessionMap().put("created", created);
-			create = true;
-		} catch (UserException e) {
-			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
-					e.getMessage());
-		} finally {
-			NavigationUtils.addMessage(msg);
-			context.addCallbackParam("create", create);
-		}
+		User user = new User();
+		user.setEmail(email);
+		user.setUsername(username);
+		user.setUserPassword(password);
+		//user.setRolename(UsersRole.CLIENT);
+
+		NavigationUtil.redirect("/Shop4j/client/CreateAccountStep2/");
+
+		// Client client = new Client();
+		// client.setUser(user);
+		// client.setFirstname("");
+		// client.setLastname("");
+		// FacesMessage msg = null;
+		// RequestContext context = RequestContext.getCurrentInstance();
+		// boolean create = false;
+		// try {
+		// if (clientService.emailExists(email))
+		// throw new UserException("Email exists");
+		// if (clientService.usernameExists(username))
+		// throw new UserException("Username exists");
+		// clientService.addClient(client);
+		// msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
+		// internationalizationService.getMessage(EManageUsers.SUCCESS
+		// .getName()),
+		// internationalizationService
+		// .getMessage(EManageUsers.USER_ADDED.getName()));
+		// created = true;
+		// FacesContext.getCurrentInstance().getExternalContext()
+		// .getSessionMap().put("created", created);
+		// create = true;
+		// } catch (UserException e) {
+		// msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
+		// e.getMessage());
+		// } finally {
+		// NavigationUtils.addMessage(msg);
+		// context.addCallbackParam("create", create);
+		// }
 	}
 
 	public void redirectLogin(ActionEvent actionEvent) {

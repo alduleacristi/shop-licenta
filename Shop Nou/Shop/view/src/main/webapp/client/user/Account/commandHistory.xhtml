@@ -46,6 +46,12 @@
 							<p:dataGrid var="p" value="#{c.clientProducts}" columns="3"
 								rows="3" paginator="true" paginatorPosition="bottom">
 								<center>
+									<p:rating value="#{p.product.productcolor.product.rating}"
+										stars="10">
+										<p:ajax event="rate" listener="#{CommandBean.onrate}" />
+										<p:ajax event="cancel" listener="#{CommandBean.oncancel}" />
+									</p:rating>
+									<br />
 									<p:graphicImage
 										url="http://localhost:8080/Shop4j/rest/products/id#{p.product.productcolor.id}"
 										width="170" height="190" />

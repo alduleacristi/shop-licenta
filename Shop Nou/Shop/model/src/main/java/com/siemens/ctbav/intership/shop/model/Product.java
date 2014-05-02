@@ -18,6 +18,8 @@ import javax.persistence.NamedQuery;
 import org.apache.solr.analysis.LowerCaseFilterFactory;
 import org.apache.solr.analysis.NGramFilterFactory;
 import org.apache.solr.analysis.StandardTokenizerFactory;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.annotations.NamedNativeQueries;
 import org.hibernate.annotations.NamedNativeQuery;
 import org.hibernate.search.annotations.Analyzer;
@@ -91,6 +93,13 @@ public class Product implements Serializable {
 	List<ProductColor> productColor;
 	@Column(name = "perc_reduction")
 	private Double reduction;
+	
+	@Column(name = "rating")
+	private Integer rating;
+	
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@OneToMany(mappedBy = "product")
+	private List<Comment> comments;
 
 	public Product() {
 	}
@@ -169,6 +178,14 @@ public class Product implements Serializable {
 		this.reduction = reduction;
 	}
 
+	public Integer getRating() {
+		return rating;
+	}
+
+	public void setRating(Integer rating) {
+		this.rating = rating;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -181,6 +198,14 @@ public class Product implements Serializable {
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ((price == null) ? 0 : price.hashCode());
 		return result;
+	}
+
+	public List<Comment> getComments() {
+		return comments;
+	}
+
+	public void setComments(List<Comment> comments) {
+		this.comments = comments;
 	}
 
 	@Override

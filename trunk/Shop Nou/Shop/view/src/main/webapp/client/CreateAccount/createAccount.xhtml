@@ -29,21 +29,11 @@
 		<ui:define name="mainContent">
 			<h:form id="formCategories">
 				<p:growl id="messages" showDetail="true" />
-				<h:outputText id="success"
-					value="#{internationalizationCreateAccount.succesMessage}"
-					rendered="#{createAccountBean.created}" />
-				<br />
-				<center>
-					<h:commandButton value="Login" id="login"
-						actionListener="#{createAccountBean.redirectLogin}"
-						rendered="#{createAccountBean.created}" styleClass="update-submit" />
-				</center>
-				<p:panel header="#{internationalizationCreateAccount.header}"
-					rendered="#{createAccountBean.created == false}">
-					<h:panelGrid columns="1" cellpadding="10"
-						rendered="#{createAccountBean.created == false}">
+
+				<p:panel header="#{internationalizationCreateAccount.header}">
+					<h:panelGrid columns="1" cellpadding="10">
 						<center>
-							<h:panelGrid rendered="#{createAccountBean.created == false}">
+							<h:panelGrid>
 					#{internationalizationManageUsers.m1}
 					<br />
 					#{internationalizationManageUsers.m2}
@@ -52,6 +42,7 @@
 					<br />
 					#{internationalizationManageUsers.m4}
 					<br />
+								<br />
 								<h:panelGrid columns="2" cellpadding="10">
 									<h:outputLabel for="username"
 										value="#{internationalizationManageUsers.username}:" />
@@ -86,10 +77,11 @@
 									validatorMessage="#{internationalizationManageUsers.invalidCaptcha}"
 									language="#{internationalizationManageUsers.type}" />
 								<br />
-								<h:commandButton value="#{internationalizationGeneric.create}"
+								<h:commandButton
+									value="#{internationalizationCreateAccount.createAccount}"
 									actionListener="#{createAccountBean.addUser}"
 									oncomplete="handleCreateRequest(xhr, status, args)"
-									update="login,messages" styleClass="search-submit" />
+									update="login,messages" styleClass="create-account" />
 							</h:panelGrid>
 						</center>
 					</h:panelGrid>

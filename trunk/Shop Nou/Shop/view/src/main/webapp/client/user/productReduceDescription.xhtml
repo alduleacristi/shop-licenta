@@ -4,7 +4,9 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui">
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:composite="http://java.sun.com/jsf/composite"
+	xmlns:custom="http://java.sun.com/jsf/composite/custom">
 <h:head>
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
 	<title>Client</title>
@@ -154,8 +156,8 @@
 										<f:converter converterId="NrOfPiecesConverter"></f:converter>
 									</p:inputText>
 									<br /> <br />
-									<p:commandButton value="#{internationalizationProduct.add}" id="addButton"
-										styleClass="update-submit"
+									<p:commandButton value="#{internationalizationProduct.add}"
+										id="addButton" styleClass="update-submit"
 										disabled="#{!productDescriptionReduceClient.isAvailabel}"
 										actionListener="#{cart.addProductFromPage(productDescriptionReduceClient.productColorSize,productDescriptionReduceClient.nrOfPieces)}"
 										update="selectProductColorSize,:cartLink:nrProducts,:cartLink:totalPrice,:cartLink:dialog"
@@ -170,6 +172,20 @@
 					<div class="cl">&nbsp;</div>
 				</div>
 			</h:form>
+			<br />
+			<br />
+			<br />
+			<br />
+			<custom:comment
+				comments="#{productDescriptionReduceClient.selectedProduct.comments}"
+				name="Comments" style="width: 100%" paginator="true"
+				paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="5,10,15" rows="5" paginatorPosition="bottom"
+				type="none" buttonClassStyle="update-submit" buttonStyle="background:#8b0000;color:white" buttonName="Post comment"
+				buttonAction="#{CommentBeanVisitor.doAction(productDescriptionReduceClient.selectedProduct)}"
+				createNewComment="true" textareaStyle="width: 100%" required="true"
+				requiredMessage="You must type something as comment"
+				textareaValue="#{CommentBeanVisitor.newComment}"/>
 			<br />
 			<br />
 		</ui:define>

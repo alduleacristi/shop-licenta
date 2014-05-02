@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<title>Personal data</title>
+</h:head>
+<h:body>
+
+
+	<ui:composition template="/resources/template/template.xhtml">
+		<ui:define name="menu">
+			<ui:include src="/resources/template/client/menuBox.xhtml"></ui:include>
+		</ui:define>
+
+		<ui:define name="search">
+			<ui:include src="/resources/template/client/searchBox.xhtml"></ui:include>
+		</ui:define>
+
+		<ui:define name="categories">
+			<ui:include
+				src="/resources/template/client/productsCategoryBox.xhtml"></ui:include>
+		</ui:define>
+
+		<ui:define name="mainContent">
+			<h:form id="formCategories">
+				<p:growl id="messages" showDetail="true" />
+
+				<h:outputText id="success"
+					value="#{internationalizationCreateAccount.succesMessage}"
+					rendered="#{createAccountStep2Bean.created}" />
+				<br />
+				<center>
+					<h:commandButton value="Login" id="login"
+						actionListener="#{createAccountBean.redirectLogin}"
+						rendered="#{createAccountStep2Bean.created}" styleClass="update-submit" />
+				</center>
+
+				<p:panel header="#{internationalizationCreateAccount.header}">
+					<h:panelGrid rendered="#{createAccountStep2Bean.created == false}">
+						#{internationalizationCreateAccount.step2Message}
+						<br />
+						<br />
+
+						<h:panelGrid columns="2" cellpadding="10">
+							<h:outputLabel for="firstName"
+								value="#{internationalizationCreateAccount.firstName}:" />
+							<p:inputText id="firstName"
+								value="#{createAccountStep2Bean.firstName}" />
+							<h:outputLabel for="lastName"
+								value="#{internationalizationCreateAccount.lastName}:" />
+							<p:inputText id="lastName" value="#{createAccountStep2Bean.lastName}" />
+							<h:outputLabel for="phoneNumber"
+								value="#{internationalizationCreateAccount.phoneNumber}:" />
+							<p:inputText id="phoneNumber"
+								value="#{createAccountStep2Bean.phoneNumber}" />
+								
+							<h:commandButton
+									value="#{internationalizationCreateAccount.finish}"
+									actionListener="#{createAccountStep2Bean.createAccount}"
+									oncomplete="handleCreateRequest(xhr, status, args)"
+									update="login,messages" styleClass="create-account" />
+						</h:panelGrid>
+					</h:panelGrid>
+				</p:panel>
+				
+				<script type="text/javascript">
+					function handleCreateRequest(xhr, status, args) {
+						if (args.validationFailed || !args.create) {
+						} else {
+							location.reload();
+						}
+					}
+				</script>
+			</h:form>
+
+		</ui:define>
+
+		<ui:define name="advertise">
+			<ui:include src="/resources/template/advertise.xhtml"></ui:include>
+		</ui:define>
+
+		<ui:define name="footer">
+			<ui:include src="/resources/template/footer.xhtml"></ui:include>
+		</ui:define>
+	</ui:composition>
+
+</h:body>
+
+</html>

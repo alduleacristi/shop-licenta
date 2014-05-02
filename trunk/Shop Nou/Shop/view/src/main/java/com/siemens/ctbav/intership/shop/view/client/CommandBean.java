@@ -13,7 +13,10 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+
+import org.primefaces.event.RateEvent;
 import org.primefaces.model.DualListModel;
+
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.siemens.ctbav.intership.shop.convert.operator.ConvertCommand;
 import com.siemens.ctbav.intership.shop.convert.operator.ConvertProductColorSize;
@@ -88,11 +91,10 @@ public class CommandBean implements Serializable {
 				throw new CommandDoesNotExistException();
 			}
 
-			
 			if (commands.size() == 0)
-					throw new CommandDoesNotExistException();
+				throw new CommandDoesNotExistException();
 			selectedOrder = commands.get(0);
-			
+
 			list = selectedOrder.getClientProducts();
 
 			dualList = new DualListModel<ClientProduct>(
@@ -104,8 +106,7 @@ public class CommandBean implements Serializable {
 		} catch (ClientDoesNotExistException e) {
 			existCommands = false;
 		}
-		dualList = new DualListModel<ClientProduct>(
-				list,
+		dualList = new DualListModel<ClientProduct>(list,
 				new ArrayList<ClientProduct>());
 	}
 
@@ -179,7 +180,7 @@ public class CommandBean implements Serializable {
 	}
 
 	public boolean canBeReturned(Command command) {
-		
+
 		System.out.println("in can be returned");
 		Date date = command.getDeliveryDate();
 
@@ -232,9 +233,9 @@ public class CommandBean implements Serializable {
 
 	public DualListModel<ClientProduct> getList() {
 		List<ClientProduct> list;
-		if (selectedOrder != null){
+		if (selectedOrder != null) {
 			list = selectedOrder.getClientProducts();
-		} else{
+		} else {
 			list = new ArrayList<ClientProduct>();
 		}
 
@@ -246,5 +247,14 @@ public class CommandBean implements Serializable {
 		System.out.println(listt.getSource().size());
 		return listt;
 
+	}
+
+	public void onrate(RateEvent rateEvent) {
+		System.out.println("You rated:"
+				+ ((Integer) rateEvent.getRating()).intValue());
+	}
+
+	public void oncancel() {
+		System.out.println("you press cancel");
 	}
 }

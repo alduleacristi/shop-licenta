@@ -22,6 +22,12 @@ public class InternationalizationCreateAccount implements Serializable {
 
 	private String header;
 	private String succesMessage;
+	private String step2Message;
+	private String createAccount;
+	private String firstName;
+	private String lastName;
+	private String phoneNumber;
+	private String finish;
 
 	@PostConstruct
 	private void init() {
@@ -56,8 +62,51 @@ public class InternationalizationCreateAccount implements Serializable {
 	}
 
 	public String getSuccesMessage() {
-		succesMessage = internationalizationService.getMessage(ECreateAccount.SUCCESS_MESSAGE.getName());
+		succesMessage = internationalizationService
+				.getMessage(ECreateAccount.SUCCESS_MESSAGE.getName());
 		return succesMessage;
+	}
+
+	public String getStep2Message() {
+		step2Message = internationalizationService
+				.getMessage(ECreateAccount.STEP2_MESSAGE.getName());
+
+		return step2Message;
+	}
+
+	public String getCreateAccount() {
+		createAccount = internationalizationService
+				.getMessage(ECreateAccount.CREATE_ACCOUNT.getName());
+
+		return createAccount;
+	}
+
+	public String getFirstName() {
+		firstName = internationalizationService
+				.getMessage(ECreateAccount.FIRST_NAME.getName());
+
+		return firstName;
+	}
+
+	public String getLastName() {
+		lastName = internationalizationService
+				.getMessage(ECreateAccount.LAST_NAME.getName());
+
+		return lastName;
+	}
+
+	public String getPhoneNumber() {
+		phoneNumber = internationalizationService
+				.getMessage(ECreateAccount.PHONE_NUMBER.getName());
+
+		return phoneNumber;
+	}
+
+	public String getFinish() {
+		finish = internationalizationService.getMessage(ECreateAccount.FINISH
+				.getName());
+
+		return finish;
 	}
 
 }

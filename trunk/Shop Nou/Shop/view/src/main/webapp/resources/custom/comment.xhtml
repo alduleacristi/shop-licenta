@@ -19,40 +19,45 @@
 	<composite:attribute name="rows" />
 	<composite:attribute name="type" />
 	<composite:attribute name="buttonStyle" />
+	<composite:attribute name="buttonClassStyle" />
 	<composite:attribute name="buttonName" />
 	<composite:attribute name="createNewComment" />
 	<composite:attribute name="textareaStyle" />
 	<composite:attribute name="required" />
 	<composite:attribute name="requiredMessage" />
 	<composite:attribute name="textareaValue" />
+	<composite:attribute name="rendered" />
 
 	<composite:attribute name="buttonAction"
-		method-signature="java.lang.String action()" />
+		method-signature="java.lang.String action(com.siemens.ctbav.intership.shop.model.Product)" />
 
 </composite:interface>
 
 <composite:implementation>
-
 	<h:form>
 
-		<p:panelGrid columns="1" id="textPanel" style="#{cc.attrs.style}">
+		<p:panelGrid columns="1" id="textPanel" style="#{cc.attrs.style}"
+			rendered="#{cc.attrs.rendered}">
 
 			<p:dataList value="#{cc.attrs.comments}" var="item"
 				paginator="#{cc.attrs.paginator}"
 				paginatorTemplate="#{cc.attrs.paginatorTemplate}"
 				paginatorPosition="#{cc.attrs.paginatorPosition}"
 				rowsPerPageTemplate="#{cc.attrs.rowsPerPageTemplate}"
-				rows="#{cc.attrs.rows}" type="#{cc.attrs.type}">
+				rows="#{cc.attrs.rows}" type="#{cc.attrs.type}" id="data"
+				rendered="true">
 				<f:facet name="header">  
                 #{cc.attrs.name}
             	</f:facet>
 				<p:panel>
-					<p:outputLabel styleClass="comments-autor" value="Gigi" />
+					<p:outputLabel styleClass="comments-autor"
+						value="#{item.user.username}" />
 					&nbsp;&nbsp;
-					<p:outputLabel styleClass="comments-autor" value="04/05/2014" />
+					<p:outputLabel styleClass="comments-autor"
+						value="#{CommentBeanVisitor.getDate(item.date)}" />
 					<br />
 					<br />
-					<p:outputLabel value="#{item}" />
+					<p:outputLabel value="#{item.comment}" />
 				</p:panel>
 
 			</p:dataList>
@@ -64,8 +69,11 @@
 					value="#{cc.attrs.textareaValue}" />
 				<br />
 				<br />
-				<h:commandButton action="#{cc.attrs.buttonAction}"
-					styleClass="#{cc.attrs.buttonStyle}" value="#{cc.attrs.buttonName}" />
+				<p:commandButton action="#{cc.attrs.buttonAction}"
+					styleClass="#{cc.attrs.buttonClassStyle}"
+					style="#{cc.attrs.buttonStyle}" value="#{cc.attrs.buttonName}"
+					update="textPanel">
+				</p:commandButton>
 			</p:panel>
 
 		</p:panelGrid>

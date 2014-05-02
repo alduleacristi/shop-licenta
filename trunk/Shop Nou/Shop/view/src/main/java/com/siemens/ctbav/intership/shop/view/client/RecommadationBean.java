@@ -135,7 +135,7 @@ public class RecommadationBean {
 		Product product;
 		int k=1;
 		
-		for(int i=0;i<1500;i++){
+		for(int i=0;i<2000;i++){
 			product = new Product();
 			product.setName("Product"+k++);
 			product.setPrice(100.0);

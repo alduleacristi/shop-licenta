@@ -4,7 +4,9 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui">
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:composite="http://java.sun.com/jsf/composite"
+	xmlns:custom="http://java.sun.com/jsf/composite/custom">
 <h:head>
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
 	<title>Client</title>
@@ -136,8 +138,8 @@
 										<f:converter converterId="NrOfPiecesConverter"></f:converter>
 									</p:inputText>
 									<br /> <br />
-									<p:commandButton value="#{internationalizationProduct.add}" id="addButton"
-										styleClass="update-submit"
+									<p:commandButton value="#{internationalizationProduct.add}"
+										id="addButton" styleClass="update-submit"
 										disabled="#{!DescriptionRecommandedProductBean.isAvailabel}"
 										actionListener="#{cart.addProductFromPage(DescriptionRecommandedProductBean.productColorSize,DescriptionRecommandedProductBean.nrOfPieces)}"
 										update="selectProductColorSize,:cartLink:nrProducts,:cartLink:totalPrice,:cartLink:dialog"
@@ -149,9 +151,26 @@
 					</ul>
 					<div class="cl">&nbsp;</div>
 				</div>
-				<br />
-				<br />
 			</h:form>
+			<br />
+			<br />
+			<br />
+			<br />
+			<custom:comment
+				comments="#{DescriptionRecommandedProductBean.selectedProduct.comments}"
+				name="Comments" style="width: 100%" paginator="true"
+				paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="5,10,15" rows="5" paginatorPosition="bottom"
+				type="none" buttonClassStyle="update-submit"
+				buttonStyle="background:#8b0000;color:white"
+				buttonName="Post comment"
+				buttonAction="#{CommentBeanVisitor.doAction(DescriptionRecommandedProductBean.selectedProduct)}"
+				createNewComment="true" textareaStyle="width: 100%" required="true"
+				requiredMessage="You must type something as comment"
+				textareaValue="#{CommentBeanVisitor.newComment}"
+				rendered="#{DescriptionRecommandedProductBean.selectedProduct != null}" />
+			<br />
+			<br />
 		</ui:define>
 
 		<ui:define name="advertise">

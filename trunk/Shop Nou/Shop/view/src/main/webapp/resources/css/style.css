@@ -296,6 +296,18 @@ a.bul {
 	margin: 12px 0 10px 0;
 }
 
+.create-account {
+	width: 150px;
+	background: #8b0000;
+	border: 0;
+	color: #fff;
+	height: 27px;
+	display: block;
+	line-height: 26px;
+	cursor: pointer;
+	margin: 12px 0 10px 0;
+}
+
 .search-submitLong {
 	width: 325px;
 	background: #8b0000;
@@ -1286,7 +1298,8 @@ h3.ico4 {
 	overflow: hidden;
 }
 
-.ui-inputfield,.ui-widget-content .ui-inputfield,.ui-widget-header .ui-inputfield
-	{
+.ui-inputfield,.ui-widget-content .ui-inputfield,.ui-widget-header .ui-inputfield {
 	width: 205px;
 }
+
+

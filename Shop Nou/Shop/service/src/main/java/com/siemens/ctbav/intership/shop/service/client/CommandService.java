@@ -7,11 +7,7 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-
-import com.siemens.ctbav.intership.shop.convert.operator.ConvertReturnedOrders;
-import com.siemens.ctbav.intership.shop.convert.operator.ConvertReturnedProduct;
 import com.siemens.ctbav.intership.shop.dto.operator.ReturnedOrdersDTO;
-import com.siemens.ctbav.intership.shop.dto.operator.ReturnedProductsDTO;
 import com.siemens.ctbav.intership.shop.exception.client.CommandDoesNotExistException;
 import com.siemens.ctbav.intership.shop.exception.client.ProductColorSizeDoesNotExistException;
 import com.siemens.ctbav.intership.shop.model.ClientProduct;

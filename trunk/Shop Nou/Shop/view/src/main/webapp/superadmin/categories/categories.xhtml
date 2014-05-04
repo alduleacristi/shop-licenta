@@ -50,20 +50,27 @@
 					rendered="#{categoryBean.selected}" />
 
 				<p:dialog header="#{internationalizationCategory.createM}"
-					modal="true" widgetVar="create" focus="name" resizable="false">
-					<h:panelGrid columns="2" cellpadding="5">
-						<h:outputLabel for="name"
-							value="#{internationalizationGeneric.name}:" />
-						<p:inputText id="name" label="name"
-							value="#{categoryBean.newName}">
-							<f:validator validatorId="validateCategory" />
-						</p:inputText>
-						<p:commandButton value="#{internationalizationGeneric.create}"
-							actionListener="#{categoryBean.create}" update="messages2"
-							oncomplete="handleCreateRequest(xhr, status, args)" />
-						<p:commandButton value="#{internationalizationGeneric.cancel}"
-							onclick="create.hide();" type="button" />
-					</h:panelGrid>
+					modal="true" widgetVar="create" resizable="false">
+					<p:dataTable id="names" value="#{categoryBean.categoryNames}"
+						editable="true" editMode="cell" widgetVar="namesTable" var="n">
+						<p:column headerText="#{internationalizationGeneric.language}">
+							<p:outputLabel value="#{n.language.name}" />
+						</p:column>
+						<p:column headerText="#{internationalizationGeneric.name}">
+							<p:inputText id="nameInput" value="#{n.name}" style="width:96%"
+								required="true"
+								requiredMessage="#{internationalizationGeneric.required} #{n.language.name}!"
+								update="messages2">
+								<f:validator validatorId="validateCategory" />
+							</p:inputText>
+						</p:column>
+					</p:dataTable>
+					<p:outputLabel value=" " />
+					<p:commandButton value="#{internationalizationGeneric.create}"
+						actionListener="#{categoryBean.create}" update="messages2"
+						oncomplete="handleCreateRequest(xhr, status, args)" />
+					<p:commandButton value="#{internationalizationGeneric.cancel}"
+						onclick="create.hide();" type="button" />
 				</p:dialog>
 
 				<script type="text/javascript">

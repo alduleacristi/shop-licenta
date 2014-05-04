@@ -15,6 +15,7 @@ import org.primefaces.model.TreeNode;
 
 import com.siemens.ctbav.intership.shop.internationalization.enums.superadmin.ECategory;
 import com.siemens.ctbav.intership.shop.model.Category;
+import com.siemens.ctbav.intership.shop.model.CategoryName;
 
 @FacesValidator("validateUpdateCategory")
 public class CategoryUpdateNameValidate implements Validator {
@@ -36,8 +37,11 @@ public class CategoryUpdateNameValidate implements Validator {
 
 		if (name != "") {
 			validateName(name, selectedNode, selectedParent, messages);
+		} else {
+			if (selectedParent != selectedNode.getParent()) {
+				uniqueCheckNulName(selectedNode, selectedParent, messages);
+			}
 		}
-
 	}
 
 	private TreeNode checkRoot(TreeNode selectedNode, TreeNode selectedParent,
@@ -72,28 +76,160 @@ public class CategoryUpdateNameValidate implements Validator {
 					FacesMessage.SEVERITY_ERROR,
 					messages.getString(ECategory.ERROR.getName()),
 					messages.getString(ECategory.LENGTH.getName())));
-		} else if (name.equalsIgnoreCase(((Category) selectedNode.getData())
-				.getName())) {
-			throw new ValidatorException(new FacesMessage(
-					FacesMessage.SEVERITY_ERROR,
-					messages.getString(ECategory.ERROR.getName()),
-					messages.getString(ECategory.INVALIDNAME1.getName())));
+		} else {
+			CategoryName cn = (CategoryName) FacesContext.getCurrentInstance()
+					.getExternalContext().getSessionMap().get("currentName");
+			if (cn.getName().equalsIgnoreCase(name)) {
+				throw new ValidatorException(new FacesMessage(
+						FacesMessage.SEVERITY_ERROR,
+						messages.getString(ECategory.ERROR.getName()),
+						messages.getString(ECategory.INVALIDNAME1.getName())));
+			}
 		}
-		uniqueCheck(name, selectedParent, messages);
+		uniqueCheck(name, selectedNode, selectedParent, messages);
+	}
+
+	private void uniqueCheckNulName(TreeNode selectedNode,
+			TreeNode selectedParent, ResourceBundle messages) {
+		checkTheNameInTheOtherHierarchy(selectedNode, messages);
+	}
+
+	private void uniqueCheck(String name, TreeNode selectedNode,
+			TreeNode selectedParent, ResourceBundle messages) {
+		if (selectedParent.equals(selectedNode.getParent())) {
+			checkTheNameInTheSameHierarchy(name, messages);
+		} else {
+			checkTheNameInTheOtherHierarchy(name, selectedNode, messages);
+		}
 	}
 
 	@SuppressWarnings("unchecked")
-	private void uniqueCheck(String name, TreeNode selectedNode,
+	private void checkTheNameInTheOtherHierarchy(String name,
+			TreeNode selectedNode, ResourceBundle messages) {
+		List<Category> allcats = (List<Category>) FacesContext
+				.getCurrentInstance().getExternalContext().getSessionMap()
+				.get("childsP");
+		checkTheNewName(name, messages, allcats);
+
+		checkTheOldNames(selectedNode, messages, allcats);
+	}
+
+	private void checkTheOldNames(TreeNode selectedNode,
+			ResourceBundle messages, List<Category> allcats) {
+		String language = getLanguage();
+		List<CategoryName> selectedNames = ((Category) selectedNode.getData())
+				.getNames();
+		for (CategoryName category : selectedNames) {
+			if (!category.getLanguage().getLanguage().equals(language))
+				for (Category c : allcats) {
+					List<CategoryName> cns = c.getNames();
+					for (CategoryName cn : cns) {
+						if (category.getName().equalsIgnoreCase(cn.getName())) {
+							throw new ValidatorException(
+									new FacesMessage(
+											FacesMessage.SEVERITY_ERROR,
+											messages.getString(ECategory.ERROR
+													.getName())
+													+ " - "
+													+ cn.getName(),
+											cn.getLanguage().getName()
+													+ ": "
+													+ messages
+															.getString(ECategory.INVALIDNAME2
+																	.getName())));
+						}
+					}
+				}
+		}
+	}
+
+	private void checkTheNewName(String name, ResourceBundle messages,
+			List<Category> allcats) {
+		for (Category c : allcats) {
+			List<CategoryName> cns = c.getNames();
+			for (CategoryName cn : cns) {
+				if (name.equalsIgnoreCase(cn.getName())) {
+					throw new ValidatorException(new FacesMessage(
+							FacesMessage.SEVERITY_ERROR,
+							messages.getString(ECategory.ERROR.getName())
+									+ " - " + cn.getName(), cn.getLanguage()
+									.getName()
+									+ ": "
+									+ messages.getString(ECategory.INVALIDNAME2
+											.getName())));
+				}
+			}
+		}
+	}
+
+	private String getLanguage() {
+		boolean isEnglishSelected;
+		String language;
+		Boolean b = (Boolean) FacesContext.getCurrentInstance()
+				.getExternalContext().getSessionMap().get("isEnglishSelected");
+		if (b == null)
+			isEnglishSelected = true;
+		else
+			isEnglishSelected = b;
+
+		if (isEnglishSelected) {
+			language = new String("en");
+		} else {
+			language = new String("ro");
+		}
+		return language;
+	}
+
+	@SuppressWarnings("unchecked")
+	private void checkTheNameInTheOtherHierarchy(TreeNode selectedNode,
+			ResourceBundle messages) {
+		Category selectedCategory = ((Category) selectedNode.getData());
+		List<CategoryName> selectedNames = selectedCategory.getNames();
+		List<Category> allcats = (List<Category>) FacesContext
+				.getCurrentInstance().getExternalContext().getSessionMap()
+				.get("childsP");
+		for (CategoryName category : selectedNames) {
+			for (Category c : allcats) {
+				List<CategoryName> cns = c.getNames();
+				for (CategoryName cn : cns) {
+					if (category.getName().equalsIgnoreCase(cn.getName())) {
+						throw new ValidatorException(
+								new FacesMessage(
+										FacesMessage.SEVERITY_ERROR,
+										messages.getString(ECategory.ERROR
+												.getName())
+												+ " - "
+												+ cn.getName(),
+										cn.getLanguage().getName()
+												+ ": "
+												+ messages
+														.getString(ECategory.INVALIDNAME2
+																.getName())));
+					}
+				}
+			}
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private void checkTheNameInTheSameHierarchy(String name,
 			ResourceBundle messages) {
 		List<Category> allcats = (List<Category>) FacesContext
 				.getCurrentInstance().getExternalContext().getSessionMap()
-				.get("categories");
-		Category cat = new Category(name, (Category) selectedNode.getData());
-		if (allcats.contains(cat)) {
-			throw new ValidatorException(new FacesMessage(
-					FacesMessage.SEVERITY_ERROR,
-					messages.getString(ECategory.ERROR.getName()),
-					messages.getString(ECategory.INVALIDNAME2.getName())));
+				.get("childs");
+		for (Category c : allcats) {
+			List<CategoryName> cns = c.getNames();
+			for (CategoryName cn : cns) {
+				if (name.equalsIgnoreCase(cn.getName())) {
+					throw new ValidatorException(new FacesMessage(
+							FacesMessage.SEVERITY_ERROR,
+							messages.getString(ECategory.ERROR.getName())
+									+ " - " + name, cn.getLanguage().getName()
+									+ ": "
+									+ messages.getString(ECategory.INVALIDNAME2
+											.getName())));
+				}
+			}
 		}
 	}
 

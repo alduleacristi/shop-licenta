@@ -29,6 +29,9 @@ public class InternationalizationGeneric implements Serializable {
 	private String confirmation;
 	private String name;
 	private String cancel;
+	private String language;
+	private String updateL;
+	private String required;
 
 	@PostConstruct
 	private void init() {
@@ -105,5 +108,23 @@ public class InternationalizationGeneric implements Serializable {
 		cancel = internationalizationService.getMessage(EGeneric.CANCEL
 				.getName());
 		return cancel;
+	}
+	
+	public String getLanguage() {
+		language = internationalizationService.getMessage(EGeneric.LANGUAGE
+				.getName());
+		return language;
+	}
+
+	public String getUpdateL() {
+		updateL = internationalizationService.getMessage(EGeneric.UPDATEL
+				.getName());
+		return updateL;
+	}
+
+	public String getRequired() {
+		required = internationalizationService.getMessage(EGeneric.REQUIRED
+				.getName());
+		return required;
 	}
 }

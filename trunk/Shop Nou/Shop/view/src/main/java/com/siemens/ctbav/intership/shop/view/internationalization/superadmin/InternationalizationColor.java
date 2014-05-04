@@ -26,6 +26,7 @@ public class InternationalizationColor implements Serializable {
 	private String colorDescription;
 	private String editTheColor;
 	private String chose;
+	private String required;
 
 	@PostConstruct
 	private void init() {
@@ -86,5 +87,11 @@ public class InternationalizationColor implements Serializable {
 	public String getChose() {
 		chose = internationalizationService.getMessage(EColor.CHOSE.getName());
 		return chose;
+	}
+
+	public String getRequired() {
+		required = internationalizationService.getMessage(EColor.REQUIRED
+				.getName());
+		return required;
 	}
 }

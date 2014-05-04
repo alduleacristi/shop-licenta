@@ -20,6 +20,12 @@ public class ColorService {
 				.getResultList();
 	}
 
+	@SuppressWarnings("unchecked")
+	public List<Color> getOtherColors(Long id) {
+		return (List<Color>) em.createNamedQuery(Color.GET_OTHER_COLORS)
+				.setParameter("id", id).getResultList();
+	}
+
 	public Color getColorById(Long id) {
 		return em.find(Color.class, id);
 	}

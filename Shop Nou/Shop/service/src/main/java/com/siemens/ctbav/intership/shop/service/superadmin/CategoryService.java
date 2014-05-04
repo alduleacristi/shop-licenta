@@ -15,6 +15,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 
 import com.siemens.ctbav.intership.shop.model.Category;
+import com.siemens.ctbav.intership.shop.model.CategoryName;
 import com.siemens.ctbav.intership.shop.model.Product;
 import com.siemens.ctbav.intership.shop.model.ProductColor;
 import com.siemens.ctbav.intership.shop.exception.superadmin.CategoryException;
@@ -37,6 +38,23 @@ public class CategoryService {
 	public List<Category> getCategories() {
 		return (List<Category>) em
 				.createNamedQuery(Category.GET_ALL_CATEGORIES).getResultList();
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<CategoryName> getCategoryName(Long id) {
+		return (List<CategoryName>) em
+				.createNamedQuery(CategoryName.GET_NAMES_FOR_CATEGORY)
+				.setParameter("id", id).getResultList();
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<CategoryName> getCategoryNameForLanguage(Long id,
+			String language) {
+		return em
+				.createNamedQuery(
+						CategoryName.GET_NAME_FOR_CATEGORY_AND_LANGUAGE)
+				.setParameter("id", id).setParameter("language", language)
+				.getResultList();
 	}
 
 	public List<Category> getList() {
@@ -77,13 +95,21 @@ public class CategoryService {
 		}
 	}
 
-	public void updateCategoryName(long idCategory, String name)
+	public void updateCategoryName(long idCategory, String name, String language)
 			throws CategoryException {
 		Category category = em.find(Category.class, idCategory);
 		if (category == null)
 			throw new CategoryException(
 					"Couldn't find the category in the database");
-		category.setName(name);
+		CategoryName categoryN = getCategoryNameForLanguage(idCategory,
+				language).get(0);
+		if (categoryN == null)
+			throw new CategoryException(
+					"Couldn't find the category in the database");
+		categoryN.setName(name);
+		category.setName(getCategoryNameForLanguage(idCategory, "en").get(0)
+				.getName());
+		em.merge(categoryN);
 		em.merge(category);
 		em.flush();
 
@@ -107,7 +133,7 @@ public class CategoryService {
 	}
 
 	public void updateCategoryNameAndParent(long idCategory, long idParent,
-			String name) throws CategoryException {
+			String name, String language) throws CategoryException {
 		Category category = em.find(Category.class, idCategory);
 		Category parent = em.find(Category.class, idParent);
 		if (category == null)
@@ -117,7 +143,15 @@ public class CategoryService {
 			throw new CategoryException(
 					"Couldn't find the category's parent in the database");
 		category.setCategory(parent);
-		category.setName(name);
+		CategoryName categoryN = getCategoryNameForLanguage(idCategory,
+				language).get(0);
+		if (categoryN == null)
+			throw new CategoryException(
+					"Couldn't find the category in the database");
+		categoryN.setName(name);
+		category.setName(getCategoryNameForLanguage(idCategory, "en").get(0)
+				.getName());
+		em.merge(categoryN);
 		em.merge(category);
 		em.merge(parent);
 		em.flush();
@@ -130,7 +164,18 @@ public class CategoryService {
 					"Couldn't find the category in the database");
 
 		List<Category> c = storedProcedureGetChildren(idCategory);
+		eraseImages(category, c);
 
+		List<CategoryName> cns = getCategoryName(category.getId());
+		for (CategoryName cn : cns) {
+			em.remove(cn);
+		}
+		em.flush();
+		em.remove(category);
+		em.flush();
+	}
+
+	private void eraseImages(Category category, List<Category> c) {
 		if (c.size() == 0) {
 
 			List<ProductColor> pc = new ArrayList<ProductColor>();
@@ -152,22 +197,32 @@ public class CategoryService {
 					System.out.println(e);
 				}
 			}
-
 		}
-
-		em.remove(category);
-		em.flush();
 	}
 
-	public void createCategory(String name, Category category) {
-		Category newCategory = new Category(name, category);
+	public void createCategory(List<CategoryName> names, Category category) {
+		Category newCategory = new Category(names.get(0).getName(), category);
 		em.persist(newCategory);
 		em.flush();
+		for (int i = 0; i < names.size(); i++) {
+			CategoryName cn = names.get(i);
+			cn.setId_category(newCategory.getId());
+			names.set(i, cn);
+		}
+		for (CategoryName cn : names)
+			em.persist(cn);
 	}
 
-	public void createRoot(String name) {
-		Category newCategory = new Category(name, null);
+	public void createRoot(List<CategoryName> names) {
+		Category newCategory = new Category(names.get(0).getName(), null);
 		em.persist(newCategory);
+		for (int i = 0; i < names.size(); i++) {
+			CategoryName cn = names.get(i);
+			cn.setId_category(newCategory.getId());
+			names.set(i, cn);
+		}
+		for (CategoryName cn : names)
+			em.persist(cn);
 		em.flush();
 	}
 

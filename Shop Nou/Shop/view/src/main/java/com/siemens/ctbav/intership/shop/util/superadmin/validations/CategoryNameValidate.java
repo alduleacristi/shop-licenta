@@ -13,15 +13,12 @@ import javax.faces.validator.ValidatorException;
 
 import org.primefaces.model.TreeNode;
 
-
-
-
-
 import com.siemens.ctbav.intership.shop.internationalization.enums.superadmin.ECategory;
 /*
  import com.siemens.ctbav.intership.shop.convert.superadmin.ConvertCategory;
  import com.siemens.ctbav.intership.shop.dto.superadmin.CategoryDTO;*/
 import com.siemens.ctbav.intership.shop.model.Category;
+import com.siemens.ctbav.intership.shop.model.CategoryName;
 
 @FacesValidator("validateCategory")
 public class CategoryNameValidate implements Validator {
@@ -50,30 +47,23 @@ public class CategoryNameValidate implements Validator {
 	@SuppressWarnings("unchecked")
 	private void uniqueCheck(String name, TreeNode selectedNode,
 			ResourceBundle messages) {
-		/*
-		 * CategoryDTO search = new CategoryDTO(name,
-		 * ConvertCategory.convertCategory((Category) selectedNode .getData()));
-		 * List<CategoryDTO> allCategories = ConvertCategory
-		 * .convertCategories((List<Category>) FacesContext
-		 * .getCurrentInstance().getExternalContext()
-		 * .getSessionMap().get("categories"));
-		 */
-
 		List<Category> allcats = (List<Category>) FacesContext
 				.getCurrentInstance().getExternalContext().getSessionMap()
-				.get("categories");
-
-		Category cat = new Category(name, (Category) selectedNode.getData());
-		if (allcats.contains(cat)) {
-			throw new ValidatorException(new FacesMessage(
-					FacesMessage.SEVERITY_ERROR,
-					messages.getString(ECategory.ERROR.getName()),
-					messages.getString(ECategory.INVALIDNAME2.getName())));
-		}/*
-		 * if (allCategories.contains(search)) { throw new ValidatorException(
-		 * new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid name",
-		 * "The category's parent already has a child with the same name")); }
-		 */
+				.get("kids");
+		for (Category c : allcats) {
+			List<CategoryName> cns = c.getNames();
+			for (CategoryName cn : cns) {
+				if (name.equalsIgnoreCase(cn.getName())) {
+					throw new ValidatorException(new FacesMessage(
+							FacesMessage.SEVERITY_ERROR,
+							messages.getString(ECategory.ERROR.getName())
+									+ " - " + name, cn.getLanguage().getName()
+									+ ": "
+									+ messages.getString(ECategory.INVALIDNAME2
+											.getName())));
+				}
+			}
+		}
 	}
 
 	private ResourceBundle internationalization() {

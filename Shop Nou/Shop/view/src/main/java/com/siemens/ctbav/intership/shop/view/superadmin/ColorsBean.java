@@ -125,22 +125,35 @@ public class ColorsBean implements Serializable {
 		boolean update = false;
 		FacesMessage msg = null;
 		try {
-			if (color.equals("")) {
-				colorService.updateColorNameAndDescription(
-						selectedColor.getId(), selectedColor.getName(),
-						selectedColor.getDescription());
+			String c = selectedColor.getCode();
+			selectedColor.setCode("#" + color);
+			List<Color> otherColors = colorService.getOtherColors(selectedColor
+					.getId());
+			if (otherColors.contains(selectedColor)) {
+				System.out.println("deja exista");
+				throw new ColorException(
+						internationalizationService.getMessage(EColor.EXCEPTION
+								.getName()));
 			} else {
-				colorService.updateColor(selectedColor.getId(),
-						selectedColor.getName(),
-						selectedColor.getDescription(), "#" + color);
+				System.out.println("nu exista");
+				selectedColor.setCode(c);
+				if (color.equals("")) {
+					colorService.updateColorNameAndDescription(
+							selectedColor.getId(), selectedColor.getName(),
+							selectedColor.getDescription());
+				} else {
+					colorService.updateColor(selectedColor.getId(),
+							selectedColor.getName(),
+							selectedColor.getDescription(), "#" + color);
+				}
+				msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
+						internationalizationService.getMessage(EColor.SUCCESS
+								.getName()),
+						internationalizationService
+								.getMessage(EColor.COLOR_EDITED.getName()));
+				update = true;
+				//allColors = colorService.getAllColors();
 			}
-			msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
-					internationalizationService.getMessage(EColor.SUCCESS
-							.getName()),
-					internationalizationService.getMessage(EColor.COLOR_EDITED
-							.getName()));
-			update = true;
-			allColors = colorService.getAllColors();
 		} catch (ColorException e) {
 			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,
 					internationalizationService.getMessage(EColor.ERROR
@@ -150,6 +163,7 @@ public class ColorsBean implements Serializable {
 			setColor("");
 			NavigationUtils.addMessage(msg);
 			context.addCallbackParam("update", update);
+			allColors = colorService.getAllColors();
 		}
 	}
 
@@ -157,19 +171,34 @@ public class ColorsBean implements Serializable {
 		RequestContext context = RequestContext.getCurrentInstance();
 		boolean create = false;
 		FacesMessage msg = null;
+		try {
+			tryToCreate();
+			create = true;
+			msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
+					internationalizationService.getMessage(EColor.SUCCESS
+							.getName()),
+					internationalizationService.getMessage(EColor.COLOR_ADDED
+							.getName()));
+			allColors = colorService.getAllColors();
+		} catch (ColorException e) {
+			create = false;
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+					internationalizationService.getMessage(EColor.ERROR
+							.getName()), e.getMessage());
+		} finally {
+			NavigationUtils.addMessage(msg);
+			context.addCallbackParam("create", create);
+		}
+	}
 
+	private void tryToCreate() throws ColorException {
+		Color newColor = new Color(newName, newDescription, "#" + color);
+		if (allColors.contains(newColor)) {
+			throw new ColorException(
+					internationalizationService.getMessage(EColor.EXCEPTION
+							.getName()));
+		}
 		colorService.addColor(newName, newDescription, "#" + color);
-		create = true;
-		msg = new FacesMessage(
-				FacesMessage.SEVERITY_INFO,
-				internationalizationService.getMessage(EColor.SUCCESS.getName()),
-				internationalizationService.getMessage(EColor.COLOR_ADDED
-						.getName()));
-
-		NavigationUtils.addMessage(msg);
-		context.addCallbackParam("create", create);
-
-		allColors = colorService.getAllColors();
 	}
 
 	public void delete(ActionEvent actionEvent) {

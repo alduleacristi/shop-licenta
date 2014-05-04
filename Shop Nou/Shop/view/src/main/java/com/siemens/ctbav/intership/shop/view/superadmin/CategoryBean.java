@@ -22,8 +22,11 @@ import com.ocpsoft.pretty.faces.annotation.URLMappings;
 import com.siemens.ctbav.intership.shop.exception.superadmin.CategoryException;
 import com.siemens.ctbav.intership.shop.internationalization.enums.superadmin.ECategory;
 import com.siemens.ctbav.intership.shop.model.Category;
+import com.siemens.ctbav.intership.shop.model.CategoryName;
+import com.siemens.ctbav.intership.shop.model.Language;
 import com.siemens.ctbav.intership.shop.service.internationalization.InternationalizationService;
 import com.siemens.ctbav.intership.shop.service.superadmin.CategoryService;
+import com.siemens.ctbav.intership.shop.service.superadmin.LanguageService;
 import com.siemens.ctbav.intership.shop.util.superadmin.NavigationUtils;
 import com.siemens.ctbav.intership.shop.util.superadmin.validations.CategoryUpdateNameValidate;
 
@@ -40,6 +43,9 @@ public class CategoryBean implements Serializable {
 	@EJB
 	private InternationalizationService internationalizationService;
 
+	@EJB
+	private LanguageService languageService;
+
 	private TreeNode root;
 	private TreeNode rootUpdate;
 	private TreeNode selectedNode;
@@ -47,6 +53,9 @@ public class CategoryBean implements Serializable {
 	private boolean selected;
 	private String newName;
 	private String photo;
+	private boolean isEnglishSelected;
+
+	private List<CategoryName> categoryNames;
 
 	@PostConstruct
 	private void init() {
@@ -61,10 +70,17 @@ public class CategoryBean implements Serializable {
 		NavigationUtils.addSuccesMessage();
 
 		internationalizationInit();
+
+		categoryNames = new ArrayList<CategoryName>();
+		List<Language> languages = languageService.getAllLanguages();
+		for (Language l : languages) {
+			CategoryName c = new CategoryName();
+			c.setLanguage(l);
+			categoryNames.add(c);
+		}
 	}
 
 	private void internationalizationInit() {
-		boolean isEnglishSelected;
 		Boolean b = (Boolean) FacesContext.getCurrentInstance()
 				.getExternalContext().getSessionMap().get("isEnglishSelected");
 		if (b == null)
@@ -140,19 +156,64 @@ public class CategoryBean implements Serializable {
 		return photo;
 	}
 
+	public List<CategoryName> getCategoryNames() {
+		return categoryNames;
+	}
+
+	public void setCategoryNames(List<CategoryName> categoryNames) {
+		this.categoryNames = categoryNames;
+	}
+
 	public void onNodeSelect(NodeSelectEvent event) {
 		FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
 				.put("selectedNode", event.getTreeNode());
+		
 		FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
 				.put("selectedParent", event.getTreeNode().getParent());
 		selectedNode = event.getTreeNode();
+		setChilds();
 		selected = true;
+	}
+
+	private void setChilds() {
+		Category categ = ((Category) selectedNode.getData()).getCategory();
+		Long id = (long) 0;
+		if (categ != null)
+			id = categ.getId();
+		List<Category> childs = categoryService.storedProcedureGetChildren(id);
+		FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
+				.put("childs", childs);
+		
+		List<Category> kids = categoryService.storedProcedureGetChildren(((Category) selectedNode.getData()).getId());
+		FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
+				.put("kids", kids);
+		
+		putNameForLanguage();
+	}
+
+	private void putNameForLanguage() {
+		String language = "ro";
+		if (isEnglishSelected)
+			language = "en";
+
+		FacesContext
+				.getCurrentInstance()
+				.getExternalContext()
+				.getSessionMap()
+				.put("currentName",
+						categoryService.getCategoryNameForLanguage(
+								((Category) selectedNode.getData()).getId(),
+								language).get(0));
 	}
 
 	public void onParentSelect(NodeSelectEvent event) {
 		FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
 				.put("selectedParent", event.getTreeNode());
 		selectedParent = event.getTreeNode();
+		Long id = ((Category) selectedParent.getData()).getId();
+		List<Category> childs = categoryService.storedProcedureGetChildren(id);
+		FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
+				.put("childsP", childs);
 	}
 
 	public void delete(ActionEvent actionEvent) {
@@ -239,9 +300,9 @@ public class CategoryBean implements Serializable {
 									.getName()));
 		}
 		if (root == null) {
-			categoryService.createRoot(newName);
+			categoryService.createRoot(categoryNames);
 		} else {
-			categoryService.createCategory(newName,
+			categoryService.createCategory(categoryNames,
 					(Category) selectedNode.getData());
 		}
 
@@ -304,9 +365,12 @@ public class CategoryBean implements Serializable {
 
 	private FacesMessage setNewName(FacesMessage msg, long idCategory,
 			long idParent) throws CategoryException {
+		String language = "ro";
+		if (isEnglishSelected)
+			language = "en";
 		if (selectedParent == null
 				|| selectedParent.equals(selectedNode.getParent())) {
-			categoryService.updateCategoryName(idCategory, newName);
+			categoryService.updateCategoryName(idCategory, newName, language);
 			msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
 					internationalizationService.getMessage(ECategory.SUCCESS
 							.getName()),
@@ -315,7 +379,7 @@ public class CategoryBean implements Serializable {
 									.getName()));
 		} else if (selectedParent != null) {
 			categoryService.updateCategoryNameAndParent(idCategory, idParent,
-					newName);
+					newName, language);
 			msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
 					internationalizationService.getMessage(ECategory.SUCCESS
 							.getName()),

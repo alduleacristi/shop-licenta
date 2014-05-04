@@ -3,6 +3,7 @@ package com.siemens.ctbav.intership.shop.model;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.faces.context.FacesContext;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -14,6 +15,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.annotations.NamedNativeQueries;
 import org.hibernate.annotations.NamedNativeQuery;
 
@@ -47,6 +50,11 @@ public class Category implements Serializable {
 
 	@OneToMany(mappedBy = "category", fetch = FetchType.EAGER)
 	private List<Category> categories;
+
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@OneToMany
+	@JoinColumn(name = "id_category")
+	private List<CategoryName> names;
 
 	public Category() {
 	}
@@ -86,6 +94,14 @@ public class Category implements Serializable {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public List<CategoryName> getNames() {
+		return names;
+	}
+
+	public void setNames(List<CategoryName> names) {
+		this.names = names;
 	}
 
 	public String getIerarhie() {
@@ -144,6 +160,28 @@ public class Category implements Serializable {
 
 	@Override
 	public String toString() {
+		setLanguageName();
 		return name;
+	}
+
+	private void setLanguageName() {
+		String language = setlanguage();
+		for (CategoryName cn : names) {
+			if (cn.getLanguage().getLanguage().equals(language))
+				name = cn.getName();
+		}
+	}
+
+	private String setlanguage() {
+		Boolean b = (Boolean) FacesContext.getCurrentInstance()
+				.getExternalContext().getSessionMap().get("isEnglishSelected");
+		String language = null;
+		if (b == null)
+			language = "en";
+		else if (b)
+			language = "en";
+		else
+			language = "ro";
+		return language;
 	}
 }

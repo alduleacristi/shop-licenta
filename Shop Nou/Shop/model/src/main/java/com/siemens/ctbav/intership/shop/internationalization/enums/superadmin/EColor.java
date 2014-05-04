@@ -4,7 +4,8 @@ public enum EColor {
 	COLORS("colors"), COLOR_DETAIL("colorDetail"), COLOR_NAME("colorName"), COLOR_DESCRIPTION(
 			"colorDescription"), EDIT_COLOR("editTheColor"), SUCCESS("success"), ERROR(
 			"error"), COLOR_EDITED("colorEdited"), COLOR_ADDED("colorAdded"), COLOR_DELETED(
-			"colorDeleted"), CHOSE("chose");
+			"colorDeleted"), CHOSE("chose"), EXCEPTION("exception"), REQUIRED(
+			"required");
 
 	private final String name;
 

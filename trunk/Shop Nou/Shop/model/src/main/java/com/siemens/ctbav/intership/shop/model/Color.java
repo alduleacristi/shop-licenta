@@ -10,11 +10,14 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
-@NamedQueries({ @NamedQuery(name = Color.GET_ALL_COLORS, query = "SELECT c FROM Color c") })
+@NamedQueries({
+		@NamedQuery(name = Color.GET_ALL_COLORS, query = "SELECT c FROM Color c"),
+		@NamedQuery(name = Color.GET_OTHER_COLORS, query = "SELECT c FROM Color c where c.id != :id") })
 @Entity
 public class Color implements Serializable {
 
 	public final static String GET_ALL_COLORS = "getAllColors";
+	public final static String GET_OTHER_COLORS = "getOtherColors";
 	private static final long serialVersionUID = -8130216714000342315L;
 
 	@Id
@@ -74,7 +77,6 @@ public class Color implements Serializable {
 		result = prime * result + ((code == null) ? 0 : code.hashCode());
 		result = prime * result
 				+ ((description == null) ? 0 : description.hashCode());
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		return result;
 	}
@@ -97,11 +99,6 @@ public class Color implements Serializable {
 			if (other.description != null)
 				return false;
 		} else if (!description.equals(other.description))
-			return false;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
 			return false;
 		if (name == null) {
 			if (other.name != null)

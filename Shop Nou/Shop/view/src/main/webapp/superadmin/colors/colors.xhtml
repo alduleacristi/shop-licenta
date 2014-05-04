@@ -32,7 +32,8 @@
 						<h:outputLabel for="name"
 							value="#{internationalizationGeneric.name}:" />
 						<p:inputText id="name" label="name" value="#{colorsBean.newName}"
-							required="true" />
+							required="true"
+							requiredMessage="#{internationalizationColor.required}" />
 						<h:outputLabel for="description"
 							value="#{internationalizationColor.colorDescription}:" />
 						<p:inputText id="description" label="description"
@@ -89,7 +90,8 @@
 							rendered="#{colorsBean.selectedColor != null}">
 							<h:outputText value="#{internationalizationColor.colorName}: " />
 							<h:inputText value="#{colorsBean.selectedColor.name}"
-								required="true" />
+								required="true"
+								requiredMessage="#{internationalizationColor.required}" />
 							<h:outputText
 								value="#{internationalizationColor.colorDescription}: " />
 							<h:inputText value="#{colorsBean.selectedColor.description}" />

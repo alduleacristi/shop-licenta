@@ -17,6 +17,64 @@ create table category(
         on delete no action
 );
 
+drop table if exists language;
+create table language(
+	id bigint not null auto_increment primary key,
+	name varchar(20) not null,
+	language char(2) not null
+);
+
+drop table if exists categoryName;
+create table categoryName(
+	id bigint not null auto_increment primary key,
+	id_category bigint not null,
+	language bigint not null,
+	name varchar(20) not null,
+
+	foreign key id_category_name(id_category)
+	references category(id)
+	on update cascade
+	on delete no action,
+
+	foreign key id_category_name_language(language)
+	references language(id)
+	on update cascade
+	on delete no action
+);
+
+insert into language(name,language)
+	values ("English", "en"),
+			("Romana","ro");
+
+insert into category(name,id_parent)
+    values
+        ("Clothes",null),
+        ("Woman",1),
+        ("Men",1),
+        ("Children",1),
+        ("TShirt",2),
+        ("Shoes",2),
+        ("Boots",6),
+        ("Flip flop",6);
+insert into categoryName(id_category,language,name)
+values
+	(1,1,"Clothes"),
+	(1,2,"Haine"),
+	(2,1,"Women"),
+	(2,2,"Femei"),
+	(3,1,"Men"),
+	(3,2,"Barbati"),
+	(4,1,"Children"),
+	(4,2,"Copii"),
+	(5,1,"TShirt"),
+	(5,2,"Tricouri"),
+	(6,1,"Shoes"),
+	(6,2,"Papuci"),
+	(7,1,"Boots"),
+	(7,2,"Cizme"),
+	(8,1,"Flip flop"),
+	(8,2,"Slapi");
+
 /* create table product*/
 drop table if exists product;
 create table product(
@@ -321,18 +379,6 @@ INSERT INTO `Client` (`id`, `first_name`, `last_name`, `phone_number`) VALUES
 (23, 'Codrea', 'Andrei', '745693655'),
 (28, 'Andrei', 'Cozma', 0723456789);
 
-INSERT INTO `Category` (`id`, `name`, `id_parent`) VALUES
-(1, 'Clothes', NULL),
-(2, 'Woman', 1),
-(4, 'Children', 1),
-(5, 'TShirt', 2),
-(6, 'Shoes', 2),
-(7, 'Boots', 6),
-(8, 'Flip flop', 6),
-(11, 'Tshirt', 4),
-(13, 'Men', 1),
-(9, 'Tshirt', 13);
-
 INSERT INTO `Product` (`id`, `id_Category`, `name`, `description`, `price`, `perc_reduction`) VALUES
 (1, 5, 'V TShirt', 'Materials: 100% poliester', 20, 0),
 (2, 5, 'Polo TShirt', 'Materials: 95% cotton, 5% elastan', 30, 0),
@@ -340,8 +386,7 @@ INSERT INTO `Product` (`id`, `id_Category`, `name`, `description`, `price`, `per
 (4, 7, 'H & M', '0.2 Kg\r\nReal leather', 110, 0),
 (5, 8, 'Sport flip flop', '0.17 Kg\r\nWomen''s flip flop for spring', 35.99, 0),
 (6, 8, 'H & M flip flop', '0.14 Kg\r\nSummer edition 2014', 20, 0),
-(7, 5, 'Petite Perfect Tank', 'Materials: 95% cotton, 5% spandex.\r\nPerfect for summer', 100, 43),
-(8, 9, 'L/S Class V Shirt', 'Materials: 83% poliester, 17% elastan', 70, 35);
+(7, 5, 'Petite Perfect Tank', 'Materials: 95% cotton, 5% spandex.\r\nPerfect for summer', 100, 43);
 
 INSERT INTO `Color` (`id_Color`, `name`, `description`, `code`) VALUES
 (1, 'Red', 'Red Product', '#ff0000'),
@@ -367,9 +412,7 @@ INSERT INTO `product_color` (`id_prod_col`, `id_Product`, `id_Color`) VALUES
 (9, 6, 3),
 (10, 6, 4),
 (11, 4, 5),
-(12, 3, 10),
-(13, 8, 1),
-(14, 8, 3);
+(12, 3, 10);
 
 INSERT INTO `Size` (`id_Size`, `name`, `id_cat`) VALUES
 (1, 'XS', 5),
@@ -384,12 +427,12 @@ INSERT INTO `Size` (`id_Size`, `name`, `id_cat`) VALUES
 (10, '38', 6),
 (11, '39', 6),
 (12, '40', 6),
-(20, 'XS', 9),
-(21, 'S', 9),
-(22, 'M', 9),
-(23, 'L', 9),
-(24, 'XL', 9),
-(25, 'XXL', 9);
+(20, 'XS', 8),
+(21, 'S', 8),
+(22, 'M', 8),
+(23, 'L', 8),
+(24, 'XL', 8),
+(25, 'XXL', 8);
 
 INSERT INTO `product_color_size` (`id_pcs`, `id_prod_col`, `nr_pieces`, `id_Size`) VALUES
 (1, 1, 4, 1),
@@ -421,13 +464,7 @@ INSERT INTO `product_color_size` (`id_pcs`, `id_prod_col`, `nr_pieces`, `id_Size
 (27, 11, 45, 10),
 (28, 12, 3, 7),
 (29, 12, 4, 8),
-(30, 12, 5, 9),
-(31, 13, 23, 20),
-(32, 13, 9, 21),
-(33, 13, 7, 22),
-(34, 14, 5, 23),
-(35, 14, 8, 24),
-(36, 14, 9, 25);
+(30, 12, 5, 9);
 
 INSERT INTO `Country` (`id`, `name`) VALUES
 (1, 'Romania'),
@@ -494,13 +531,13 @@ INSERT INTO `Command` (`id`, `order_date`, `delivery_date`, `id_Adress`, `id_Cli
 (8, '2014-03-24', NULL, 25, 10, 1, NULL, NULL);
 
 INSERT INTO `client_product` (`id_client_product`, `id_Command`, `id_pcs`, `nr_pieces`, `perc_reduction`, `price`) VALUES
-(1, 7, 33, 1, 35, 70),
-(2, 7, 34, 5, 35, 70),
-(3, 7, 36, 2, 35, 70),
-(4, 7, 31, 10, 35, 70),
-(5, 8, 34, 5, 35, 70),
-(6, 8, 36, 2, 35, 70),
-(7, 8, 31, 10, 35, 70);
+(1, 7, 30, 1, 35, 70),
+(2, 7, 29, 5, 35, 70),
+(3, 7, 26, 2, 35, 70),
+(4, 7, 21, 10, 35, 70),
+(5, 8, 24, 5, 35, 70),
+(6, 8, 26, 2, 35, 70),
+(7, 8, 21, 10, 35, 70);
 
 insert into `comments` (`id_comments`,`id_product`,`id_user`,`comment`) values
 (1,1,7,"Comentariu 1");

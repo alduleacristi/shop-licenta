@@ -33,41 +33,135 @@
 				<h:outputText id="success"
 					value="#{internationalizationCreateAccount.succesMessage}"
 					rendered="#{createAccountStep2Bean.created}" />
+				&nbsp; <a href="/Shop4j/index" class="active">#{internationalizationMenuBox.home}</a>
 				<br />
 				<center>
 					<h:commandButton value="Login" id="login"
-						actionListener="#{createAccountBean.redirectLogin}"
-						rendered="#{createAccountStep2Bean.created}" styleClass="update-submit" />
+						actionListener="#{createAccountStep2Bean.redirectLogin}"
+						rendered="#{createAccountStep2Bean.created}"
+						styleClass="update-submit" />
+
+					<p:outputLabel
+						value="#{internationalizationCreateAccount.accidentalPage}"
+						rendered="#{createAccountStep2Bean.nullUser == true}" />
 				</center>
 
-				<p:panel header="#{internationalizationCreateAccount.header}">
-					<h:panelGrid rendered="#{createAccountStep2Bean.created == false}">
+				<p:panel header="#{internationalizationCreateAccount.header}"
+					rendered="#{createAccountStep2Bean.created == false and createAccountStep2Bean.nullUser == false}"
+					id="data">
+					
 						#{internationalizationCreateAccount.step2Message}
-						<br />
-						<br />
+					<br />
+					<br />
 
-						<h:panelGrid columns="2" cellpadding="10">
-							<h:outputLabel for="firstName"
-								value="#{internationalizationCreateAccount.firstName}:" />
-							<p:inputText id="firstName"
-								value="#{createAccountStep2Bean.firstName}" />
-							<h:outputLabel for="lastName"
-								value="#{internationalizationCreateAccount.lastName}:" />
-							<p:inputText id="lastName" value="#{createAccountStep2Bean.lastName}" />
-							<h:outputLabel for="phoneNumber"
-								value="#{internationalizationCreateAccount.phoneNumber}:" />
-							<p:inputText id="phoneNumber"
-								value="#{createAccountStep2Bean.phoneNumber}" />
-								
-							<h:commandButton
-									value="#{internationalizationCreateAccount.finish}"
-									actionListener="#{createAccountStep2Bean.createAccount}"
-									oncomplete="handleCreateRequest(xhr, status, args)"
-									update="login,messages" styleClass="create-account" />
-						</h:panelGrid>
+					<p:selectBooleanCheckbox
+						value="#{createAccountStep2Bean.addAdress}" id="addAdress">
+						<p:ajax event="change" update="@form"
+							listener="#{createAccountStep2Bean.createNewAdress}" />
+					</p:selectBooleanCheckbox>
+					&nbsp; <p:outputLabel style="color: #8b0000;size: 3px"
+						value="#{internationalizationCreateAccount.addAdress}" />
+					<h:panelGrid styleClass="sendCommandElement"
+						rendered="#{createAccountStep2Bean.addAdress == true}" columns="2"
+						id="adress">
+
+						<h:outputLabel for="Country"
+							value="#{internationalizationAddress.country}: " />
+						<p:selectOneMenu
+							value="#{createAccountStep2Bean.selectedCountryForNewAdress}"
+							id="Country" filter="true" filterMatchMode="startsWith"
+							style="width:200px">
+							<f:selectItem
+								itemLabel="#{internationalizationAddress.chooseCountry}" />
+							<f:selectItems
+								value="#{createAccountStep2Bean.countrysForNewAdress}" var="c"
+								itemLabel="#{c.name}" itemValue="#{c.idCountry}" />
+							<p:ajax event="valueChange" update="County" />
+						</p:selectOneMenu>
+
+						<h:outputLabel for="County"
+							value="#{internationalizationAddress.county} :" />
+						<p:selectOneMenu
+							value="#{createAccountStep2Bean.selectedCountyForNewAdress}"
+							id="County" filter="true" filterMatchMode="startsWith"
+							style="width:200px">
+							<f:selectItem
+								itemLabel="#{internationalizationAddress.chooseCounty}" />
+							<f:selectItems
+								value="#{createAccountStep2Bean.countysForNewAdress}" var="c"
+								itemLabel="#{c.name}" itemValue="#{c.idCounty}" />
+							<p:ajax event="valueChange" update="Locality" />
+						</p:selectOneMenu>
+
+						<h:outputLabel for="Locality"
+							value="#{internationalizationAddress.locality}: " />
+						<p:selectOneMenu
+							value="#{createAccountStep2Bean.selectedLocalityForNewAdress}"
+							id="Locality" filter="true" filterMatchMode="startsWith"
+							style="width:200px">
+							<f:selectItem
+								itemLabel="#{internationalizationAddress.chooseLocality}" />
+							<f:selectItems
+								value="#{createAccountStep2Bean.localitysForNewAdress}" var="l"
+								itemLabel="#{l.name}" itemValue="#{l.idLocality}" />
+						</p:selectOneMenu>
+
+						<h:outputLabel value="* #{internationalizationAddress.street}:"
+							for="street" />
+						<p:inputText value="#{createAccountStep2Bean.street}" id="street" />
+
+						<h:outputLabel value="* #{internationalizationAddress.number}:"
+							for="number" />
+
+						<p:inputText id="number" value="#{createAccountStep2Bean.number}"
+							required="true"
+							requiredMessage="#{internationalizationAddress.numberRequired}">
+							<f:convertNumber minIntegerDigits="1" />
+						</p:inputText>
+
+
+						<h:outputLabel value="Block:" for="block" />
+						<p:inputText id="block" value="#{createAccountStep2Bean.block}">
+							<f:convertNumber />
+						</p:inputText>
+
+
+						<h:outputLabel value="#{internationalizationAddress.staircase}:"
+							for="staircase" />
+						<p:inputText id="staircase"
+							value="#{createAccountStep2Bean.staircase}" />
+
+						<h:outputLabel value="#{internationalizationAddress.flat}:"
+							for="flat" />
+						<p:inputText id="flat" value="#{createAccountStep2Bean.flat}">
+							<f:convertNumber />
+						</p:inputText>
 					</h:panelGrid>
+					<br />
+					<br />
+					<h:panelGrid columns="2" cellpadding="10" id="personalData">
+						<h:outputLabel for="firstName"
+							value="#{internationalizationCreateAccount.firstName}:" />
+						<p:inputText id="firstName"
+							value="#{createAccountStep2Bean.firstName}" />
+						<h:outputLabel for="lastName"
+							value="#{internationalizationCreateAccount.lastName}:" />
+						<p:inputText id="lastName"
+							value="#{createAccountStep2Bean.lastName}" />
+						<h:outputLabel for="phoneNumber"
+							value="#{internationalizationCreateAccount.phoneNumber}:" />
+						<p:inputText id="phoneNumber"
+							value="#{createAccountStep2Bean.phoneNumber}" />
+					</h:panelGrid>
+
+					<h:commandButton
+						value="#{internationalizationCreateAccount.finish}"
+						actionListener="#{createAccountStep2Bean.createAccount}"
+						oncomplete="handleCreateRequest(xhr, status, args)"
+						update="login,messages" styleClass="create-account" />
+
 				</p:panel>
-				
+
 				<script type="text/javascript">
 					function handleCreateRequest(xhr, status, args) {
 						if (args.validationFailed || !args.create) {

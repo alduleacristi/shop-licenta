@@ -10,6 +10,8 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
+import org.apache.commons.codec.digest.DigestUtils;
+
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
 import com.siemens.ctbav.intership.shop.exception.client.NullUserException;
@@ -88,7 +90,9 @@ public class EditSecurityDataBean implements Serializable {
 	}
 
 	public String update() {
-		if (!oldClient.getUser().getUserPassword().equals(oldPassword)) {
+		String oldPassHsh = DigestUtils.md5Hex(oldPassword);
+
+		if (!oldClient.getUser().getUserPassword().equals(oldPassHsh)) {
 			FacesContext context = FacesContext.getCurrentInstance();
 			context.addMessage(
 					null,
@@ -103,7 +107,8 @@ public class EditSecurityDataBean implements Serializable {
 		}
 
 		User user = oldClient.getUser();
-		user.setUserPassword(client.getPassword());
+		String clientPassHash = DigestUtils.md5Hex(client.getPassword());
+		user.setUserPassword(clientPassHash);
 
 		try {
 			userService.update(user);

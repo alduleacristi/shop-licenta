@@ -7,6 +7,8 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.UserTransaction;
+
+import com.siemens.ctbav.intership.shop.exception.client.AdressDoesNotExistException;
 import com.siemens.ctbav.intership.shop.model.Adress;
 
 @Stateless(name="AdressServiceClient")
@@ -26,5 +28,12 @@ public class AdressService {
 		return adress;
 	}
 	
-
+	public void addAdress(Adress adress) throws AdressDoesNotExistException{
+		try{
+			em.persist(adress);
+			em.flush();
+		}catch(Exception e){
+			throw new AdressDoesNotExistException(e.getMessage());
+		}
+	}
 }

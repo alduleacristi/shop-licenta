@@ -10,13 +10,11 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
-import org.primefaces.context.RequestContext;
+import org.apache.commons.codec.digest.DigestUtils;
 
 import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import com.ocpsoft.pretty.faces.annotation.URLMappings;
 import com.siemens.ctbav.intership.shop.exception.UserException;
-import com.siemens.ctbav.intership.shop.internationalization.enums.superadmin.EManageUsers;
-import com.siemens.ctbav.intership.shop.model.Client;
 import com.siemens.ctbav.intership.shop.model.User;
 import com.siemens.ctbav.intership.shop.service.client.ClientService;
 import com.siemens.ctbav.intership.shop.service.internationalization.InternationalizationService;
@@ -32,10 +30,10 @@ public class CreateAccount implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@EJB
-	private ClientService clientService;
+	private InternationalizationService internationalizationService;
 
 	@EJB
-	private InternationalizationService internationalizationService;
+	private ClientService clientService;
 
 	private String username;
 	private String password;
@@ -103,48 +101,28 @@ public class CreateAccount implements Serializable {
 	}
 
 	public void addUser(ActionEvent actionEvent) {
+		FacesMessage msg = null;
 		User user = new User();
 		user.setEmail(email);
 		user.setUsername(username);
-		user.setUserPassword(password);
-		//user.setRolename(UsersRole.CLIENT);
+		user.setUserPassword(DigestUtils.md5Hex(password));
+		user.setRolename(UsersRole.CLIENT.toString());
+
+		try {
+			if (clientService.emailExists(user.getEmail()))
+				throw new UserException("Email exists");
+			if (clientService.usernameExists(user.getUsername()))
+				throw new UserException("Username exists");
+		} catch (UserException e) {
+			msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
+					e.getMessage());
+			NavigationUtils.addMessage(msg);
+			return;
+		}
+
+		FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
+				.put("createAccountStep2", user);
 
 		NavigationUtil.redirect("/Shop4j/client/CreateAccountStep2/");
-
-		// Client client = new Client();
-		// client.setUser(user);
-		// client.setFirstname("");
-		// client.setLastname("");
-		// FacesMessage msg = null;
-		// RequestContext context = RequestContext.getCurrentInstance();
-		// boolean create = false;
-		// try {
-		// if (clientService.emailExists(email))
-		// throw new UserException("Email exists");
-		// if (clientService.usernameExists(username))
-		// throw new UserException("Username exists");
-		// clientService.addClient(client);
-		// msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
-		// internationalizationService.getMessage(EManageUsers.SUCCESS
-		// .getName()),
-		// internationalizationService
-		// .getMessage(EManageUsers.USER_ADDED.getName()));
-		// created = true;
-		// FacesContext.getCurrentInstance().getExternalContext()
-		// .getSessionMap().put("created", created);
-		// create = true;
-		// } catch (UserException e) {
-		// msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error",
-		// e.getMessage());
-		// } finally {
-		// NavigationUtils.addMessage(msg);
-		// context.addCallbackParam("create", create);
-		// }
-	}
-
-	public void redirectLogin(ActionEvent actionEvent) {
-		FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
-				.remove("created");
-		NavigationUtils.redirect("/Shop4j/Login");
 	}
 }

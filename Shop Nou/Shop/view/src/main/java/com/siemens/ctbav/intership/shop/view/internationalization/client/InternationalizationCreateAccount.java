@@ -28,6 +28,8 @@ public class InternationalizationCreateAccount implements Serializable {
 	private String lastName;
 	private String phoneNumber;
 	private String finish;
+	private String accidentalPage;
+	private String addAdress;
 
 	@PostConstruct
 	private void init() {
@@ -107,6 +109,20 @@ public class InternationalizationCreateAccount implements Serializable {
 				.getName());
 
 		return finish;
+	}
+
+	public String getAccidentalPage() {
+		accidentalPage = internationalizationService
+				.getMessage(ECreateAccount.ACCIDENTAL.getName());
+
+		return accidentalPage;
+	}
+
+	public String getAddAdress() {
+		addAdress = internationalizationService
+				.getMessage(ECreateAccount.ADD_ADRESS.getName());
+
+		return addAdress;
 	}
 
 }

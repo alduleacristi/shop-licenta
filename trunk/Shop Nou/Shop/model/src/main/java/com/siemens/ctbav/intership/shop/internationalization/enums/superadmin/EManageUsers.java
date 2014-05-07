@@ -8,7 +8,8 @@ public enum EManageUsers {
 			"requiredEmail"), REQUIRED_PASSWORD("requiredPassword"), RETYPE_MUST_MATCH(
 			"retypeMustMatch"), INVALID_PASSWORD("invalidPassword"), LENGTH(
 			"length"), INVALID_EMAIL("invalidEmail"), REQUIRED_CAPTCHA(
-			"requiredCaptcha"), INVALID_CAPTCHA("invalidCaptcha"), TYPE("type");
+			"requiredCaptcha"), INVALID_CAPTCHA("invalidCaptcha"), TYPE("type"), ADRESS_ERROR(
+			"adressError"), ACCOUNT_ERROR("accountError");
 
 	private final String name;
 

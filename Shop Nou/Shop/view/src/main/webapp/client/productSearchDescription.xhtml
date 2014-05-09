@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:composite="http://java.sun.com/jsf/composite"
+	xmlns:custom="http://java.sun.com/jsf/composite/custom">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<title>Client</title>
+</h:head>
+<h:body>
+	<ui:composition template="/resources/template/template.xhtml">
+		<ui:define name="menu">
+			<ui:include src="/resources/template/client/menuBox.xhtml"></ui:include>
+		</ui:define>
+
+		<ui:define name="search">
+			<ui:include src="/resources/template/client/searchBox.xhtml"></ui:include>
+		</ui:define>
+
+		<ui:define name="categories">
+			<ui:include
+				src="/resources/template/client/productsCategoryBox.xhtml"></ui:include>
+		</ui:define>
+
+		<ui:define name="mainContent">
+			<h:form id="formChange">
+				<p:growl autoUpdate="true" showDetail="true" id="messageConverter" />
+				<b><p:outputLabel style="color: #8b0000;size: 3px"
+						value="The product is not in stock"
+						rendered="#{productDescriptionSearchClient.selectedProduct == null}" /></b>
+				<br />
+				<br />
+				<center>
+					<center>
+						<p:commandLink onclick="PF('galleryDialog').show()"
+							partialSubmit="true" process="@this">
+							<p:graphicImage
+								url="#{productDescriptionSearchClient.host}/Shop4j/rest/products/id#{productDescriptionSearchClient.getProductColorId(productDescriptionSearchClient.selectedProduct)}"
+								width="170" height="190" id="image" cache="false"
+								rendered="#{productDescriptionSearchClient.selectedProduct != null}">
+							</p:graphicImage>
+						</p:commandLink>
+					</center>
+					<p:tooltip for="image" showEffect="fade" hideEffect="fade"
+						value="Click to open gallery"></p:tooltip>
+				</center>
+				<p:dialog header="Gallery" widgetVar="galleryDialog"
+					id="descriptionDlg" showEffect="fade" hideEffect="explode"
+					modal="true">
+					<p:galleria id="refreshMe"
+						value="#{productDescriptionSearchClient.photos}" var="image"
+						panelWidth="500" panelHeight="250" showCaption="false"
+						rendered="#{productDescriptionSearchClient.selectedProduct != null}">
+						<p:graphicImage url="#{image}" height="250"
+							rendered="#{productDescriptionSearchClient.selectedProduct != null}">>
+						</p:graphicImage>
+					</p:galleria>
+				</p:dialog>
+				<br />
+				<br />
+				<div class="products2">
+					<div class="cl">&nbsp;</div>
+					<ul>
+						<li>
+							<div class="product-info2">
+								<h3>#{internationalizationProduct.productInfo}</h3>
+								<div class="reduction">
+									<p:outputLabel
+										value="-#{productDescriptionSearchClient.selectedProduct.reduction}%"
+										rendered="#{productDescriptionSearchClient.selectedProduct.reduction != 0.0}"
+										styleClass="reduction"></p:outputLabel>
+								</div>
+								<div class="product-desc">
+									<center>
+										<strong class="price">#{internationalizationProduct.name}</strong>
+										#{productDescriptionSearchClient.selectedProduct.name}<br />
+										<br /> <strong class="price">#{internationalizationProduct.category}</strong>
+										#{productDescriptionSearchClient.selectedProduct.category.name}<br />
+										<br /> <strong class="price">#{internationalizationProduct.price}</strong>
+										<p:outputLabel
+											value="#{productDescriptionSearchClient.selectedProduct.price}$"
+											rendered="#{productDescriptionSearchClient.selectedProduct.reduction == 0.0 and productDescriptionSearchClient.selectedProduct != null}"></p:outputLabel>
+										<p:outputLabel
+											value="#{productDescriptionSearchClient.selectedProduct.price}$"
+											rendered="#{productDescriptionSearchClient.selectedProduct.reduction != 0.0 and productDescriptionSearchClient.selectedProduct != null}"
+											style="text-decoration:line-through;"></p:outputLabel>
+										<br />
+										<p:outputLabel
+											value="#{productDescriptionSearchClient.selectedProduct.price - productDescriptionSearchClient.selectedProduct.price * productDescriptionSearchClient.selectedProduct.reduction / 100}$"
+											rendered="#{productDescriptionSearchClient.selectedProduct.reduction != 0.0 and productDescriptionSearchClient.selectedProduct != null}"></p:outputLabel>
+									</center>
+								</div>
+							</div>
+						</li>
+					</ul>
+				</div>
+				<div class="products2description">
+					<ul>
+						<li>
+							<div class="product-info2description">
+								<center>
+									<h3>#{internationalizationProduct.description}</h3>
+									<br></br>
+									<p:inputTextarea cols="55" rows="9" maxlength="200"
+										value="#{productDescriptionSearchClient.selectedProduct.description}"
+										readonly="true" style="width: 300px">
+									</p:inputTextarea>
+								</center>
+
+							</div>
+						</li>
+					</ul>
+				</div>
+				<div class="products2">
+					<ul>
+						<li>
+							<div class="product-info2">
+								<h3>#{internationalizationProduct.chooseColor}</h3>
+
+								<div style="width: 100%">
+									<br></br>
+									<p:selectOneMenu
+										value="#{productDescriptionSearchClient.idProductColor}"
+										style="width:175px">
+										<f:selectItem
+											itemLabel="#{internationalizationProduct.chooseColor}"></f:selectItem>
+										<f:selectItems id="selectColor"
+											value="#{productDescriptionSearchClient.productsColor}"
+											var="p" itemLabel="#{p.color.name}" itemValue="#{p.id}" />
+										<f:ajax event="valueChange"
+											listener="#{productDescriptionSearchClient.changeColor}"
+											update="selectSize,ava,addButton" render="formChange" />
+									</p:selectOneMenu>
+									<br /> <br />
+									<p:selectOneMenu id="selectProductColorSize"
+										value="#{productDescriptionSearchClient.idProductColorSize}"
+										style="width:175px">
+										<f:selectItem
+											itemLabel="#{internationalizationProduct.chooseSize}"></f:selectItem>
+										<f:selectItems id="selectSize"
+											value="#{productDescriptionSearchClient.productsColorSize}"
+											var="pcs" itemLabel="#{pcs.size.size}" itemValue="#{pcs.id}" />
+										<p:ajax event="valueChange"
+											listener="#{productDescriptionSearchClient.changeSize}"
+											update="ava,addButton" />
+									</p:selectOneMenu>
+									<br /> <br /> <strong class="price"><p:outputLabel
+											value="#{productDescriptionSearchClient.availabel}" id="ava"></p:outputLabel></strong>
+									<strong class="price">#{internationalizationProduct.nrPieces}</strong>
+									<p:inputText style="width:165px"
+										value="#{productDescriptionSearchClient.nrOfPieces}">
+										<f:converter converterId="NrOfPiecesConverter"></f:converter>
+									</p:inputText>
+									<br /> <br />
+									<p:commandButton value="#{internationalizationProduct.add}"
+										id="addButton" styleClass="update-submit"
+										disabled="#{!productDescriptionSearchClient.isAvailabel}"
+										actionListener="#{cart.addProductFromPage(productDescriptionSearchClient.productColorSize,productDescriptionSearchClient.nrOfPieces)}"
+										update="selectProductColorSize"
+										style="width:173px" />
+								</div>
+
+							</div>
+						</li>
+					</ul>
+					<div class="cl">&nbsp;</div>
+				</div>
+			</h:form>
+			<br />
+			<br />
+			<br />
+			<br />
+			<custom:comment
+				comments="#{productDescriptionSearchClient.selectedProduct.comments}"
+				name="Comments" style="width: 100%" paginator="true"
+				paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="5,10,15" rows="5" paginatorPosition="bottom"
+				type="none" buttonClassStyle="update-submit" buttonStyle="background:#8b0000;color:white" buttonName="Post comment"
+				buttonAction="#{CommentBeanVisitor.doAction(productDescriptionSearchClient.selectedProduct)}"
+				createNewComment="true" textareaStyle="width: 100%" required="true"
+				requiredMessage="You must type something as comment"
+				textareaValue="#{CommentBeanVisitor.newComment}"/>
+			<br />
+			<br />
+		</ui:define>
+
+		<ui:define name="advertise">
+			<ui:include src="/resources/template/advertise.xhtml"></ui:include>
+		</ui:define>
+
+		<ui:define name="footer">
+			<ui:include src="/resources/template/footer.xhtml"></ui:include>
+		</ui:define>
+	</ui:composition>
+
+
+
+</h:body>
+
+</html>

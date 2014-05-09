@@ -29,7 +29,7 @@ import com.siemens.ctbav.intership.shop.service.superadmin.PhotoService;
 @ViewScoped
 @URLMappings(mappings = {
 		@URLMapping(id = "productForClient", pattern = "/client/user/products/#{clientProducts.id}", viewId = "/client/user/productDescription.xhtml"),
-		@URLMapping(id = "product7", pattern = "/client/products/#{clientProducts.id}", viewId = "/client/productDescription.xhtml") })
+		@URLMapping(id = "product7", pattern = "/client/products/#{visitorProducts.id}", viewId = "/client/productDescription.xhtml") })
 public class VisitorProductsBean implements Serializable {
 
 	/**
@@ -64,6 +64,7 @@ public class VisitorProductsBean implements Serializable {
 
 	@PostConstruct
 	private void postConstruct() {
+		System.out.println("Postconstruct");
 		this.host = confService.getHost();
 
 		this.nrOfPieces = 1L;
@@ -88,11 +89,12 @@ public class VisitorProductsBean implements Serializable {
 	}
 
 	public void setId(long id) {
-		System.out.println("in setId clientProducts: " + id);
+		// System.out.println("in setId clientProducts: " + id);
 		this.id = id;
 		if (id != 0) {
 			try {
 				selectedProduct = productColorService.getProductById(id);
+				// System.out.println(selectedProduct);
 				// this.isAvailabel = false;
 				FacesContext.getCurrentInstance().getExternalContext()
 						.getSessionMap()
@@ -202,25 +204,27 @@ public class VisitorProductsBean implements Serializable {
 	}
 
 	public void showProduct(ProductColor product) {
+		String url = "/Shop4j/client/user/products/" + product.getId();
+
+		FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
+				.put("urlProduct", url);
+
 		FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
 				.put("myObj", product);
 
 		setId(product.getId());
-		String url = "/Shop4j/client/user/products/" + product.getId();
-		FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
-				.put("urlProduct", url);
 
 		if (FacesContext.getCurrentInstance().getExternalContext()
 				.getSessionMap().get("client") != null) {
-			redirect(url);
+			redirect("/Shop4j/client/user/products/" + product.getId());
 		} else {
-			redirect("/Shop4j/Login");
+			redirect("/Shop4j/client/products/" + product.getId());
 		}
 	}
 
 	public void changeSize() {
-		System.out.println("change size " + idProductColorSize + " "
-				+ isAvailabel);
+		// System.out.println("change size " + idProductColorSize + " "
+		// + isAvailabel);
 		try {
 			// idProductColorSize = (Long) event.getNewValue();
 			if (idProductColorSize == 0) {

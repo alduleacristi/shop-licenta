@@ -45,6 +45,7 @@ import com.siemens.ctbav.intership.shop.service.client.RecommandService;
 import com.siemens.ctbav.intership.shop.service.internationalization.InternationalizationService;
 import com.siemens.ctbav.intership.shop.util.Enum.CommandStatusEnum;
 import com.siemens.ctbav.intership.shop.util.client.CookieEncryption;
+import com.siemens.ctbav.intership.shop.util.client.NavigationUtil;
 
 @SessionScoped
 @ManagedBean(name = "cart")
@@ -246,6 +247,13 @@ public class Cart implements Serializable {
 
 	public void addProductFromPage(ProductColorSize pcs, Long nrOfProducts) {
 		internationalizationInit();
+
+		if (FacesContext.getCurrentInstance().getExternalContext()
+				.getSessionMap().get("client") == null) {
+
+			redirect("/Shop4j/Login");
+			return;
+		}
 
 		try {
 			addProduct(pcs, nrOfProducts);

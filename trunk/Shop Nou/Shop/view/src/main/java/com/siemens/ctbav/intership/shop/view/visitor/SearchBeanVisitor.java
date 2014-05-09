@@ -161,9 +161,11 @@ public class SearchBeanVisitor implements Serializable {
 
 		if (FacesContext.getCurrentInstance().getExternalContext()
 				.getSessionMap().get("client") != null) {
-			redirect(url);
+			redirect("/Shop4j/client/user/productSearchDescription/"
+					+ product.getId());
 		} else {
-			redirect("/Shop4j/Login");
+			redirect("/Shop4j/client/productSearchDescription/"
+					+ product.getId());
 		}
 	}
 

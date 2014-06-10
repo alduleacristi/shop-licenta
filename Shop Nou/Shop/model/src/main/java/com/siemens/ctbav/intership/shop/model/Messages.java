@@ -18,8 +18,10 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "messages")
 @NamedQueries({
-	@NamedQuery(name = Messages.GET_UNREPLIED_MESSAGES, query = "SELECT m FROM Messages m where m.isReplied = :isReplied")})
+	@NamedQuery(name = Messages.GET_UNREPLIED_MESSAGES, query = "SELECT m FROM Messages m where m.client.user.ban = 0 and  m.isReplied = :isReplied")})
 public class Messages implements Serializable{
+
+	
 
 	private static final long serialVersionUID = 408004164350412012L;
 	
@@ -63,6 +65,18 @@ public class Messages implements Serializable{
 		this.client = client;
 	}
 
+	
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public Long getId() {
+		return id;
+	}
 	public String getSubject() {
 		return subject;
 	}

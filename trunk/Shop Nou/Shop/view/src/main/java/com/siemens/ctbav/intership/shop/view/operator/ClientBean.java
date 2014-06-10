@@ -12,8 +12,10 @@ import org.primefaces.event.ToggleEvent;
 
 import com.siemens.ctbav.intership.shop.convert.operator.ConvertClient;
 import com.siemens.ctbav.intership.shop.convert.operator.ConvertCommand;
+import com.siemens.ctbav.intership.shop.convert.operator.ConvertUser;
 import com.siemens.ctbav.intership.shop.dto.operator.ClientDTO;
 import com.siemens.ctbav.intership.shop.dto.operator.CommandDTO;
+import com.siemens.ctbav.intership.shop.dto.operator.UserDTO;
 
 import com.siemens.ctbav.intership.shop.exception.operator.ClientWithOrdersException;
 import com.siemens.ctbav.intership.shop.report.operator.GenerateCSV;
@@ -25,6 +27,7 @@ import com.siemens.ctbav.intership.shop.report.operator.GenerateXML;
 import com.siemens.ctbav.intership.shop.service.operator.ClientService;
 import com.siemens.ctbav.intership.shop.service.operator.CommandService;
 import com.siemens.ctbav.intership.shop.service.operator.UserService;
+import com.siemens.ctbav.intership.shop.util.operator.MailService;
 
 //@URLMappings(mappings = {@URLMapping(id = "client", pattern = "/operator/clients", viewId = "operator/clients.xhtml") })
 @ManagedBean(name = "clients")
@@ -38,7 +41,7 @@ public class ClientBean {
 	@EJB
 	private UserService userService;
 	private List<ClientDTO> allClients;
-
+	private static final String accountdeleted="We are very sorry but your account has been deleted because it haven't been used in a very long time;";
 	private String[] reports;
 
 	public String[] getReports() {
@@ -99,11 +102,15 @@ public class ClientBean {
 						"There are products ordered by this client; you can't delete it ");
 			}
 			userService.deleteUserClient(username);
+			//aici voi trimite mail clientului ca sa il anunt ca i-a fost sters contul
+			UserDTO uDTO = ConvertUser.convertUser(userService.getUserByUsername(username));
+			System.out.println(uDTO);
+			MailService.sendLink(uDTO.getEmail(), "Account deleted", accountdeleted, false);
 			FacesContext.getCurrentInstance().getExternalContext();
 			FacesContext.getCurrentInstance().addMessage(
 					null,
 					new FacesMessage(FacesMessage.SEVERITY_INFO,
-							"Client deleted", "Client deleted"));
+							"Client deleted; the client has been notified", "Client deleted; the client has been notified"));
 			
 			FacesContext.getCurrentInstance().getExternalContext().redirect("clients.xhtml");
 		} catch (Exception e) {

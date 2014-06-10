@@ -19,7 +19,6 @@ import com.siemens.ctbav.intership.shop.dto.operator.UserDTO;
 import com.siemens.ctbav.intership.shop.exception.operator.UserNotFoundException;
 import com.siemens.ctbav.intership.shop.service.operator.UserService;
 import com.siemens.ctbav.intership.shop.util.operator.AES;
-import com.siemens.ctbav.intership.shop.util.operator.Interval;
 
 @Stateless
 @Path("/passwordRecovery")

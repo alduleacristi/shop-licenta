@@ -272,5 +272,12 @@ public class UserService {
 			throw new EJBException(exc);
 		}
 	}
+	
+	public void banUser(User u) throws UserNotFoundException{
+		if(u== null) throw new UserNotFoundException();
+		User user = em.find(User.class, u.getId());
+		user.setBan(1);
+		em.merge(user);
+	}
 
 }

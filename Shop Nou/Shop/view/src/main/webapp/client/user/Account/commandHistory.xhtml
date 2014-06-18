@@ -46,11 +46,7 @@
 							<p:dataGrid var="p" value="#{c.clientProducts}" columns="3"
 								rows="3" paginator="true" paginatorPosition="bottom">
 								<center>
-									<p:rating value="#{p.product.productcolor.product.rating}"
-										stars="10">
-										<p:ajax event="rate" listener="#{CommandBean.onrate}" />
-										<p:ajax event="cancel" listener="#{CommandBean.oncancel}" />
-									</p:rating>
+
 									<br />
 									<p:graphicImage
 										url="http://localhost:8080/Shop4j/rest/products/id#{p.product.productcolor.id}"
@@ -72,20 +68,19 @@
 								</center>
 								<br />
 
-								<center>
-									<strong> <p:outputLabel value="#{CommandBean.message}"
-											rendered="#{CommandBean.isAlreadySaved(c)}"></p:outputLabel></strong>
 
-									<p:commandButton rendered="#{CommandBean.canBeReturned(c)}"
-										value="Return command"
-										style="background: #8b0000;color: #fff;"
-										action="#{CommandBean.setSelectedOrder(c)}"
-										oncomplete="PF('dialog').show()"></p:commandButton>
-								</center>
 
 							</p:dataGrid>
 
+							<center>
+								<strong> <p:outputLabel value="#{CommandBean.message}"
+										rendered="#{CommandBean.isAlreadySaved(c)}"></p:outputLabel></strong>
 
+								<p:commandButton rendered="#{CommandBean.canBeReturned(c)}"
+									value="Return command" style="background: #8b0000;color: #fff;"
+									action="#{CommandBean.setSelectedOrder(c)}"
+									oncomplete="PF('dialog').show()"></p:commandButton>
+							</center>
 						</p:carousel>
 						<p:dialog id="dlg" header="Returned products" widgetVar="dialog"
 							width="600" showEffect="explode" hideEffect="explode">

@@ -147,9 +147,9 @@ public class LoginBean implements Serializable {
 		try {
 			User user = userService
 					.getClientByUsername(this.user.getUserName());
-
+				System.out.println("userul este : " + user);
 			String hashPass = DigestUtils.md5Hex(this.user.getPassword());
-			request.login(this.user.getUserName(), hashPass);
+			request.login(this.user.getUserName(), this.user.getUserName());
 			if (user.getBan() == 1)
 				throw new UserException("User is banned");
 			this.logged = true;
@@ -196,16 +196,19 @@ public class LoginBean implements Serializable {
 				}
 			}
 		} catch (ServletException e) {
+			//System.out.println("servlet exc");
 			FacesContext context = FacesContext.getCurrentInstance();
 			context.addMessage(null, new FacesMessage(
 					FacesMessage.SEVERITY_ERROR, "Error ",
 					"Incorect User name or password."));
 		} catch (IOException e) {
+			//System.out.println("ioexc");
 			FacesContext context = FacesContext.getCurrentInstance();
 			context.addMessage(null, new FacesMessage(
 					FacesMessage.SEVERITY_ERROR, "Error ",
 					"Incorect User name or password."));
 		} catch (ClientDoesNotExistException e) {
+			System.out.println("in exceptie: " + user.getUserName());
 			FacesContext context = FacesContext.getCurrentInstance();
 			context.addMessage(null, new FacesMessage(
 					FacesMessage.SEVERITY_ERROR, "Error ",

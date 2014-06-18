@@ -25,6 +25,8 @@ public class CancelOrder {
 			@Context HttpServletResponse response) {
 		
 		System.out.println(order);
+		order=order.replace('*','/');
+		System.out.println(order);
 		String contextPath = request.getContextPath();
 		redirectTo(response, contextPath,"/cancelOrder.xhtml?order=" + order);
 		return Response.status(Status.ACCEPTED).build();

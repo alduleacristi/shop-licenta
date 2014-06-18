@@ -66,25 +66,36 @@ public class UserService {
 
 	public void deleteUser(Long id) throws UserException {
 		User u = em.find(User.class, id);
+		System.out.println(u);
 		if (u == null)
 			throw new UserException(
 					internationalizationService.getMessage("userNotFound") + id);
+		System.out.println("inainte de remove");
 		em.remove(u);
+		System.out.println("dupa remove");
 	}
 
 	public void deleteUserClient(String username) throws UserException,
 			UserNotFoundException {
-		// try {
-		// userTransaction.begin();
+		 try {
+//		 userTransaction.begin();
 
-		System.out.println("in tranzactie");
+		System.out.println("in metoda service");
 		Long id = getUserId(username);
-		deleteUser(id);
+		System.out.println("id " + id);
+		User u = em.find(User.class, id);
+		System.out.println(u);
+		if (u == null)
+			throw new UserException(
+					internationalizationService.getMessage("userNotFound") + id);
+		System.out.println("inainte de remove");
+		em.remove(u);
+		System.out.println("dupa remove");
 
 		// userTransaction.commit();
-		// } catch (Exception exc) {
-
-		// }
+		 } catch (Exception exc) {
+			 	System.out.println("in exceptie");
+		 }
 	}
 
 	public User getUserByUsername(String username) throws UserException,

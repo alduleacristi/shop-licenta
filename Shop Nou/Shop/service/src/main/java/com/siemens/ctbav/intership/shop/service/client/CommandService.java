@@ -109,9 +109,11 @@ public class CommandService {
 	@SuppressWarnings("unchecked")
 	public boolean willBeReturned(ReturnedOrdersDTO order) {
 
+		System.out.println("id " + order.getCommand().getId());
 		List<ReturnedOrders> list = em
 				.createNamedQuery(ReturnedOrders.getReturnedOrder)
 				.setParameter("id", order.getCommand().getId()).getResultList();
+		System.out.println("size " + list.size());
 		if (list != null && list.size() == 1)
 			return true;
 		return false;

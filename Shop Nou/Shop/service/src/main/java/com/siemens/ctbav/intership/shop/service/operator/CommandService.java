@@ -49,10 +49,12 @@ public class CommandService {
 	@SuppressWarnings("unchecked")
 	public List<ReturnedOrders> getReturnedOrders()
 			throws CommandNotFoundException {
+		System.out.println("iau comenzule returnate");
 		List<ReturnedOrders> list = em.createNamedQuery(
 				ReturnedOrders.getAllReturnedOrders).getResultList();
 		if (list == null || list.size() == 0)
 			throw new CommandNotFoundException("There are no returned orders");
+		System.out.println("size : " + list.size());
 		return list;
 	}
 
@@ -260,6 +262,7 @@ public class CommandService {
 	@SuppressWarnings("unchecked")
 	public void addReturnedProductsPieces(ClientProductDTO cp) throws ProductDoesNotExistException {
 		Long nrPieces = cp.getNrPieces();
+		System.out.println("nr bucati de adaugat " + cp.getNrPieces());
 		ProductColorSizeDTO pcs = cp.getProduct();
 		List<ProductColorSize> products = em
 				.createNamedQuery(ProductColorSize.GET_PRODUCT_COLOR_SIZE)
@@ -293,6 +296,14 @@ public class CommandService {
 		ord.setRetreived(true);
 		em.merge(ord);
 		
+	}
+
+	public List<ReturnedProducts> getProductsReturned(Long idOrder) {
+		
+		List<ReturnedProducts> list = new ArrayList<ReturnedProducts>();
+		list= em.createNamedQuery(ReturnedProducts.getReturnedProductsForOrder).getResultList();
+		System.out.println("rezultate: "+ list.size());
+		return list;
 	}
 
 }

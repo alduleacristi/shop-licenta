@@ -39,146 +39,117 @@
 						styleClass="search-submitLong" />
 					<br />
 					<br />
-					<p:dataTable id="ordersTable" var="order"
-						value="#{orders.orderList}" paginator="true" rows="10"
-						paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
-						paginatorPosition="bottom" rowsPerPageTemplate="3,6,9,12,15"
-						selection="#{orders.selectedOrder}" rowKey="#{order.id}"
-						selectionMode="single">
 
-						<p:column style="width:7%">
+					<p:dataScroller value="#{orders.orderList}" var="order"
+						chunkSize="3">
+						<f:facet name="header">
+           Orders
+        </f:facet>
 
-							<f:facet name="header">  
-                    Order date 
-         		   </f:facet>
-							<h:outputText value="#{order.orderDate}" />
-						</p:column>
-						<p:column style="width:20%">
-							<f:facet name="header">  
-                  First name
-            </f:facet>
-							<h:outputText value="#{order.client.firstName}" />
-						</p:column>
-						<p:column style="width:20%">
-							<f:facet name="header">  
-                   Last name
-            </f:facet>
-							<h:outputText value="#{order.client.lastName}" />
-						</p:column>
-						<p:column style="width:10%">
-							<f:facet name="header">  
-                   Phone number
-            </f:facet>
-							<h:outputText value="#{order.client.phoneNumber}" />
-						</p:column>
-						<p:column style="width:30%">
-							<f:facet name="header">  
-                  Email
-            </f:facet>
-							<h:outputText value="#{order.client.user.email}" />
-						</p:column>
-
-						<p:column exportable="false">
-
-							<p:commandButton value="Deliver order"
-								actionListener="#{orders.deliveredOrder(order)}"
-								styleClass="ui-priority-primary" update=":form:error" />
-						</p:column>
-
-						<p:column>
-
-							<p:commandButton value="Change order"
-								actionListener="#{orders.changeOrder(order)}"
-								styleClass="ui-priority-primary" update=":form:error" />
-						</p:column>
-						<f:facet name="footer">
-							<p:commandButton value="View" icon="ui-icon-search"
-								update=":form:display" oncomplete="PF('dialog').show()"></p:commandButton>
-						</f:facet>
-						<p:growl id="growl" />
-					</p:dataTable>
-					<br></br>
-					<br></br>
-					<br></br>
-
-
-
-
-					<p:dialog header="Order details" widgetVar="dialog" width="600"
-						showEffect="explode" hideEffect="explode">
-						<p:dataTable id="display" var="prodClient"
-							value="#{orders.selectedOrder.listProducts}" border="1">
-
-							<f:facet name="header">
-						Adress:<br></br>  #{orders.selectedOrder.adress.locality}, number #{orders.selectedOrder.adress.number} block #{orders.selectedOrder.adress.block} staircase #{orders.selectedOrder.adress.staircase} apartament #{orders.selectedOrder.adress.flat}
-						</f:facet>
-
-							<p:column>
-								<f:facet name="header">
+						<h:panelGrid style="width:100%"
+							columnClasses="logo,detail">
+ 
+							<p:outputPanel>
+								<h:panelGrid columns="2" cellpadding="5">
+									<p:panel>
+										<h:outputText value="Order date:" />
+										<h:outputText value="#{order.orderDate}"
+											style="font-weight: bold" />
+<br></br>
+										<h:outputText value="Client:" />
+										<h:outputText
+											value="#{order.client.firstName} #{order.client.lastName}"
+											style="font-weight: bold" />
+<br></br>
+										<h:outputText value="Phone number:" />
+										<h:outputText value="#{order.client.phoneNumber}"
+											style="font-weight: bold"></h:outputText>
+<br></br>
+										<h:outputText value="Adress:" />
+										<h:outputText
+											value="#{order.adress.locality} , number #{order.adress.number} block #{order.adress.block} staircase #{order.adress.staircase} apartament #{order.adress.flat}"
+											style="font-weight: bold" />
+<br></br>
+									</p:panel>
+									<p:panel>
+										<p:commandButton value="Deliver order"
+											actionListener="#{orders.deliveredOrder(order)}"
+											styleClass="ui-priority-primary" update=":form:error" />
+											
+											<p:commandButton value="Change order"
+											actionListener="#{orders.deliveredOrder(order)}"
+											styleClass="ui-priority-primary" update=":form:error" />
+									</p:panel>
+									</h:panelGrid>
+									<p:dataTable id="display" var="prodClient"
+										value="#{order.listProducts}" border="1">
+										<p:column>
+											<f:facet name="header">
 									Product
 							</f:facet>
-								<h:outputText
-									value="#{prodClient.product.prodColor.product.name}"></h:outputText>
-							</p:column>
+											<h:outputText
+												value="#{prodClient.product.prodColor.product.name}"></h:outputText>
+										</p:column>
 
-							<p:column>
-								<f:facet name="header">
+										<p:column>
+											<f:facet name="header">
 									Description
 							</f:facet>
-								<h:outputText
-									value="#{prodClient.product.prodColor.product.description}"></h:outputText>
-							</p:column>
+											<h:outputText
+												value="#{prodClient.product.prodColor.product.description}"></h:outputText>
+										</p:column>
 
-							<p:column>
-								<f:facet name="header">
-									Category
-							</f:facet>
-								<h:outputText
-									value="#{prodClient.product.prodColor.product.category.name}"></h:outputText>
-							</p:column>
-							<p:column>
-								<f:facet name="header">
+										<!-- 										<p:column> -->
+										<!-- 											<f:facet name="header"> -->
+										<!-- 									Category -->
+										<!-- 							</f:facet> -->
+										<!-- 											<h:outputText -->
+										<!-- 												value="#{prodClient.product.prodColor.product.category.name}"></h:outputText> -->
+										<!-- 										</p:column> -->
+										<p:column>
+											<f:facet name="header">
 									Color
 							</f:facet>
-								<h:outputText value="#{prodClient.product.prodColor.color.name}"></h:outputText>
-							</p:column>
-							<p:column>
-								<f:facet name="header">
+											<h:outputText
+												value="#{prodClient.product.prodColor.color.name}"></h:outputText>
+										</p:column>
+										<p:column>
+											<f:facet name="header">
 									Price
 							</f:facet>
-								<h:outputText
-									value="#{prodClient.product.prodColor.product.price}"></h:outputText>
-							</p:column>
+											<h:outputText
+												value="#{prodClient.product.prodColor.product.price}"></h:outputText>
+										</p:column>
 
-							<p:column>
-								<f:facet name="header">
+										<p:column>
+											<f:facet name="header">
 									Number of pieces
 							</f:facet>
-								<h:outputText value="#{prodClient.nrPieces}"></h:outputText>
-							</p:column>
+											<h:outputText value="#{prodClient.nrPieces}"></h:outputText>
+										</p:column>
 
-							<p:column>
-								<f:facet name="header">
+										<p:column>
+											<f:facet name="header">
 									Procent reduction
 							</f:facet>
-								<h:outputText value="#{prodClient.percReduction}"></h:outputText>
-							</p:column>
-							<p:column>
-								<f:facet name="header">
+											<h:outputText value="#{prodClient.percReduction}"></h:outputText>
+										</p:column>
+										<p:column>
+											<f:facet name="header">
 									Price
 							</f:facet>
-								<h:outputText value="#{prodClient.price}"></h:outputText>
-							</p:column>
+											<h:outputText value="#{prodClient.price}"></h:outputText>
+										</p:column>
 
-							<p:column>
-								<f:facet name="header">
+										<p:column>
+											<f:facet name="header">
 									Total price
 							</f:facet>
-								<h:outputText value="#{prodClient.totalPrice()}"></h:outputText>
-							</p:column>
+											<h:outputText value="#{prodClient.totalPrice()}"></h:outputText>
+										</p:column>
 
-							<f:facet name="footer">
-								Total price: #{orders.total()}
+										<f:facet name="footer">
+								Total price: #{orders.total(order)}
 								<br></br>
 								#{orders.message()}
 								<br></br>
@@ -186,10 +157,11 @@
 								<br></br>
 								Total price(transport included) : #{orders.totalPerOrder}
 						</f:facet>
-						</p:dataTable>
-
-					</p:dialog>
-					<br></br>
+									</p:dataTable>
+								
+							</p:outputPanel>
+						</h:panelGrid>
+					</p:dataScroller>
 
 					<h:selectManyCheckbox value="#{orders.reports}">
 
@@ -206,11 +178,10 @@
 					<h:commandButton value="Generate my reports, please"
 						styleClass="search-submitLong"
 						actionListener="#{orders.generateReports}" update=":form:error" />
-
 				</p:growl>
 			</h:form>
 		</ui:define>
-		
+
 	</ui:composition>
 
 </h:body>

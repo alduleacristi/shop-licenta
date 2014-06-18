@@ -81,6 +81,11 @@
 		<url-pattern>/rest/*</url-pattern>
 	</servlet-mapping>
 
+<!-- <servlet> -->
+<!-- 	<servlet-name>Push Servlet</servlet-name> -->
+<!-- 	<servlet-class>org.primefaces.push.PushServlet</servlet-class> -->
+<!-- 	<async-supported>true</async-supported> -->
+<!-- </servlet> -->
 	<servlet>
 		<servlet-name>facesServlet</servlet-name>
 		<servlet-class>javax.faces.webapp.FacesServlet</servlet-class>

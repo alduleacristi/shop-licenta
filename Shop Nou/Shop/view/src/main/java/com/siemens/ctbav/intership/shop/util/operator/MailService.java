@@ -13,8 +13,7 @@ import javax.mail.internet.MimeMessage;
 
 public class MailService {
 
-	static final String username = "shop4j@yahoo.com",
-			password = "Licenta1";
+	static final String username = "shop4j@yahoo.com", password = "Licenta1";
 	static String smtpServ = "smtp.mail.yahoo.com";
 
 	public static void sendLink(String to, String subject, String mess,
@@ -32,10 +31,9 @@ public class MailService {
 					}
 				});
 
-		
 		if (isHtml) {
-			System.out.println("trimit html");
-			MimeMessage message= new MimeMessage(session);
+			//System.out.println("trimit html");
+			MimeMessage message = new MimeMessage(session);
 			message.setContent(mess, "text/html; charset=utf-8");
 			message.saveChanges();
 			message.setFrom(new InternetAddress(username));
@@ -43,18 +41,17 @@ public class MailService {
 					InternetAddress.parse(to));
 			message.setSubject(subject);
 			Transport.send(message);
-		}
-		else{
-		Message message2 = new MimeMessage(session);
-		message2.setFrom(new InternetAddress(username));
-		message2.setRecipients(Message.RecipientType.TO,
-				InternetAddress.parse(to));
-		message2.setSubject(subject);
-		message2.setText(mess);
-		Transport.send(message2);
-		}
+		} else {
 
-		
+			System.out.println("trimit mail "+ to);
+			Message message2 = new MimeMessage(session);
+			message2.setFrom(new InternetAddress(username));
+			message2.setRecipients(Message.RecipientType.TO,
+					InternetAddress.parse(to));
+			message2.setSubject(subject);
+			message2.setText(mess);
+			Transport.send(message2);
+		}
 
 		System.out.println("Done");
 

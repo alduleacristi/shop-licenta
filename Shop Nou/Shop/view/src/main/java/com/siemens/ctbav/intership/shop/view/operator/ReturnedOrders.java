@@ -21,6 +21,7 @@ import com.siemens.ctbav.intership.shop.dto.operator.ReturnedOrdersDTO;
 import com.siemens.ctbav.intership.shop.dto.operator.ReturnedProductsDTO;
 import com.siemens.ctbav.intership.shop.exception.client.ProductDoesNotExistException;
 import com.siemens.ctbav.intership.shop.exception.operator.CommandNotFoundException;
+import com.siemens.ctbav.intership.shop.model.ReturnedProducts;
 import com.siemens.ctbav.intership.shop.service.operator.CommandService;
 
 @RequestScoped
@@ -33,13 +34,14 @@ public class ReturnedOrders {
 	private List<ReturnedOrdersDTO> returnedOrders;
 	private List<ReturnedProductsDTO> returnedProducts;
 	private List<Long> pieces;
-	private Iterator it;
+	//private Iterator it;
 
 	@PostConstruct
 	public void postConstruct() {
-		setPieces(new ArrayList<Long>());
-		returnedProducts = new ArrayList<ReturnedProductsDTO>();
-		try {
+		System.out.println("in post construct");
+	//	setPieces(new ArrayList<Long>());
+	//	returnedProducts = new ArrayList<ReturnedProductsDTO>();
+		try { 
 			setReturnedOrders(ConvertReturnedOrders
 					.convertListOfReturnedOrders(commService
 							.getReturnedOrders()));
@@ -69,12 +71,20 @@ public class ReturnedOrders {
 
 	public List<ReturnedProductsDTO> productList(ReturnedOrdersDTO order) {
 
-		for (ClientProductDTO cp : order.getCommand().getListProducts())
-			pieces.add(cp.getNrPieces());
-		it = pieces.iterator();
-		returnedProducts = ConvertReturnedProduct.convertList((commService
-				.getReturnedProductsForOrder(order)));
+//		for (ClientProductDTO cp : order.getCommand().getListProducts())
+//			pieces.add(cp.getNrPieces());
+//		it = pieces.iterator();
+//		returnedProducts = ConvertReturnedProduct.convertList((commService
+//				.getReturnedProductsForOrder(order)));
+//		return returnedProducts;
+		
+//		for (ClientProductDTO cp : order.getCommand().getListProducts())
+//			pieces.add(cp.getNrPieces());
+	//	it = pieces.iterator();
+		Long idOrder = order.getId();
+		returnedProducts=ConvertReturnedProduct.convertList(commService.getProductsReturned(idOrder));
 		return returnedProducts;
+		
 	}
 
 	public void returnOrder(ReturnedOrdersDTO order) {
@@ -83,6 +93,7 @@ public class ReturnedOrders {
 				.getExternalContext();
 		context.getFlash().setKeepMessages(true);
 		// adaug nr de bucati in baza
+		
 		List<ProductColorSizeDTO> excProducts = updateStock(order);
 		StringBuilder message = new StringBuilder("The stock has been updated");
 		StringBuilder names = new StringBuilder();
@@ -116,6 +127,7 @@ public class ReturnedOrders {
 			ProductColorSizeDTO prod = cp.getProduct();
 			if (isReturned(prod)) {
 				try {
+				//	System.out.println(prod+ " " + cp.getNrPieces());
 					commService.addReturnedProductsPieces(cp);
 				} catch (ProductDoesNotExistException e) {
 					excProducts.add(prod);
@@ -151,8 +163,9 @@ public class ReturnedOrders {
 	}
 
 	public long piecesForProduct() {
-		if (it.hasNext())
-			return (Long) it.next();
+		
+//		if (it!= null && it.hasNext())
+//			return (Long) it.next();
 		return 0;
 	}
 

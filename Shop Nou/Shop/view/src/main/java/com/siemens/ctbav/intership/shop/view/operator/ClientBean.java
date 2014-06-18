@@ -1,5 +1,6 @@
 package com.siemens.ctbav.intership.shop.view.operator;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -7,6 +8,7 @@ import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import org.primefaces.event.ToggleEvent;
 
@@ -41,7 +43,7 @@ public class ClientBean {
 	@EJB
 	private UserService userService;
 	private List<ClientDTO> allClients;
-	private static final String accountdeleted="We are very sorry but your account has been deleted because it haven't been used in a very long time;";
+	private static final String accountdeleted="We are very sorry but your account has been deleted because it hasn't been used in a very long time;";
 	private String[] reports;
 
 	public String[] getReports() {
@@ -92,33 +94,48 @@ public class ClientBean {
 	}
 
 	public void deleteClient(String username) {
+		ExternalContext context = FacesContext.getCurrentInstance()
+				.getExternalContext();
+		context.getFlash().setKeepMessages(true);
 		try {
+		//	System.out.println("username: " +username);
 			Long id = userService.getUserId(username);
-			System.out.println(id);
+		//	System.out.println("id: " + id);
 			List<CommandDTO> ordersList = ConvertCommand
 					.convertListOfOrders(commService.getOrdersForClient(id));
 			if (ordersList.size() > 0) {
+				System.out.println("There are products ordered by this client; you can't delete it ");
 				throw new ClientWithOrdersException(
 						"There are products ordered by this client; you can't delete it ");
 			}
-			userService.deleteUserClient(username);
-			//aici voi trimite mail clientului ca sa il anunt ca i-a fost sters contul
+			else System.out.println("se poate sterge");
+			System.out.println("in bean inainte de apel service");
 			UserDTO uDTO = ConvertUser.convertUser(userService.getUserByUsername(username));
-			System.out.println(uDTO);
+			System.out.println("inainte de send mail");
 			MailService.sendLink(uDTO.getEmail(), "Account deleted", accountdeleted, false);
+			userService.deleteUserClient(username);
+//			
+			
 			FacesContext.getCurrentInstance().getExternalContext();
 			FacesContext.getCurrentInstance().addMessage(
 					null,
 					new FacesMessage(FacesMessage.SEVERITY_INFO,
 							"Client deleted; the client has been notified", "Client deleted; the client has been notified"));
 			
-			FacesContext.getCurrentInstance().getExternalContext().redirect("clients.xhtml");
 		} catch (Exception e) {
 			FacesContext.getCurrentInstance().addMessage(
 					null,
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, e
 							.getMessage(), "Please try again later."));
+			
 			return;
+		}
+		finally{
+			try {
+				FacesContext.getCurrentInstance().getExternalContext().redirect("clients.xhtml");
+			} catch (IOException e) {
+				System.out.println("fara redirect");
+			}
 		}
 	}
 

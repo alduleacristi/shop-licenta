@@ -14,18 +14,18 @@ import javax.persistence.OneToOne;
 
 @Entity
 @NamedQueries({
-		@NamedQuery(name = ReturnedProducts.getReturnedProductsForOrder, query = "SELECT p from ReturnedProducts p where p.command.id=:id") })
+		@NamedQuery(name = ReturnedProducts.getReturnedProductsForOrder, query = "SELECT p from ReturnedProducts p") })
 public class ReturnedProducts implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	public final static String getReturnedProductsForOrder = "getReturnedProductsForOrder";
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private Long idreturnedproducts;
 
-	@ManyToOne
-	@JoinColumn(name = "id_command")
-	private ReturnedOrders command;
+//	@ManyToOne
+//	@JoinColumn(name = "id_command")
+//	private ReturnedOrders command;
 
 	@OneToOne
 	@JoinColumn(name = "id_product")
@@ -36,21 +36,13 @@ public class ReturnedProducts implements Serializable {
 	}
 
 	public ReturnedProducts(ReturnedOrders command, ProductColorSize product) {
-		this.command = command;
+		//this.command = command;
 		this.product = product;
 	}
 
 	
 	public Long getIdreturnedproducts() {
-		return id;
-	}
-
-	public ReturnedOrders getCommand() {
-		return command;
-	}
-
-	public void setCommand(ReturnedOrders command) {
-		this.command = command;
+		return idreturnedproducts;
 	}
 
 	public ProductColorSize getProduct() {

@@ -12,6 +12,8 @@ import javax.faces.bean.RequestScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
+import org.primefaces.event.SelectEvent;
+
 import com.siemens.ctbav.intership.shop.convert.operator.ConvertCommand;
 import com.siemens.ctbav.intership.shop.dto.operator.ClientProductDTO;
 import com.siemens.ctbav.intership.shop.dto.operator.CommandDTO;
@@ -37,6 +39,7 @@ public class OrdersBean {
 	private double transport = (double) 0;
 	private static final String clientHasToPayTransport = "Client will have to pay 20 RON for transport";
 	private static final String clientDoesentHaveToPayTransport = "The client doesen't have to pay transport";
+	private static final String clientNotification="Your products are on their way";
 	private List<CommandDTO> orderList;
 	private String[] reports;
 	@EJB
@@ -51,7 +54,7 @@ public class OrdersBean {
 	public List<CommandDTO> getOrderList() {
 		return orderList;
 	}
-
+	
 	private CommandDTO selectedOrder;
 
 	public CommandDTO getSelectedOrder() {
@@ -152,6 +155,8 @@ public class OrdersBean {
 					null,
 					new FacesMessage(FacesMessage.SEVERITY_INFO,
 							"Order delivered", "Order delivered"));
+			String email = order.getClient().getUser().getEmail();
+			MailService.sendLink(email, "Notification", clientNotification, false);
 			context.redirect("orders.xhtml");
 		} catch (NotEnoughProductsException e) {
 			System.out.println("not enough, trimit mail");
@@ -187,6 +192,9 @@ public class OrdersBean {
 		System.out.println("trimit");
 		// creez pagina de html pe care vreau sa o trimit clientului
 		String encryptedId = AES.encrypt(order.getId().toString());
+		System.out.println(encryptedId);
+		encryptedId=encryptedId.replace('/', '*');
+		System.out.println(encryptedId);
 		String page = "<form action='http://localhost:8080/Shop4j/rest/cancelOrder/"
 				+ encryptedId
 				+ "'>Ne cerem scuze, dar acum nu avem destule produse in stoc pentru a va onora "
@@ -217,9 +225,9 @@ public class OrdersBean {
 
 	}
 
-	public Double total() {
-		if (selectedOrder != null) {
-			List<ClientProductDTO> list = selectedOrder.getListProducts();
+	public Double total(CommandDTO order) {
+		if (order != null) {
+			List<ClientProductDTO> list = order.getListProducts();
 			for (ClientProductDTO client : list)
 				totalPerOrder += client.getPrice() * client.getNrPieces();
 			return totalPerOrder;
@@ -416,6 +424,13 @@ public class OrdersBean {
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, e
 							.getMessage(), e.getMessage()));
 		}
+	}
+	
+	private boolean containsSlash(String encrypt) {
+		int index = encrypt.indexOf('/');
+		if (index < 0 || index > encrypt.length())
+			return false;
+		return true;
 	}
 
 }

@@ -39,7 +39,21 @@ public class ReturnedOrders implements Serializable{
 	@JoinColumn(name = "id_command")
 	private Command command;
 
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@OneToMany
+	@JoinColumn(name = "idreturnedproducts")
+	private List<ReturnedProducts> products;
 	
+	public List<ReturnedProducts> getProducts() {
+		return products;
+	}
+
+
+	public void setProducts(List<ReturnedProducts> products) {
+		this.products = products;
+	}
+
+
 	private Date returnDate;
 	private Date addDate;
 	private boolean returned;

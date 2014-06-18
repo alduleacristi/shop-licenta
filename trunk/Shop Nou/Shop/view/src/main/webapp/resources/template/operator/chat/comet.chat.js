@@ -39,7 +39,6 @@
 
 			var cometdURL = location.protocol + "//" + location.host
 					+ config.contextPath + "/Shop4j/cometd";
-		//	window.alert(cometdURL);
 			$.cometd.configure({
 				url : cometdURL,
 				logLevel : 'debug'

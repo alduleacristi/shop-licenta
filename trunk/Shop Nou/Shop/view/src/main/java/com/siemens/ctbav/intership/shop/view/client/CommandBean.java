@@ -191,7 +191,8 @@ public class CommandBean implements Serializable {
 		int days = (int) ((now.getTime() - date.getTime()) / DAY_IN_MILIS);
 		System.out.println(days);
 		if (days > MAX_DAYS)
-			return false;
+			{ System.out.println("depaseste");return false;}
+		System.out.println("rezultat: " + !isAlreadySaved(command));
 		return !isAlreadySaved(command);
 	}
 

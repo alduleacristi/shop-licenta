@@ -18,13 +18,12 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "messages")
 @NamedQueries({
-	@NamedQuery(name = Messages.GET_UNREPLIED_MESSAGES, query = "SELECT m FROM Messages m where m.client.user.ban = 0 and  m.isReplied = :isReplied")})
+	@NamedQuery(name = Messages.GET_UNREPLIED_MESSAGES, query = "SELECT m FROM Messages m where m.isReplied=0")})
 public class Messages implements Serializable{
 
 	
 
 	private static final long serialVersionUID = 408004164350412012L;
-	
 	public final static String GET_UNREPLIED_MESSAGES = "getUnrepliedMessages";
 	
 	@Id

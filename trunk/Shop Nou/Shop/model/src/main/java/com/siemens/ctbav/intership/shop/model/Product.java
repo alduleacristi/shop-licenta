@@ -94,12 +94,12 @@ public class Product implements Serializable {
 	@Column(name = "perc_reduction")
 	private Double reduction;
 	
-	@Column(name = "rating")
-	private Integer rating;
+//	@Column(name = "rating")
+//	private Integer rating;
 	
-	@LazyCollection(LazyCollectionOption.FALSE)
-	@OneToMany(mappedBy = "product")
-	private List<Comment> comments;
+//	@LazyCollection(LazyCollectionOption.FALSE)
+//	@OneToMany(mappedBy = "product")
+//	private List<Comment> comments;
 
 	public Product() {
 	}
@@ -178,14 +178,7 @@ public class Product implements Serializable {
 		this.reduction = reduction;
 	}
 
-	public Integer getRating() {
-		return rating;
-	}
-
-	public void setRating(Integer rating) {
-		this.rating = rating;
-	}
-
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -200,13 +193,6 @@ public class Product implements Serializable {
 		return result;
 	}
 
-	public List<Comment> getComments() {
-		return comments;
-	}
-
-	public void setComments(List<Comment> comments) {
-		this.comments = comments;
-	}
 
 	@Override
 	public boolean equals(Object obj) {

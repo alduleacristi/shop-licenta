@@ -77,7 +77,7 @@ public class CommentBeanVisitor implements Serializable {
 		//commentService.addComment(comment);
 		
 		//commentList.add(comment);
-		product.getComments().add(comment);
+	//	product.getComments().add(comment);
 		
 		newComment = "";
 

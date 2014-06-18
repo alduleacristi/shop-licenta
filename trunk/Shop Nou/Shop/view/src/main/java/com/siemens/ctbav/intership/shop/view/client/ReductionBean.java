@@ -76,8 +76,8 @@ public class ReductionBean implements Serializable {
 
 		}
 
-		for (Product p : products)
-			System.out.println(p.getName() + " -> " + p.getComments().size());
+//		for (Product p : products)
+//			System.out.println(p.getName() + " -> " + p.getComments().size());
 	}
 
 	public List<Product> getProducts() {

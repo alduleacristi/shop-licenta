@@ -10,6 +10,7 @@ import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
 import com.siemens.ctbav.intership.shop.dto.operator.MissingProduct;
@@ -48,6 +49,9 @@ public class AddProducts {
 	}
 
 	public void add(MissingProduct product) {
+		ExternalContext context1 = FacesContext.getCurrentInstance()
+				.getExternalContext();
+		context1.getFlash().setKeepMessages(true);
 		if (product.getPiecesAdded() <= 0) {
 			FacesContext.getCurrentInstance().addMessage(
 					null,

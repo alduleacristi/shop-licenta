@@ -148,8 +148,8 @@ public class LoginBean implements Serializable {
 			User user = userService
 					.getClientByUsername(this.user.getUserName());
 				System.out.println("userul este : " + user);
-			String hashPass = DigestUtils.md5Hex(this.user.getPassword());
-			request.login(this.user.getUserName(), this.user.getUserName());
+			//String hashPass = DigestUtils.md5Hex(this.user.getPassword());
+			request.login(this.user.getUserName(), this.user.getPassword());
 			if (user.getBan() == 1)
 				throw new UserException("User is banned");
 			this.logged = true;

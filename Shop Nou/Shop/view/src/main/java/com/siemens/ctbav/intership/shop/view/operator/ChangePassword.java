@@ -8,6 +8,7 @@ import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 
@@ -92,7 +93,9 @@ public class ChangePassword {
 
 	public void change() {
 		FacesContext context = FacesContext.getCurrentInstance();
-
+		ExternalContext context1 = FacesContext.getCurrentInstance()
+				.getExternalContext();
+		context1.getFlash().setKeepMessages(true);
 		try {
 			userService.changePassword(generatedPassword, newPassword);
 
@@ -100,6 +103,7 @@ public class ChangePassword {
 					FacesMessage.SEVERITY_INFO,
 					"The password has been successfully changed!!!",
 					"The password has been successfully changed!!!"));
+			context1.redirect("login.xhtml");
 		} catch (Exception e) {
 
 			System.out.println(e.getMessage());

@@ -14,141 +14,111 @@
 
 	<ui:composition template="/resources/template/operator/index.xhtml">
 		<ui:define name="mainContent">
-			<h:form id="form">
-				<p:growl id="error">
-			
-			Choose date interval:
-			<br />
-					<h:outputLabel for="from" value="From" />
-					<p:calendar id="from" value="#{orders.from}"></p:calendar>
-					<h:outputLabel for="to" value="To" />
-					<p:calendar id="to" value="#{orders.to}"></p:calendar>
-					<br />
-					<br />
-			
-			Choose total amount interval:
-			<br />
-					<h:outputLabel for="from" value="From" />
-					<p:inputText name="minvalue" value="#{orders.minValue}" />
-					<h:outputLabel for="to" value="To" />
-					<p:inputText name="maxvalue" value="#{orders.maxValue}" />
-					<br />
-					<br />
-					<h:commandButton value="Show me the results"
-						action="#{orders.results}" update=":form:error"
-						styleClass="search-submitLong" />
-					<br />
-					<br />
+			<h:form id="order">
+				<p:growl id="order">
 
 					<p:dataScroller value="#{orders.orderList}" var="order"
 						chunkSize="3">
 						<f:facet name="header">
            Orders
         </f:facet>
+						<p:panelGrid id="grid" columns="2" cellpadding="5">
+							<p:column>
 
-						<h:panelGrid style="width:100%"
-							columnClasses="logo,detail">
- 
-							<p:outputPanel>
-								<h:panelGrid columns="2" cellpadding="5">
-									<p:panel>
-										<h:outputText value="Order date:" />
-										<h:outputText value="#{order.orderDate}"
-											style="font-weight: bold" />
-<br></br>
-										<h:outputText value="Client:" />
-										<h:outputText
-											value="#{order.client.firstName} #{order.client.lastName}"
-											style="font-weight: bold" />
-<br></br>
-										<h:outputText value="Phone number:" />
-										<h:outputText value="#{order.client.phoneNumber}"
-											style="font-weight: bold"></h:outputText>
-<br></br>
-										<h:outputText value="Adress:" />
-										<h:outputText
-											value="#{order.adress.locality} , number #{order.adress.number} block #{order.adress.block} staircase #{order.adress.staircase} apartament #{order.adress.flat}"
-											style="font-weight: bold" />
-<br></br>
-									</p:panel>
-									<p:panel>
-										<p:commandButton value="Deliver order"
-											actionListener="#{orders.deliveredOrder(order)}"
-											styleClass="ui-priority-primary" update=":form:error" />
-											
-											<p:commandButton value="Change order"
-											actionListener="#{orders.deliveredOrder(order)}"
-											styleClass="ui-priority-primary" update=":form:error" />
-									</p:panel>
-									</h:panelGrid>
-									<p:dataTable id="display" var="prodClient"
-										value="#{order.listProducts}" border="1">
-										<p:column>
-											<f:facet name="header">
+								<h:outputText value="Order date:" />
+								<h:outputText value="#{order.orderDate}"
+									style="font-weight: bold" />
+								<br></br>
+								<h:outputText value="Client:" />
+								<h:outputText
+									value="#{order.client.firstName} #{order.client.lastName}"
+									style="font-weight: bold" />
+								<br></br>
+								<h:outputText value="Phone number:" />
+								<h:outputText value="#{order.client.phoneNumber}"
+									style="font-weight: bold"></h:outputText>
+								<br></br>
+								<h:outputText value="Adress:" />
+								<h:outputText
+									value="#{order.adress.locality} , number #{order.adress.number} block #{order.adress.block} staircase #{order.adress.staircase} apartament #{order.adress.flat}"
+									style="font-weight: bold" />
+								<br></br>
+
+							</p:column>
+							<p:column>
+
+								<p:commandButton value="Deliver order"
+									actionListener="#{orders.deliveredOrder(order)}"
+									style="background: #FFFF00;color: 00FF00;" />
+							</p:column>
+						</p:panelGrid>
+						<p:dataTable id="display" var="prodClient"
+							value="#{order.listProducts}" border="1">
+							<p:column>
+								<f:facet name="header">
 									Product
 							</f:facet>
-											<h:outputText
-												value="#{prodClient.product.prodColor.product.name}"></h:outputText>
-										</p:column>
+								<h:outputText
+									value="#{prodClient.product.prodColor.product.name}"></h:outputText>
+							</p:column>
 
-										<p:column>
-											<f:facet name="header">
+							<p:column>
+								<f:facet name="header">
 									Description
 							</f:facet>
-											<h:outputText
-												value="#{prodClient.product.prodColor.product.description}"></h:outputText>
-										</p:column>
+								<h:outputText
+									value="#{prodClient.product.prodColor.product.description}"></h:outputText>
+							</p:column>
 
-										<!-- 										<p:column> -->
-										<!-- 											<f:facet name="header"> -->
-										<!-- 									Category -->
-										<!-- 							</f:facet> -->
-										<!-- 											<h:outputText -->
-										<!-- 												value="#{prodClient.product.prodColor.product.category.name}"></h:outputText> -->
-										<!-- 										</p:column> -->
-										<p:column>
-											<f:facet name="header">
+							<!-- 										<p:column> -->
+							<!-- 											<f:facet name="header"> -->
+							<!-- 									Category -->
+							<!-- 							</f:facet> -->
+							<!-- 											<h:outputText -->
+							<!-- 												value="#{prodClient.product.prodColor.product.category.name}"></h:outputText> -->
+							<!-- 										</p:column> -->
+							<p:column>
+								<f:facet name="header">
 									Color
 							</f:facet>
-											<h:outputText
-												value="#{prodClient.product.prodColor.color.name}"></h:outputText>
-										</p:column>
-										<p:column>
-											<f:facet name="header">
+								<h:outputText value="#{prodClient.product.prodColor.color.name}"></h:outputText>
+							</p:column>
+							<p:column>
+								<f:facet name="header">
 									Price
 							</f:facet>
-											<h:outputText
-												value="#{prodClient.product.prodColor.product.price}"></h:outputText>
-										</p:column>
+								<h:outputText
+									value="#{prodClient.product.prodColor.product.price}"></h:outputText>
+							</p:column>
 
-										<p:column>
-											<f:facet name="header">
+							<p:column>
+								<f:facet name="header">
 									Number of pieces
 							</f:facet>
-											<h:outputText value="#{prodClient.nrPieces}"></h:outputText>
-										</p:column>
+								<h:outputText value="#{prodClient.nrPieces}"></h:outputText>
+							</p:column>
 
-										<p:column>
-											<f:facet name="header">
+							<p:column>
+								<f:facet name="header">
 									Procent reduction
 							</f:facet>
-											<h:outputText value="#{prodClient.percReduction}"></h:outputText>
-										</p:column>
-										<p:column>
-											<f:facet name="header">
+								<h:outputText value="#{prodClient.percReduction}"></h:outputText>
+							</p:column>
+							<p:column>
+								<f:facet name="header">
 									Price
 							</f:facet>
-											<h:outputText value="#{prodClient.price}"></h:outputText>
-										</p:column>
+								<h:outputText value="#{prodClient.price}"></h:outputText>
+							</p:column>
 
-										<p:column>
-											<f:facet name="header">
+							<p:column>
+								<f:facet name="header">
 									Total price
 							</f:facet>
-											<h:outputText value="#{prodClient.totalPrice()}"></h:outputText>
-										</p:column>
+								<h:outputText value="#{prodClient.totalPrice()}"></h:outputText>
+							</p:column>
 
-										<f:facet name="footer">
+							<f:facet name="footer">
 								Total price: #{orders.total(order)}
 								<br></br>
 								#{orders.message()}
@@ -157,10 +127,10 @@
 								<br></br>
 								Total price(transport included) : #{orders.totalPerOrder}
 						</f:facet>
-									</p:dataTable>
-								
-							</p:outputPanel>
-						</h:panelGrid>
+						</p:dataTable>
+
+
+
 					</p:dataScroller>
 
 					<h:selectManyCheckbox value="#{orders.reports}">

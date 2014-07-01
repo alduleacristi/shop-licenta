@@ -1,5 +1,6 @@
 package com.siemens.ctbav.intership.shop.view.operator;
 
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -39,7 +40,7 @@ public class OrdersBean {
 	private double transport = (double) 0;
 	private static final String clientHasToPayTransport = "Client will have to pay 20 RON for transport";
 	private static final String clientDoesentHaveToPayTransport = "The client doesen't have to pay transport";
-	private static final String clientNotification="Your products are on their way";
+	private static final String clientNotification = "Your products are on their way";
 	private List<CommandDTO> orderList;
 	private String[] reports;
 	@EJB
@@ -54,7 +55,7 @@ public class OrdersBean {
 	public List<CommandDTO> getOrderList() {
 		return orderList;
 	}
-	
+
 	private CommandDTO selectedOrder;
 
 	public CommandDTO getSelectedOrder() {
@@ -125,6 +126,7 @@ public class OrdersBean {
 			return;
 		orderList = ConvertCommand.convertListOfOrders(commService
 				.getOrdersForOperator(user.getId(), ordersPerOperator));
+		System.out.println("in post construct;" + orderList.size());
 		if (orderList.size() < ordersPerOperator) {
 			int limit = ordersPerOperator - orderList.size();
 			try {
@@ -142,24 +144,26 @@ public class OrdersBean {
 
 	public void deliveredOrder(CommandDTO order) {
 		System.out.println("in deliver");
-		ExternalContext context = FacesContext.getCurrentInstance()
+		ExternalContext context1 = FacesContext.getCurrentInstance()
 				.getExternalContext();
-		context.getFlash().setKeepMessages(true);
-
+		context1.getFlash().setKeepMessages(true);
 		Date date = new Date(Calendar.getInstance().getTimeInMillis());
 		order.setDeliveryDate(date);
 		order.getStatus().setStatus("delivered");
 		try {
 			commService.setDeliveredCommand(order);
+
+			String email = order.getClient().getUser().getEmail();
+			MailService.sendLink(email, "Notification", clientNotification,
+					false);
 			FacesContext.getCurrentInstance().addMessage(
 					null,
 					new FacesMessage(FacesMessage.SEVERITY_INFO,
 							"Order delivered", "Order delivered"));
-			String email = order.getClient().getUser().getEmail();
-			MailService.sendLink(email, "Notification", clientNotification, false);
-			context.redirect("orders.xhtml");
+			context1.redirect("orders.xhtml");
 		} catch (NotEnoughProductsException e) {
 			System.out.println("not enough, trimit mail");
+
 			FacesContext.getCurrentInstance().addMessage(
 					null,
 					new FacesMessage(FacesMessage.SEVERITY_ERROR,
@@ -171,13 +175,18 @@ public class OrdersBean {
 					new FacesMessage(FacesMessage.SEVERITY_INFO,
 							"A mail will be sent to the client",
 							"A mail will be sent to the client"));
+			sendExplicationMail(order);
+			try {
+				context1.redirect("orders.xhtml");
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			// System.out
 			// .println("trimitem mail pentru explicare + pun pe sesiune lista de produse");
 			//
 			// FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("productList",
 			// e.getProductsNotFound());
-
-			sendExplicationMail(order);
 
 		} catch (Throwable e) {
 			FacesContext.getCurrentInstance().addMessage(
@@ -193,7 +202,7 @@ public class OrdersBean {
 		// creez pagina de html pe care vreau sa o trimit clientului
 		String encryptedId = AES.encrypt(order.getId().toString());
 		System.out.println(encryptedId);
-		encryptedId=encryptedId.replace('/', '*');
+		encryptedId = encryptedId.replace('/', '*');
 		System.out.println(encryptedId);
 		String page = "<form action='http://localhost:8080/Shop4j/rest/cancelOrder/"
 				+ encryptedId
@@ -247,32 +256,38 @@ public class OrdersBean {
 		return clientHasToPayTransport;
 	}
 
-	public void changeOrder(CommandDTO order) {
-
-		System.out.println("in change order");
-		User user = (User) FacesContext.getCurrentInstance()
-				.getExternalContext().getSessionMap().get("user");
-		if (user == null) {
-			FacesContext.getCurrentInstance().addMessage(
-					null,
-					new FacesMessage(FacesMessage.SEVERITY_ERROR, "User null",
-							"User null"));
-			return;
-		}
-
-		try {
-			commService.assignOperatorsOrder(user.getId());
-			commService.setOperatorNull(order.getId());
-			FacesContext.getCurrentInstance().getExternalContext()
-					.redirect("orders.xhtml");
-
-		} catch (Exception e) {
-			FacesContext.getCurrentInstance().addMessage(
-					null,
-					new FacesMessage(FacesMessage.SEVERITY_ERROR, e
-							.getMessage(), e.getMessage()));
-		}
-	}
+//	public void changeOrder(CommandDTO order) {
+//		ExternalContext context1 = FacesContext.getCurrentInstance()
+//				.getExternalContext();
+//		context1.getFlash().setKeepMessages(true);
+//		System.out.println("in change order");
+//		User user = (User) FacesContext.getCurrentInstance()
+//				.getExternalContext().getSessionMap().get("user");
+//		if (user == null) {
+//			FacesContext.getCurrentInstance().addMessage(
+//					null,
+//					new FacesMessage(FacesMessage.SEVERITY_ERROR, "User null",
+//							"User null"));
+//			return;
+//		}
+//
+//		try {
+//			commService.assignOperatorsOrder(user.getId());
+//			commService.setOperatorNull(order.getId());
+//			System.out.println("mesaj");
+//			FacesContext.getCurrentInstance().addMessage(
+//					null,
+//					new FacesMessage(FacesMessage.SEVERITY_INFO,
+//							"You received another order!", ""));
+//			context1.redirect("orders.xhtml");
+//
+//		} catch (Exception e) {
+//			FacesContext.getCurrentInstance().addMessage(
+//					null,
+//					new FacesMessage(FacesMessage.SEVERITY_ERROR, e
+//							.getMessage(), e.getMessage()));
+//		}
+//	}
 
 	public void results() {
 		List<CommandDTO> orders;
@@ -425,7 +440,7 @@ public class OrdersBean {
 							.getMessage(), e.getMessage()));
 		}
 	}
-	
+
 	private boolean containsSlash(String encrypt) {
 		int index = encrypt.indexOf('/');
 		if (index < 0 || index > encrypt.length())

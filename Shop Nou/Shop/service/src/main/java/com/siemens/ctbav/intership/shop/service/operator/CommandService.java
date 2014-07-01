@@ -107,9 +107,7 @@ public class CommandService {
 
 	public void cancelOrder(Long id) throws CommandNotFoundException {
 		Command cmd = getOrderById(id);
-		if (cmd == null)
-			throw new CommandNotFoundException(
-					"This order has already been canceled!!!");
+		if (cmd != null)
 		em.remove(cmd);
 	}
 
@@ -136,8 +134,8 @@ public class CommandService {
 				.createNamedQuery(Command.GET_ORDERS_FOR_OPERATOR)
 				.setParameter("id", id_operator).setMaxResults(nrOrders)
 				.getResultList();
-		// if(list.size() > 0) System.out.println(list.get(0).getId()); else
-		// System.out.println("lista vida");
+		 if(list.size() > 0) System.out.println(list.get(0).getId()); else
+		 System.out.println("lista vida");
 		return list;
 	}
 
@@ -164,20 +162,20 @@ public class CommandService {
 		return list;
 	}
 
-	@SuppressWarnings("unchecked")
-	public void assignOperatorsOrder(long id_operator)
-			throws CommandNotFoundException, UserNotFoundException {
-		List<Command> comm = em.createNamedQuery(Command.GET_ORDER)
-				.setMaxResults(1).getResultList();
-		if (comm == null || comm.size() == 0)
-			throw new CommandNotFoundException("No more unassigned orders");
-
-		User user = em.find(User.class, id_operator);
-		if (user == null)
-			throw new UserNotFoundException("No operator with this id: "
-					+ id_operator);
-		comm.get(0).setUser(user);
-	}
+//	@SuppressWarnings("unchecked")
+//	public void assignOperatorsOrder(long id_operator)
+//			throws CommandNotFoundException, UserNotFoundException {
+//		List<Command> comm = em.createNamedQuery(Command.GET_ORDER)
+//				.setMaxResults(1).getResultList();
+//		if (comm == null || comm.size() == 0)
+//			throw new CommandNotFoundException("No more unassigned orders");
+//
+//		User user = em.find(User.class, id_operator);
+//		if (user == null)
+//			throw new UserNotFoundException("No operator with this id: "
+//					+ id_operator);
+//		comm.get(0).setUser(user);
+//	}
 
 	public void setOperatorNull(Long idOrder) throws CommandNotFoundException {
 		Command comm = em.find(Command.class, idOrder);

@@ -130,6 +130,7 @@ public class UserService {
 		List<User> usersList = em.createNamedQuery(User.GET_USER_BY_EMAIL)
 				.setParameter("email", email).getResultList();
 		if (usersList.size() == 0) {
+			System.out.println("lista vida");
 			throw new UserNotFoundException(
 					internationalizationService.getMessage("emailNotFound"));
 		}
@@ -230,8 +231,8 @@ public class UserService {
 		Long id = getUserId(user.getUsername());
 		User u = new User(id, user.getUsername(), user.getPassword(),
 				user.getRolename(), user.getEmail());
-		u.setPasswordStatus(user.getPasswordStatus().ordinal());
-		System.out.println(user.getPasswordStatus().ordinal());
+		u.setPasswordStatus(1);
+		//System.out.println(user.getPasswordStatus().ordinal());
 		System.out.println("VReau sa  setez parola pentru  " + u);
 		em.merge(u);
 	}
@@ -268,7 +269,7 @@ public class UserService {
 			// if (user == null)
 			// throw new UserNotFoundException(
 			// "the password does not exists in the database");
-			user.setPasswordStatus(1);
+			user.setPasswordStatus(2);
 			user.setUserPassword(newPassword);
 			System.out.println(user);
 			em.merge(user);
